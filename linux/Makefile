@@ -66,6 +66,7 @@ TARFILES += firmware/cpia2/stv0672_vp4.bin.ihex
 TARFILES += firmware/ihex2fw.c
 TARFILES += firmware/vicam/firmware.H16
 TARFILES += firmware/ttusb-budget/dspbootcode.bin.ihex
+TARFILES += firmware/dvb-fe-mxl5xx.fw
 
 DATE := `git --git-dir $(DIR)/.git log -n1 '--pretty=format:%h %ai' |perl -ne 'print "$$2-$$1" if (m/([\da-f]+)\s+(\S+)/)'`
 TODAY_TAR := linux-media-${DATE}.tar
