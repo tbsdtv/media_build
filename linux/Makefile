@@ -69,10 +69,11 @@ TARFILES += firmware/ttusb-budget/dspbootcode.bin.ihex
 TARFILES += firmware/dvb-fe-mxl5xx.fw
 
 DATE := `git --git-dir $(DIR)/.git log -n1 '--pretty=format:%h %ai' |perl -ne 'print "$$2-$$1" if (m/([\da-f]+)\s+(\S+)/)'`
-TODAY_TAR := linux-media-${DATE}.tar
+#TODAY_TAR := linux-media-${DATE}.tar
+TODAY_TAR := linux-media.tar
 TODAY_TAR_MD5 := ${TODAY_TAR}.bz2.md5
-LATEST_TAR := http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2
-LATEST_TAR_MD5 := http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+LATEST_TAR := http://www.tbsdtv.com/download/document/linux//linux-media-LATEST.tar.bz2
+LATEST_TAR_MD5 := http://www.tbsdtv.com/download/document/linux//linux-media-LATEST.tar.bz2.md5
 
 default:
 	make -C ..

@@ -14,10 +14,15 @@ my $check_only = 0;
 my $main_git = 0;
 my @git;
 
-my $main_git_url = "git://linuxtv.org/media_tree.git";
-my $main_branch = "master";
-my $firmware_url = "http://www.linuxtv.org/downloads/firmware/";
-my $firmware_tarball = "dvb-firmwares.tar.bz2";
+#my $main_git_url = "git://linuxtv.org/media_tree.git";
+#my $main_branch = "master";
+#my $firmware_url = "http://www.linuxtv.org/downloads/firmware/";
+#my $firmware_tarball = "dvb-firmwares.tar.bz2";
+
+my $main_git_url = "https://github.com/tbsdtv/linux_media.git";
+my $main_branch = "latest";
+my $firmware_url = "http://www.tbsdtv.com/download/document/linux/";
+my $firmware_tarball = "tbs-tuner-firmwares_v1.0.tar.bz2";
 
 GetOptions('v|verbose' => \$level,
 	   'help|?' => \$help,
@@ -275,7 +280,7 @@ sub check_needs()
 
 sub get_remote_name()
 {
-	if ($git[0] =~ m,^(http|git|git\+ssh|ssh):\/\/linuxtv.org\/(.*),) {
+	if ($git[0] =~ m,^(http|https|git|git\+ssh|ssh):\/\/linuxtv.org\/(.*),) {
 		my $name = $2;
 		$name =~ s,^/git,,;
 		$name =~ s,\.git$,,g;
@@ -283,7 +288,24 @@ sub get_remote_name()
 
 		return ($name, 0);
 	}
-	if (!($git[0] =~ m,^(http|git|git\+ssh|ssh):\/\/,)) {
+	if ($git[0] =~ m,^(http|https|git|git\+ssh|ssh):\/\/bitbucket.org\/(.*),) {
+		my $name = $2;
+		$name =~ s,^/git,,;
+		$name =~ s,\.git$,,g;
+		$name =~ s,/,_,g;
+
+		return ($name, 0);
+	}
+	if ($git[0] =~ m,^(http|https|git|git\+ssh|ssh):\/\/github.com\/(.*),) {
+		my $name = $2;
+		$name =~ s,^/git,,;
+		$name =~ s,\.git$,,g;
+		$name =~ s,/,_,g;
+
+		return ($name, 0);
+	}
+
+	if (!($git[0] =~ m,^(http|https|git|git\+ssh|ssh):\/\/,)) {
 		my $name = $git[0];
 		$name =~ s,\s*$,,;
 		$name =~ s,/$,,;
