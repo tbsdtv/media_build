@@ -1,8 +1,8 @@
 diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-frontends/m88ds3103.c
-index 5557ef8..7688360 100644
+index e0fe5bc..97cf147 100644
 --- a/drivers/media/dvb-frontends/m88ds3103.c
 +++ b/drivers/media/dvb-frontends/m88ds3103.c
-@@ -1251,9 +1251,9 @@ static void m88ds3103_release(struct dvb_frontend *fe)
+@@ -1232,9 +1232,9 @@ static void m88ds3103_release(struct dvb_frontend *fe)
  	i2c_unregister_device(client);
  }
  
@@ -14,7 +14,7 @@ index 5557ef8..7688360 100644
  	struct i2c_client *client = dev->client;
  	int ret;
  	struct i2c_msg msg = {
-@@ -1374,7 +1374,7 @@ static struct i2c_adapter *m88ds3103_get_i2c_adapter(struct i2c_client *client)
+@@ -1355,7 +1355,7 @@ static struct i2c_adapter *m88ds3103_get_i2c_adapter(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -23,7 +23,7 @@ index 5557ef8..7688360 100644
  }
  
  static int m88ds3103_probe(struct i2c_client *client,
-@@ -1467,16 +1467,13 @@ static int m88ds3103_probe(struct i2c_client *client,
+@@ -1453,16 +1453,13 @@ static int m88ds3103_probe(struct i2c_client *client,
  		goto err_kfree;
  
  	/* create mux i2c adapter for tuner */
@@ -44,7 +44,7 @@ index 5557ef8..7688360 100644
  
  	/* create dvb_frontend */
  	memcpy(&dev->fe.ops, &m88ds3103_ops, sizeof(struct dvb_frontend_ops));
-@@ -1505,7 +1502,7 @@ static int m88ds3103_remove(struct i2c_client *client)
+@@ -1491,7 +1488,7 @@ static int m88ds3103_remove(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -54,10 +54,10 @@ index 5557ef8..7688360 100644
  	kfree(dev);
  	return 0;
 diff --git a/drivers/media/dvb-frontends/m88ds3103_priv.h b/drivers/media/dvb-frontends/m88ds3103_priv.h
-index d78e467..651e005 100644
+index 07f20c2..022afcc 100644
 --- a/drivers/media/dvb-frontends/m88ds3103_priv.h
 +++ b/drivers/media/dvb-frontends/m88ds3103_priv.h
-@@ -42,7 +42,7 @@ struct m88ds3103_dev {
+@@ -41,7 +41,7 @@ struct m88ds3103_dev {
  	enum fe_status fe_status;
  	u32 dvbv3_ber; /* for old DVBv3 API read_ber */
  	bool warm; /* FW running */
@@ -67,10 +67,10 @@ index d78e467..651e005 100644
  	u8 chip_id;
  	/* main mclk is calculated for M88RS6000 dynamically */
 diff --git a/drivers/media/dvb-frontends/rtl2830.c b/drivers/media/dvb-frontends/rtl2830.c
-index d25d1e0..3f96429 100644
+index 8722605..2922d2e 100644
 --- a/drivers/media/dvb-frontends/rtl2830.c
 +++ b/drivers/media/dvb-frontends/rtl2830.c
-@@ -677,9 +677,9 @@ err:
+@@ -655,9 +655,9 @@ err:
   * adapter lock is already taken by tuner driver.
   * Gate is closed automatically after single I2C transfer.
   */
@@ -82,7 +82,7 @@ index d25d1e0..3f96429 100644
  	struct rtl2830_dev *dev = i2c_get_clientdata(client);
  	int ret;
  
-@@ -712,7 +712,7 @@ static struct i2c_adapter *rtl2830_get_i2c_adapter(struct i2c_client *client)
+@@ -690,7 +690,7 @@ static struct i2c_adapter *rtl2830_get_i2c_adapter(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -91,7 +91,7 @@ index d25d1e0..3f96429 100644
  }
  
  /*
-@@ -865,16 +865,12 @@ static int rtl2830_probe(struct i2c_client *client,
+@@ -842,16 +842,12 @@ static int rtl2830_probe(struct i2c_client *client,
  		goto err_regmap_exit;
  
  	/* create muxed i2c adapter for tuner */
@@ -112,9 +112,9 @@ index d25d1e0..3f96429 100644
  
  	/* create dvb frontend */
  	memcpy(&dev->fe.ops, &rtl2830_ops, sizeof(dev->fe.ops));
-@@ -907,7 +903,7 @@ static int rtl2830_remove(struct i2c_client *client)
- 	/* stop statistics polling */
- 	cancel_delayed_work_sync(&dev->stat_work);
+@@ -881,7 +877,7 @@ static int rtl2830_remove(struct i2c_client *client)
+ 
+ 	dev_dbg(&client->dev, "\n");
  
 -	i2c_mux_del_adapters(dev->muxc);
 +	i2c_del_mux_adapter(dev->adapter);
@@ -122,10 +122,10 @@ index d25d1e0..3f96429 100644
  	kfree(dev);
  
 diff --git a/drivers/media/dvb-frontends/rtl2830_priv.h b/drivers/media/dvb-frontends/rtl2830_priv.h
-index da49095..cf793f3 100644
+index 8ec4721..aa6316b 100644
 --- a/drivers/media/dvb-frontends/rtl2830_priv.h
 +++ b/drivers/media/dvb-frontends/rtl2830_priv.h
-@@ -29,7 +29,7 @@ struct rtl2830_dev {
+@@ -30,7 +30,7 @@ struct rtl2830_dev {
  	struct rtl2830_platform_data *pdata;
  	struct i2c_client *client;
  	struct regmap *regmap;
@@ -135,7 +135,7 @@ index da49095..cf793f3 100644
  	bool sleeping;
  	unsigned long filters;
 diff --git a/drivers/media/dvb-frontends/rtl2832.c b/drivers/media/dvb-frontends/rtl2832.c
-index c16c69e..4c15488 100644
+index 0ced01f..36334ef 100644
 --- a/drivers/media/dvb-frontends/rtl2832.c
 +++ b/drivers/media/dvb-frontends/rtl2832.c
 @@ -153,6 +153,43 @@ static const struct rtl2832_reg_entry registers[] = {
@@ -637,7 +637,7 @@ index 9a6d01a..8eb2e0b 100644
  	enum fe_status fe_status;
  	u64 post_bit_error_prev; /* for old DVBv3 read_ber() calculation */
 diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
-index 47a480a..b860f02 100644
+index 6e22af3..dfe2667 100644
 --- a/drivers/media/dvb-frontends/rtl2832_sdr.c
 +++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
 @@ -35,7 +35,6 @@
@@ -1094,7 +1094,7 @@ index d8fc7e7..342ea84 100644
  	struct v4l2_subdev *v4l2_subdev;
  	struct dvb_usb_device *dvb_usb_device;
 diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
-index 108a069..821a8f4 100644
+index 20b4a65..c18f506 100644
 --- a/drivers/media/dvb-frontends/si2168.c
 +++ b/drivers/media/dvb-frontends/si2168.c
 @@ -18,23 +18,53 @@
@@ -1213,7 +1213,7 @@ index 108a069..821a8f4 100644
  static int si2168_read_status(struct dvb_frontend *fe, enum fe_status *status)
  {
  	struct i2c_client *client = fe->demodulator_priv;
-@@ -570,9 +610,14 @@ static int si2168_get_tune_settings(struct dvb_frontend *fe,
+@@ -540,9 +580,14 @@ static int si2168_get_tune_settings(struct dvb_frontend *fe,
  	return 0;
  }
  
@@ -1230,7 +1230,7 @@ index 108a069..821a8f4 100644
  	int ret;
  	struct si2168_cmd cmd;
  
-@@ -580,7 +625,7 @@ static int si2168_select(struct i2c_mux_core *muxc, u32 chan)
+@@ -550,7 +595,7 @@ static int si2168_select(struct i2c_mux_core *muxc, u32 chan)
  	memcpy(cmd.args, "\xc0\x0d\x01", 3);
  	cmd.wlen = 3;
  	cmd.rlen = 0;
@@ -1239,7 +1239,7 @@ index 108a069..821a8f4 100644
  	if (ret)
  		goto err;
  
-@@ -590,9 +635,9 @@ err:
+@@ -560,9 +605,9 @@ err:
  	return ret;
  }
  
@@ -1251,7 +1251,7 @@ index 108a069..821a8f4 100644
  	int ret;
  	struct si2168_cmd cmd;
  
-@@ -600,7 +645,7 @@ static int si2168_deselect(struct i2c_mux_core *muxc, u32 chan)
+@@ -570,7 +615,7 @@ static int si2168_deselect(struct i2c_mux_core *muxc, u32 chan)
  	memcpy(cmd.args, "\xc0\x0d\x00", 3);
  	cmd.wlen = 3;
  	cmd.rlen = 0;
@@ -1260,12 +1260,17 @@ index 108a069..821a8f4 100644
  	if (ret)
  		goto err;
  
-@@ -663,25 +708,18 @@ static int si2168_probe(struct i2c_client *client,
- 		goto err;
+@@ -635,7 +680,6 @@ static int si2168_probe(struct i2c_client *client,
  	}
  
+ 	i2c_set_clientdata(client, dev);
 -	mutex_init(&dev->i2c_mutex);
--
+ 
+ 	/* Initialize */
+ 	memcpy(cmd.args, "\xc0\x12\x00\x0c\x00\x0d\x16\x00\x00\x00\x00\x00\x00", 13);
+@@ -685,22 +729,17 @@ static int si2168_probe(struct i2c_client *client,
+ 		       (cmd.args[4] - '0') << 8 | (cmd.args[5]) << 0;
+ 
  	/* create mux i2c adapter for tuner */
 -	dev->muxc = i2c_mux_alloc(client->adapter, &client->dev,
 -				  1, 0, I2C_MUX_LOCKED,
@@ -1291,7 +1296,7 @@ index 108a069..821a8f4 100644
  	*config->fe = &dev->fe;
  	dev->ts_mode = config->ts_mode;
  	dev->ts_clock_inv = config->ts_clock_inv;
-@@ -705,7 +743,7 @@ static int si2168_remove(struct i2c_client *client)
+@@ -727,7 +766,7 @@ static int si2168_remove(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -1301,7 +1306,7 @@ index 108a069..821a8f4 100644
  	dev->fe.ops.release = NULL;
  	dev->fe.demodulator_priv = NULL;
 diff --git a/drivers/media/dvb-frontends/si2168_priv.h b/drivers/media/dvb-frontends/si2168_priv.h
-index 8a1f36d..c07e6fe 100644
+index 7843ccb..355a37b 100644
 --- a/drivers/media/dvb-frontends/si2168_priv.h
 +++ b/drivers/media/dvb-frontends/si2168_priv.h
 @@ -29,8 +29,7 @@

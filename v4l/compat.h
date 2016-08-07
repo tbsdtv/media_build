@@ -20,6 +20,10 @@
 #define uninitialized_var(x) x = x
 #endif
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0)
+#include <linux/sizes.h>
+#endif
+
 /* In v2.6.19-rc6-118-g52bad64 struct work_struct was was changed to be only for
  * non-delayed work and struct delayed_work was created for delayed work.  This
  * will rename the structures.  Hopefully no one will decide to name something
@@ -1794,5 +1798,53 @@ static inline int led_set_brightness_sync(struct led_classdev *led_cdev,
 #ifdef NEED_KTIME_GET_BOOTTIME
 #define ktime_get_boottime ktime_get
 #endif
+
+#ifdef NEED_BUS_CEC
+#define BUS_CEC			0x1E
+/* Diagonal movement keys */
+#define KEY_RIGHT_UP			0x266
+#define KEY_RIGHT_DOWN			0x267
+#define KEY_LEFT_UP			0x268
+#define KEY_LEFT_DOWN			0x269
+
+#define KEY_ROOT_MENU			0x26a /* Show Device's Root Menu */
+/* Show Top Menu of the Media (e.g. DVD) */
+#define KEY_MEDIA_TOP_MENU		0x26b
+#define KEY_NUMERIC_11			0x26c
+#define KEY_NUMERIC_12			0x26d
+/*
+ * Toggle Audio Description: refers to an audio service that helps blind and
+ * visually impaired consumers understand the action in a program. Note: in
+ * some countries this is referred to as "Video Description".
+ */
+#define KEY_AUDIO_DESC			0x26e
+#define KEY_3D_MODE			0x26f
+#define KEY_NEXT_FAVORITE		0x270
+#define KEY_STOP_RECORD			0x271
+#define KEY_PAUSE_RECORD		0x272
+#define KEY_VOD				0x273 /* Video on Demand */
+#define KEY_UNMUTE			0x274
+#define KEY_FASTREVERSE			0x275
+#define KEY_SLOWREVERSE			0x276
+/*
+ * Control a data application associated with the currently viewed channel,
+ * e.g. teletext or data broadcast application (MHEG, MHP, HbbTV, etc.)
+ */
+#define KEY_DATA			0x275
+#endif
+
+#ifdef NEED_KTIME_MS_DELTA
+static inline s64 ktime_ms_delta(const ktime_t later, const ktime_t earlier)
+{
+	return ktime_to_ms(ktime_sub(later, earlier));
+}
+#endif
+
+#ifdef NEED_SMP_LOAD_ACQUIRE
+#define smp_load_acquire(p) (*(p))
+#define smp_store_release(p, a) (*p) = (a)
+#endif
+
+#define SERIO_PULSE8_CEC     0x40
 
 #endif /*  _COMPAT_H */

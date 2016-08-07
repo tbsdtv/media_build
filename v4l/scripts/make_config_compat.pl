@@ -675,6 +675,7 @@ sub check_other_dependencies()
 	check_files_for_func("kvfree", "NEED_KVFREE", "include/linux/mm.h");
 	check_files_for_func("ktime_before", "NEED_KTIME_BEFORE", "include/linux/ktime.h");
 	check_files_for_func("ktime_compare", "NEED_KTIME_COMPARE", "include/linux/ktime.h");
+	check_files_for_func("ktime_ms_delta", "NEED_KTIME_MS_DELTA", "include/linux/ktime.h");
 	check_files_for_func("of_node_full_name", "NEED_OF_NODE_FULL_NAME", "include/linux/of.h");
 	check_files_for_func("ktime_get_ns", "NEED_KTIME_GET_NS", "include/linux/timekeeping.h");
 	check_files_for_func("div64_u64_rem", "NEED_DIV64_U64_REM", "include/linux/math64.h");
@@ -682,6 +683,8 @@ sub check_other_dependencies()
 	check_files_for_func("GENMASK_ULL", "NEED_GENMASK_ULL", "include/linux/bitops.h");
 	check_files_for_func("ida_simple_remove", "NEED_IDA_SIMPLE_REMOVE", "include/linux/idr.h");
 	check_files_for_func("ktime_get_boottime", "NEED_KTIME_GET_BOOTTIME", "include/linux/hrtimer.h", "include/linux/timekeeping.h");
+	check_files_for_func("BUS_CEC", "NEED_BUS_CEC", "include/uapi/linux/input.h");
+	check_files_for_func("smp_load_acquire", "NEED_SMP_LOAD_ACQUIRE", "include/asm-generic/barrier.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");
