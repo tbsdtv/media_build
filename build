@@ -489,7 +489,7 @@ if (@git == 2) {
 	print "****************************\n";
 	print "Updating the building system\n";
 	print "****************************\n";
-	system("git pull git://linuxtv.org/media_build.git master");
+	system("git pull https://github.com/tbsdtv/linux_media.git master");
 
 	system ("make -C linux/ download") == 0 or die "Download failed";
 	system ("make -C linux/ untar") == 0 or die "Untar failed";
