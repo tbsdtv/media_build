@@ -637,7 +637,7 @@ index 9a6d01a..8eb2e0b 100644
  	enum fe_status fe_status;
  	u64 post_bit_error_prev; /* for old DVBv3 read_ber() calculation */
 diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
-index 6e22af3..dfe2667 100644
+index e038e88..9f702c2 100644
 --- a/drivers/media/dvb-frontends/rtl2832_sdr.c
 +++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
 @@ -35,7 +35,6 @@
@@ -704,7 +704,7 @@ index 6e22af3..dfe2667 100644
  /* Private functions */
  static struct rtl2832_sdr_frame_buf *rtl2832_sdr_get_next_fill_buf(
  		struct rtl2832_sdr_dev *dev)
-@@ -519,11 +558,11 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
+@@ -518,11 +557,11 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
  
  	f_sr = dev->f_adc;
  
@@ -718,7 +718,7 @@ index 6e22af3..dfe2667 100644
  	if (ret)
  		goto err;
  
-@@ -549,7 +588,7 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
+@@ -548,7 +587,7 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
  	buf[1] = (u32tmp >>  8) & 0xff;
  	buf[2] = (u32tmp >>  0) & 0xff;
  
@@ -727,7 +727,7 @@ index 6e22af3..dfe2667 100644
  	if (ret)
  		goto err;
  
-@@ -563,15 +602,15 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
+@@ -562,15 +601,15 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
  		u8tmp2 = 0xcd; /* enable ADC I, ADC Q */
  	}
  
@@ -746,7 +746,7 @@ index 6e22af3..dfe2667 100644
  	if (ret)
  		goto err;
  
-@@ -582,169 +621,168 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
+@@ -581,169 +620,168 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
  	buf[1] = (u32tmp >> 16) & 0xff;
  	buf[2] = (u32tmp >>  8) & 0xff;
  	buf[3] = (u32tmp >>  0) & 0xff;
@@ -1033,7 +1033,7 @@ index 6e22af3..dfe2667 100644
  	if (ret)
  		goto err;
  err:
-@@ -759,29 +797,29 @@ static void rtl2832_sdr_unset_adc(struct rtl2832_sdr_dev *dev)
+@@ -758,29 +796,29 @@ static void rtl2832_sdr_unset_adc(struct rtl2832_sdr_dev *dev)
  	dev_dbg(&pdev->dev, "\n");
  
  	/* PID filter */
@@ -1069,7 +1069,7 @@ index 6e22af3..dfe2667 100644
  	if (ret)
  		goto err;
  err:
-@@ -1361,7 +1399,6 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
+@@ -1360,7 +1398,6 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
  	subdev = pdata->v4l2_subdev;
  	dev->v4l2_subdev = pdata->v4l2_subdev;
  	dev->pdev = pdev;
@@ -1320,20 +1320,23 @@ index 7843ccb..355a37b 100644
  	enum fe_delivery_system delivery_system;
  	enum fe_status fe_status;
 diff --git a/drivers/media/usb/cx231xx/cx231xx-core.c b/drivers/media/usb/cx231xx/cx231xx-core.c
-index 630f4fc..6741fd0 100644
+index 8b099fe..01484b4 100644
 --- a/drivers/media/usb/cx231xx/cx231xx-core.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-core.c
-@@ -1305,9 +1305,6 @@ int cx231xx_dev_init(struct cx231xx *dev)
- 	cx231xx_i2c_register(&dev->i2c_bus[1]);
- 	cx231xx_i2c_register(&dev->i2c_bus[2]);
+@@ -1334,12 +1334,6 @@ int cx231xx_dev_init(struct cx231xx *dev)
+ 	if (errCode < 0)
+ 		return errCode;
  
 -	errCode = cx231xx_i2c_mux_create(dev);
--	if (errCode < 0)
+-	if (errCode < 0) {
+-		dev_err(dev->dev,
+-			"%s: Failed to create I2C mux\n", __func__);
 -		return errCode;
- 	cx231xx_i2c_mux_register(dev, 0);
- 	cx231xx_i2c_mux_register(dev, 1);
- 
-@@ -1430,7 +1427,8 @@ EXPORT_SYMBOL_GPL(cx231xx_dev_init);
+-	}
+ 	errCode = cx231xx_i2c_mux_register(dev, 0);
+ 	if (errCode < 0)
+ 		return errCode;
+@@ -1467,7 +1461,8 @@ EXPORT_SYMBOL_GPL(cx231xx_dev_init);
  void cx231xx_dev_uninit(struct cx231xx *dev)
  {
  	/* Un Initialize I2C bus */
@@ -1344,7 +1347,7 @@ index 630f4fc..6741fd0 100644
  	cx231xx_i2c_unregister(&dev->i2c_bus[1]);
  	cx231xx_i2c_unregister(&dev->i2c_bus[0]);
 diff --git a/drivers/media/usb/cx231xx/cx231xx-i2c.c b/drivers/media/usb/cx231xx/cx231xx-i2c.c
-index 473cd34..a29c345 100644
+index 3e7982e..e528bd4 100644
 --- a/drivers/media/usb/cx231xx/cx231xx-i2c.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-i2c.c
 @@ -557,41 +557,40 @@ int cx231xx_i2c_unregister(struct cx231xx_i2c *bus)
@@ -1420,7 +1423,7 @@ index 473cd34..a29c345 100644
 -		return dev->muxc->adapter[1];
 +		return dev->i2c_mux_adap[1];
  	default:
- 		return NULL;
+ 		BUG();
  	}
 diff --git a/drivers/media/usb/cx231xx/cx231xx.h b/drivers/media/usb/cx231xx/cx231xx.h
 index 90c8676..69f6d20 100644

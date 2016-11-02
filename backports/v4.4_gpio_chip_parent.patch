@@ -1,13 +1,13 @@
 diff --git a/drivers/media/dvb-frontends/cxd2820r_core.c b/drivers/media/dvb-frontends/cxd2820r_core.c
-index 24a457d9d803..def6d21d1445 100644
+index 95267c6..7c378de 100644
 --- a/drivers/media/dvb-frontends/cxd2820r_core.c
 +++ b/drivers/media/dvb-frontends/cxd2820r_core.c
-@@ -722,7 +722,7 @@ struct dvb_frontend *cxd2820r_attach(const struct cxd2820r_config *cfg,
+@@ -662,7 +662,7 @@ static int cxd2820r_probe(struct i2c_client *client,
  #ifdef CONFIG_GPIOLIB
- 		/* add GPIOs */
+ 		/* Add GPIOs */
  		priv->gpio_chip.label = KBUILD_MODNAME;
--		priv->gpio_chip.parent = &priv->i2c->dev;
-+		priv->gpio_chip.dev = &priv->i2c->dev;
+-		priv->gpio_chip.parent = &client->dev;
++		priv->gpio_chip.dev = &client->dev;
  		priv->gpio_chip.owner = THIS_MODULE;
- 		priv->gpio_chip.direction_output =
- 				cxd2820r_gpio_direction_output;
+ 		priv->gpio_chip.direction_output = cxd2820r_gpio_direction_output;
+ 		priv->gpio_chip.set = cxd2820r_gpio_set;

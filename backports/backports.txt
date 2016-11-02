@@ -26,6 +26,9 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 
+[4.7.255]
+add v4.7_dma_attrs.patch
+
 [4.6.255]
 add v4.6_i2c_mux.patch
 

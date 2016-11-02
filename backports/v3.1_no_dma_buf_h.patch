@@ -1,8 +1,8 @@
 diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index dfac5ed..b0bff69 100644
+index e0b0741..707f69e 100644
 --- a/include/linux/dma-buf.h
 +++ b/include/linux/dma-buf.h
-@@ -162,6 +162,7 @@ static inline void get_dma_buf(struct dma_buf *dmabuf)
+@@ -214,6 +214,7 @@ static inline void get_dma_buf(struct dma_buf *dmabuf)
  	get_file(dmabuf->file);
  }
  
@@ -10,10 +10,10 @@ index dfac5ed..b0bff69 100644
  struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
  							struct device *dev);
  void dma_buf_detach(struct dma_buf *dmabuf,
-@@ -196,4 +197,102 @@ void *dma_buf_vmap(struct dma_buf *);
+@@ -242,4 +243,102 @@ int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
+ 		 unsigned long);
+ void *dma_buf_vmap(struct dma_buf *);
  void dma_buf_vunmap(struct dma_buf *, void *vaddr);
- int dma_buf_debugfs_create_file(const char *name,
- 				int (*write)(struct seq_file *));
 +#else
 +
 +static inline struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,

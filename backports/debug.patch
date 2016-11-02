@@ -10,27 +10,3 @@ index 5936923..a6d487c 100644
  #define DEBUG
  
  #ifdef DEBUG
-diff --git a/drivers/media/platform/s5p-tv/hdmi_drv.c b/drivers/media/platform/s5p-tv/hdmi_drv.c
-index 37c8bd6..85a1156 100644
---- a/drivers/media/platform/s5p-tv/hdmi_drv.c
-+++ b/drivers/media/platform/s5p-tv/hdmi_drv.c
-@@ -14,6 +14,7 @@
- #define pr_fmt(fmt) "s5p-tv (hdmi_drv): " fmt
- 
- #ifdef CONFIG_VIDEO_SAMSUNG_S5P_HDMI_DEBUG
-+#undef DEBUG
- #define DEBUG
- #endif
- 
-diff --git a/drivers/media/platform/s5p-tv/mixer.h b/drivers/media/platform/s5p-tv/mixer.h
-index fb2acc5..8edffcb 100644
---- a/drivers/media/platform/s5p-tv/mixer.h
-+++ b/drivers/media/platform/s5p-tv/mixer.h
-@@ -15,6 +15,7 @@
- #define SAMSUNG_MIXER_H
- 
- #ifdef CONFIG_VIDEO_SAMSUNG_S5P_MIXER_DEBUG
-+	#undef DEBUG
- 	#define DEBUG
- #endif
- 

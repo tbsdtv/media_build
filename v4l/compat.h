@@ -1593,6 +1593,10 @@ static inline long get_user_pages_unlocked(struct task_struct *tsk, struct mm_st
 #define pr_warn_once pr_warn
 #endif
 
+#ifdef NEED_DEV_ERR_ONCE
+#define dev_err_once dev_err
+#endif
+
 #ifdef NEED_DIV_ROUND_CLOSEST_ULL
 #define DIV_ROUND_CLOSEST_ULL(x, divisor)(		\
 {							\
@@ -1846,5 +1850,15 @@ static inline s64 ktime_ms_delta(const ktime_t later, const ktime_t earlier)
 #endif
 
 #define SERIO_PULSE8_CEC     0x40
+
+#ifdef NEED_KTHREAD_INIT_WORKER
+#define __kthread_init_worker __init_kthread_worker
+#define kthread_init_worker init_kthread_worker
+#define kthread_init_work init_kthread_work
+#define kthread_insert_work insert_kthread_work
+#define kthread_queue_work queue_kthread_work
+#define kthread_flush_work flush_kthread_work
+#define kthread_flush_worker flush_kthread_worker
+#endif
 
 #endif /*  _COMPAT_H */
