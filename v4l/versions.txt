@@ -1,7 +1,7 @@
 # Use this for stuff for drivers that don't compile
 [9.255.255]
 
-[4.6.0]
+[4.4.0]
 # needs regmap_write_bits
 DVB_CXD2820R
 
