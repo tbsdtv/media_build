@@ -91,9 +91,15 @@ ifneq ($(filter $(no-makefile-media-targets), $(MAKECMDGOALS)),)
 	endif
 endif
 
+makefile-mm := 1
+ifeq ($(wildcard ../linux/mm/frame_vector.c),)
+	makefile-mm := 0
+endif
+
 # If version not yet detected, we can't create/have these files yet
 ifeq ($(KERNELRELEASE),)
 	makefile-media := 0
+	makefile-mm := 0
 	dot-config := 0
 endif
 
@@ -104,6 +110,8 @@ endif
 ifeq ($(makefile-media),1)
 -include $(obj)/Makefile.media
 -include $(obj)/Makefile.sound
+endif
+ifeq ($(makefile-mm),1)
 -include $(obj)/Makefile.mm
 endif
 
@@ -202,8 +210,14 @@ all:: default
 
 #################################################
 # installation invocation rules
-
-modules_install install:: mm-install media-install firmware_install
+INSTALLDEPS :=
+ifeq ($(makefile-mm),1)
+INSTALLDEPS += mm-install
+endif
+ifeq ($(makefile-media),1)
+INSTALLDEPS += media-install
+endif
+modules_install install:: $(INSTALLDEPS) firmware_install
 
 remove rminstall:: media-rminstall
 
@@ -258,7 +272,7 @@ links::
 	@echo creating symbolic links...
 	@find ../linux/drivers/media -name '*.[ch]' -type f -print0 | xargs -0n 255 ln -sf --target-directory=.
 	@find ../linux/sound -name '*.[ch]' -type f -print0 | xargs -0n 255 ln -sf --target-directory=.
-	@find ../linux/mm -name '*.[ch]' -type f -print0 | xargs -0n 255 ln -sf --target-directory=.
+	@if [ -f ../linux/mm/frame_vector.c ]; then find ../linux/mm -name '*.[ch]' -type f -print0 | xargs -0n 255 ln -sf --target-directory=. ; fi
 	@find ../linux/drivers/staging -name '*.[ch]' -type f -print0 | xargs -0n 255 ln -sf --target-directory=.
 	@find ../linux/drivers/misc -name '*.[ch]' -type f -print0 | xargs -0n 255 ln -sf --target-directory=.
 

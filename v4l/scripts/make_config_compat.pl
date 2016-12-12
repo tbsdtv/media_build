@@ -687,6 +687,8 @@ sub check_other_dependencies()
 	check_files_for_func("smp_load_acquire", "NEED_SMP_LOAD_ACQUIRE", "include/asm-generic/barrier.h");
 	check_files_for_func("dev_err_once", "NEED_DEV_ERR_ONCE", "include/linux/device.h");
 	check_files_for_func("kthread_init_worker", "NEED_KTHREAD_INIT_WORKER", "include/linux/kthread.h");
+	check_files_for_func("print_hex_dump_debug", "NEED_PRINT_HEX_DUMP_DEBUG", "include/linux/printk.h");
+	check_files_for_func("min3", "NEED_MIN3", "include/linux/kernel.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

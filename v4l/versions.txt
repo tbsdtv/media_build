@@ -17,7 +17,7 @@ VIDEO_SMIAPP
 # needs of_property_read_u64_array
 VIDEO_MT9V032
 # needs debugfs_create_devm_seqfile
-MEDIA_CEC
+MEDIA_CEC_SUPPORT
 
 [3.18.0]
 # needs LED brightness support
@@ -62,6 +62,8 @@ IR_HIX5HD2
 VIDEO_SH_VEU
 VIDEO_RENESAS_VSP1
 VIDEO_RCAR_VIN
+VIDEO_TI_SC
+VIDEO_TI_CSC
 IR_IMG
 
 [3.8.0]
@@ -119,6 +121,7 @@ MEDIA_TUNER_M88RS6000T
 MEDIA_TUNER_TUA9001
 MEDIA_TUNER_FC2580
 DVB_TDA10071
+DVB_SI2165
 # needs spi_finalize_current_message
 USB_MSI3101
 MEDIA_TUNER_MSI001

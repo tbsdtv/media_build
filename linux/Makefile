@@ -11,7 +11,6 @@ TARDIR += drivers/media/
 TARDIR += drivers/staging/media/
 TARDIR += drivers/misc/altera-stapl/
 TARFILES += sound/pci/bt87x.c
-TARFILES += mm/frame_vector.c
 
 # Includes
 
@@ -54,8 +53,8 @@ TARFILES += include/uapi/linux/smiapp.h
 TARFILES += include/uapi/linux/v4l2-subdev.h
 TARFILES += include/uapi/linux/v4l2-common.h
 TARFILES += include/uapi/linux/v4l2-mediabus.h
-TARFILES += include/linux/cec.h
-TARFILES += include/linux/cec-funcs.h
+TARFILES += include/uapi/linux/cec.h
+TARFILES += include/uapi/linux/cec-funcs.h
 
 # Other random files
 TARFILES += include/linux/fixp-arith.h
@@ -154,6 +153,7 @@ apply_patches apply-patches:
 	fi; \
 	echo "Applying patches for kernel $$dir"; \
 	touch .patches_applied; \
+	rm -f mm/frame_vector.c; \
 	for i in $$PATCHES; do \
 		echo patch -s -f -N -p1 -i ../backports/$$i; \
 		patch -s -f -N -p1 -i ../backports/$$i --dry-run || exit 1; \
@@ -176,6 +176,7 @@ unapply_patches unapply-patches:
 		echo patch -s -f -R -p1 -i ../backports/$$i; \
 		patch -s -f -R -p1 -i ../backports/$$i || break; \
 	done; \
+	rm -f mm/frame_vector.c; \
 	rm -f .patches_applied; fi
 
 download:

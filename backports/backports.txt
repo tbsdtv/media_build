@@ -26,6 +26,9 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 
+[4.8.255]
+add v4.8_user_pages_flag.patch
+
 [4.7.255]
 add v4.7_dma_attrs.patch
 
@@ -39,6 +42,10 @@ add v4.5_uvc_super_plus.patch
 
 [4.4.255]
 add v4.4_gpio_chip_parent.patch
+
+[4.2.255]
+add v4.2_atomic64.patch
+add v4.2_frame_vector.patch
 
 [4.1.255]
 add v4.1_pat_enabled.patch

@@ -1861,4 +1861,16 @@ static inline s64 ktime_ms_delta(const ktime_t later, const ktime_t earlier)
 #define kthread_flush_worker flush_kthread_worker
 #endif
 
+#ifdef NEED_PRINT_HEX_DUMP_DEBUG
+#define print_hex_dump_debug(prefix_str, prefix_type, rowsize,          \
+			     groupsize, buf, len, ascii)                \
+	print_hex_dump(KERN_DEBUG, prefix_str, prefix_type, rowsize,    \
+		       groupsize, buf, len, ascii)
+#endif
+
+#ifdef NEED_MIN3
+#define min3(x, y, z) min((typeof(x))min(x, y), z)
+#define max3(x, y, z) max((typeof(x))max(x, y), z)
+#endif
+
 #endif /*  _COMPAT_H */
