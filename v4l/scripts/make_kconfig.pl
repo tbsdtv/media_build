@@ -616,6 +616,7 @@ disable_config('STAGING') if (!$enable_staging);
 disable_config('STAGING_BROKEN');
 $config{'COMPILE_TEST'} = 0;
 $intopt { "DVB_MAX_ADAPTERS" } = 48;
+disable_config('DVB_DEMUX_SECTION_LOSS_LOG');
 
 # Check dependencies
 my %newconfig = checkdeps();
