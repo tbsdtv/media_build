@@ -169,6 +169,7 @@ sub depends($$)
 	push @{$depends{$key}}, $deps;
 }
 
+my %selectdepends = ();
 sub selects($$$)
 {
 	my $key = shift;
@@ -181,7 +182,7 @@ sub selects($$$)
 		# Transform "select X if Y" into "depends on !Y || X"
 		$select = "!($if) || ($select)";
 	}
-	push @{$depends{$key}}, $select;
+	push @{$selectdepends{$key}}, $select;
 }
 
 # Needs:
@@ -228,6 +229,23 @@ sub checkdeps()
 				return 0;
 			}
 		}
+		my $selectdeps = $selectdepends{$key};
+		if ($selectdeps) {
+			my $found = 0;
+			foreach (@$selectdeps) {
+				next if($_ eq '');
+				if (eval(toperl($_))) {
+					$found = 1;
+					last;
+				}
+			}
+			if ($found == 0) {
+				print "Disabling $key, select dependency '$_' not met\n" if $debug;
+				$allconfig{$key} = 0;
+				return 0;
+			}
+		}
+
 		return 1;
 	}
 
