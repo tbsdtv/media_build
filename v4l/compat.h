@@ -1056,6 +1056,15 @@ static inline size_t memweight(const void *ptr, size_t bytes)
 #define usb_endpoint_maxp(epd) __le16_to_cpu((epd)->wMaxPacketSize)
 #endif
 
+#ifdef NEED_USB_ENDPOINT_MAXP_MULT
+#define USB_EP_MAXP_MULT_SHIFT  11
+#define USB_EP_MAXP_MULT_MASK   (3 << USB_EP_MAXP_MULT_SHIFT)
+#define USB_EP_MAXP_MULT(m) \
+	        (((m) & USB_EP_MAXP_MULT_MASK) >> USB_EP_MAXP_MULT_SHIFT)
+
+#define usb_endpoint_maxp_mult(epd) (USB_EP_MAXP_MULT(usb_endpoint_maxp(epd)) + 1)
+#endif
+
 #ifdef NEED_PRINTK_RATELIMITED
 #define printk_ratelimited printk
 #endif
@@ -1872,5 +1881,34 @@ static inline s64 ktime_ms_delta(const ktime_t later, const ktime_t earlier)
 #define min3(x, y, z) min((typeof(x))min(x, y), z)
 #define max3(x, y, z) max((typeof(x))max(x, y), z)
 #endif
+
+#ifdef NEED_RCU_POINTER_HANDOFF
+#define rcu_pointer_handoff(p) (p)
+#endif
+
+#ifdef NEED_REGMAP_READ_POLL_TIMEOUT
+#define regmap_read_poll_timeout(map, addr, val, cond, sleep_us, timeout_us) \
+({ \
+	ktime_t timeout = ktime_add_us(ktime_get(), timeout_us); \
+	int pollret; \
+	might_sleep_if(sleep_us); \
+	for (;;) { \
+		pollret = regmap_read((map), (addr), &(val)); \
+		if (pollret) \
+			break; \
+		if (cond) \
+			break; \
+		if (timeout_us && ktime_compare(ktime_get(), timeout) > 0) { \
+			pollret = regmap_read((map), (addr), &(val)); \
+			break; \
+		} \
+		if (sleep_us) \
+			usleep_range((sleep_us >> 2) + 1, sleep_us); \
+	} \
+	pollret ?: ((cond) ? 0 : -ETIMEDOUT); \
+})
+#endif
+
+#define of_node_cmp(s1, s2)          strcasecmp((s1), (s2))
 
 #endif /*  _COMPAT_H */

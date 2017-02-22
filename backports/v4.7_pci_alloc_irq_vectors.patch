@@ -1,0 +1,44 @@
+diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
+index d5c911c..9796340 100644
+--- a/drivers/media/pci/cobalt/cobalt-driver.c
++++ b/drivers/media/pci/cobalt/cobalt-driver.c
+@@ -308,7 +308,9 @@ static void cobalt_pci_iounmap(struct cobalt *cobalt, struct pci_dev *pci_dev)
+ static void cobalt_free_msi(struct cobalt *cobalt, struct pci_dev *pci_dev)
+ {
+ 	free_irq(pci_dev->irq, (void *)cobalt);
+-	pci_free_irq_vectors(pci_dev);
++
++	if (cobalt->msi_enabled)
++		pci_disable_msi(pci_dev);
+ }
+ 
+ static int cobalt_setup_pci(struct cobalt *cobalt, struct pci_dev *pci_dev,
+@@ -385,12 +387,14 @@ static int cobalt_setup_pci(struct cobalt *cobalt, struct pci_dev *pci_dev,
+ 	   from being generated. */
+ 	cobalt_set_interrupt(cobalt, false);
+ 
+-	if (pci_alloc_irq_vectors(pci_dev, 1, 1, PCI_IRQ_MSI) < 1) {
++	if (pci_enable_msi_range(pci_dev, 1, 1) < 1) {
+ 		cobalt_err("Could not enable MSI\n");
++		cobalt->msi_enabled = false;
+ 		ret = -EIO;
+ 		goto err_release;
+ 	}
+ 	msi_config_show(cobalt, pci_dev);
++	cobalt->msi_enabled = true;
+ 
+ 	/* Register IRQ */
+ 	if (request_irq(pci_dev->irq, cobalt_irq_handler, IRQF_SHARED,
+diff --git a/drivers/media/pci/cobalt/cobalt-driver.h b/drivers/media/pci/cobalt/cobalt-driver.h
+index 00f773e..ed00dc9 100644
+--- a/drivers/media/pci/cobalt/cobalt-driver.h
++++ b/drivers/media/pci/cobalt/cobalt-driver.h
+@@ -287,6 +287,8 @@ struct cobalt {
+ 	u32 irq_none;
+ 	u32 irq_full_fifo;
+ 
++	bool msi_enabled;
++
+ 	/* omnitek dma */
+ 	int dma_channels;
+ 	int first_fifo_channel;

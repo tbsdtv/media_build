@@ -1,0 +1,63 @@
+diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
+index 0c16bb2..0c44479 100644
+--- a/drivers/media/dvb-core/dmxdev.c
++++ b/drivers/media/dvb-core/dmxdev.c
+@@ -562,7 +562,7 @@ static int dvb_dmxdev_start_feed(struct dmxdev *dmxdev,
+ 				 struct dmxdev_filter *filter,
+ 				 struct dmxdev_feed *feed)
+ {
+-	ktime_t timeout = 0;
++	ktime_t timeout = ktime_set(0, 0);
+ 	struct dmx_pes_filter_params *para = &filter->params.pes;
+ 	dmx_output_t otype;
+ 	int ret;
+diff --git a/drivers/media/pci/cx88/cx88-input.c b/drivers/media/pci/cx88/cx88-input.c
+index c7b3cb4..dcfea35 100644
+--- a/drivers/media/pci/cx88/cx88-input.c
++++ b/drivers/media/pci/cx88/cx88-input.c
+@@ -178,7 +178,8 @@ static enum hrtimer_restart cx88_ir_work(struct hrtimer *timer)
+ 	struct cx88_IR *ir = container_of(timer, struct cx88_IR, timer);
+ 
+ 	cx88_ir_handle_key(ir);
+-	missed = hrtimer_forward_now(&ir->timer, ir->polling * 1000000);
++	missed = hrtimer_forward_now(&ir->timer,
++				     ktime_set(0, ir->polling * 1000000));
+ 	if (missed > 1)
+ 		ir_dprintk("Missed ticks %ld\n", missed - 1);
+ 
+@@ -198,7 +199,8 @@ static int __cx88_ir_start(void *priv)
+ 	if (ir->polling) {
+ 		hrtimer_init(&ir->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 		ir->timer.function = cx88_ir_work;
+-		hrtimer_start(&ir->timer, ir->polling * 1000000,
++		hrtimer_start(&ir->timer,
++			      ktime_set(0, ir->polling * 1000000),
+ 			      HRTIMER_MODE_REL);
+ 	}
+ 	if (ir->sampling) {
+diff --git a/drivers/media/pci/pt3/pt3.c b/drivers/media/pci/pt3/pt3.c
+index 77f4d15..7fb649e 100644
+--- a/drivers/media/pci/pt3/pt3.c
++++ b/drivers/media/pci/pt3/pt3.c
+@@ -463,7 +463,7 @@ static int pt3_fetch_thread(void *data)
+ 
+ 		pt3_proc_dma(adap);
+ 
+-		delay = PT3_FETCH_DELAY * NSEC_PER_MSEC;
++		delay = ktime_set(0, PT3_FETCH_DELAY * NSEC_PER_MSEC);
+ 		set_current_state(TASK_UNINTERRUPTIBLE);
+ 		freezable_schedule_hrtimeout_range(&delay,
+ 					PT3_FETCH_DELAY_DELTA * NSEC_PER_MSEC,
+diff --git a/drivers/media/rc/ir-rx51.c b/drivers/media/rc/ir-rx51.c
+index e6efa8c..82fb6f2 100644
+--- a/drivers/media/rc/ir-rx51.c
++++ b/drivers/media/rc/ir-rx51.c
+@@ -109,7 +109,7 @@ static enum hrtimer_restart lirc_rx51_timer_cb(struct hrtimer *timer)
+ 
+ 		now = timer->base->get_time();
+ 
+-	} while (hrtimer_get_expires_tv64(timer) < now);
++	} while (hrtimer_get_expires_tv64(timer) < now.tv64);
+ 
+ 	return HRTIMER_RESTART;
+ end:

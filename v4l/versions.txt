@@ -1,6 +1,15 @@
 # Use this for stuff for drivers that don't compile
 [9.255.255]
 
+[4.7.0]
+# needs i2c_mux_alloc
+#VIDEO_CX231XX
+DVB_LGDT3306A
+#DVB_SI2168
+#DVB_RTL2830
+#DVB_RTL2832
+#DVB_M88DS3103
+
 [4.4.0]
 # needs regmap_write_bits
 DVB_CXD2820R
@@ -34,6 +43,7 @@ VIDEO_TC358743
 VIDEO_ADP1653
 VIDEO_TVP5150
 VIDEO_ADV7180
+VIDEO_ET8EK8
 
 [3.15.0]
 # needs reset_control_get_optional
@@ -65,18 +75,19 @@ VIDEO_RCAR_VIN
 VIDEO_TI_SC
 VIDEO_TI_CSC
 IR_IMG
+# needs spi_sync_transfer
+IR_SPI
 
 [3.8.0]
 # needs regmap lock/unlock ops
-DVB_RTL2830
-DVB_RTL2832
 DVB_TS2020
-DVB_M88DS3103
 
 [3.7.0]
 # i2c_add_mux_adapter prototype change
 # Needs PLATFORM_DEVID_AUTO
 DVB_USB_RTL28XXU
+DVB_USB_AF9035
+DVB_USB_ZD1301
 # needs pcie_capability_clear_and_set_word
 DVB_NETUP_UNIDVB
 
@@ -128,6 +139,7 @@ MEDIA_TUNER_MSI001
 # needs regmap_bulk_write
 MEDIA_TUNER_M88TS2022
 MEDIA_TUNER_IT913X
+DVB_AF9033
 DVB_MN88472
 DVB_MN88473
 
@@ -240,8 +252,6 @@ SMS_SDIO_DRV
 VIDEO_SAA7164
 
 [2.6.23]
-# Needs field intf_assoc in struct usb_host_config
-VIDEO_CX231XX
 # writel/readl headers moved
 DVB_MANTIS
 MANTIS_CORE

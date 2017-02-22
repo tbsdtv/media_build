@@ -1,7 +1,7 @@
-diff --git a/include/linux/fence.h b/include/linux/fence.h
+diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
 index d174585..6f60f55 100644
---- a/include/linux/fence.h
-+++ b/include/linux/fence.h
+--- a/include/linux/dma-fence.h
++++ b/include/linux/dma-fence.h
 @@ -27,7 +27,6 @@
  #include <linux/bitops.h>
  #include <linux/kref.h>
