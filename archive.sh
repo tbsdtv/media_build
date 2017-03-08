@@ -1,7 +1,8 @@
 #!/bin/bash
 echo "V4L drivers archive..."
+make cleanall
+make dir DIR=./media
 cd linux
-make unapply-patches
 make todaytar DIR=.
 mv -f linux-media-LATEST.tar.* ..
 
