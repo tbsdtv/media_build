@@ -26,6 +26,9 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 
+[4.10.255]
+add v4.10_sched_signal.patch
+
 [4.9.255]
 add v4.9_mm_address.patch
 add v4.9_dvb_net_max_mtu.patch

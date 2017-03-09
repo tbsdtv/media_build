@@ -1,0 +1,286 @@
+diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
+index 8d65028c7a74..000d737ad827 100644
+--- a/drivers/media/dvb-core/dvb_ca_en50221.c
++++ b/drivers/media/dvb-core/dvb_ca_en50221.c
+@@ -34,7 +34,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/delay.h>
+ #include <linux/spinlock.h>
+-#include <linux/sched/signal.h>
++#include <linux/sched.h>
+ #include <linux/kthread.h>
+ 
+ #include "dvb_ca_en50221.h"
+diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
+index 6628f80d184f..4eac71e50c5f 100644
+--- a/drivers/media/dvb-core/dvb_demux.c
++++ b/drivers/media/dvb-core/dvb_demux.c
+@@ -19,7 +19,7 @@
+ 
+ #define pr_fmt(fmt) "dvb_demux: " fmt
+ 
+-#include <linux/sched/signal.h>
++#include <linux/sched.h>
+ #include <linux/spinlock.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+index e3fff8f64d37..85ae3669aa66 100644
+--- a/drivers/media/dvb-core/dvb_frontend.c
++++ b/drivers/media/dvb-core/dvb_frontend.c
+@@ -29,7 +29,7 @@
+ 
+ #include <linux/string.h>
+ #include <linux/kernel.h>
+-#include <linux/sched/signal.h>
++#include <linux/sched.h>
+ #include <linux/wait.h>
+ #include <linux/slab.h>
+ #include <linux/poll.h>
+diff --git a/drivers/media/pci/cx18/cx18-driver.h b/drivers/media/pci/cx18/cx18-driver.h
+index 7be2088c45fe..fef3c736fcba 100644
+--- a/drivers/media/pci/cx18/cx18-driver.h
++++ b/drivers/media/pci/cx18/cx18-driver.h
+@@ -24,7 +24,7 @@
+ #include <linux/moduleparam.h>
+ #include <linux/init.h>
+ #include <linux/delay.h>
+-#include <linux/sched/signal.h>
++#include <linux/sched.h>
+ #include <linux/fs.h>
+ #include <linux/pci.h>
+ #include <linux/interrupt.h>
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
+index d27c5c2c07ea..cde452e30746 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.h
++++ b/drivers/media/pci/ivtv/ivtv-driver.h
+@@ -38,38 +38,37 @@
+  *                using information provided by Jiun-Kuei Jung @ AVerMedia.
+  */
+ 
+-#include <linux/module.h>
+-#include <linux/init.h>
++#include <asm/byteorder.h>
+ #include <linux/delay.h>
+-#include <linux/sched/signal.h>
++#include <linux/device.h>
+ #include <linux/fs.h>
+-#include <linux/pci.h>
+-#include <linux/interrupt.h>
+-#include <linux/spinlock.h>
+ #include <linux/i2c.h>
+ #include <linux/i2c-algo-bit.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/ivtv.h>
++#include <linux/kernel.h>
++#include <linux/kthread.h>
+ #include <linux/list.h>
+-#include <linux/unistd.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
+ #include <linux/pagemap.h>
++#include <linux/pci.h>
+ #include <linux/scatterlist.h>
+-#include <linux/kthread.h>
+-#include <linux/mutex.h>
++#include <linux/sched.h>
+ #include <linux/slab.h>
++#include <linux/spinlock.h>
+ #include <linux/uaccess.h>
+-#include <asm/byteorder.h>
++#include <linux/unistd.h>
+ 
+-#include <linux/dvb/video.h>
+-#include <linux/dvb/audio.h>
++#include <media/drv-intf/cx2341x.h>
++#include <media/i2c/ir-kbd-i2c.h>
++#include <media/tuner.h>
+ #include <media/v4l2-common.h>
+-#include <media/v4l2-ioctl.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fh.h>
+-#include <media/tuner.h>
+-#include <media/drv-intf/cx2341x.h>
+-#include <media/i2c/ir-kbd-i2c.h>
+-
+-#include <linux/ivtv.h>
++#include <media/v4l2-ioctl.h>
+ 
+ /* Memory layout */
+ #define IVTV_ENCODER_OFFSET	0x00000000
+diff --git a/drivers/media/pci/pt1/pt1.c b/drivers/media/pci/pt1/pt1.c
+index 3219d2f3271e..da1eebd2016f 100644
+--- a/drivers/media/pci/pt1/pt1.c
++++ b/drivers/media/pci/pt1/pt1.c
+@@ -18,7 +18,6 @@
+  */
+ 
+ #include <linux/kernel.h>
+-#include <linux/sched/signal.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+diff --git a/drivers/media/pci/pt3/pt3.c b/drivers/media/pci/pt3/pt3.c
+index e8b5d0992157..77f4d15f322b 100644
+--- a/drivers/media/pci/pt3/pt3.c
++++ b/drivers/media/pci/pt3/pt3.c
+@@ -21,7 +21,6 @@
+ #include <linux/module.h>
+ #include <linux/pci.h>
+ #include <linux/string.h>
+-#include <linux/sched/signal.h>
+ 
+ #include "dmxdev.h"
+ #include "dvbdev.h"
+diff --git a/drivers/media/pci/solo6x10/solo6x10-i2c.c b/drivers/media/pci/solo6x10/solo6x10-i2c.c
+index e83bb79f9349..c908672b2c40 100644
+--- a/drivers/media/pci/solo6x10/solo6x10-i2c.c
++++ b/drivers/media/pci/solo6x10/solo6x10-i2c.c
+@@ -27,7 +27,6 @@
+  * thread context, ACK the interrupt, and move on. -- BenC */
+ 
+ #include <linux/kernel.h>
+-#include <linux/sched/signal.h>
+ 
+ #include "solo6x10.h"
+ 
+diff --git a/drivers/media/pci/zoran/zoran_device.c b/drivers/media/pci/zoran/zoran_device.c
+index 40adceebca7e..671907a6e6b6 100644
+--- a/drivers/media/pci/zoran/zoran_device.c
++++ b/drivers/media/pci/zoran/zoran_device.c
+@@ -28,7 +28,6 @@
+ #include <linux/module.h>
+ #include <linux/vmalloc.h>
+ #include <linux/ktime.h>
+-#include <linux/sched/signal.h>
+ 
+ #include <linux/interrupt.h>
+ #include <linux/proc_fs.h>
+diff --git a/drivers/media/platform/vivid/vivid-radio-rx.c b/drivers/media/platform/vivid/vivid-radio-rx.c
+index 47c36c26096b..f99092ca8f5c 100644
+--- a/drivers/media/platform/vivid/vivid-radio-rx.c
++++ b/drivers/media/platform/vivid/vivid-radio-rx.c
+@@ -22,8 +22,6 @@
+ #include <linux/delay.h>
+ #include <linux/videodev2.h>
+ #include <linux/v4l2-dv-timings.h>
+-#include <linux/sched/signal.h>
+-
+ #include <media/v4l2-common.h>
+ #include <media/v4l2-event.h>
+ #include <media/v4l2-dv-timings.h>
+diff --git a/drivers/media/platform/vivid/vivid-radio-tx.c b/drivers/media/platform/vivid/vivid-radio-tx.c
+index 0e8025b7b4dd..8c59d4f53200 100644
+--- a/drivers/media/platform/vivid/vivid-radio-tx.c
++++ b/drivers/media/platform/vivid/vivid-radio-tx.c
+@@ -19,7 +19,6 @@
+ 
+ #include <linux/errno.h>
+ #include <linux/kernel.h>
+-#include <linux/sched/signal.h>
+ #include <linux/delay.h>
+ #include <linux/videodev2.h>
+ #include <linux/v4l2-dv-timings.h>
+diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
+index 393dccaabdd0..a54ca531d8ef 100644
+--- a/drivers/media/rc/lirc_dev.c
++++ b/drivers/media/rc/lirc_dev.c
+@@ -19,7 +19,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+-#include <linux/sched/signal.h>
++#include <linux/sched.h>
+ #include <linux/errno.h>
+ #include <linux/ioctl.h>
+ #include <linux/fs.h>
+diff --git a/drivers/media/usb/cpia2/cpia2_core.c b/drivers/media/usb/cpia2/cpia2_core.c
+index b1d13444ff30..431dd0b4b332 100644
+--- a/drivers/media/usb/cpia2/cpia2_core.c
++++ b/drivers/media/usb/cpia2/cpia2_core.c
+@@ -32,7 +32,6 @@
+ #include <linux/mm.h>
+ #include <linux/vmalloc.h>
+ #include <linux/firmware.h>
+-#include <linux/sched/signal.h>
+ 
+ #define FIRMWARE "cpia2/stv0672_vp4.bin"
+ MODULE_FIRMWARE(FIRMWARE);
+diff --git a/drivers/media/usb/gspca/cpia1.c b/drivers/media/usb/gspca/cpia1.c
+index e91d00762e94..23d3285f182a 100644
+--- a/drivers/media/usb/gspca/cpia1.c
++++ b/drivers/media/usb/gspca/cpia1.c
+@@ -27,8 +27,6 @@
+ #define MODULE_NAME "cpia1"
+ 
+ #include <linux/input.h>
+-#include <linux/sched/signal.h>
+-
+ #include "gspca.h"
+ 
+ MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com>");
+diff --git a/drivers/staging/media/lirc/lirc_sir.c b/drivers/staging/media/lirc/lirc_sir.c
+index c6c3de94adaa..c75ae43095ba 100644
+--- a/drivers/staging/media/lirc/lirc_sir.c
++++ b/drivers/staging/media/lirc/lirc_sir.c
+@@ -36,7 +36,7 @@
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/module.h>
+-#include <linux/sched/signal.h>
++#include <linux/sched.h>
+ #include <linux/errno.h>
+ #include <linux/signal.h>
+ #include <linux/fs.h>
+diff --git a/drivers/staging/media/lirc/lirc_zilog.c b/drivers/staging/media/lirc/lirc_zilog.c
+index e4a533b6beb3..34aac3e2eb87 100644
+--- a/drivers/staging/media/lirc/lirc_zilog.c
++++ b/drivers/staging/media/lirc/lirc_zilog.c
+@@ -42,7 +42,7 @@
+ #include <linux/module.h>
+ #include <linux/kmod.h>
+ #include <linux/kernel.h>
+-#include <linux/sched/signal.h>
++#include <linux/sched.h>
+ #include <linux/fs.h>
+ #include <linux/poll.h>
+ #include <linux/string.h>
+diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+index 6cd94e5ee113..574ff2ae94be 100644
+--- a/include/media/v4l2-ioctl.h
++++ b/include/media/v4l2-ioctl.h
+@@ -12,7 +12,6 @@
+ #include <linux/poll.h>
+ #include <linux/fs.h>
+ #include <linux/mutex.h>
+-#include <linux/sched/signal.h>
+ #include <linux/compiler.h> /* need __user */
+ #include <linux/videodev2.h>
+ 
+diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
+index 0b5c43f7e020..36bd904946bd 100644
+--- a/drivers/media/v4l2-core/videobuf-dma-sg.c
++++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+@@ -21,7 +21,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+-#include <linux/sched/mm.h>
++#include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/interrupt.h>
+ 
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
+index a71a03e22385..aaccc1187791 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.c
++++ b/drivers/media/pci/ivtv/ivtv-driver.c
+@@ -59,7 +59,6 @@
+ #include <media/tveeprom.h>
+ #include <media/i2c/saa7115.h>
+ #include "tuner-xc2028.h"
+-#include <uapi/linux/sched/types.h>
+ 
+ /* If you have already X v4l cards, then set this to X. This way
+    the device numbers stay matched. Example: you have a WinTV card
