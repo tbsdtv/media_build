@@ -28,6 +28,7 @@ add drx39xxj.patch
 
 [4.10.255]
 add v4.10_sched_signal.patch
+add v4.10_fault_page.patch
 
 [4.9.255]
 add v4.9_mm_address.patch
