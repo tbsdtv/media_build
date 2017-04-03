@@ -1915,4 +1915,13 @@ static inline s64 ktime_ms_delta(const ktime_t later, const ktime_t earlier)
 #define BIT_ULL_MASK(nr)   (1ULL << ((nr) % BITS_PER_LONG_LONG))
 #define BIT_ULL_WORD(nr)   ((nr) / BITS_PER_LONG_LONG)
 
+#ifdef NEED_DMA_COERCE_MASK
+#include <linux/dma-mapping.h>
+static inline int dma_coerce_mask_and_coherent(struct device *dev, u64 mask)
+{
+	dev->dma_mask = &dev->coherent_dma_mask;
+	return dma_set_mask_and_coherent(dev, mask);
+}
+#endif
+
 #endif /*  _COMPAT_H */
