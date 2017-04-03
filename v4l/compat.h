@@ -1739,6 +1739,9 @@ static inline const char* of_node_full_name(const struct device_node *np)
 	return "<no-node>";
 }
 #endif
+#elif LINUX_VERSION_CODE <= KERNEL_VERSION(3, 14, 0)
+#include <linux/of.h>
+#define of_node_full_name(p) of_node_full_name((struct device_node *)(p))
 #endif
 
 #ifdef NEED_DIV64_U64_REM
@@ -1922,6 +1925,11 @@ static inline int dma_coerce_mask_and_coherent(struct device *dev, u64 mask)
 	dev->dma_mask = &dev->coherent_dma_mask;
 	return dma_set_mask_and_coherent(dev, mask);
 }
+#endif
+
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(3, 10, 0)
+#include <sound/pcm.h>
+#define snd_pcm_set_ops(pcm, dir, ops) snd_pcm_set_ops(pcm, dir, (struct snd_pcm_ops *)(ops))
 #endif
 
 #endif /*  _COMPAT_H */
