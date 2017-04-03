@@ -1911,4 +1911,8 @@ static inline s64 ktime_ms_delta(const ktime_t later, const ktime_t earlier)
 
 #define of_node_cmp(s1, s2)          strcasecmp((s1), (s2))
 
+#define BIT_ULL(nr)        (1ULL << (nr))
+#define BIT_ULL_MASK(nr)   (1ULL << ((nr) % BITS_PER_LONG_LONG))
+#define BIT_ULL_WORD(nr)   ((nr) / BITS_PER_LONG_LONG)
+
 #endif /*  _COMPAT_H */
