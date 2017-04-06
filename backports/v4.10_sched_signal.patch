@@ -221,19 +221,6 @@ index e91d00762e94..23d3285f182a 100644
  #include "gspca.h"
  
  MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com>");
-diff --git a/drivers/staging/media/lirc/lirc_sir.c b/drivers/staging/media/lirc/lirc_sir.c
-index c6c3de94adaa..c75ae43095ba 100644
---- a/drivers/staging/media/lirc/lirc_sir.c
-+++ b/drivers/staging/media/lirc/lirc_sir.c
-@@ -36,7 +36,7 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
--#include <linux/sched/signal.h>
-+#include <linux/sched.h>
- #include <linux/errno.h>
- #include <linux/signal.h>
- #include <linux/fs.h>
 diff --git a/drivers/staging/media/lirc/lirc_zilog.c b/drivers/staging/media/lirc/lirc_zilog.c
 index e4a533b6beb3..34aac3e2eb87 100644
 --- a/drivers/staging/media/lirc/lirc_zilog.c
