@@ -12,6 +12,7 @@ my $help = 0;
 my $man = 0;
 my $check_only = 0;
 my $main_git = 0;
+my $depth;
 my @git;
 
 #my $main_git_url = "git://linuxtv.org/media_tree.git";
@@ -29,10 +30,13 @@ GetOptions('v|verbose' => \$level,
 	    man => \$man,
 	   'check_only|check-only' => \$check_only,
 	   'main_git|main-git' => \$main_git,
+	   'depth=i' => \$depth,
 	   'git=s{2}' => \@git,
 	  ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
+
+$depth="--depth $depth" if ($depth);
 
 #############
 # Static vars
@@ -422,8 +426,13 @@ if (@git == 2) {
 	if (!stat "./media/.git/config") {
 		if (!$local) {
 			print "Getting the latest Kernel tree. This will take some time\n";
-			system("git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git media") == 0
-				or die "Can't clone from the upstream tree";
+			if ($depth) {
+				system("git clone --origin '$rname/$git[1]' git://linuxtv.org/media_tree.git media $depth") == 0
+					or die "Can't clone from the upstream tree";
+			} else {
+				system("git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git media $depth") == 0
+					or die "Can't clone from the upstream tree";
+			}
 			system('git --git-dir media/.git config format.cc "Linux Media Mailing List <linux-media@vger.kernel.org>"');
 			system('git --git-dir media/.git config format.signoff true');
 			system('git --git-dir media/.git config format.numbered auto');
@@ -435,12 +444,12 @@ if (@git == 2) {
 					or die "Can't create a new workdir";
 			} else {
 				print "Creating a new clone\n";
-				system("git clone -l $git[0] media") == 0
+				system("git clone -l $git[0] media $depth") == 0
 					or die "Can't create a new clone";
 			}
 		}
 	} elsif ($workdir eq "") {
-		system("git --git-dir media/.git remote update origin") == 0
+		system("git --git-dir media/.git remote update '$rname/$git[1]'") == 0
 			or die "Can't update from the upstream tree";
 	}
 
@@ -451,19 +460,21 @@ if (@git == 2) {
 			system ("git --git-dir media/.git remote add $name $git[0]") == 0
 				or die "Can't create remote $name";
 		}
-		print "updating remote $rname\n";
-		system ("git --git-dir media/.git remote update $name") == 0
-				or die "Can't update remote $name";
-		print "creating a local branch $rname\n";
-		if (!check_git("branch", "$rname/$git[1]")) {
-			print "\$ (cd media; git checkout -b $rname/$git[1] remotes/$name/$git[1])\n" if ($level);
-			system ("(cd media; git checkout -b $rname/$git[1] remotes/$name/$git[1])") == 0
+		if (!$depth) {
+			print "updating remote $rname\n";
+			system ("git --git-dir media/.git remote update $name") == 0
+					or die "Can't update remote $name";
+			print "creating a local branch $rname\n";
+			if (!check_git("branch", "$rname/$git[1]")) {
+				print "\$ (cd media; git checkout -b $rname/$git[1] remotes/$name/$git[1])\n" if ($level);
+				system ("(cd media; git checkout -b $rname/$git[1] remotes/$name/$git[1])") == 0
 					or die "Can't create local branch $rname";
-		} else {
-			system ("(cd media; git checkout $rname/$git[1])") == 0
-					or die "Can't checkout to branch $rname";
-			system ("(cd media; git pull . remotes/$name/$git[1])") == 0
-					or die "Can't update local branch $name";
+			} else {
+				system ("(cd media; git checkout $rname/$git[1])") == 0
+						or die "Can't checkout to branch $rname";
+				system ("(cd media; git pull . remotes/$name/$git[1])") == 0
+						or die "Can't update local branch $name";
+			}
 		}
 	} else {
 		print "git checkout $git[1]\n";
@@ -526,7 +537,7 @@ build - Builds the media drivers without needing to compile a new kernel
 =head1 SYNOPSIS
 
 build [--help] [--man] [--verbose] [--check-only] [<--git> [URL] [BRANCH]]
- [--main-git]
+ [--main-git] [--depth [DEPTH]]
 
 =head1 OPTIONS
 
@@ -558,6 +569,13 @@ warrant an unique namespace for git remotes.
 
 Use the main development git tree, as found at
 L<http://git.linuxtv.org/media_tree.git>.
+
+=item B<--depth> [DEPTH]
+
+When using doing a git clone (e. g. with --git or --main-git), pass the
+depth parameter, in order to get a smaller tree.
+
+That helps to reduce disk storage and download time.
 
 =back
 
@@ -607,7 +625,7 @@ If you're developing a new driver or patch, it is better to use:
 
 =over 8
 
-~/media_build $ B<./build --main-git>
+~/media_build $ B<./build --main-git> B<--depth 1>
 
 =back
 
