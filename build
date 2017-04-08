@@ -572,7 +572,7 @@ L<http://git.linuxtv.org/media_tree.git>.
 
 =item B<--depth> [DEPTH]
 
-When using doing a git clone (e. g. with --git or --main-git), pass the
+When doing a git clone (e. g. with --git or --main-git), pass the
 depth parameter, in order to get a smaller tree.
 
 That helps to reduce disk storage and download time.
