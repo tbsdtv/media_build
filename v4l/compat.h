@@ -1862,6 +1862,7 @@ static inline s64 ktime_ms_delta(const ktime_t later, const ktime_t earlier)
 #endif
 
 #define SERIO_PULSE8_CEC     0x40
+#define SERIO_RAINSHADOW_CEC 0x41
 
 #ifdef NEED_KTHREAD_INIT_WORKER
 #define __kthread_init_worker __init_kthread_worker
