@@ -1469,6 +1469,15 @@ static inline void *devm_kmalloc_array(struct device *dev,
 }
 #endif
 
+#ifdef NEED_DEVM_KCALLOC
+#include <linux/slab.h>
+static inline void *devm_kcalloc(struct device *dev,
+				 size_t n, size_t size, gfp_t flags)
+{
+	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
+}
+#endif
+
 #ifdef NEED_PCI_ZALLOC_CONSISTENT
 #include <linux/pci.h>
 #include <linux/dma-mapping.h>

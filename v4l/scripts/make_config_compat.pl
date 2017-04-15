@@ -692,6 +692,7 @@ sub check_other_dependencies()
 	check_files_for_func("rcu_pointer_handoff", "NEED_RCU_POINTER_HANDOFF", "include/linux/rcupdate.h");
 	check_files_for_func("regmap_read_poll_timeout", "NEED_REGMAP_READ_POLL_TIMEOUT", "include/linux/regmap.h");
 	check_files_for_func("dma_coerce_mask_and_coherent", "NEED_DMA_COERCE_MASK", "include/linux/dma-mapping.h");
+	check_files_for_func("devm_kcalloc", "NEED_DEVM_KCALLOC", "include/linux/device.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");
