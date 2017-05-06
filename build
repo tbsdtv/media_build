@@ -449,7 +449,7 @@ if (@git == 2) {
 			}
 		}
 	} elsif ($workdir eq "") {
-		system("git --git-dir media/.git remote update '$rname/$git[1]'") == 0
+		system("git --git-dir media/.git remote update '$name'") == 0
 			or die "Can't update from the upstream tree";
 	}
 
