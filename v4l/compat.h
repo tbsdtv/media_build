@@ -20,6 +20,8 @@
 #define uninitialized_var(x) x = x
 #endif
 
+#define SIZE_MAX    (~(size_t)0)
+
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0)
 #include <linux/sizes.h>
 #endif
@@ -817,6 +819,28 @@ static inline void *vzalloc(unsigned long size)
 	return p;
 }
 
+#endif
+
+#ifdef NEED_KVZALLOC
+#include <linux/vmalloc.h>
+
+static inline void *kvzalloc(size_t size, gfp_t flags)
+{
+	return vzalloc(size);
+}
+
+static inline void *kvmalloc(size_t size, gfp_t flags)
+{
+	return vmalloc(size);
+}
+
+static inline void *kvmalloc_array(size_t n, size_t size, gfp_t flags)
+{
+	if (size != 0 && n > SIZE_MAX / size)
+		return NULL;
+
+	return kvmalloc(n * size, flags);
+}
 #endif
 
 #ifdef NEED_FLUSH_WORK_SYNC
@@ -1940,6 +1964,112 @@ static inline int dma_coerce_mask_and_coherent(struct device *dev, u64 mask)
 #if LINUX_VERSION_CODE <= KERNEL_VERSION(3, 10, 0)
 #include <sound/pcm.h>
 #define snd_pcm_set_ops(pcm, dir, ops) snd_pcm_set_ops(pcm, dir, (struct snd_pcm_ops *)(ops))
+#endif
+
+#ifdef NEED_CDEV_DEVICE
+#include <linux/cdev.h>
+
+static inline void cdev_set_parent(struct cdev *p, struct kobject *kobj)
+{
+	WARN_ON(!kobj->state_initialized);
+	p->kobj.parent = kobj;
+}
+
+static inline int cdev_device_add(struct cdev *cdev, struct device *dev)
+{
+	int rc = 0;
+
+	if (dev->devt) {
+		cdev_set_parent(cdev, &dev->kobj);
+
+		rc = cdev_add(cdev, dev->devt, 1);
+		if (rc)
+			return rc;
+	}
+
+	rc = device_add(dev);
+	if (rc)
+		cdev_del(cdev);
+
+	return rc;
+}
+
+static inline void cdev_device_del(struct cdev *cdev, struct device *dev)
+{
+	device_del(dev);
+	if (dev->devt)
+		cdev_del(cdev);
+}
+#endif
+
+#ifdef NEED_MODULE_PARAM_HW
+#include <linux/moduleparam.h>
+#define module_param_hw(n, t, hwtype, p) module_param(n, t, p)
+#define module_param_hw_named(n, v, t, hwtype, p) module_param_named(n, v, t, p)
+#define module_param_hw_array(n, t, hwtype, m, p) module_param_array(n, t, m, p)
+#endif
+
+#ifdef NEED_FWNODE
+
+/* Minimum stuff for drivers to build without OF support */
+#define of_fwnode_handle(node) NULL
+
+struct fwnode_endpoint {
+	unsigned int port;
+	unsigned int id;
+	const struct fwnode_handle *local_fwnode;
+};
+
+static inline struct fwnode_handle *fwnode_get_parent(struct fwnode_handle *fwnode)
+{
+        return NULL;
+}
+
+static inline struct fwnode_handle *fwnode_get_next_parent(struct fwnode_handle *fwnode)
+{
+        return NULL;
+}
+
+static inline struct fwnode_handle *fwnode_graph_get_next_endpoint(
+	struct fwnode_handle *fwnode, struct fwnode_handle *prev)
+{
+	return NULL;
+}
+
+static inline struct fwnode_handle *
+fwnode_graph_get_remote_endpoint(struct fwnode_handle *fwnode)
+{
+        return NULL;
+}
+
+static inline struct fwnode_handle *dev_fwnode(struct device *dev)
+{
+	return NULL;
+}
+
+static inline int fwnode_graph_parse_endpoint(struct fwnode_handle *fwnode,
+                                struct fwnode_endpoint *endpoint)
+{
+	return 0;
+}
+
+static inline void fwnode_handle_get(struct fwnode_handle *fwnode)
+{
+}
+#endif
+
+#ifdef NEED_TO_OF_NODE
+static inline struct device_node *to_of_node(struct fwnode_handle *fwnode)
+{
+	return NULL;
+}
+#endif
+
+#ifdef NEED_IS_OF_NODE
+static inline bool is_of_node(struct fwnode_handle *fwnode)
+{
+	return false;
+}
 #endif
 
 #endif /*  _COMPAT_H */

@@ -43,6 +43,7 @@ TARFILES += include/uapi/linux/videodev2.h
 TARFILES += include/uapi/linux/meye.h
 TARFILES += include/uapi/linux/ivtv.h
 TARFILES += include/uapi/linux/ivtvfb.h
+TARFILES += include/uapi/linux/max2175.h
 TARFILES += include/uapi/linux/media.h
 TARFILES += include/uapi/linux/media-bus-format.h
 TARFILES += include/uapi/linux/v4l2-dv-timings.h

@@ -1,5 +1,18 @@
+diff --git a/drivers/media/cec/cec-api.c b/drivers/media/cec/cec-api.c
+index 0860fb458757..60fd48214142 100644
+--- a/drivers/media/cec/cec-api.c
++++ b/drivers/media/cec/cec-api.c
+@@ -93,7 +93,7 @@ static long cec_adap_g_caps(struct cec_adapter *adap,
+ 	strlcpy(caps.name, adap->name, sizeof(caps.name));
+ 	caps.available_log_addrs = adap->available_log_addrs;
+ 	caps.capabilities = adap->capabilities;
+-	caps.version = LINUX_VERSION_CODE;
++	caps.version = V4L2_VERSION;
+ 	if (copy_to_user(parg, &caps, sizeof(caps)))
+ 		return -EFAULT;
+ 	return 0;
 diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
-index 760e3e4..b188787 100644
+index 760e3e424e23..b1887870172d 100644
 --- a/drivers/media/media-device.c
 +++ b/drivers/media/media-device.c
 @@ -834,7 +834,7 @@ void media_device_pci_init(struct media_device *mdev,
@@ -21,10 +34,10 @@ index 760e3e4..b188787 100644
  	media_device_init(mdev);
  }
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 04bf350..3056300 100644
+index 70842c5af05b..2b719f80de15 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2062,7 +2062,7 @@ static int uvc_probe(struct usb_interface *intf,
+@@ -2096,7 +2096,7 @@ static int uvc_probe(struct usb_interface *intf,
  			sizeof(dev->mdev.serial));
  	strcpy(dev->mdev.bus_info, udev->devpath);
  	dev->mdev.hw_revision = le16_to_cpu(udev->descriptor.bcdDevice);
@@ -34,10 +47,10 @@ index 04bf350..3056300 100644
  
  	dev->vdev.mdev = &dev->mdev;
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 0c3f238..f1cdc3d 100644
+index 4f27cfa134a1..e0fb14c851d5 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -985,7 +985,7 @@ static int v4l_querycap(const struct v4l2_ioctl_ops *ops,
+@@ -1000,7 +1000,7 @@ static int v4l_querycap(const struct v4l2_ioctl_ops *ops,
  	struct video_device *vfd = video_devdata(file);
  	int ret;
  

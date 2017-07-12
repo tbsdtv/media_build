@@ -325,12 +325,13 @@ sub check_git($$)
 	my $cmd = shift;
 	my $remote = shift;
 
-	print "\$ git --git-dir media/.git $cmd\n" if ($level);
+	print "\$ git --git-dir media/.git $cmd (checking for '$remote')\n" if ($level);
 	open IN, "git --git-dir media/.git $cmd|" or die "can't run git --git-dir media/.git $cmd";
 	while (<IN>) {
 		return 1 if (m/^[\*]*\s*($remote)\n$/);
 	}
 	close IN;
+	print "check failed\n" if ($level);
 	return 0;
 }
 
@@ -361,6 +362,19 @@ sub which($)
 		return $name if (-x $name );
 	}
 	return undef;
+}
+
+sub run($$)
+{
+       my $cmd = shift;
+       my $err = shift;
+       $err = '' unless defined($err);
+
+       my ($pkg,$filename,$line) = caller;
+
+       print "\$ $cmd\n" if ($level);
+       system($cmd) == 0
+               or die($err . " at $filename line $line\n");
 }
 
 ######
@@ -427,11 +441,11 @@ if (@git == 2) {
 		if (!$local) {
 			print "Getting the latest Kernel tree. This will take some time\n";
 			if ($depth) {
-				system("git clone --origin '$rname/$git[1]' git://linuxtv.org/media_tree.git media $depth") == 0
-					or die "Can't clone from the upstream tree";
+				run("git clone --origin '$rname/$git[1]' git://linuxtv.org/media_tree.git media $depth",
+					"Can't clone from the upstream tree");
 			} else {
-				system("git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git media $depth") == 0
-					or die "Can't clone from the upstream tree";
+				run("git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git media $depth",
+					"Can't clone from the upstream tree");
 			}
 			system('git --git-dir media/.git config format.cc "Linux Media Mailing List <linux-media@vger.kernel.org>"');
 			system('git --git-dir media/.git config format.signoff true');
@@ -440,51 +454,54 @@ if (@git == 2) {
 		} else {
 			if ($workdir ne "") {
 				print "Creating a new workdir from $git[0] at media\n";
-				system("git new-workdir $git[0] media") == 0
-					or die "Can't create a new workdir";
+				run("git new-workdir $git[0] media",
+					"Can't create a new workdir");
 			} else {
 				print "Creating a new clone\n";
-				system("git clone -l $git[0] media $depth") == 0
-					or die "Can't create a new clone";
+				run("git clone -l $git[0] media $depth",
+					"Can't create a new clone");
 			}
 		}
 	} elsif ($workdir eq "") {
-		system("git --git-dir media/.git remote update '$name'") == 0
-			or die "Can't update from the upstream tree";
+		if (check_git("remote", "$rname/$git[1]")) {
+			run("git --git-dir media/.git remote update '$rname/$git[1]'",
+				"Can't update from the upstream tree");
+		} else {
+			run("git --git-dir media/.git remote update origin",
+				"Can't update from the upstream tree");
+		}
 	}
 
 	if ($workdir eq "") {
 		if (!check_git("remote", "$name")) {
 			print "adding remote $name to track $git[0]\n";
-			printf "\$ git --git-dir media/.git remote add $name $git[0]\n" if ($level);
-			system ("git --git-dir media/.git remote add $name $git[0]") == 0
-				or die "Can't create remote $name";
+			run("git --git-dir media/.git remote add $name $git[0]",
+				"Can't create remote $name");
 		}
 		if (!$depth) {
 			print "updating remote $rname\n";
-			system ("git --git-dir media/.git remote update $name") == 0
-					or die "Can't update remote $name";
+			run("git --git-dir media/.git remote update $name",
+					"Can't update remote $name");
 			print "creating a local branch $rname\n";
 			if (!check_git("branch", "$rname/$git[1]")) {
-				print "\$ (cd media; git checkout -b $rname/$git[1] remotes/$name/$git[1])\n" if ($level);
-				system ("(cd media; git checkout -b $rname/$git[1] remotes/$name/$git[1])") == 0
-					or die "Can't create local branch $rname";
+				run("(cd media; git checkout -b $rname/$git[1] remotes/$name/$git[1])",
+					"Can't create local branch $rname");
 			} else {
-				system ("(cd media; git checkout $rname/$git[1])") == 0
-						or die "Can't checkout to branch $rname";
-				system ("(cd media; git pull . remotes/$name/$git[1])") == 0
-						or die "Can't update local branch $name";
+				run("(cd media; git checkout $rname/$git[1])",
+						"Can't checkout to branch $rname");
+				run("(cd media; git pull . remotes/$name/$git[1])",
+						"Can't update local branch $name");
 			}
 		}
 	} else {
 		print "git checkout $git[1]\n";
-		system ("(cd media; git checkout $git[1])") == 0
-			or die "Can't checkout $git[1]";
+		run("(cd media; git checkout $git[1])",
+			"Can't checkout $git[1]");
 	}
 
 
-	system ("make -C linux dir DIR=../media/") == 0
-		or die "Can't link the building system to the media directory.";
+	run("make -C linux dir DIR=../media/",
+		"Can't link the building system to the media directory.");
 } else {
 	print "\n";
 	print "************************************************************\n";
@@ -500,10 +517,11 @@ if (@git == 2) {
 	print "****************************\n";
 	print "Updating the building system\n";
 	print "****************************\n";
-	system("git pull https://github.com/tbsdtv/linux_media.git master");
+	run("git pull https://github.com/tbsdtv/linux_media.git master",
+	    "Can't clone tree from linuxtv.org");
 
-	system ("make -C linux/ download") == 0 or die "Download failed";
-	system ("make -C linux/ untar") == 0 or die "Untar failed";
+	run("make -C linux/ download", "Download failed");
+	run("make -C linux/ untar", "Untar failed");
 }
 
 print "**********************************************************\n";
@@ -511,17 +529,19 @@ print "* Downloading firmwares from linuxtv.org.                *\n";
 print "**********************************************************\n";
 
 if (!stat $firmware_tarball) {
-	system ("wget $firmware_url/$firmware_tarball -O $firmware_tarball") == 0 or die "Can't download $firmware_tarball";
+	run("wget $firmware_url/$firmware_tarball -O $firmware_tarball",
+		"Can't download $firmware_tarball");
 }
-system ("(cd v4l/firmware/; tar xvfj ../../$firmware_tarball)") == 0 or die "Can't extract $firmware_tarball";
+run("(cd v4l/firmware/; tar xvfj ../../$firmware_tarball)",
+		"Can't extract $firmware_tarball");
 
 
 print "******************\n";
 print "* Start building *\n";
 print "******************\n";
 
-system ("make allyesconfig") == 0 or die "can't select all drivers";
-system ("make") == 0 or die "build failed";
+run("make allyesconfig", "can't select all drivers");
+run("make", "build failed");
 
 print "**********************************************************\n";
 print "* Compilation finished. Use 'make install' to install them\n";

@@ -1,5 +1,5 @@
 diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index 8d65028c7a74..000d737ad827 100644
+index d38bf9bce480..bf07e367bc4e 100644
 --- a/drivers/media/dvb-core/dvb_ca_en50221.c
 +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
 @@ -34,7 +34,7 @@
@@ -50,6 +50,18 @@ index 7be2088c45fe..fef3c736fcba 100644
  #include <linux/fs.h>
  #include <linux/pci.h>
  #include <linux/interrupt.h>
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
+index e8fa99b6c7b4..e8dc69102f97 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.c
++++ b/drivers/media/pci/ivtv/ivtv-driver.c
+@@ -59,7 +59,6 @@
+ #include <media/tveeprom.h>
+ #include <media/i2c/saa7115.h>
+ #include "tuner-xc2028.h"
+-#include <uapi/linux/sched/types.h>
+ 
+ /* If you have already X v4l cards, then set this to X. This way
+    the device numbers stay matched. Example: you have a WinTV card
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
 index d27c5c2c07ea..cde452e30746 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.h
@@ -135,7 +147,7 @@ index e8b5d0992157..77f4d15f322b 100644
  #include "dmxdev.h"
  #include "dvbdev.h"
 diff --git a/drivers/media/pci/solo6x10/solo6x10-i2c.c b/drivers/media/pci/solo6x10/solo6x10-i2c.c
-index e83bb79f9349..c908672b2c40 100644
+index 89f2f2a493c2..0456f2db5878 100644
 --- a/drivers/media/pci/solo6x10/solo6x10-i2c.c
 +++ b/drivers/media/pci/solo6x10/solo6x10-i2c.c
 @@ -27,7 +27,6 @@
@@ -184,20 +196,20 @@ index 0e8025b7b4dd..8c59d4f53200 100644
  #include <linux/videodev2.h>
  #include <linux/v4l2-dv-timings.h>
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index 393dccaabdd0..a54ca531d8ef 100644
+index db1e7b70c998..fc03068e22b5 100644
 --- a/drivers/media/rc/lirc_dev.c
 +++ b/drivers/media/rc/lirc_dev.c
-@@ -19,7 +19,7 @@
+@@ -18,7 +18,7 @@
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include <linux/module.h>
- #include <linux/kernel.h>
 -#include <linux/sched/signal.h>
 +#include <linux/sched.h>
- #include <linux/errno.h>
  #include <linux/ioctl.h>
- #include <linux/fs.h>
+ #include <linux/poll.h>
+ #include <linux/mutex.h>
 diff --git a/drivers/media/usb/cpia2/cpia2_core.c b/drivers/media/usb/cpia2/cpia2_core.c
-index b1d13444ff30..431dd0b4b332 100644
+index 0efba0da0a45..5d8aa65ab40b 100644
 --- a/drivers/media/usb/cpia2/cpia2_core.c
 +++ b/drivers/media/usb/cpia2/cpia2_core.c
 @@ -32,7 +32,6 @@
@@ -221,31 +233,6 @@ index e91d00762e94..23d3285f182a 100644
  #include "gspca.h"
  
  MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com>");
-diff --git a/drivers/staging/media/lirc/lirc_zilog.c b/drivers/staging/media/lirc/lirc_zilog.c
-index e4a533b6beb3..34aac3e2eb87 100644
---- a/drivers/staging/media/lirc/lirc_zilog.c
-+++ b/drivers/staging/media/lirc/lirc_zilog.c
-@@ -42,7 +42,7 @@
- #include <linux/module.h>
- #include <linux/kmod.h>
- #include <linux/kernel.h>
--#include <linux/sched/signal.h>
-+#include <linux/sched.h>
- #include <linux/fs.h>
- #include <linux/poll.h>
- #include <linux/string.h>
-diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
-index 6cd94e5ee113..574ff2ae94be 100644
---- a/include/media/v4l2-ioctl.h
-+++ b/include/media/v4l2-ioctl.h
-@@ -12,7 +12,6 @@
- #include <linux/poll.h>
- #include <linux/fs.h>
- #include <linux/mutex.h>
--#include <linux/sched/signal.h>
- #include <linux/compiler.h> /* need __user */
- #include <linux/videodev2.h>
- 
 diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
 index 0b5c43f7e020..36bd904946bd 100644
 --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
@@ -259,15 +246,28 @@ index 0b5c43f7e020..36bd904946bd 100644
  #include <linux/slab.h>
  #include <linux/interrupt.h>
  
-diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
-index a71a03e22385..aaccc1187791 100644
---- a/drivers/media/pci/ivtv/ivtv-driver.c
-+++ b/drivers/media/pci/ivtv/ivtv-driver.c
-@@ -59,7 +59,6 @@
- #include <media/tveeprom.h>
- #include <media/i2c/saa7115.h>
- #include "tuner-xc2028.h"
--#include <uapi/linux/sched/types.h>
+diff --git a/drivers/staging/media/lirc/lirc_zilog.c b/drivers/staging/media/lirc/lirc_zilog.c
+index 015e41bd036e..fd61081b47d9 100644
+--- a/drivers/staging/media/lirc/lirc_zilog.c
++++ b/drivers/staging/media/lirc/lirc_zilog.c
+@@ -42,7 +42,7 @@
+ #include <linux/module.h>
+ #include <linux/kmod.h>
+ #include <linux/kernel.h>
+-#include <linux/sched/signal.h>
++#include <linux/sched.h>
+ #include <linux/fs.h>
+ #include <linux/poll.h>
+ #include <linux/string.h>
+diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+index bd5312118013..b6433cc5964b 100644
+--- a/include/media/v4l2-ioctl.h
++++ b/include/media/v4l2-ioctl.h
+@@ -12,7 +12,6 @@
+ #include <linux/poll.h>
+ #include <linux/fs.h>
+ #include <linux/mutex.h>
+-#include <linux/sched/signal.h>
+ #include <linux/compiler.h> /* need __user */
+ #include <linux/videodev2.h>
  
- /* If you have already X v4l cards, then set this to X. This way
-    the device numbers stay matched. Example: you have a WinTV card

@@ -673,6 +673,7 @@ sub check_other_dependencies()
 	check_files_for_func("eth_zero_addr", "NEED_ETH_ZERO_ADDR", "include/linux/etherdevice.h");
 	check_files_for_func("frame_vector_create", "NEED_FRAME_VECTOR", "include/linux/mm.h");
 	check_files_for_func("kvfree", "NEED_KVFREE", "include/linux/mm.h");
+	check_files_for_func("kvzalloc", "NEED_KVZALLOC", "include/linux/mm.h");
 	check_files_for_func("ktime_before", "NEED_KTIME_BEFORE", "include/linux/ktime.h");
 	check_files_for_func("ktime_compare", "NEED_KTIME_COMPARE", "include/linux/ktime.h");
 	check_files_for_func("ktime_ms_delta", "NEED_KTIME_MS_DELTA", "include/linux/ktime.h");
@@ -693,6 +694,11 @@ sub check_other_dependencies()
 	check_files_for_func("regmap_read_poll_timeout", "NEED_REGMAP_READ_POLL_TIMEOUT", "include/linux/regmap.h");
 	check_files_for_func("dma_coerce_mask_and_coherent", "NEED_DMA_COERCE_MASK", "include/linux/dma-mapping.h");
 	check_files_for_func("devm_kcalloc", "NEED_DEVM_KCALLOC", "include/linux/device.h");
+	check_files_for_func("cdev_device_add", "NEED_CDEV_DEVICE", "include/linux/cdev.h");
+	check_files_for_func("module_param_hw", "NEED_MODULE_PARAM_HW", "include/linux/moduleparam.h");
+	check_files_for_func("of_fwnode_handle", "NEED_FWNODE", "include/linux/of.h");
+	check_files_for_func("to_of_node", "NEED_TO_OF_NODE", "include/linux/of.h");
+	check_files_for_func("is_of_node", "NEED_IS_OF_NODE", "include/linux/of.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

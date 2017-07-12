@@ -38,7 +38,7 @@ index 239a2db35068..511513c1ca3e 100644
  
  #include <media/drv-intf/saa7146_vv.h>
 diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
-index e034bcfcf757..04fcdf356041 100644
+index b3b29d4f36ed..9f679334437e 100644
 --- a/drivers/media/common/saa7146/saa7146_video.c
 +++ b/drivers/media/common/saa7146/saa7146_video.c
 @@ -1,3 +1,4 @@
@@ -83,7 +83,7 @@ index 45e91add73ba..1284c09054d4 100644
  
  #include <linux/sched.h>
 diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index 8d65028c7a74..201d41242a62 100644
+index af694f2066a2..a5bd98ab9abf 100644
 --- a/drivers/media/dvb-core/dvb_ca_en50221.c
 +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
 @@ -25,6 +25,7 @@
@@ -203,7 +203,7 @@ index 5ce9f93a65c3..b15ab787b40c 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib7000p.c b/drivers/media/dvb-frontends/dib7000p.c
-index 3815ea515364..cd07f0b2f130 100644
+index 1caa04d8f60f..f07df1789fef 100644
 --- a/drivers/media/dvb-frontends/dib7000p.c
 +++ b/drivers/media/dvb-frontends/dib7000p.c
 @@ -8,6 +8,7 @@
@@ -248,7 +248,7 @@ index bc28184c7fb0..a7479559813f 100644
  
  #include <linux/i2c.h>
 diff --git a/drivers/media/dvb-frontends/drx39xyj/drxj.c b/drivers/media/dvb-frontends/drx39xyj/drxj.c
-index daeaf965dd56..aa4ac1392554 100644
+index 14040c915dbb..36165a618355 100644
 --- a/drivers/media/dvb-frontends/drx39xyj/drxj.c
 +++ b/drivers/media/dvb-frontends/drx39xyj/drxj.c
 @@ -53,6 +53,7 @@
@@ -260,7 +260,7 @@ index daeaf965dd56..aa4ac1392554 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index 7e1bbbaad625..2a6c54c6c485 100644
+index 48a8aad47a74..5b284a036485 100644
 --- a/drivers/media/dvb-frontends/drxk_hard.c
 +++ b/drivers/media/dvb-frontends/drxk_hard.c
 @@ -17,6 +17,7 @@
@@ -344,7 +344,7 @@ index d14fa9736ae5..ce6f5fc7dafd 100644
  
  /*
 diff --git a/drivers/media/media-devnode.c b/drivers/media/media-devnode.c
-index ae46753c90cb..22ce44d76df2 100644
+index 423248f577b6..06bf97d61b42 100644
 --- a/drivers/media/media-devnode.c
 +++ b/drivers/media/media-devnode.c
 @@ -26,6 +26,7 @@
@@ -380,7 +380,7 @@ index 5cc42b426715..69318faac49b 100644
  
  #include <linux/delay.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index fb4aefbcc8f8..9bcaf1ea3058 100644
+index ed319f18ba48..f7ac27233436 100644
 --- a/drivers/media/pci/bt8xx/bttv-driver.c
 +++ b/drivers/media/pci/bt8xx/bttv-driver.c
 @@ -34,6 +34,7 @@
@@ -607,6 +607,18 @@ index 6777926f20f2..74358ade87f2 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include <linux/pci.h>
+diff --git a/drivers/media/pci/ddbridge/ddbridge-core.c b/drivers/media/pci/ddbridge/ddbridge-core.c
+index 32f4d3746c8e..660898d16268 100644
+--- a/drivers/media/pci/ddbridge/ddbridge-core.c
++++ b/drivers/media/pci/ddbridge/ddbridge-core.c
+@@ -17,6 +17,7 @@
+  * http://www.gnu.org/copyleft/gpl.html
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/module.h>
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
 index d27c5c2c07ea..f0aa5efecfa3 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.h
@@ -680,7 +692,7 @@ index 397fe146dedd..abda33ce9c40 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/pci/ttpci/budget-av.c b/drivers/media/pci/ttpci/budget-av.c
-index 19f07d4aba6a..945c11788985 100644
+index dc7be8fac9a3..9855cb7c16c8 100644
 --- a/drivers/media/pci/ttpci/budget-av.c
 +++ b/drivers/media/pci/ttpci/budget-av.c
 @@ -30,6 +30,7 @@
@@ -704,7 +716,7 @@ index 72b9b436c5c0..e08e90046f16 100644
  
  #include <linux/bitops.h>
 diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
-index 7f92144a1de3..2a6bee3ee9aa 100644
+index 340d906db370..963bf8340997 100644
 --- a/drivers/media/platform/exynos4-is/fimc-is.c
 +++ b/drivers/media/platform/exynos4-is/fimc-is.c
 @@ -10,6 +10,7 @@
@@ -728,7 +740,7 @@ index 8efe9160ab34..7b5658afb9e3 100644
  
  #include <linux/device.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
-index 1b30be72f4f9..c5faa502e603 100644
+index 25c7a7d42292..3dba7dcb8e3a 100644
 --- a/drivers/media/platform/s3c-camif/camif-capture.c
 +++ b/drivers/media/platform/s3c-camif/camif-capture.c
 @@ -11,6 +11,7 @@
@@ -788,7 +800,7 @@ index 0d3562712f27..0d1c5ac75a25 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
-index 89823d24a384..6e0ddcef163d 100644
+index bd76534a2749..23b031a5b3e8 100644
 --- a/drivers/media/rc/imon.c
 +++ b/drivers/media/rc/imon.c
 @@ -22,6 +22,7 @@
@@ -800,7 +812,7 @@ index 89823d24a384..6e0ddcef163d 100644
  
  #include <linux/errno.h>
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index 8d60c9f00df9..c0ae9b2adde7 100644
+index db1e7b70c998..d7979b987d1a 100644
 --- a/drivers/media/rc/lirc_dev.c
 +++ b/drivers/media/rc/lirc_dev.c
 @@ -15,6 +15,7 @@
@@ -824,7 +836,7 @@ index ec4b25bd2ec2..1a07ef0ee16a 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 6ec73357fa47..cd83cd5d95c0 100644
+index a9eba0013525..04335502dde7 100644
 --- a/drivers/media/rc/rc-main.c
 +++ b/drivers/media/rc/rc-main.c
 @@ -12,6 +12,7 @@
@@ -836,7 +848,7 @@ index 6ec73357fa47..cd83cd5d95c0 100644
  
  #include <media/rc-core.h>
 diff --git a/drivers/media/rc/serial_ir.c b/drivers/media/rc/serial_ir.c
-index 2f0a0d248936..67031c2ba482 100644
+index 77d5d4cbed0a..cb242f2dff11 100644
 --- a/drivers/media/rc/serial_ir.c
 +++ b/drivers/media/rc/serial_ir.c
 @@ -21,6 +21,7 @@
@@ -848,7 +860,7 @@ index 2f0a0d248936..67031c2ba482 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/rc/sir_ir.c b/drivers/media/rc/sir_ir.c
-index e12ec50bf0bf..5b1fc437af3e 100644
+index 20234ba0b318..8c8f38f58777 100644
 --- a/drivers/media/rc/sir_ir.c
 +++ b/drivers/media/rc/sir_ir.c
 @@ -10,6 +10,7 @@
@@ -896,7 +908,7 @@ index 525b7ab90c80..07a17d0053b5 100644
  
  #include <linux/i2c.h>
 diff --git a/drivers/media/usb/au0828/au0828.h b/drivers/media/usb/au0828/au0828.h
-index 88e59748ebc2..1fab4ab25822 100644
+index 05e445fe0b77..d6e99f714455 100644
 --- a/drivers/media/usb/au0828/au0828.h
 +++ b/drivers/media/usb/au0828/au0828.h
 @@ -15,6 +15,7 @@
@@ -1124,7 +1136,7 @@ index 8447b9c5f8e0..b7afa503a277 100644
  
  #include "m5602_s5k4aa.h"
 diff --git a/drivers/media/usb/gspca/m5602/m5602_s5k83a.c b/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
-index be5e25d1a2e8..5b165675a315 100644
+index 6ad8d4849680..743eaf04cec8 100644
 --- a/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
 +++ b/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
 @@ -16,6 +16,7 @@
@@ -1172,7 +1184,7 @@ index 5d2d0bcb038d..82a4a0850991 100644
  
  #define MODULE_NAME "nw80x"
 diff --git a/drivers/media/usb/gspca/ov519.c b/drivers/media/usb/gspca/ov519.c
-index f4c41f043cda..3974f9510b9e 100644
+index cdb79c5f0c38..cafff1265b9a 100644
 --- a/drivers/media/usb/gspca/ov519.c
 +++ b/drivers/media/usb/gspca/ov519.c
 @@ -33,6 +33,7 @@
@@ -1591,3 +1603,27 @@ index e2d486bd8c28..1a1e7a609ed5 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include <linux/input.h>
+diff --git a/drivers/media/usb/stkwebcam/stk-sensor.c b/drivers/media/usb/stkwebcam/stk-sensor.c
+index c1d4505f84ea..b3ad8561410b 100644
+--- a/drivers/media/usb/stkwebcam/stk-sensor.c
++++ b/drivers/media/usb/stkwebcam/stk-sensor.c
+@@ -41,6 +41,7 @@
+ 
+ /* It seems the i2c bus is controlled with these registers */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include "stk-webcam.h"
+diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
+index 90d4a08cda31..009d01c799b5 100644
+--- a/drivers/media/usb/stkwebcam/stk-webcam.c
++++ b/drivers/media/usb/stkwebcam/stk-webcam.c
+@@ -18,6 +18,7 @@
+  * GNU General Public License for more details.
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/module.h>

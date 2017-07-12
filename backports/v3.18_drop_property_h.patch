@@ -1,0 +1,12 @@
+diff --git a/drivers/media/media-entity.c b/drivers/media/media-entity.c
+index dd0f0ead9516..c5b37a56b4e2 100644
+--- a/drivers/media/media-entity.c
++++ b/drivers/media/media-entity.c
+@@ -18,7 +18,6 @@
+ 
+ #include <linux/bitmap.h>
+ #include <linux/module.h>
+-#include <linux/property.h>
+ #include <linux/slab.h>
+ #include <media/media-entity.h>
+ #include <media/media-device.h>

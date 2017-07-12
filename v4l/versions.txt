@@ -1,56 +1,78 @@
 # Use this for stuff for drivers that don't compile
 [9.255.255]
+INTEL_ATOMISP
+VIDEO_DW9714
+
+[4.12.0]
+# needs V4L2_FWNODE
+VIDEO_ADV7604
+VIDEO_TC358743
+VIDEO_TVP514X
+VIDEO_TVP7002
+VIDEO_OV2659
+VIDEO_OV5645
+VIDEO_OV5647
+VIDEO_MT9V032
+VIDEO_S5K5BAF
+VIDEO_S5C73M3
+VIDEO_SMIAPP
+VIDEO_OMAP3
+VIDEO_PXA27x
+VIDEO_STM32_DCMI
+VIDEO_TI_CAL
+VIDEO_AM437X_VPFE
+VIDEO_ATMEL_ISC
+VIDEO_ATMEL_ISI
+VIDEO_SAMSUNG_EXYNOS4_IS
+VIDEO_S5P_MIPI_CSIS
+VIDEO_RCAR_VIN
+VIDEO_XILINX
 
 [4.7.0]
 # needs i2c_mux_alloc
-#VIDEO_CX231XX
 DVB_LGDT3306A
-#DVB_SI2168
-#DVB_RTL2830
-#DVB_RTL2832
-#DVB_M88DS3103
 
 [4.4.0]
 # needs regmap_write_bits
 DVB_CXD2820R
 
+[4.5.0]
+# needs pm_runtime_get_if_in_use
+VIDEO_OV13858
+
 [4.2.0]
 # needs led_trigger_remove
 V4L2_FLASH_LED_CLASS
 
-[4.0.0]
-# needs of_property_read_u64_array
-VIDEO_SMIAPP
-
 [3.19.0]
-# needs of_property_read_u64_array
-VIDEO_MT9V032
 # needs debugfs_create_devm_seqfile
+CEC_CORE
 MEDIA_CEC_SUPPORT
-
-[3.18.0]
-# needs LED brightness support
-V4L2_FLASH_LED_CLASS
+# needs fwnode_property_read_u32
+SDR_MAX2175
 
 [3.17.0]
 # needs GPIOD_OUT_LOW/HIGH
-VIDEO_ADV7604
 VIDEO_MT9P031
 SOC_CAMERA_OV2640
 VIDEO_XILINX
 I2C_SI4713
-VIDEO_TC358743
 VIDEO_ADP1653
 VIDEO_TVP5150
 VIDEO_ADV7180
 VIDEO_ET8EK8
 VIDEO_OV2640
-VIDEO_OV5645
 VIDEO_OV7670
 
 [3.15.0]
 # needs reset_control_get_optional
 RC_ST
+
+[3.14.0]
+# needs pci_enable_msi_range
+VIDEO_COBALT
+# needs linux/component.h
+VIDEO_VIMC
 
 [3.13.0]
 # needs gpio/consumer.h
@@ -74,7 +96,6 @@ IR_HIX5HD2
 # needs devm_ioremap_resource
 VIDEO_SH_VEU
 VIDEO_RENESAS_VSP1
-VIDEO_RCAR_VIN
 VIDEO_TI_SC
 VIDEO_TI_CSC
 IR_IMG
@@ -83,7 +104,10 @@ IR_SPI
 
 [3.8.0]
 # needs regmap lock/unlock ops
+DVB_M88DS3103
 DVB_TS2020
+DVB_RTL2830
+DVB_RTL2832
 
 [3.7.0]
 # i2c_add_mux_adapter prototype change
@@ -97,7 +121,6 @@ DVB_NETUP_UNIDVB
 [3.6.0]
 # needs include/linux/sizes.h
 VIDEO_M5MOLS
-VIDEO_S5C73M3
 # needs dma_mmap_coherent and sg_alloc_table_from_pages.
 VIDEOBUF2_DMA_CONTIG
 
@@ -105,9 +128,7 @@ VIDEOBUF2_DMA_CONTIG
 # needs devm_clk_get, clk_enable, clk_disable
 VIDEO_CODA
 VIDEO_MT9T001
-VIDEO_S5K5BAF
 VIDEO_S5K6A3
-VIDEO_OV2659
 # needs devm_gpio_request_one
 VIDEO_OV9650
 VIDEO_ADV7183
@@ -143,15 +164,13 @@ MEDIA_TUNER_MSI001
 MEDIA_TUNER_M88TS2022
 MEDIA_TUNER_IT913X
 DVB_AF9033
+DVB_AF9013
 DVB_MN88472
 DVB_MN88473
 
 [3.3.0]
 # Needs struct dma_interleaved_template in dmaengine.h
 VIDEO_MEM2MEM_DEINTERLACE
-# Needs of_node_put
-VIDEO_TVP514X
-VIDEO_TVP7002
 
 [3.2.0]
 # due to the rename at include/linux from "pm_qos_params.h" to "pm_qos.h"
@@ -212,7 +231,6 @@ DVB_PT1
 [2.6.32]
 # These rely on arch support that wasn't available until 2.6.32
 VIDEO_SH_MOBILE_CEU
-VIDEO_PXA27x
 VIDEO_TLG2300
 # Relies on some changes at PnP API
 IR_ENE
@@ -238,7 +256,6 @@ RADIO_TEF6862
 VIDEOBUF_DMA_CONTIG
 VIDEOBUF_VMALLOC
 DISPLAY_DAVINCI_DM646X_EVM
-VIDEO_VPFE_CAPTURE
 VIDEO_MX1
 VIDEO_MX3
 
@@ -279,8 +296,6 @@ RADIO_SI470X
 # use of struct delayed_work
 USB_GSPCA_FINEPIX
 USB_GSPCA_JEILINJ
-# uses linux/hid.h and struct delayed_work
-USB_SI470X
 # due to INIT_WORK changes
 USB_GSPCA_SQ905
 USB_GSPCA_SQ905C
@@ -312,8 +327,6 @@ DVB_AV7110
 USB_ZR364XX
 
 [2.6.18]
-# Uses remap_vmalloc_range()
-VIDEOBUF_VMALLOC
 # Uses new class interface, which did not start to appear until 2.6.18.
 VIDEO_PVRUSB2_SYSFS
 # linux/uaccess.h

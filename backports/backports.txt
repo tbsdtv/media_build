@@ -60,6 +60,7 @@ add v4.2_frame_vector.patch
 
 [4.1.255]
 add v4.1_pat_enabled.patch
+add v4.1_drop_fwnode.patch
 
 [4.0.255]
 add v4.0_dma_buf_export.patch
@@ -68,6 +69,9 @@ add v4.0_fwnode.patch
 
 [3.19.255]
 add v3.19_get_user_pages_locked.patch
+
+[3.18.255]
+add v3.18_drop_property_h.patch
 
 [3.17.255]
 add v3.17_fix_clamp.patch
