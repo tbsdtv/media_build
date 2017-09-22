@@ -1320,10 +1320,10 @@ index 737cf416fbb2..d5c2720f926d 100644
  	enum fe_delivery_system delivery_system;
  	enum fe_status fe_status;
 diff --git a/drivers/media/usb/cx231xx/cx231xx-core.c b/drivers/media/usb/cx231xx/cx231xx-core.c
-index 46646ecd2dbc..1e854ef1f37f 100644
+index f372ad3917a8..8c450dfad905 100644
 --- a/drivers/media/usb/cx231xx/cx231xx-core.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-core.c
-@@ -1337,12 +1337,6 @@ int cx231xx_dev_init(struct cx231xx *dev)
+@@ -1340,12 +1340,6 @@ int cx231xx_dev_init(struct cx231xx *dev)
  	if (errCode < 0)
  		return errCode;
  
@@ -1336,7 +1336,7 @@ index 46646ecd2dbc..1e854ef1f37f 100644
  	errCode = cx231xx_i2c_mux_register(dev, 0);
  	if (errCode < 0)
  		return errCode;
-@@ -1470,7 +1464,8 @@ EXPORT_SYMBOL_GPL(cx231xx_dev_init);
+@@ -1473,7 +1467,8 @@ EXPORT_SYMBOL_GPL(cx231xx_dev_init);
  void cx231xx_dev_uninit(struct cx231xx *dev)
  {
  	/* Un Initialize I2C bus */
@@ -1347,10 +1347,10 @@ index 46646ecd2dbc..1e854ef1f37f 100644
  	cx231xx_i2c_unregister(&dev->i2c_bus[1]);
  	cx231xx_i2c_unregister(&dev->i2c_bus[0]);
 diff --git a/drivers/media/usb/cx231xx/cx231xx-i2c.c b/drivers/media/usb/cx231xx/cx231xx-i2c.c
-index 8d95b1154e12..6b03aab303c4 100644
+index 8ce6b815d16d..5baeff70605f 100644
 --- a/drivers/media/usb/cx231xx/cx231xx-i2c.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-i2c.c
-@@ -561,34 +561,35 @@ int cx231xx_i2c_unregister(struct cx231xx_i2c *bus)
+@@ -561,34 +561,35 @@ void cx231xx_i2c_unregister(struct cx231xx_i2c *bus)
   * cx231xx_i2c_mux_select()
   * switch i2c master number 1 between port1 and port3
   */
@@ -1417,10 +1417,10 @@ index 8d95b1154e12..6b03aab303c4 100644
  		BUG();
  	}
 diff --git a/drivers/media/usb/cx231xx/cx231xx.h b/drivers/media/usb/cx231xx/cx231xx.h
-index d9792ea4bbc6..48599717466f 100644
+index 72d5937a087e..1c2a589a4048 100644
 --- a/drivers/media/usb/cx231xx/cx231xx.h
 +++ b/drivers/media/usb/cx231xx/cx231xx.h
-@@ -625,7 +625,6 @@ struct cx231xx {
+@@ -626,7 +626,6 @@ struct cx231xx {
  
  	/* I2C adapters: Master 1 & 2 (External) & Master 3 (Internal only) */
  	struct cx231xx_i2c i2c_bus[3];
@@ -1428,10 +1428,10 @@ index d9792ea4bbc6..48599717466f 100644
  	struct i2c_adapter *i2c_mux_adap[2];
  
  	unsigned int xc_fw_load_done:1;
-@@ -762,9 +761,8 @@ int cx231xx_reset_analog_tuner(struct cx231xx *dev);
+@@ -763,9 +762,8 @@ int cx231xx_reset_analog_tuner(struct cx231xx *dev);
  void cx231xx_do_i2c_scan(struct cx231xx *dev, int i2c_port);
  int cx231xx_i2c_register(struct cx231xx_i2c *bus);
- int cx231xx_i2c_unregister(struct cx231xx_i2c *bus);
+ void cx231xx_i2c_unregister(struct cx231xx_i2c *bus);
 -int cx231xx_i2c_mux_create(struct cx231xx *dev);
  int cx231xx_i2c_mux_register(struct cx231xx *dev, int mux_no);
 -void cx231xx_i2c_mux_unregister(struct cx231xx *dev);

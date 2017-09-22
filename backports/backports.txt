@@ -26,6 +26,9 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 
+[4.12.255]
+add v4.12_revert_solo6x10_copykerneluser.patch
+
 [4.10.255]
 add v4.10_sched_signal.patch
 add v4.10_fault_page.patch
@@ -35,6 +38,7 @@ add v4.10_refcount.patch
 add v4.9_mm_address.patch
 add v4.9_dvb_net_max_mtu.patch
 add v4.9_ktime_cleanups.patch
+add v4.9_cec_pin.patch
 
 [4.8.255]
 add v4.8_user_pages_flag.patch
@@ -80,6 +84,9 @@ add v3.17_fix_clamp.patch
 add v3.16_netdev.patch
 add v3.16_wait_on_bit.patch
 add v3.16_void_gpiochip_remove.patch
+
+[3.13.255]
+add v3.13_ddbridge_pcimsi.patch
 
 [3.12.255]
 add v3.12_kfifo_in.patch

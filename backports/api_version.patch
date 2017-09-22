@@ -11,41 +11,6 @@ index 0860fb458757..60fd48214142 100644
  	if (copy_to_user(parg, &caps, sizeof(caps)))
  		return -EFAULT;
  	return 0;
-diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
-index 760e3e424e23..b1887870172d 100644
---- a/drivers/media/media-device.c
-+++ b/drivers/media/media-device.c
-@@ -834,7 +834,7 @@ void media_device_pci_init(struct media_device *mdev,
- 	mdev->hw_revision = (pci_dev->subsystem_vendor << 16)
- 			    | pci_dev->subsystem_device;
- 
--	mdev->driver_version = LINUX_VERSION_CODE;
-+	mdev->driver_version = V4L2_VERSION;
- 
- 	media_device_init(mdev);
- }
-@@ -863,7 +863,7 @@ void __media_device_usb_init(struct media_device *mdev,
- 		strlcpy(mdev->serial, udev->serial, sizeof(mdev->serial));
- 	usb_make_path(udev, mdev->bus_info, sizeof(mdev->bus_info));
- 	mdev->hw_revision = le16_to_cpu(udev->descriptor.bcdDevice);
--	mdev->driver_version = LINUX_VERSION_CODE;
-+	mdev->driver_version = V4L2_VERSION;
- 
- 	media_device_init(mdev);
- }
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 70842c5af05b..2b719f80de15 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2096,7 +2096,7 @@ static int uvc_probe(struct usb_interface *intf,
- 			sizeof(dev->mdev.serial));
- 	strcpy(dev->mdev.bus_info, udev->devpath);
- 	dev->mdev.hw_revision = le16_to_cpu(udev->descriptor.bcdDevice);
--	dev->mdev.driver_version = LINUX_VERSION_CODE;
-+	dev->mdev.driver_version = V4L2_VERSION;
- 	media_device_init(&dev->mdev);
- 
- 	dev->vdev.mdev = &dev->mdev;
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
 index 4f27cfa134a1..e0fb14c851d5 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
@@ -58,4 +23,17 @@ index 4f27cfa134a1..e0fb14c851d5 100644
 +	cap->version = V4L2_VERSION;
  	cap->device_caps = vfd->device_caps;
  	cap->capabilities = vfd->device_caps | V4L2_CAP_DEVICE_CAPS;
+ 
+diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
+index e79f72b8b858..77c2abad24b7 100644
+--- a/drivers/media/media-device.c
++++ b/drivers/media/media-device.c
+@@ -69,7 +69,7 @@ static int media_device_get_info(struct media_device *dev,
+ 	strlcpy(info->serial, dev->serial, sizeof(info->serial));
+ 	strlcpy(info->bus_info, dev->bus_info, sizeof(info->bus_info));
+ 
+-	info->media_version = LINUX_VERSION_CODE;
++	info->media_version = V4L2_VERSION;
+ 	info->driver_version = info->media_version;
+ 	info->hw_revision = dev->hw_revision;
  

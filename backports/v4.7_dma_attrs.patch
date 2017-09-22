@@ -294,18 +294,18 @@ index 9a144f2..c5e3113 100644
   *		doesn't fill in the @alloc_devs array.
 - * @dma_attrs:	DMA attributes to use for the DMA.
 + * @dma_attrs:	DMA attributes to use for the DMA. May be NULL.
-  * @fileio_read_once:		report EOF after reading the first buffer
-  * @fileio_write_immediately:	queue buffer after each write() call
-  * @allow_zero_bytesused:	allow bytesused == 0 to be passed to the driver
+  * @bidirectional: when this flag is set the DMA direction for the buffers of
+  *		this queue will be overridden with DMA_BIDIRECTIONAL direction.
+  *		This is useful in cases where the hardware (firmware) writes to
 @@ -494,7 +494,7 @@ struct vb2_queue {
  	unsigned int			type;
  	unsigned int			io_modes;
  	struct device			*dev;
 -	unsigned long			dma_attrs;
 +	const struct dma_attrs		*dma_attrs;
+ 	unsigned			bidirectional:1;
  	unsigned			fileio_read_once:1;
  	unsigned			fileio_write_immediately:1;
- 	unsigned			allow_zero_bytesused:1;
 diff --git a/include/media/videobuf2-dma-contig.h b/include/media/videobuf2-dma-contig.h
 index 5604818..df2aabe 100644
 --- a/include/media/videobuf2-dma-contig.h

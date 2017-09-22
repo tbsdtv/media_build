@@ -206,6 +206,10 @@ sub give_hints()
 		give_ubuntu_hints;
 		return;
 	}
+	if ($system_release =~ /Raspbian/) {
+		give_ubuntu_hints;
+		return;
+	}
 	if ($system_release =~ /Gentoo/) {
 		give_gentoo_hints;
 		return;

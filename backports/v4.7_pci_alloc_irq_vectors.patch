@@ -42,3 +42,16 @@ index 00f773e..ed00dc9 100644
  	/* omnitek dma */
  	int dma_channels;
  	int first_fifo_channel;
+diff --git a/drivers/media/pci/ddbridge/ddbridge.c b/drivers/media/pci/ddbridge/ddbridge.c
+index fab421f..031288a 100644
+--- a/drivers/media/pci/ddbridge/ddbridge-main.c
++++ b/drivers/media/pci/ddbridge/ddbridge-main.c
+@@ -109,7 +109,7 @@ static void ddb_irq_msi(struct ddb *dev, int nr)
+ 	int stat;
+ 
+ 	if (msi && pci_msi_enabled()) {
+-		stat = pci_alloc_irq_vectors(dev->pdev, 1, nr, PCI_IRQ_MSI);
++		stat = pci_enable_msi_range(dev->pdev, 1, nr);
+ 		if (stat >= 1) {
+ 			dev->msi = stat;
+ 			dev_info(dev->dev, "using %d MSI interrupt(s)\n",

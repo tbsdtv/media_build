@@ -1,25 +1,20 @@
 diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-index cbd919d4edd2..e4050151f3c8 100644
+index d741a8e0fdac..d06d283be1f5 100644
 --- a/drivers/media/v4l2-core/v4l2-async.c
 +++ b/drivers/media/v4l2-core/v4l2-async.c
-@@ -43,12 +43,16 @@ static bool match_devname(struct v4l2_subdev *sd,
+@@ -44,7 +44,11 @@ static bool match_devname(struct v4l2_subdev *sd,
  
  static bool match_fwnode(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
  {
 +#ifdef CONFIG_OF
- 	if (!is_of_node(sd->fwnode) || !is_of_node(asd->match.fwnode.fwnode))
- 		return sd->fwnode == asd->match.fwnode.fwnode;
- 
- 	return !of_node_cmp(of_node_full_name(to_of_node(sd->fwnode)),
- 			    of_node_full_name(
- 				    to_of_node(asd->match.fwnode.fwnode)));
+ 	return sd->fwnode == asd->match.fwnode.fwnode;
 +#else
 +	return false;
 +#endif
  }
  
  static bool match_custom(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
-@@ -285,8 +289,10 @@ int v4l2_async_register_subdev(struct v4l2_subdev *sd)
+@@ -282,8 +286,10 @@ int v4l2_async_register_subdev(struct v4l2_subdev *sd)
  	 * (struct v4l2_subdev.dev), and async sub-device does not
  	 * exist independently of the device at any point of time.
  	 */

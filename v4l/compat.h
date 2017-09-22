@@ -823,6 +823,7 @@ static inline void *vzalloc(unsigned long size)
 
 #ifdef NEED_KVZALLOC
 #include <linux/vmalloc.h>
+#include <linux/gfp.h>
 
 static inline void *kvzalloc(size_t size, gfp_t flags)
 {
@@ -831,7 +832,7 @@ static inline void *kvzalloc(size_t size, gfp_t flags)
 
 static inline void *kvmalloc(size_t size, gfp_t flags)
 {
-	return vmalloc(size);
+	return (flags & __GFP_ZERO) ? vzalloc(size) : vmalloc(size);
 }
 
 static inline void *kvmalloc_array(size_t n, size_t size, gfp_t flags)
@@ -2056,6 +2057,11 @@ static inline int fwnode_graph_parse_endpoint(struct fwnode_handle *fwnode,
 static inline void fwnode_handle_get(struct fwnode_handle *fwnode)
 {
 }
+
+static inline void fwnode_handle_put(struct fwnode_handle *fwnode)
+{
+}
+
 #endif
 
 #ifdef NEED_TO_OF_NODE
@@ -2070,6 +2076,87 @@ static inline bool is_of_node(struct fwnode_handle *fwnode)
 {
 	return false;
 }
+#endif
+
+#ifdef NEED_SKB_PUT_DATA
+static inline void *skb_put_data(struct sk_buff *skb, const void *data,
+                                 unsigned int len)
+{
+        void *tmp = skb_put(skb, len);
+
+        memcpy(tmp, data, len);
+
+        return tmp;
+}
+#endif
+
+#ifdef NEED_PM_RUNTIME_GET
+static inline int pm_runtime_get_if_in_use(struct device *dev)
+{
+	unsigned long flags;
+	int retval;
+
+	spin_lock_irqsave(&dev->power.lock, flags);
+	retval = dev->power.disable_depth > 0 ? -EINVAL :
+		dev->power.runtime_status == RPM_ACTIVE
+			&& atomic_inc_not_zero(&dev->power.usage_count);
+	spin_unlock_irqrestore(&dev->power.lock, flags);
+	return retval;
+}
+#endif
+
+#ifdef NEED_KEY_APPSELECT
+#define KEY_APPSELECT         0x244   /* AL Select Task/Application */
+#endif
+
+#ifndef __GFP_RETRY_MAYFAIL
+#define __GFP_RETRY_MAYFAIL __GFP_REPEAT
+#endif
+
+#ifdef NEED_PCI_DEVICE_SUB
+#define PCI_DEVICE_SUB(vend, dev, subvend, subdev) \
+	.vendor = (vend), .device = (dev), \
+	.subvendor = (subvend), .subdevice = (subdev)
+#endif
+
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 16, 0)
+
+#include <linux/jiffies.h>
+
+/*
+ * copied from kernel/time/time.c
+ */
+static inline u64 nsecs_to_jiffies64_static(u64 n)
+{
+#if (NSEC_PER_SEC % HZ) == 0
+    /* Common case, HZ = 100, 128, 200, 250, 256, 500, 512, 1000 etc. */
+    return div_u64(n, NSEC_PER_SEC / HZ);
+#elif (HZ % 512) == 0
+    /* overflow after 292 years if HZ = 1024 */
+    return div_u64(n * HZ / 512, NSEC_PER_SEC / 512);
+#else
+    /*
+     * Generic case - optimized for cases where HZ is a multiple of 3.
+     * overflow after 64.99 years, exact for HZ = 60, 72, 90, 120 etc.
+     */
+    return div_u64(n * 9, (9ull * NSEC_PER_SEC + HZ / 2) / HZ);
+#endif
+}
+
+static inline unsigned long nsecs_to_jiffies_static(u64 n)
+{
+    return (unsigned long)nsecs_to_jiffies64_static(n);
+}
+
+/*
+ * linux/jiffies.h defines nsecs_to_jiffies64 and nsecs_to_jiffies
+ * as externals. To get rid of the compiler error, we redefine the
+ * functions to the static variant just defined above.
+ */
+#define nsecs_to_jiffies64(_n) nsecs_to_jiffies64_static(_n)
+#define nsecs_to_jiffies(_n) nsecs_to_jiffies_static(_n)
+
 #endif
 
 #endif /*  _COMPAT_H */

@@ -271,3 +271,15 @@ index bd5312118013..b6433cc5964b 100644
  #include <linux/compiler.h> /* need __user */
  #include <linux/videodev2.h>
  
+diff --git a/drivers/media/cec/cec-pin.c b/drivers/media/cec/cec-pin.c
+index 03f800e5ec1f..c9527804537b 100644
+--- a/drivers/media/cec/cec-pin.c
++++ b/drivers/media/cec/cec-pin.c
+@@ -17,7 +17,6 @@
+ 
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+-#include <linux/sched/types.h>
+ 
+ #include <media/cec-pin.h>
+ 

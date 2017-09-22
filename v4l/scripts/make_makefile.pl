@@ -163,7 +163,7 @@ sub getobsolete()
 sub removeobsolete()
 {
 	while ( my ($dir, $files) = each(%obsolete) ) {
-		print OUT "\t\@echo \"\\nRemoving obsolete files from \$(KDIR26)/$dir:\"\n";
+		print OUT "\t\@echo \"\\nRemoving obsolete files from \$(DESTDIR)\$(KDIR26)/$dir:\"\n";
 		print OUT "\t\@files='", join(' ', keys %$files), "'; ";
 
 		print OUT "for i in \$\$files;do if [ -f \"\$(DESTDIR)\$(KDIR26)/$dir/\$\$i\" ]; then ";
