@@ -38,7 +38,6 @@ add v4.10_refcount.patch
 add v4.9_mm_address.patch
 add v4.9_dvb_net_max_mtu.patch
 add v4.9_ktime_cleanups.patch
-add v4.9_cec_pin.patch
 
 [4.8.255]
 add v4.8_user_pages_flag.patch
@@ -127,6 +126,10 @@ add v3.1_no_pm_qos.patch
 add no_atomic_include.patch
 add v4l2-compat-timespec.patch
 add v3.0_ida2bit.patch
+add v3.0_remove_ida_lird_dev.patch
+
+[2.6.39]
+add v2.6_rc_main_bsearch_h.patch
 
 [2.6.38]
 add v2.6.38_use_getkeycode_new_setkeycode_new.patch

@@ -1,13 +1,13 @@
 diff --git a/drivers/media/pci/cx18/cx18-driver.c b/drivers/media/pci/cx18/cx18-driver.c
-index 004d8ac..11ae526 100644
+index 8f314ca320c7..6464e3ffd7c1 100644
 --- a/drivers/media/pci/cx18/cx18-driver.c
 +++ b/drivers/media/pci/cx18/cx18-driver.c
-@@ -695,7 +695,7 @@ static int cx18_create_in_workq(struct cx18 *cx)
+@@ -697,7 +697,7 @@ static int cx18_create_in_workq(struct cx18 *cx)
  {
  	snprintf(cx->in_workq_name, sizeof(cx->in_workq_name), "%s-in",
  		 cx->v4l2_dev.name);
 -	cx->in_work_queue = alloc_ordered_workqueue("%s", 0, cx->in_workq_name);
 +	cx->in_work_queue = alloc_ordered_workqueue(cx->in_workq_name, 0);
- 	if (cx->in_work_queue == NULL) {
+ 	if (!cx->in_work_queue) {
  		CX18_ERR("Unable to create incoming mailbox handler thread\n");
  		return -ENOMEM;

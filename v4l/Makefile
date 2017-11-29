@@ -47,24 +47,20 @@ endif	# TOPDIR
 #################################################
 # default compilation rule
 
-default:: prepare firmware
+default:: prepare
 	@echo Kernel build directory is $(OUTDIR)
 	$(MAKE) -C ../linux apply_patches
 	$(MAKE) -C $(OUTDIR) SUBDIRS=$(PWD) $(MYCFLAGS) modules
 	./scripts/rmmod.pl check
 #	$(MAKE) checkpatch
 
-mismatch:: prepare firmware
+mismatch:: prepare
 	@echo Kernel build directory is $(OUTDIR)
 	$(MAKE) -Wfatal-errors -C $(OUTDIR) SUBDIRS=$(PWD) $(MYCFLAGS) CONFIG_DEBUG_SECTION_MISMATCH=y modules
 	./scripts/rmmod.pl check
 
 # Anything in this target shouldn't be build in parallel.
 prepare:: config-compat.h Makefile.media links
-
-firmware::
-	$(MAKE) -C firmware prep
-	$(MAKE) -C firmware
 
 #################################################
 # Object specific rules
@@ -217,12 +213,9 @@ endif
 ifeq ($(makefile-media),1)
 INSTALLDEPS += media-install
 endif
-modules_install install:: $(INSTALLDEPS) firmware_install
+modules_install install:: $(INSTALLDEPS)
 
 remove rminstall:: media-rminstall
-
-firmware_install::
-	make -C firmware install
 
 #################################################
 # Compiling preparation rules
@@ -298,7 +291,6 @@ clean::
 	-rm -f *~ *.o *.ko .*.o.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
 		config-compat.h Module.symvers Module.markers modules.order \
 		*.unsigned .*.ko.unsigned.cmd
-	$(MAKE) -C firmware $@
 
 distclean:: clean
 	-rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
@@ -308,7 +300,6 @@ distclean:: clean
 	-rm -f scripts/lxdialog scripts/kconfig
 	@find .. -name '*.orig' -exec rm '{}' \;
 	@find .. -name '*.rej' -exec rm '{}' \;
-	$(MAKE) -C firmware $@
 
 #################################################
 # Kernel module insert/removal rules

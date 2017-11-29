@@ -65,6 +65,7 @@ VIDEO_OV5645
 VIDEO_OV7670
 VIDEO_OV5640
 IR_GPIO_TX
+IR_GPIO_CIR
 # needs component_match_add
 VIDEO_VIMC
 
@@ -75,6 +76,8 @@ RC_ST
 [3.14.0]
 # needs pci_enable_msi_range
 VIDEO_COBALT
+# needs linux/component.h
+VIDEO_VIMC
 
 [3.13.0]
 # needs gpio/consumer.h
@@ -153,7 +156,6 @@ DVB_AF9013
 # needs devm_regulator_bulk_get
 VIDEO_S5K4ECGX
 # needs EPROBE_DEFER
-IR_GPIO_CIR
 VIDEO_AD5820
 VIDEO_MT9M111
 # needs of_property_read_bool

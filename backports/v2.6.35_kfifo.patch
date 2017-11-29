@@ -6,12 +6,13 @@ diff --git a/drivers/media/rc/rc-core-priv.h b/drivers/media/rc/rc-core-priv.h
 index 96f0a8b..b72f858 100644
 --- a/drivers/media/rc/rc-core-priv.h
 +++ b/drivers/media/rc/rc-core-priv.h
-@@ -35,7 +35,7 @@ struct ir_raw_event_ctrl {
+@@ -39,7 +39,7 @@
  	struct list_head		list;		/* to keep track of raw clients */
  	struct task_struct		*thread;
- 	spinlock_t			lock;
--	struct kfifo_rec_ptr_1		kfifo;		/* fifo for the pulse/space durations */
-+	struct kfifo			kfifo;		/* fifo for the pulse/space durations */
+ 	/* fifo for the pulse/space durations */
+-	DECLARE_KFIFO(kfifo, struct ir_raw_event, MAX_IR_EVENT_SIZE);
++	struct kfifo			kfifo;
  	ktime_t				last_event;	/* when last event occurred */
- 	enum raw_event_type		last_type;	/* last event type */
  	struct rc_dev			*dev;		/* pointer to the parent rc_dev */
+ 	/* edge driver */
+
