@@ -1,8 +1,46 @@
+diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
+index 207c50d0325c..0ff9b79d4db2 100644
+--- a/drivers/media/rc/lirc_dev.c
++++ b/drivers/media/rc/lirc_dev.c
+@@ -93,9 +93,11 @@ void ir_lirc_raw_event(struct rc_dev *dev, struct ir_raw_event ev)
+						  LIRC_VALUE_MASK);
+
+			spin_lock_irqsave(&dev->lirc_fh_lock, flags);
+-			list_for_each_entry(fh, &dev->lirc_fh, list)
+-				kfifo_put(&fh->rawir,
+-					  LIRC_SPACE(dev->gap_duration));
++			list_for_each_entry(fh, &dev->lirc_fh, list) {
++				u64 gap_duration = LIRC_SPACE(dev->gap_duration);
++				kfifo_in(&fh->rawir, &gap_duration, sizeof(gap_duration));
++			}
++
+			spin_unlock_irqrestore(&dev->lirc_fh_lock, flags);
+			dev->gap = false;
+		}
+@@ -110,7 +112,8 @@ void ir_lirc_raw_event(struct rc_dev *dev, struct ir_raw_event ev)
+	list_for_each_entry(fh, &dev->lirc_fh, list) {
+		if (LIRC_IS_TIMEOUT(sample) && !fh->send_timeout_reports)
+			continue;
+-		if (kfifo_put(&fh->rawir, sample))
++
++		if (kfifo_in(&fh->rawir, &sample, sizeof(sample)))
+			wake_up_poll(&fh->wait_poll, POLLIN | POLLRDNORM);
+	}
+	spin_unlock_irqrestore(&dev->lirc_fh_lock, flags);
+@@ -131,7 +134,7 @@ void ir_lirc_scancode_event(struct rc_dev *dev, struct lirc_scancode *lsc)
+
+	spin_lock_irqsave(&dev->lirc_fh_lock, flags);
+	list_for_each_entry(fh, &dev->lirc_fh, list) {
+-		if (kfifo_put(&fh->scancodes, *lsc))
++		if (kfifo_in(&fh->scancodes, lsc, sizeof(*lsc)))
+			wake_up_poll(&fh->wait_poll, POLLIN | POLLRDNORM);
+	}
+	spin_unlock_irqrestore(&dev->lirc_fh_lock, flags);
 diff --git a/drivers/media/rc/rc-ir-raw.c b/drivers/media/rc/rc-ir-raw.c
-index 144304c..7d9cfce 100644
+index 11090b101ad1..8ebe6911ba79 100644
 --- a/drivers/media/rc/rc-ir-raw.c
 +++ b/drivers/media/rc/rc-ir-raw.c
-@@ -83,7 +83,7 @@ int ir_raw_event_store(struct rc_dev *dev, struct ir_raw_event *ev)
+@@ -69,7 +69,7 @@ int ir_raw_event_store(struct rc_dev *dev, struct ir_raw_event *ev)
  	IR_dprintk(2, "sample: (%05dus %s)\n",
  		   TO_US(ev->duration), TO_STR(ev->pulse));
  

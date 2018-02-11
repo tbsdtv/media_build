@@ -9,6 +9,16 @@
 
 #include "config-compat.h"
 
+#ifndef SZ_512
+#define SZ_512				0x00000200
+#endif
+#ifndef SZ_4K
+#define SZ_4K				0x00001000
+#endif
+#ifndef SZ_8K
+#define SZ_8K				0x00002000
+#endif
+
 #ifdef NEED_ANNOTATE_REACHABLE
 #define annotate_reachable()
 #define annotate_unreachable()
@@ -2268,6 +2278,45 @@ static inline bool fwnode_device_is_available(struct fwnode_handle *fwnode)
 {
 	return false;
 }
+#endif
+
+#ifdef NEED_TIMER_SETUP_ON_STACK
+#define timer_setup_on_stack(timer, callback, flags)        \
+        setup_timer_on_stack((timer), (TIMER_FUNC_TYPE)(callback), (flags))
+#endif
+
+#ifdef NEED_TIME64_TO_TM
+#define time64_to_tm(totalsecs, offset, result) time_to_tm((time_t)totalsecs, offset, result)
+#endif
+
+#ifdef NEED_READ_ONCE
+#define READ_ONCE(x)  ACCESS_ONCE(x)
+#endif
+
+#ifdef NEED_USB_EP_CHECK
+static inline int usb_urb_ep_type_check(void *urb)
+{
+	/* This is for security. Backward compat may survive without that */
+	return 0;
+}
+#endif
+
+/* prototype of get_user_pages changed in Kernel 4.9. For older Kernels
+ * this will not compile */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
+#ifdef NEED_GET_USER_PAGES_LONGTERM
+#include <linux/mm.h>
+static inline long get_user_pages_longterm(unsigned long start,
+                unsigned long nr_pages, unsigned int gup_flags,
+                struct page **pages, struct vm_area_struct **vmas)
+{
+        return get_user_pages(start, nr_pages, gup_flags, pages, vmas);
+}
+#endif
+#endif
+
+#ifdef NEED_PCI_EXP_DEVCTL2_COMP_TIMEOUT
+#define  PCI_EXP_DEVCTL2_COMP_TIMEOUT     0x000f
 #endif
 
 #endif /*  _COMPAT_H */

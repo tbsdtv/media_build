@@ -26,6 +26,9 @@ VIDEO_SOLO6X10
 [4.3.0]
 # needs regmap_write_bits
 DVB_CXD2820R
+MEDIA_TUNER_TDA18250
+# Needs struct reg_sequence
+VIDEO_OV7740
 
 [4.2.0]
 # needs led_trigger_remove
@@ -43,6 +46,8 @@ CEC_CORE
 MEDIA_CEC_SUPPORT
 # needs fwnode_property_read_u32
 SDR_MAX2175
+# needs dma_wmb
+VIDEO_IPU3_CIO2
 
 [3.18.0]
 # needs LED brightness support

@@ -1,5 +1,5 @@
 diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
-index 2c9232e..4769469 100644
+index 3b33e87..f98f7a0 100644
 --- a/drivers/media/pci/ivtv/ivtv-udma.c
 +++ b/drivers/media/pci/ivtv/ivtv-udma.c
 @@ -124,8 +124,8 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
@@ -33,7 +33,7 @@ index 44936d6..a61f632 100644
  
  	if (y_pages != y_dma.page_count || uv_pages != uv_dma.page_count) {
 diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index 1db0af6..f300f06 100644
+index b6189a4..c799917 100644
 --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
 +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
 @@ -156,7 +156,6 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
@@ -44,7 +44,7 @@ index 1db0af6..f300f06 100644
  
  	dma->direction = direction;
  	switch (dma->direction) {
-@@ -179,14 +178,12 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+@@ -179,18 +178,16 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
  	if (NULL == dma->pages)
  		return -ENOMEM;
  
@@ -54,17 +54,23 @@ index 1db0af6..f300f06 100644
  	dprintk(1, "init user [0x%lx+0x%lx => %d pages]\n",
  		data, size, dma->nr_pages);
  
- 	err = get_user_pages(data & PAGE_MASK, dma->nr_pages,
+-	err = get_user_pages_longterm(data & PAGE_MASK, dma->nr_pages,
 -			     flags, dma->pages, NULL);
++	err = get_user_pages(data & PAGE_MASK, dma->nr_pages,
 +			     rw == READ, 1, /* force */
 +			     dma->pages, NULL);
  
  	if (err != dma->nr_pages) {
  		dma->nr_pages = (err >= 0) ? err : 0;
-diff --git a/drivers/media/v4l2-core/videobuf2-memops.c b/drivers/media/v4l2-core/videobuf2-memops.c
-index 1cd322e..3c3b517 100644
---- a/drivers/media/v4l2-core/videobuf2-memops.c
-+++ b/drivers/media/v4l2-core/videobuf2-memops.c
+-		dprintk(1, "get_user_pages_longterm: err=%d [%d]\n", err,
++		dprintk(1, "get_user_pages: err=%d [%d]\n", err,
+ 			dma->nr_pages);
+ 		return err < 0 ? err : -EINVAL;
+ 	}
+diff --git a/drivers/media/common/videobuf2/videobuf2-memops.c b/drivers/media/common/videobuf2/videobuf2-memops.c
+index 00bb08f..9e65048 100644
+--- a/drivers/media/common/videobuf2/videobuf2-memops.c
++++ b/drivers/media/common/videobuf2/videobuf2-memops.c
 @@ -42,10 +42,6 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
  	unsigned long first, last;
  	unsigned long nr;

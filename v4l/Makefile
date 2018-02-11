@@ -304,7 +304,7 @@ distclean:: clean
 	-rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
 		Kconfig Kconfig.kern .config .config.cmd .myconfig \
 		.kconfig.dep
-	-rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno
+	-rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
 	-rm -f scripts/lxdialog scripts/kconfig
 	@find .. -name '*.orig' -exec rm '{}' \;
 	@find .. -name '*.rej' -exec rm '{}' \;

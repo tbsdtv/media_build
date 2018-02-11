@@ -1,0 +1,118 @@
+diff --git a/drivers/media/pci/ttpci/av7110.h b/drivers/media/pci/ttpci/av7110.h
+index cbb150d6cbb1..cd09fd6e6548 100644
+--- a/drivers/media/pci/ttpci/av7110.h
++++ b/drivers/media/pci/ttpci/av7110.h
+@@ -94,7 +94,7 @@ struct infrared {
+ 	u8			inversion;
+ 	u16			last_key;
+ 	u16			last_toggle;
+-	bool			keypressed;
++	u8			delay_timer_finished;
+ };
+ 
+ 
+diff --git a/drivers/media/pci/ttpci/av7110_ir.c b/drivers/media/pci/ttpci/av7110_ir.c
+index ee414803e6b5..ca05198de2c2 100644
+--- a/drivers/media/pci/ttpci/av7110_ir.c
++++ b/drivers/media/pci/ttpci/av7110_ir.c
+@@ -84,16 +84,15 @@ static u16 default_key_map [256] = {
+ 
+ 
+ /* key-up timer */
+-static void av7110_emit_keyup(struct timer_list *t)
++static void av7110_emit_keyup(unsigned long parm)
+ {
+-	struct infrared *ir = from_timer(ir, t, keyup_timer);
++	struct infrared *ir = (struct infrared *) parm;
+ 
+-	if (!ir || !ir->keypressed)
++	if (!ir || !test_bit(ir->last_key, ir->input_dev->key))
+ 		return;
+ 
+ 	input_report_key(ir->input_dev, ir->last_key, 0);
+ 	input_sync(ir->input_dev);
+-	ir->keypressed = false;
+ }
+ 
+ 
+@@ -153,18 +152,29 @@ static void av7110_emit_key(unsigned long parm)
+ 		return;
+ 	}
+ 
+-	if (ir->keypressed &&
+-	    (ir->last_key != keycode || toggle != ir->last_toggle))
+-		input_event(ir->input_dev, EV_KEY, ir->last_key, 0);
+-
+-	input_event(ir->input_dev, EV_KEY, keycode, 1);
+-	input_sync(ir->input_dev);
++	if (timer_pending(&ir->keyup_timer)) {
++		del_timer(&ir->keyup_timer);
++		if (ir->last_key != keycode || toggle != ir->last_toggle) {
++			ir->delay_timer_finished = 0;
++			input_event(ir->input_dev, EV_KEY, ir->last_key, 0);
++			input_event(ir->input_dev, EV_KEY, keycode, 1);
++			input_sync(ir->input_dev);
++		} else if (ir->delay_timer_finished) {
++			input_event(ir->input_dev, EV_KEY, keycode, 2);
++			input_sync(ir->input_dev);
++		}
++	} else {
++		ir->delay_timer_finished = 0;
++		input_event(ir->input_dev, EV_KEY, keycode, 1);
++		input_sync(ir->input_dev);
++	}
+ 
+-	ir->keypressed = true;
+ 	ir->last_key = keycode;
+ 	ir->last_toggle = toggle;
+ 
+-	mod_timer(&ir->keyup_timer, jiffies + UP_TIMEOUT);
++	ir->keyup_timer.expires = jiffies + UP_TIMEOUT;
++	add_timer(&ir->keyup_timer);
++
+ }
+ 
+ 
+@@ -194,6 +204,16 @@ static void input_register_keys(struct infrared *ir)
+ 	ir->input_dev->keycodemax = ARRAY_SIZE(ir->key_map);
+ }
+ 
++
++/* called by the input driver after rep[REP_DELAY] ms */
++static void input_repeat_key(unsigned long parm)
++{
++	struct infrared *ir = (struct infrared *) parm;
++
++	ir->delay_timer_finished = 1;
++}
++
++
+ /* check for configuration changes */
+ int av7110_check_ir_config(struct av7110 *av7110, int force)
+ {
+@@ -313,7 +333,8 @@ int av7110_ir_init(struct av7110 *av7110)
+ 	av_list[av_cnt++] = av7110;
+ 	av7110_check_ir_config(av7110, true);
+ 
+-	timer_setup(&av7110->ir.keyup_timer, av7110_emit_keyup, 0);
++	setup_timer(&av7110->ir.keyup_timer, av7110_emit_keyup,
++		    (unsigned long)&av7110->ir);
+ 
+ 	input_dev = input_allocate_device();
+ 	if (!input_dev)
+@@ -344,13 +365,8 @@ int av7110_ir_init(struct av7110 *av7110)
+ 		input_free_device(input_dev);
+ 		return err;
+ 	}
+-
+-	/*
+-	 * Input core's default autorepeat is 33 cps with 250 msec
+-	 * delay, let's adjust to numbers more suitable for remote
+-	 * control.
+-	 */
+-	input_enable_softrepeat(input_dev, 250, 125);
++	input_dev->timer.function = input_repeat_key;
++	input_dev->timer.data = (unsigned long) &av7110->ir;
+ 
+ 	if (av_cnt == 1) {
+ 		e = proc_create("av7110_ir", S_IWUSR, NULL, &av7110_ir_proc_fops);

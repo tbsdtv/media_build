@@ -1,8 +1,8 @@
 diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
-index 098ad5fd5231..2c3c61af8224 100644
+index da8ea7b..b380257 100644
 --- a/drivers/media/v4l2-core/Makefile
 +++ b/drivers/media/v4l2-core/Makefile
-@@ -11,9 +11,6 @@ ifeq ($(CONFIG_COMPAT),y)
+@@ -12,9 +12,6 @@ ifeq ($(CONFIG_COMPAT),y)
    videodev-objs += v4l2-compat-ioctl32.o
  endif
  #obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
@@ -13,10 +13,10 @@ index 098ad5fd5231..2c3c61af8224 100644
  
  obj-$(CONFIG_VIDEO_V4L2) += videodev.o
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 4f27cfa134a1..3789a80f977e 100644
+index 7a64ff4..93d62eb 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -29,8 +29,6 @@
+@@ -30,8 +30,6 @@
  #include <media/videobuf2-v4l2.h>
  #include <media/v4l2-mc.h>
  
@@ -25,24 +25,25 @@ index 4f27cfa134a1..3789a80f977e 100644
  /* Zero out the end of the struct pointed to by p.  Everything after, but
   * not including, the specified field is cleared. */
  #define CLEAR_AFTER_FIELD(p, field) \
-@@ -2877,12 +2875,6 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
- 	err = func(file, cmd, parg);
- 	if (err == -ENOIOCTLCMD)
- 		err = -ENOTTY;
+@@ -2905,13 +2903,6 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
+ 		goto out;
+ 	}
+ 
 -	if (err == 0) {
 -		if (cmd == VIDIOC_DQBUF)
 -			trace_v4l2_dqbuf(video_devdata(file)->minor, parg);
 -		else if (cmd == VIDIOC_QBUF)
 -			trace_v4l2_qbuf(video_devdata(file)->minor, parg);
 -	}
- 
+-
  	if (has_array_args) {
  		*kernel_ptr = (void __force *)user_ptr;
-diff --git a/drivers/media/v4l2-core/videobuf2-core.c b/drivers/media/v4l2-core/videobuf2-core.c
-index c0175ea7e7ad..bf9fee755ae4 100644
---- a/drivers/media/v4l2-core/videobuf2-core.c
-+++ b/drivers/media/v4l2-core/videobuf2-core.c
-@@ -27,8 +27,6 @@
+ 		if (copy_to_user(user_ptr, mbuf, array_size))
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index f7109f8..a85266f 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -29,8 +29,6 @@
  #include <media/videobuf2-core.h>
  #include <media/v4l2-mc.h>
  
@@ -51,7 +52,7 @@ index c0175ea7e7ad..bf9fee755ae4 100644
  static int debug;
  module_param(debug, int, 0644);
  
-@@ -926,7 +924,6 @@ void vb2_buffer_done(struct vb2_buffer *vb, enum vb2_buffer_state state)
+@@ -932,7 +930,6 @@ void vb2_buffer_done(struct vb2_buffer *vb, enum vb2_buffer_state state)
  	atomic_dec(&q->owned_by_drv_count);
  	spin_unlock_irqrestore(&q->done_lock, flags);
  
@@ -59,15 +60,15 @@ index c0175ea7e7ad..bf9fee755ae4 100644
  
  	switch (state) {
  	case VB2_BUF_STATE_QUEUED:
-@@ -1232,7 +1229,6 @@ static void __enqueue_in_driver(struct vb2_buffer *vb)
+@@ -1233,7 +1230,6 @@ static void __enqueue_in_driver(struct vb2_buffer *vb)
  	vb->state = VB2_BUF_STATE_ACTIVE;
  	atomic_inc(&q->owned_by_drv_count);
  
 -	trace_vb2_buf_queue(q, vb);
  
- 	/* sync buffers */
- 	for (plane = 0; plane < vb->num_planes; ++plane)
-@@ -1398,7 +1394,6 @@ int vb2_core_qbuf(struct vb2_queue *q, unsigned int index, void *pb)
+ 	call_void_vb_qop(vb, buf_queue, vb);
+ }
+@@ -1404,7 +1400,6 @@ int vb2_core_qbuf(struct vb2_queue *q, unsigned int index, void *pb)
  	if (pb)
  		call_void_bufop(q, copy_timestamp, vb, pb);
  
@@ -75,7 +76,7 @@ index c0175ea7e7ad..bf9fee755ae4 100644
  
  	/*
  	 * If already streaming, give the buffer to driver for processing.
-@@ -1614,7 +1609,6 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
+@@ -1620,7 +1615,6 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
  	list_del(&vb->queued_entry);
  	q->queued_count--;
  

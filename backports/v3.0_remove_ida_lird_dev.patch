@@ -1,111 +1,83 @@
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index e16d113..67f1f7d 100644
+index 42e7831a77e9..207c50d0325c 100644
 --- a/drivers/media/rc/lirc_dev.c
 +++ b/drivers/media/rc/lirc_dev.c
-@@ -24,7 +24,6 @@
+@@ -21,7 +21,6 @@
+ #include <linux/module.h>
  #include <linux/mutex.h>
  #include <linux/device.h>
- #include <linux/cdev.h>
 -#include <linux/idr.h>
- 
- #include <media/rc-core.h>
- #include <media/lirc.h>
-@@ -34,9 +33,10 @@
+ #include <linux/poll.h>
+ #include <linux/sched.h>
+ #include <linux/wait.h>
+@@ -33,8 +32,10 @@
  
  static dev_t lirc_base_dev;
  
 -/* Used to keep track of allocated lirc devices */
--#define LIRC_MAX_DEVICES 256
 -static DEFINE_IDA(lirc_ida);
 +/* This mutex protects the irctls array */
 +static DEFINE_MUTEX(lirc_dev_lock);
 +
-+static struct lirc_dev *irctls[MAX_IRCTL_DEVICES];
++static struct rc_dev *irctls[RC_DEV_MAX];
  
  /* Only used for sysfs but defined to void otherwise */
  static struct class *lirc_class;
-@@ -45,6 +45,10 @@ static void lirc_release_device(struct device *ld)
+@@ -734,6 +735,10 @@ static void lirc_release_device(struct device *ld)
  {
- 	struct lirc_dev *d = container_of(ld, struct lirc_dev, dev);
+ 	struct rc_dev *rcdev = container_of(ld, struct rc_dev, lirc_dev);
  
 +	mutex_lock(&lirc_dev_lock);
-+	irctls[d->minor] = NULL;
++	irctls[MINOR(rcdev->lirc_dev.devt)] = NULL;
 +	mutex_unlock(&lirc_dev_lock);
 +
- 	put_device(d->dev.parent);
+ 	put_device(&rcdev->dev);
+ }
  
- 	if (d->buf_internal) {
-@@ -161,9 +165,20 @@ int lirc_register_device(struct lirc_dev *d)
- 			return err;
- 	}
+@@ -741,9 +746,20 @@ int ir_lirc_register(struct rc_dev *dev)
+ {
+ 	int err, minor;
  
--	minor = ida_simple_get(&lirc_ida, 0, LIRC_MAX_DEVICES, GFP_KERNEL);
+-	minor = ida_simple_get(&lirc_ida, 0, RC_DEV_MAX, GFP_KERNEL);
 -	if (minor < 0)
 -		return minor;
 +	mutex_lock(&lirc_dev_lock);
 +
 +	/* find first free slot for driver */
-+	for (minor = 0; minor < MAX_IRCTL_DEVICES; minor++)
++	for (minor = 0; minor < RC_DEV_MAX; minor++)
 +		if (!irctls[minor])
 +			break;
 +
-+	if (minor == MAX_IRCTL_DEVICES) {
-+		dev_err(&d->dev, "no free slots for drivers!\n");
++	if (minor == RC_DEV_MAX) {
++		dev_err(&dev->dev, "no free slots for drivers!\n");
 +		mutex_unlock(&lirc_dev_lock);
 +		return -ENOMEM;
 +	}
-+	irctls[minor] = d;
++	irctls[minor] = dev;
 +	mutex_unlock(&lirc_dev_lock);
  
- 	d->minor = minor;
- 	d->dev.devt = MKDEV(MAJOR(lirc_base_dev), d->minor);
-@@ -175,7 +190,10 @@ int lirc_register_device(struct lirc_dev *d)
+ 	device_initialize(&dev->lirc_dev);
+ 	dev->lirc_dev.class = lirc_class;
+@@ -769,7 +785,10 @@ int ir_lirc_register(struct rc_dev *dev)
+ 	return 0;
  
- 	err = cdev_device_add(&d->cdev, &d->dev);
- 	if (err) {
--		ida_simple_remove(&lirc_ida, minor);
-+		mutex_lock(&lirc_dev_lock);
-+		irctls[minor] = NULL;
-+		mutex_unlock(&lirc_dev_lock);
+ out_ida:
+-	ida_simple_remove(&lirc_ida, minor);
++	mutex_lock(&lirc_dev_lock);
++	irctls[minor] = NULL;
++	mutex_unlock(&lirc_dev_lock);
 +
- 		return err;
- 	}
- 
-@@ -208,7 +226,6 @@ void lirc_unregister_device(struct lirc_dev *d)
- 	mutex_unlock(&d->mutex);
- 
- 	cdev_device_del(&d->cdev, &d->dev);
--	ida_simple_remove(&lirc_ida, d->minor);
- 	put_device(&d->dev);
- }
- EXPORT_SYMBOL(lirc_unregister_device);
-@@ -487,7 +504,7 @@ static int __init lirc_dev_init(void)
- 		return PTR_ERR(lirc_class);
- 	}
- 
--	retval = alloc_chrdev_region(&lirc_base_dev, 0, LIRC_MAX_DEVICES,
-+	retval = alloc_chrdev_region(&lirc_base_dev, 0, MAX_IRCTL_DEVICES,
- 				     "BaseRemoteCtl");
- 	if (retval) {
- 		class_destroy(lirc_class);
-@@ -504,7 +521,7 @@ static int __init lirc_dev_init(void)
- static void __exit lirc_dev_exit(void)
- {
- 	class_destroy(lirc_class);
--	unregister_chrdev_region(lirc_base_dev, LIRC_MAX_DEVICES);
-+	unregister_chrdev_region(lirc_base_dev, MAX_IRCTL_DEVICES);
- 	pr_info("module unloaded\n");
+ 	return err;
  }
  
-diff --git a/include/media/lirc_dev.h b/include/media/lirc_dev.h
-index 857da67..47bcd39 100644
---- a/include/media/lirc_dev.h
-+++ b/include/media/lirc_dev.h
-@@ -9,6 +9,7 @@
- #ifndef _LINUX_LIRC_DEV_H
- #define _LINUX_LIRC_DEV_H
+@@ -787,7 +806,9 @@ void ir_lirc_unregister(struct rc_dev *dev)
+ 	spin_unlock_irqrestore(&dev->lirc_fh_lock, flags);
  
-+#define MAX_IRCTL_DEVICES 8
- #define BUFLEN            16
+ 	cdev_device_del(&dev->lirc_cdev, &dev->lirc_dev);
+-	ida_simple_remove(&lirc_ida, MINOR(dev->lirc_dev.devt));
++	mutex_lock(&lirc_dev_lock);
++	irctls[MINOR(dev->lirc_dev.devt)] = NULL;
++	mutex_unlock(&lirc_dev_lock);
+ }
  
- #include <linux/slab.h>
+ int __init lirc_dev_init(void)

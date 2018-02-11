@@ -26,6 +26,11 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 
+[4.14.255]
+add v4.14_compiler_h.patch
+add v4.14_saa7146_timer_cast.patch
+add v4.14_module_param_call.patch
+
 [4.12.255]
 add v4.12_revert_solo6x10_copykerneluser.patch
 
@@ -38,6 +43,7 @@ add v4.10_refcount.patch
 add v4.9_mm_address.patch
 add v4.9_dvb_net_max_mtu.patch
 add v4.9_ktime_cleanups.patch
+add v4.9_uvcvideo_ktime_conversion.patch
 
 [4.8.255]
 add v4.8_user_pages_flag.patch
@@ -57,6 +63,9 @@ add v4.5_uvc_super_plus.patch
 [4.4.255]
 add v4.4_gpio_chip_parent.patch
 
+[4.3.255]
+add v4.3_add_autorepeat_handling.patch
+
 [4.2.255]
 add v4.2_atomic64.patch
 add v4.2_frame_vector.patch
@@ -71,10 +80,12 @@ add v4.0_drop_trace.patch
 add v4.0_fwnode.patch
 
 [3.19.255]
+add v3.19_get_user_pages_unlocked.patch
 add v3.19_get_user_pages_locked.patch
 
 [3.18.255]
 add v3.18_drop_property_h.patch
+add v3.18_ktime_get_real_seconds.patch
 
 [3.17.255]
 add v3.17_fix_clamp.patch

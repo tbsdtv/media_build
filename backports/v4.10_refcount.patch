@@ -54,10 +54,10 @@ index 6777926f20f2..115414cf520f 100644
  
  	/* board name */
  	int                        nr;
-diff --git a/drivers/media/v4l2-core/videobuf2-dma-contig.c b/drivers/media/v4l2-core/videobuf2-dma-contig.c
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/vcommon/videobuf2/videobuf2-dma-contig.c
 index d29a07f3b048..fb6a177be461 100644
---- a/drivers/media/v4l2-core/videobuf2-dma-contig.c
-+++ b/drivers/media/v4l2-core/videobuf2-dma-contig.c
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 @@ -12,7 +12,6 @@
  
  #include <linux/dma-buf.h>
@@ -111,10 +111,10 @@ index d29a07f3b048..fb6a177be461 100644
  
  	return dbuf;
  }
-diff --git a/drivers/media/v4l2-core/videobuf2-dma-sg.c b/drivers/media/v4l2-core/videobuf2-dma-sg.c
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 index 29fde1a58a79..ecff8f492c4f 100644
---- a/drivers/media/v4l2-core/videobuf2-dma-sg.c
-+++ b/drivers/media/v4l2-core/videobuf2-dma-sg.c
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 @@ -12,7 +12,6 @@
  
  #include <linux/module.h>
@@ -168,10 +168,10 @@ index 29fde1a58a79..ecff8f492c4f 100644
  
  	return dbuf;
  }
-diff --git a/drivers/media/v4l2-core/videobuf2-memops.c b/drivers/media/v4l2-core/videobuf2-memops.c
+diff --git a/drivers/media/common/videobuf2/videobuf2-memops.c b/drivers/media/common/videobuf2/videobuf2-memops.c
 index 4bb8424114ce..1cd322e939c7 100644
---- a/drivers/media/v4l2-core/videobuf2-memops.c
-+++ b/drivers/media/v4l2-core/videobuf2-memops.c
+--- a/drivers/media/common/videobuf2/videobuf2-memops.c
++++ b/drivers/media/common/videobuf2/videobuf2-memops.c
 @@ -96,10 +96,10 @@ static void vb2_common_vm_open(struct vm_area_struct *vma)
  	struct vb2_vmarea_handler *h = vma->vm_private_data;
  
@@ -194,10 +194,10 @@ index 4bb8424114ce..1cd322e939c7 100644
  	       vma->vm_end);
  
  	h->put(h->arg);
-diff --git a/drivers/media/v4l2-core/videobuf2-vmalloc.c b/drivers/media/v4l2-core/videobuf2-vmalloc.c
+diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 index f83253a233ca..3f778147cdef 100644
---- a/drivers/media/v4l2-core/videobuf2-vmalloc.c
-+++ b/drivers/media/v4l2-core/videobuf2-vmalloc.c
+--- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
++++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 @@ -13,7 +13,6 @@
  #include <linux/io.h>
  #include <linux/module.h>

@@ -115,7 +115,7 @@ untar: linux-media.tar.bz2
 	-rm -f .patches_applied .linked_dir .git_log.md5
 
 clean:
-	-rm -rf $(MAINDIRS) .patches_applied .linked_dir .git_log.md5 git_log kernel_version.h
+	-rm -rf $(MAINDIRS) mm .patches_applied .linked_dir .git_log.md5 git_log kernel_version.h
 
 dir: clean
 	@lsdiff --version >/dev/null # Make 'make dir' fail if lsdiff is not installed

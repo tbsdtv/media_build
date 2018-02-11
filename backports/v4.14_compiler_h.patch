@@ -1,0 +1,11 @@
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index 2272ded..744334e 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __LINUX_COMPILER_TYPES_H
++#if (!defined(__LINUX_COMPILER_TYPES_H) && !defined (__LINUX_COMPILER_H))
+ #error "Please don't include <linux/compiler-gcc.h> directly, include <linux/compiler.h> instead."
+ #endif
+ 

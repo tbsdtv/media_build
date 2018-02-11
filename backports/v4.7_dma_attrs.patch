@@ -65,10 +65,10 @@ index b7892f3..3df66d1 100644
  	if (!base)
  		return -ENOMEM;
  
-diff --git a/drivers/media/v4l2-core/videobuf2-dma-contig.c b/drivers/media/v4l2-core/videobuf2-dma-contig.c
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 index fb6a177..e50ef6a 100644
---- a/drivers/media/v4l2-core/videobuf2-dma-contig.c
-+++ b/drivers/media/v4l2-core/videobuf2-dma-contig.c
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 @@ -27,7 +27,7 @@ struct vb2_dc_buf {
  	unsigned long			size;
  	void				*cookie;
@@ -176,10 +176,10 @@ index fb6a177..e50ef6a 100644
  
  fail_sgt_init:
  	sg_free_table(sgt);
-diff --git a/drivers/media/v4l2-core/videobuf2-dma-sg.c b/drivers/media/v4l2-core/videobuf2-dma-sg.c
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 index ecff8f4..64a386d 100644
---- a/drivers/media/v4l2-core/videobuf2-dma-sg.c
-+++ b/drivers/media/v4l2-core/videobuf2-dma-sg.c
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 @@ -95,7 +95,7 @@ static int vb2_dma_sg_alloc_compacted(struct vb2_dma_sg_buf *buf,
  	return 0;
  }
@@ -262,10 +262,10 @@ index ecff8f4..64a386d 100644
  	if (buf->vaddr)
  		vm_unmap_ram(buf->vaddr, buf->num_pages);
  	sg_free_table(buf->dma_sgt);
-diff --git a/drivers/media/v4l2-core/videobuf2-vmalloc.c b/drivers/media/v4l2-core/videobuf2-vmalloc.c
+diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 index ab3227b..4fdfefd 100644
---- a/drivers/media/v4l2-core/videobuf2-vmalloc.c
-+++ b/drivers/media/v4l2-core/videobuf2-vmalloc.c
+--- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
++++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 @@ -33,7 +33,7 @@ struct vb2_vmalloc_buf {
  
  static void vb2_vmalloc_put(void *buf_priv);

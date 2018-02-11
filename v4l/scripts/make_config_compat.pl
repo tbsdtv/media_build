@@ -711,10 +711,16 @@ sub check_other_dependencies()
 	check_files_for_func("fwnode_reference_args", "NEED_FWNODE_REF_ARGS", "include/linux/fwnode.h");
 	check_files_for_func("fwnode_for_each_child_node", "NEED_FWNODE_FOR_EACH_CHILD_NODE", "include/linux/property.h");
 	check_files_for_func("fwnode_graph_get_port_parent", "NEED_FWNODE_GRAPH_GET_PORT_PARENT", "include/linux/property.h");
+	check_files_for_func("timer_setup_on_stack", "NEED_TIMER_SETUP_ON_STACK", "include/linux/timer.h");
+	check_files_for_func("time64_to_tm", "NEED_TIME64_TO_TM", "include/linux/time.h");
+	check_files_for_func("READ_ONCE", "NEED_READ_ONCE", "include/linux/compiler.h");
+	check_files_for_func("usb_urb_ep_type_check", "NEED_USB_EP_CHECK", "include/linux/usb.h");
+	check_files_for_func("get_user_pages_longterm", "NEED_GET_USER_PAGES_LONGTERM", "include/linux/mm.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");
 	check_files_for_func_uapi("usb_endpoint_maxp_mult", "NEED_USB_ENDPOINT_MAXP_MULT", "usb/ch9.h");
+	check_files_for_func_uapi("PCI_EXP_DEVCTL2_COMP_TIMEOUT", "NEED_PCI_EXP_DEVCTL2_COMP_TIMEOUT", "linux/pci_regs.h");
 }
 
 # Do the basic rules
