@@ -17,15 +17,15 @@ VIDEO_OV5670
 # needs i2c_mux_alloc
 DVB_LGDT3306A
 
-[4.4.0]
-# needs regmap_write_bits
-DVB_CXD2820R
-
 [4.5.0]
 # needs pm_runtime_get_if_in_use
 VIDEO_OV13858
 # needs gpiochip_get_data
 VIDEO_SOLO6X10
+
+[4.3.0]
+# needs regmap_write_bits
+DVB_CXD2820R
 
 [4.2.0]
 # needs led_trigger_remove
