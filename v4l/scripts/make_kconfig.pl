@@ -635,6 +635,7 @@ disable_config('STAGING_BROKEN');
 $config{'COMPILE_TEST'} = 0;
 $intopt { "DVB_MAX_ADAPTERS" } = 48;
 disable_config('DVB_DEMUX_SECTION_LOSS_LOG');
+disable_config('DVB_SAA716X_FF');
 
 # Check dependencies
 my %newconfig = checkdeps();
