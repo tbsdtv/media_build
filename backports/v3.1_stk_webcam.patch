@@ -1,0 +1,12 @@
+diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
+index 22389b5..1d331d3 100644
+--- a/drivers/media/usb/stkwebcam/stk-webcam.c
++++ b/drivers/media/usb/stkwebcam/stk-webcam.c
+@@ -37,6 +37,7 @@
+ 
+ #include "stk-webcam.h"
+ 
++#include <linux/ratelimit.h>
+ 
+ static int hflip = -1;
+ module_param(hflip, int, 0444);

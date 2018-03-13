@@ -27,7 +27,7 @@ VIDEO_SOLO6X10
 # needs regmap_write_bits
 DVB_CXD2820R
 MEDIA_TUNER_TDA18250
-# Needs struct reg_sequence
+# needs struct reg_sequence
 VIDEO_OV7740
 
 [4.2.0]
@@ -48,6 +48,8 @@ MEDIA_CEC_SUPPORT
 SDR_MAX2175
 # needs dma_wmb
 VIDEO_IPU3_CIO2
+# needs fwnode_property_present
+VIDEO_OV7670
 
 [3.18.0]
 # needs LED brightness support
@@ -67,17 +69,21 @@ VIDEO_ADV7180
 VIDEO_ET8EK8
 VIDEO_OV2640
 VIDEO_OV5645
-VIDEO_OV7670
 VIDEO_OV5640
 VIDEO_IMX274
 IR_GPIO_TX
 IR_GPIO_CIR
+VIDEO_OV5695
+VIDEO_OV9650
+VIDEO_OV2685
 # needs component_match_add
 VIDEO_VIMC
 
 [3.15.0]
 # needs reset_control_get_optional
 RC_ST
+# needs of_property_count_u32_elems
+VIDEO_TDA1997X
 
 [3.14.0]
 # needs pci_enable_msi_range
@@ -88,6 +94,8 @@ VIDEO_VIMC
 [3.13.0]
 # needs gpio/consumer.h
 RADIO_SI4713
+SOC_CAMERA_TW9910
+VIDEO_TW9910
 
 [3.12.0]
 # BIN_ATTR_RW was changed
@@ -147,7 +155,6 @@ VIDEO_S5K5BAF
 VIDEO_S5K6A3
 VIDEO_OV2659
 # needs devm_gpio_request_one
-VIDEO_OV9650
 VIDEO_ADV7183
 VIDEO_VS6624
 VIDEO_NOON010PC30
@@ -177,6 +184,7 @@ DVB_TDA10071
 DVB_SI2165
 # needs spi_finalize_current_message
 USB_MSI3101
+USB_MSI2500
 MEDIA_TUNER_MSI001
 # needs regmap_bulk_write
 MEDIA_TUNER_M88TS2022
@@ -191,6 +199,12 @@ VIDEO_MEM2MEM_DEINTERLACE
 # Needs of_node_put
 VIDEO_TVP514X
 VIDEO_TVP7002
+# requires new interface for alloc_ordered_workqueue
+VIDEO_VIVID
+# requires functions from clk.h
+VIDEO_OV5647
+# does not compile for older kernels
+CXD2880_SPI_DRV
 
 [3.2.0]
 # due to the rename at include/linux from "pm_qos_params.h" to "pm_qos.h"
@@ -199,7 +213,6 @@ SOC_CAMERA_MT9V022
 SOC_CAMERA_MT9M001
 SOC_CAMERA_MT9T031
 SOC_CAMERA_OV772X
-SOC_CAMERA_TW9910
 SOC_CAMERA_PLATFORM
 # Needs of_match_ptr
 VIDEO_THS8200

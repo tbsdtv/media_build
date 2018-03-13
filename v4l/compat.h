@@ -37,6 +37,23 @@
 #define uninitialized_var(x) x = x
 #endif
 
+#ifdef NEED_POLL_T
+typedef unsigned __poll_t;
+/* Epoll event masks */
+#define EPOLLIN		(__force __poll_t)0x00000001
+#define EPOLLPRI	(__force __poll_t)0x00000002
+#define EPOLLOUT	(__force __poll_t)0x00000004
+#define EPOLLERR	(__force __poll_t)0x00000008
+#define EPOLLHUP	(__force __poll_t)0x00000010
+#define EPOLLNVAL	(__force __poll_t)0x00000020
+#define EPOLLRDNORM	(__force __poll_t)0x00000040
+#define EPOLLRDBAND	(__force __poll_t)0x00000080
+#define EPOLLWRNORM	(__force __poll_t)0x00000100
+#define EPOLLWRBAND	(__force __poll_t)0x00000200
+#define EPOLLMSG	(__force __poll_t)0x00000400
+#define EPOLLRDHUP	(__force __poll_t)0x00002000
+#endif
+
 #define SIZE_MAX    (~(size_t)0)
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0)
@@ -2317,6 +2334,18 @@ static inline long get_user_pages_longterm(unsigned long start,
 
 #ifdef NEED_PCI_EXP_DEVCTL2_COMP_TIMEOUT
 #define  PCI_EXP_DEVCTL2_COMP_TIMEOUT     0x000f
+#endif
+
+#ifdef NEED_PFN_TO_PHYS
+#include <linux/pfn.h>
+#define __pfn_to_phys(pfn)  PFN_PHYS(pfn)
+#endif
+
+#ifdef NEED_NEXT_PSEUDO_RANDOM32
+static inline u32 next_pseudo_random32(u32 seed)
+{
+	return seed * 1664525 + 1013904223;
+}
 #endif
 
 #endif /*  _COMPAT_H */

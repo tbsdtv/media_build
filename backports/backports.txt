@@ -43,10 +43,10 @@ add v4.10_refcount.patch
 add v4.9_mm_address.patch
 add v4.9_dvb_net_max_mtu.patch
 add v4.9_ktime_cleanups.patch
-add v4.9_uvcvideo_ktime_conversion.patch
 
 [4.8.255]
 add v4.8_user_pages_flag.patch
+add v4.8_em28xx_bitfield.patch
 
 [4.7.255]
 add v4.7_dma_attrs.patch
@@ -132,6 +132,7 @@ add v3.2_alloc_ordered_workqueue.patch
 add v3.1_no_export_h.patch
 add v3.1_no_dma_buf_h.patch
 add v3.1_no_pm_qos.patch
+add v3.1_stk_webcam.patch
 
 [3.0.255]
 add no_atomic_include.patch
