@@ -1,0 +1,16 @@
+diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
+index 97365a8..0330226 100644
+--- a/drivers/media/dvb-core/dvb_ca_en50221.c
++++ b/drivers/media/dvb-core/dvb_ca_en50221.c
+@@ -1494,7 +1494,10 @@ static ssize_t dvb_ca_en50221_io_write(struct file *file,
+ 
+ 		fragbuf[0] = connection_id;
+ 		fragbuf[1] = ((fragpos + fraglen) < count) ? 0x80 : 0x00;
+-		status = copy_from_user(fragbuf + 2, buf + fragpos, fraglen);
++		/* to fix a warning for older kernels we need to check fraglen explicitly */
++		status = -1;
++		if (fraglen <= sizeof(fragbuf) - 2)
++			status = copy_from_user(fragbuf + 2, buf + fragpos, fraglen);
+ 		if (status) {
+ 			status = -EFAULT;
+ 			goto exit;

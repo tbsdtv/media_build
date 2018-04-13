@@ -1,8 +1,20 @@
+diff --git a/drivers/media/cec/cec-pin-error-inj.c b/drivers/media/cec/cec-pin-error-inj.c
+index aaa899a..3915403 100644
+--- a/drivers/media/cec/cec-pin-error-inj.c
++++ b/drivers/media/cec/cec-pin-error-inj.c
+@@ -5,7 +5,6 @@
+ 
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+-#include <linux/sched/types.h>
+ 
+ #include <media/cec-pin.h>
+ #include "cec-pin-priv.h"
 diff --git a/drivers/media/cec/cec-pin.c b/drivers/media/cec/cec-pin.c
-index b48dfe844118..d87639004496 100644
+index fafe1eb..fc587fb 100644
 --- a/drivers/media/cec/cec-pin.c
 +++ b/drivers/media/cec/cec-pin.c
-@@ -17,7 +17,6 @@
+@@ -5,7 +5,6 @@
  
  #include <linux/delay.h>
  #include <linux/slab.h>
@@ -11,7 +23,7 @@ index b48dfe844118..d87639004496 100644
  #include <media/cec-pin.h>
  #include "cec-pin-priv.h"
 diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index e5a3a5bf26ec..c632f0781f40 100644
+index f0298b5..b17bd97 100644
 --- a/drivers/media/dvb-core/dvb_ca_en50221.c
 +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
 @@ -35,7 +35,7 @@
@@ -22,9 +34,9 @@ index e5a3a5bf26ec..c632f0781f40 100644
 +#include <linux/sched.h>
  #include <linux/kthread.h>
  
- #include "dvb_ca_en50221.h"
+ #include <media/dvb_ca_en50221.h>
 diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-index d83dff4d3a4d..965f6afb2281 100644
+index 9c4e466..f5eb4ee 100644
 --- a/drivers/media/dvb-core/dvb_demux.c
 +++ b/drivers/media/dvb-core/dvb_demux.c
 @@ -20,7 +20,7 @@
@@ -37,7 +49,7 @@ index d83dff4d3a4d..965f6afb2281 100644
  #include <linux/slab.h>
  #include <linux/vmalloc.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index d4742bace046..da86a4dd6193 100644
+index aaa67d3..13e97a2 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
 @@ -30,7 +30,7 @@
@@ -50,7 +62,7 @@ index d4742bace046..da86a4dd6193 100644
  #include <linux/slab.h>
  #include <linux/poll.h>
 diff --git a/drivers/media/pci/cx18/cx18-driver.h b/drivers/media/pci/cx18/cx18-driver.h
-index 7be2088c45fe..fef3c736fcba 100644
+index 0b707fa..dfdf65d 100644
 --- a/drivers/media/pci/cx18/cx18-driver.h
 +++ b/drivers/media/pci/cx18/cx18-driver.h
 @@ -24,7 +24,7 @@
@@ -63,7 +75,7 @@ index 7be2088c45fe..fef3c736fcba 100644
  #include <linux/pci.h>
  #include <linux/interrupt.h>
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
-index 6b2ffdc96961..01c229252fe1 100644
+index 6b2ffdc..01c2292 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.c
 +++ b/drivers/media/pci/ivtv/ivtv-driver.c
 @@ -59,7 +59,6 @@
@@ -75,7 +87,7 @@ index 6b2ffdc96961..01c229252fe1 100644
  /* If you have already X v4l cards, then set this to X. This way
     the device numbers stay matched. Example: you have a WinTV card
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
-index f0aa5efecfa3..6477f5151a48 100644
+index 6b099da..81f3c19 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.h
 +++ b/drivers/media/pci/ivtv/ivtv-driver.h
 @@ -39,38 +39,37 @@
@@ -135,7 +147,7 @@ index f0aa5efecfa3..6477f5151a48 100644
  /* Memory layout */
  #define IVTV_ENCODER_OFFSET	0x00000000
 diff --git a/drivers/media/pci/pt1/pt1.c b/drivers/media/pci/pt1/pt1.c
-index acc3afeb6224..1e7992dcd138 100644
+index 4f6867a..d0aa6bb 100644
 --- a/drivers/media/pci/pt1/pt1.c
 +++ b/drivers/media/pci/pt1/pt1.c
 @@ -18,7 +18,6 @@
@@ -147,7 +159,7 @@ index acc3afeb6224..1e7992dcd138 100644
  #include <linux/slab.h>
  #include <linux/vmalloc.h>
 diff --git a/drivers/media/pci/pt3/pt3.c b/drivers/media/pci/pt3/pt3.c
-index 34044a45fecc..abe7f962195c 100644
+index da74828..198829d 100644
 --- a/drivers/media/pci/pt3/pt3.c
 +++ b/drivers/media/pci/pt3/pt3.c
 @@ -21,7 +21,6 @@
@@ -156,10 +168,10 @@ index 34044a45fecc..abe7f962195c 100644
  #include <linux/string.h>
 -#include <linux/sched/signal.h>
  
- #include "dmxdev.h"
- #include "dvbdev.h"
+ #include <media/dmxdev.h>
+ #include <media/dvbdev.h>
 diff --git a/drivers/media/pci/solo6x10/solo6x10-i2c.c b/drivers/media/pci/solo6x10/solo6x10-i2c.c
-index 89f2f2a493c2..0456f2db5878 100644
+index 89f2f2a..0456f2d 100644
 --- a/drivers/media/pci/solo6x10/solo6x10-i2c.c
 +++ b/drivers/media/pci/solo6x10/solo6x10-i2c.c
 @@ -27,7 +27,6 @@
@@ -171,7 +183,7 @@ index 89f2f2a493c2..0456f2db5878 100644
  #include "solo6x10.h"
  
 diff --git a/drivers/media/pci/zoran/zoran_device.c b/drivers/media/pci/zoran/zoran_device.c
-index 40adceebca7e..671907a6e6b6 100644
+index 40adcee..671907a 100644
 --- a/drivers/media/pci/zoran/zoran_device.c
 +++ b/drivers/media/pci/zoran/zoran_device.c
 @@ -28,7 +28,6 @@
@@ -183,10 +195,10 @@ index 40adceebca7e..671907a6e6b6 100644
  #include <linux/interrupt.h>
  #include <linux/proc_fs.h>
 diff --git a/drivers/media/platform/vivid/vivid-radio-rx.c b/drivers/media/platform/vivid/vivid-radio-rx.c
-index 35fbff490535..f2bf92bca62b 100644
+index 1f86d7d..854325d 100644
 --- a/drivers/media/platform/vivid/vivid-radio-rx.c
 +++ b/drivers/media/platform/vivid/vivid-radio-rx.c
-@@ -22,8 +22,6 @@
+@@ -10,8 +10,6 @@
  #include <linux/delay.h>
  #include <linux/videodev2.h>
  #include <linux/v4l2-dv-timings.h>
@@ -196,10 +208,10 @@ index 35fbff490535..f2bf92bca62b 100644
  #include <media/v4l2-event.h>
  #include <media/v4l2-dv-timings.h>
 diff --git a/drivers/media/platform/vivid/vivid-radio-tx.c b/drivers/media/platform/vivid/vivid-radio-tx.c
-index 897b56195ca7..9c2114898875 100644
+index 1a3749b..89a1ee6 100644
 --- a/drivers/media/platform/vivid/vivid-radio-tx.c
 +++ b/drivers/media/platform/vivid/vivid-radio-tx.c
-@@ -19,7 +19,6 @@
+@@ -7,7 +7,6 @@
  
  #include <linux/errno.h>
  #include <linux/kernel.h>
@@ -208,7 +220,7 @@ index 897b56195ca7..9c2114898875 100644
  #include <linux/videodev2.h>
  #include <linux/v4l2-dv-timings.h>
 diff --git a/drivers/media/usb/cpia2/cpia2_core.c b/drivers/media/usb/cpia2/cpia2_core.c
-index 0efba0da0a45..5d8aa65ab40b 100644
+index 3dfbb54..30784fa 100644
 --- a/drivers/media/usb/cpia2/cpia2_core.c
 +++ b/drivers/media/usb/cpia2/cpia2_core.c
 @@ -32,7 +32,6 @@
@@ -220,7 +232,7 @@ index 0efba0da0a45..5d8aa65ab40b 100644
  #define FIRMWARE "cpia2/stv0672_vp4.bin"
  MODULE_FIRMWARE(FIRMWARE);
 diff --git a/drivers/media/usb/gspca/cpia1.c b/drivers/media/usb/gspca/cpia1.c
-index 3244857169f1..32e492df4d1b 100644
+index 67afabf..272a8bc 100644
 --- a/drivers/media/usb/gspca/cpia1.c
 +++ b/drivers/media/usb/gspca/cpia1.c
 @@ -28,8 +28,6 @@
@@ -233,7 +245,7 @@ index 3244857169f1..32e492df4d1b 100644
  
  MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com>");
 diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index 0b5c43f7e020..36bd904946bd 100644
+index add2edb..8eb0f49 100644
 --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
 +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
 @@ -21,7 +21,7 @@
@@ -246,7 +258,7 @@ index 0b5c43f7e020..36bd904946bd 100644
  #include <linux/interrupt.h>
  
 diff --git a/drivers/staging/media/atomisp/pci/atomisp2/hmm/hmm_bo.c b/drivers/staging/media/atomisp/pci/atomisp2/hmm/hmm_bo.c
-index 79bd540d7882..c9a61ba74002 100644
+index 79bd540..c9a61ba 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp2/hmm/hmm_bo.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp2/hmm/hmm_bo.c
 @@ -34,7 +34,7 @@
@@ -259,7 +271,7 @@ index 79bd540d7882..c9a61ba74002 100644
  
  #include <asm/set_memory.h>
 diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
-index a7b3f7c75d62..a63034b58e47 100644
+index a7b3f7c..a63034b 100644
 --- a/include/media/v4l2-ioctl.h
 +++ b/include/media/v4l2-ioctl.h
 @@ -13,7 +13,6 @@

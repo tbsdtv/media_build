@@ -30,6 +30,12 @@
 #include <linux/idr.h>
 #include "../linux/kernel_version.h"
 
+#ifdef RETPOLINE
+#ifndef __noretpoline
+#define __noretpoline __attribute__((indirect_branch("keep")))
+#endif
+#endif
+
 #undef __devinitconst
 #define __devinitconst
 
@@ -2346,6 +2352,66 @@ static inline u32 next_pseudo_random32(u32 seed)
 {
 	return seed * 1664525 + 1013904223;
 }
+#endif
+
+/* of_property_read_u32_index is available since Kernel 3.10. For older Kernels
+ * this will not compile */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 10, 0)
+#ifdef NEED_I2C_NEW_SECONDARY_DEV
+#include <linux/i2c.h>
+static inline struct i2c_client *i2c_new_secondary_device(struct i2c_client *client,
+							  const char *name,
+							  u16 default_addr)
+{
+	struct device_node *np = client->dev.of_node;
+	u32 addr = default_addr;
+	int i;
+
+	if (np) {
+		i = of_property_match_string(np, "reg-names", name);
+		if (i >= 0)
+			of_property_read_u32_index(np, "reg", i, &addr);
+	}
+
+	dev_dbg(&client->adapter->dev, "Address for %s : 0x%x\n", name, addr);
+	return i2c_new_dummy(client->adapter, addr);
+}
+#endif
+#endif
+
+#ifdef NEED_MEMDUP_USER_NUL
+static inline void *memdup_user_nul(const void __user *src, size_t len)
+{
+	char *p;
+
+	/*
+	 * Always use GFP_KERNEL, since copy_from_user() can sleep and
+	 * cause pagefault, which makes it pointless to use GFP_NOFS
+	 * or GFP_ATOMIC.
+	 */
+	p = kmalloc_track_caller(len + 1, GFP_KERNEL);
+	if (!p)
+		return ERR_PTR(-ENOMEM);
+
+	if (copy_from_user(p, src, len)) {
+		kfree(p);
+		return ERR_PTR(-EFAULT);
+	}
+	p[len] = '\0';
+
+	return p;
+}
+#endif
+
+#ifdef NEED_KEY_SCREENSAVER
+#define KEY_SCREENSAVER     0x245   /* AL Screen Saver */
+#endif
+
+#ifdef NEED_STACK_FRAME_NON_STANDARD
+#define STACK_FRAME_NON_STANDARD(func)
+#else
+/* be sure STACK_FRAME_NON_STANDARD is defined */
+#include <linux/frame.h>
 #endif
 
 #endif /*  _COMPAT_H */

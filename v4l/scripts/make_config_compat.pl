@@ -718,12 +718,16 @@ sub check_other_dependencies()
 	check_files_for_func("get_user_pages_longterm", "NEED_GET_USER_PAGES_LONGTERM", "include/linux/mm.h");
 	check_files_for_func("__pfn_to_phys", "NEED_PFN_TO_PHYS", "include/asm-generic/memory_model.h");
 	check_files_for_func("next_pseudo_random32", "NEED_NEXT_PSEUDO_RANDOM32", "include/linux/random.h");
+	check_files_for_func("i2c_new_secondary_device", "NEED_I2C_NEW_SECONDARY_DEV", "include/linux/i2c.h");
+	check_files_for_func("memdup_user_nul", "NEED_MEMDUP_USER_NUL", "include/linux/string.h");
+	check_files_for_func("STACK_FRAME_NON_STANDARD", "NEED_STACK_FRAME_NON_STANDARD", "include/linux/frame.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");
 	check_files_for_func_uapi("usb_endpoint_maxp_mult", "NEED_USB_ENDPOINT_MAXP_MULT", "usb/ch9.h");
 	check_files_for_func_uapi("PCI_EXP_DEVCTL2_COMP_TIMEOUT", "NEED_PCI_EXP_DEVCTL2_COMP_TIMEOUT", "pci_regs.h");
 	check_files_for_func_uapi("__poll_t", "NEED_POLL_T", "types.h");
+	check_files_for_func_uapi("KEY_SCREENSAVER", "NEED_KEY_SCREENSAVER", "input.h");
 }
 
 # Do the basic rules

@@ -143,6 +143,9 @@ EXTRA_CFLAGS += $(if $(wildcard $(srctree)/.mm), -DMM_KERNEL)
 # Make sure to use the backport header for common stuff
 EXTRA_CFLAGS += -include $(obj)/compat.h
 
+# gives too much warnings (false positives) -> disable it
+EXTRA_CFLAGS += -Wno-format-truncation
+
 #################################################
 # Kernel 2.6/3.x specific rules
 

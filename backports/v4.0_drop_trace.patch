@@ -58,7 +58,7 @@ index b50c9cc..942c741 100644
  
  obj-$(CONFIG_VIDEO_V4L2) += videodev.o
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 0a1785c..1f32a9a 100644
+index ce0d711..84cab64 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
 @@ -30,8 +30,6 @@
@@ -70,7 +70,7 @@ index 0a1785c..1f32a9a 100644
  /* Zero out the end of the struct pointed to by p.  Everything after, but
   * not including, the specified field is cleared. */
  #define CLEAR_AFTER_FIELD(p, field) \
-@@ -2905,13 +2903,6 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
+@@ -2907,13 +2905,6 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
  		goto out;
  	}
  

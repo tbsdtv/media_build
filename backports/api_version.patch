@@ -1,8 +1,8 @@
 diff --git a/drivers/media/cec/cec-api.c b/drivers/media/cec/cec-api.c
-index 0860fb458757..60fd48214142 100644
+index 10b67fc..64b0250 100644
 --- a/drivers/media/cec/cec-api.c
 +++ b/drivers/media/cec/cec-api.c
-@@ -93,7 +93,7 @@ static long cec_adap_g_caps(struct cec_adapter *adap,
+@@ -82,7 +82,7 @@ static long cec_adap_g_caps(struct cec_adapter *adap,
  	strlcpy(caps.name, adap->name, sizeof(caps.name));
  	caps.available_log_addrs = adap->available_log_addrs;
  	caps.capabilities = adap->capabilities;
@@ -11,21 +11,8 @@ index 0860fb458757..60fd48214142 100644
  	if (copy_to_user(parg, &caps, sizeof(caps)))
  		return -EFAULT;
  	return 0;
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 4f27cfa134a1..e0fb14c851d5 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1000,7 +1000,7 @@ static int v4l_querycap(const struct v4l2_ioctl_ops *ops,
- 	struct video_device *vfd = video_devdata(file);
- 	int ret;
- 
--	cap->version = LINUX_VERSION_CODE;
-+	cap->version = V4L2_VERSION;
- 	cap->device_caps = vfd->device_caps;
- 	cap->capabilities = vfd->device_caps | V4L2_CAP_DEVICE_CAPS;
- 
 diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
-index e79f72b8b858..77c2abad24b7 100644
+index 35e81f7..9c3361c 100644
 --- a/drivers/media/media-device.c
 +++ b/drivers/media/media-device.c
 @@ -69,7 +69,7 @@ static int media_device_get_info(struct media_device *dev,
@@ -36,4 +23,17 @@ index e79f72b8b858..77c2abad24b7 100644
 +	info->media_version = V4L2_VERSION;
  	info->driver_version = info->media_version;
  	info->hw_revision = dev->hw_revision;
+ 
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index a5dab16..ce0d711 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1004,7 +1004,7 @@ static int v4l_querycap(const struct v4l2_ioctl_ops *ops,
+ 	struct video_device *vfd = video_devdata(file);
+ 	int ret;
+ 
+-	cap->version = LINUX_VERSION_CODE;
++	cap->version = V4L2_VERSION;
+ 	cap->device_caps = vfd->device_caps;
+ 	cap->capabilities = vfd->device_caps | V4L2_CAP_DEVICE_CAPS;
  

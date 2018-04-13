@@ -1,5 +1,5 @@
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index 133ff8f..dbb9ce9 100644
+index 2f9e0c1..dc1a534 100644
 --- a/drivers/media/rc/lirc_dev.c
 +++ b/drivers/media/rc/lirc_dev.c
 @@ -92,9 +92,11 @@ void ir_lirc_raw_event(struct rc_dev *dev, struct ir_raw_event ev)
@@ -10,7 +10,7 @@ index 133ff8f..dbb9ce9 100644
 -				kfifo_put(&fh->rawir,
 -					  LIRC_SPACE(dev->gap_duration));
 +			list_for_each_entry(fh, &dev->lirc_fh, list) {
-+				u64 gap_duration = LIRC_SPACE(dev->gap_duration);
++				unsigned int gap_duration = LIRC_SPACE(dev->gap_duration);
 +				kfifo_in(&fh->rawir, &gap_duration, sizeof(gap_duration));
 +			}
 +
@@ -37,7 +37,7 @@ index 133ff8f..dbb9ce9 100644
  	}
  	spin_unlock_irqrestore(&dev->lirc_fh_lock, flags);
 diff --git a/drivers/media/rc/rc-ir-raw.c b/drivers/media/rc/rc-ir-raw.c
-index dbb0ad1..4e86abc 100644
+index 213394b..7fe73f0 100644
 --- a/drivers/media/rc/rc-ir-raw.c
 +++ b/drivers/media/rc/rc-ir-raw.c
 @@ -69,7 +69,7 @@ int ir_raw_event_store(struct rc_dev *dev, struct ir_raw_event *ev)

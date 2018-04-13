@@ -1,0 +1,13 @@
+diff --git a/drivers/media/radio/radio-cadet.c b/drivers/media/radio/radio-cadet.c
+index 5b82e63..272473c 100644
+--- a/drivers/media/radio/radio-cadet.c
++++ b/drivers/media/radio/radio-cadet.c
+@@ -344,7 +344,7 @@ static ssize_t cadet_read(struct file *file, char __user *data, size_t count, lo
+ 		readbuf[i++] = dev->rdsbuf[dev->rdsout++];
+ 	mutex_unlock(&dev->lock);
+ 
+-	if (i && copy_to_user(data, readbuf, i))
++	if (i > sizeof(readbuf) || (i && copy_to_user(data, readbuf, i)))
+ 		return -EFAULT;
+ 	return i;
+ }

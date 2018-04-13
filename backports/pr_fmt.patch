@@ -120,7 +120,7 @@ index f450912..9c4e466 100644
  
  #include <linux/sched/signal.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index a7ed16e..3f966ad 100644
+index 21a7d4b..aaa67d3 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
 @@ -25,6 +25,7 @@
@@ -144,7 +144,7 @@ index ba39f99..3efe25c 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index cf747d7..d47265c 100644
+index 787fe06..9030dfb 100644
 --- a/drivers/media/dvb-core/dvbdev.c
 +++ b/drivers/media/dvb-core/dvbdev.c
 @@ -17,6 +17,7 @@
@@ -441,7 +441,7 @@ index eccd1e3..fe5bd28 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-input.c b/drivers/media/pci/bt8xx/bttv-input.c
-index da49c55..247f845 100644
+index 08266b2..0552001 100644
 --- a/drivers/media/pci/bt8xx/bttv-input.c
 +++ b/drivers/media/pci/bt8xx/bttv-input.c
 @@ -14,6 +14,7 @@
@@ -837,7 +837,7 @@ index f2639d0..1040fa1 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
-index 950d068..8e31a6a 100644
+index 1041c056..6194983 100644
 --- a/drivers/media/rc/imon.c
 +++ b/drivers/media/rc/imon.c
 @@ -22,6 +22,7 @@
@@ -848,6 +848,18 @@ index 950d068..8e31a6a 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ":%s: " fmt, __func__
  
  #include <linux/errno.h>
+diff --git a/drivers/media/rc/ir-imon-decoder.c b/drivers/media/rc/ir-imon-decoder.c
+index a1ff06a..53e88dd 100644
+--- a/drivers/media/rc/ir-imon-decoder.c
++++ b/drivers/media/rc/ir-imon-decoder.c
+@@ -3,6 +3,7 @@
+ //
+ // Copyright (C) 2018 by Sean Young <sean@mess.org>
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/module.h>
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
 index 24e9fbb..2f9e0c1 100644
 --- a/drivers/media/rc/lirc_dev.c
@@ -873,7 +885,7 @@ index 5e1d866..418d57a 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 4a95210..dc06268 100644
+index b67be33..176c4d3 100644
 --- a/drivers/media/rc/rc-main.c
 +++ b/drivers/media/rc/rc-main.c
 @@ -3,6 +3,7 @@

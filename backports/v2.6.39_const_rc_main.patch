@@ -1,0 +1,13 @@
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index 1040f2f..593949c 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -1623,7 +1623,7 @@ static const struct attribute_group rc_dev_wakeup_filter_attr_grp = {
+ 	.attrs	= rc_dev_wakeup_filter_attrs,
+ };
+ 
+-static const struct device_type rc_dev_type = {
++static struct device_type rc_dev_type = {
+ 	.release	= rc_dev_release,
+ 	.uevent		= rc_dev_uevent,
+ };

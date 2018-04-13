@@ -1,0 +1,156 @@
+diff --git a/drivers/media/pci/cx18/cx18-alsa-pcm.c b/drivers/media/pci/cx18/cx18-alsa-pcm.c
+index 4f31042..c40558c 100644
+--- a/drivers/media/pci/cx18/cx18-alsa-pcm.c
++++ b/drivers/media/pci/cx18/cx18-alsa-pcm.c
+@@ -308,7 +308,7 @@ static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
+ 	return vmalloc_to_page(pageptr);
+ }
+ 
+-static const struct snd_pcm_ops snd_cx18_pcm_capture_ops = {
++static struct snd_pcm_ops snd_cx18_pcm_capture_ops = {
+ 	.open		= snd_cx18_pcm_capture_open,
+ 	.close		= snd_cx18_pcm_capture_close,
+ 	.ioctl		= snd_cx18_pcm_ioctl,
+diff --git a/drivers/media/pci/cx23885/cx23885-alsa.c b/drivers/media/pci/cx23885/cx23885-alsa.c
+index 20b3cb1..07f0734 100644
+--- a/drivers/media/pci/cx23885/cx23885-alsa.c
++++ b/drivers/media/pci/cx23885/cx23885-alsa.c
+@@ -501,7 +501,7 @@ static struct page *snd_cx23885_page(struct snd_pcm_substream *substream,
+ /*
+  * operators
+  */
+-static const struct snd_pcm_ops snd_cx23885_pcm_ops = {
++static struct snd_pcm_ops snd_cx23885_pcm_ops = {
+ 	.open = snd_cx23885_pcm_open,
+ 	.close = snd_cx23885_close,
+ 	.ioctl = snd_pcm_lib_ioctl,
+diff --git a/drivers/media/pci/cx25821/cx25821-alsa.c b/drivers/media/pci/cx25821/cx25821-alsa.c
+index a45bf03..f80d9ba 100644
+--- a/drivers/media/pci/cx25821/cx25821-alsa.c
++++ b/drivers/media/pci/cx25821/cx25821-alsa.c
+@@ -645,7 +645,7 @@ static struct page *snd_cx25821_page(struct snd_pcm_substream *substream,
+ /*
+  * operators
+  */
+-static const struct snd_pcm_ops snd_cx25821_pcm_ops = {
++static struct snd_pcm_ops snd_cx25821_pcm_ops = {
+ 	.open = snd_cx25821_pcm_open,
+ 	.close = snd_cx25821_close,
+ 	.ioctl = snd_pcm_lib_ioctl,
+diff --git a/drivers/media/pci/cx88/cx88-alsa.c b/drivers/media/pci/cx88/cx88-alsa.c
+index ab09bb5..e6ccf0c 100644
+--- a/drivers/media/pci/cx88/cx88-alsa.c
++++ b/drivers/media/pci/cx88/cx88-alsa.c
+@@ -591,7 +591,7 @@ static struct page *snd_cx88_page(struct snd_pcm_substream *substream,
+ /*
+  * operators
+  */
+-static const struct snd_pcm_ops snd_cx88_pcm_ops = {
++static struct snd_pcm_ops snd_cx88_pcm_ops = {
+ 	.open = snd_cx88_pcm_open,
+ 	.close = snd_cx88_close,
+ 	.ioctl = snd_pcm_lib_ioctl,
+diff --git a/drivers/media/pci/ivtv/ivtv-alsa-pcm.c b/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
+index 5326d86..dc59e47 100644
+--- a/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
++++ b/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
+@@ -313,7 +313,7 @@ static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
+ 	return vmalloc_to_page(pageptr);
+ }
+ 
+-static const struct snd_pcm_ops snd_ivtv_pcm_capture_ops = {
++static struct snd_pcm_ops snd_ivtv_pcm_capture_ops = {
+ 	.open		= snd_ivtv_pcm_capture_open,
+ 	.close		= snd_ivtv_pcm_capture_close,
+ 	.ioctl		= snd_ivtv_pcm_ioctl,
+diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
+index 7231144..4a5508d 100644
+--- a/drivers/media/pci/saa7134/saa7134-alsa.c
++++ b/drivers/media/pci/saa7134/saa7134-alsa.c
+@@ -871,7 +871,7 @@ static struct page *snd_card_saa7134_page(struct snd_pcm_substream *substream,
+  * ALSA capture callbacks definition
+  */
+ 
+-static const struct snd_pcm_ops snd_card_saa7134_capture_ops = {
++static struct snd_pcm_ops snd_card_saa7134_capture_ops = {
+ 	.open =			snd_card_saa7134_capture_open,
+ 	.close =		snd_card_saa7134_capture_close,
+ 	.ioctl =		snd_pcm_lib_ioctl,
+diff --git a/drivers/media/pci/tw686x/tw686x-audio.c b/drivers/media/pci/tw686x/tw686x-audio.c
+index 7719076..96e444c 100644
+--- a/drivers/media/pci/tw686x/tw686x-audio.c
++++ b/drivers/media/pci/tw686x/tw686x-audio.c
+@@ -269,7 +269,7 @@ static snd_pcm_uframes_t tw686x_pcm_pointer(struct snd_pcm_substream *ss)
+ 	return bytes_to_frames(ss->runtime, ac->ptr);
+ }
+ 
+-static const struct snd_pcm_ops tw686x_pcm_ops = {
++static struct snd_pcm_ops tw686x_pcm_ops = {
+ 	.open = tw686x_pcm_open,
+ 	.close = tw686x_pcm_close,
+ 	.ioctl = snd_pcm_lib_ioctl,
+diff --git a/drivers/media/usb/em28xx/em28xx-audio.c b/drivers/media/usb/em28xx/em28xx-audio.c
+index 8e799ae..535d7f7 100644
+--- a/drivers/media/usb/em28xx/em28xx-audio.c
++++ b/drivers/media/usb/em28xx/em28xx-audio.c
+@@ -705,7 +705,7 @@ static int em28xx_cvol_new(struct snd_card *card, struct em28xx *dev,
+ /*
+  * register/unregister code and data
+  */
+-static const struct snd_pcm_ops snd_em28xx_pcm_capture = {
++static struct snd_pcm_ops snd_em28xx_pcm_capture = {
+ 	.open      = snd_em28xx_capture_open,
+ 	.close     = snd_em28xx_pcm_close,
+ 	.ioctl     = snd_pcm_lib_ioctl,
+diff --git a/drivers/media/usb/go7007/snd-go7007.c b/drivers/media/usb/go7007/snd-go7007.c
+index f84a213..8e4006f 100644
+--- a/drivers/media/usb/go7007/snd-go7007.c
++++ b/drivers/media/usb/go7007/snd-go7007.c
+@@ -198,7 +198,7 @@ static struct page *go7007_snd_pcm_page(struct snd_pcm_substream *substream,
+ 	return vmalloc_to_page(substream->runtime->dma_area + offset);
+ }
+ 
+-static const struct snd_pcm_ops go7007_snd_capture_ops = {
++static struct snd_pcm_ops go7007_snd_capture_ops = {
+ 	.open		= go7007_snd_capture_open,
+ 	.close		= go7007_snd_capture_close,
+ 	.ioctl		= snd_pcm_lib_ioctl,
+diff --git a/drivers/media/usb/tm6000/tm6000-alsa.c b/drivers/media/usb/tm6000/tm6000-alsa.c
+index f18cffae..153732f 100644
+--- a/drivers/media/usb/tm6000/tm6000-alsa.c
++++ b/drivers/media/usb/tm6000/tm6000-alsa.c
+@@ -380,7 +380,7 @@ static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
+ /*
+  * operators
+  */
+-static const struct snd_pcm_ops snd_tm6000_pcm_ops = {
++static struct snd_pcm_ops snd_tm6000_pcm_ops = {
+ 	.open = snd_tm6000_pcm_open,
+ 	.close = snd_tm6000_close,
+ 	.ioctl = snd_pcm_lib_ioctl,
+diff --git a/drivers/media/usb/usbtv/usbtv-audio.c b/drivers/media/usb/usbtv/usbtv-audio.c
+index 2c2ca77..14400f3 100644
+--- a/drivers/media/usb/usbtv/usbtv-audio.c
++++ b/drivers/media/usb/usbtv/usbtv-audio.c
+@@ -332,7 +332,7 @@ static snd_pcm_uframes_t snd_usbtv_pointer(struct snd_pcm_substream *substream)
+ 	return chip->snd_buffer_pos;
+ }
+ 
+-static const struct snd_pcm_ops snd_usbtv_pcm_ops = {
++static struct snd_pcm_ops snd_usbtv_pcm_ops = {
+ 	.open = snd_usbtv_pcm_open,
+ 	.close = snd_usbtv_pcm_close,
+ 	.ioctl = snd_pcm_lib_ioctl,
+diff --git a/sound/pci/bt87x.c b/sound/pci/bt87x.c
+index d8ade87..f9122fa 100644
+--- a/sound/pci/bt87x.c
++++ b/sound/pci/bt87x.c
+@@ -550,7 +550,7 @@ static snd_pcm_uframes_t snd_bt87x_pointer(struct snd_pcm_substream *substream)
+ 	return (snd_pcm_uframes_t)bytes_to_frames(runtime, chip->current_line * chip->line_bytes);
+ }
+ 
+-static const struct snd_pcm_ops snd_bt87x_pcm_ops = {
++static struct snd_pcm_ops snd_bt87x_pcm_ops = {
+ 	.open = snd_bt87x_pcm_open,
+ 	.close = snd_bt87x_close,
+ 	.ioctl = snd_pcm_lib_ioctl,

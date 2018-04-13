@@ -25,6 +25,7 @@ add api_version.patch
 add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
+add noretpoline.patch
 
 [4.14.255]
 add v4.14_compiler_h.patch
@@ -51,6 +52,8 @@ add v4.8_em28xx_bitfield.patch
 [4.7.255]
 add v4.7_dma_attrs.patch
 add v4.7_pci_alloc_irq_vectors.patch
+add v4.7_copy_to_user_warning.patch
+add v4.7_objtool_warning.patch
 
 [4.6.255]
 add v4.6_i2c_mux.patch
@@ -59,12 +62,14 @@ add v4.6_i2c_mux.patch
 add v4.5_gpiochip_data_pointer.patch
 add v4.5_get_user_pages.patch
 add v4.5_uvc_super_plus.patch
+add v4.5_copy_to_user_warning.patch
 
 [4.4.255]
 add v4.4_gpio_chip_parent.patch
 
 [4.3.255]
 add v4.3_add_autorepeat_handling.patch
+add v4.3_bt87x_const_fix.patch
 
 [4.2.255]
 add v4.2_atomic64.patch
@@ -107,6 +112,7 @@ add v3.11_dev_groups.patch
 [3.10.255]
 add v3.10_fw_driver_probe.patch
 add v3.10_ir_hix5hd2.patch
+add v3.10_const_snd_pcm_ops.patch
 
 [3.9.255]
 add v3.9_drxj_warnings.patch
@@ -120,6 +126,7 @@ add v3.6_i2c_add_mux_adapter.patch
 
 [3.4.255]
 add v3.4_i2c_add_mux_adapter.patch
+add v3.4_stk_webcam.patch
 
 [3.3.255]
 add v3.3_eprobe_defer.patch
@@ -132,7 +139,6 @@ add v3.2_alloc_ordered_workqueue.patch
 add v3.1_no_export_h.patch
 add v3.1_no_dma_buf_h.patch
 add v3.1_no_pm_qos.patch
-add v3.1_stk_webcam.patch
 
 [3.0.255]
 add no_atomic_include.patch
@@ -142,6 +148,7 @@ add v3.0_remove_ida_lird_dev.patch
 
 [2.6.39]
 add v2.6_rc_main_bsearch_h.patch
+add v2.6.39_const_rc_main.patch
 
 [2.6.38]
 add v2.6.38_use_getkeycode_new_setkeycode_new.patch

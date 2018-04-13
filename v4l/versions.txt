@@ -16,6 +16,8 @@ VIDEO_OV5670
 [4.7.0]
 # needs i2c_mux_alloc
 DVB_LGDT3306A
+# needs struct i2c_mux_core
+DVB_AF9013
 
 [4.5.0]
 # needs pm_runtime_get_if_in_use
@@ -76,6 +78,8 @@ IR_GPIO_CIR
 VIDEO_OV5695
 VIDEO_OV9650
 VIDEO_OV2685
+VIDEO_TW9910
+SOC_CAMERA_TW9910
 # needs component_match_add
 VIDEO_VIMC
 
@@ -88,14 +92,12 @@ VIDEO_TDA1997X
 [3.14.0]
 # needs pci_enable_msi_range
 VIDEO_COBALT
-# needs linux/component.h
-VIDEO_VIMC
+# requires m2m_ctx in struct v4l2_fh
+VIDEO_VIM2M
 
 [3.13.0]
 # needs gpio/consumer.h
 RADIO_SI4713
-SOC_CAMERA_TW9910
-VIDEO_TW9910
 
 [3.12.0]
 # BIN_ATTR_RW was changed
@@ -154,6 +156,7 @@ VIDEO_MT9T001
 VIDEO_S5K5BAF
 VIDEO_S5K6A3
 VIDEO_OV2659
+VIDEO_OV5647
 # needs devm_gpio_request_one
 VIDEO_ADV7183
 VIDEO_VS6624
@@ -162,8 +165,8 @@ VIDEO_NOON010PC30
 VIDEO_S5K6AA
 # needs dev_err_ratelimited
 MEDIA_TUNER_E4000
-# regmap_init has different arguments
-DVB_AF9013
+# needs regmap_init with 4 arguments
+DVB_USB_AF9015
 
 [3.4.0]
 # needs devm_regulator_bulk_get
@@ -192,6 +195,8 @@ MEDIA_TUNER_IT913X
 DVB_AF9033
 DVB_MN88472
 DVB_MN88473
+# does not compile for older kernels
+CXD2880_SPI_DRV
 
 [3.3.0]
 # Needs struct dma_interleaved_template in dmaengine.h
@@ -201,10 +206,8 @@ VIDEO_TVP514X
 VIDEO_TVP7002
 # requires new interface for alloc_ordered_workqueue
 VIDEO_VIVID
-# requires functions from clk.h
-VIDEO_OV5647
-# does not compile for older kernels
-CXD2880_SPI_DRV
+# needs SPI driver framework
+VIDEO_GS1662
 
 [3.2.0]
 # due to the rename at include/linux from "pm_qos_params.h" to "pm_qos.h"
@@ -233,6 +236,8 @@ VIDEO_VIA_CAMERA
 # needs div64_s64
 MEDIA_TUNER_QM1D1C0042
 DVB_TC90522
+# requires linux/atomic.h
+DVB_CXD2880
 
 [2.6.36]
 

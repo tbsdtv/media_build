@@ -1,0 +1,13 @@
+diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+index 44ca66c..c2c7585 100644
+--- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
++++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+@@ -802,6 +802,8 @@ static void ttusb_dec_process_urb_frame_list(unsigned long data)
+ 		kfree(frame);
+ 	}
+ }
++/* to fix a warning for Kernel 4.7 */
++STACK_FRAME_NON_STANDARD(ttusb_dec_process_urb_frame_list);
+ 
+ static void ttusb_dec_process_urb(struct urb *urb)
+ {
