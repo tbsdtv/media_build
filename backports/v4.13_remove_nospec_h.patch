@@ -1,0 +1,12 @@
+diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
+index b2bc855..1cf5c6f3 100644
+--- a/drivers/media/dvb-core/dvb_ca_en50221.c
++++ b/drivers/media/dvb-core/dvb_ca_en50221.c
+@@ -32,7 +32,6 @@
+ #include <linux/slab.h>
+ #include <linux/list.h>
+ #include <linux/module.h>
+-#include <linux/nospec.h>
+ #include <linux/vmalloc.h>
+ #include <linux/delay.h>
+ #include <linux/spinlock.h>

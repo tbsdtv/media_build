@@ -1,72 +1,5 @@
-diff --git a/drivers/media/platform/sti/bdisp/bdisp-hw.c b/drivers/media/platform/sti/bdisp/bdisp-hw.c
-index b7892f3..3df66d1 100644
---- a/drivers/media/platform/sti/bdisp/bdisp-hw.c
-+++ b/drivers/media/platform/sti/bdisp/bdisp-hw.c
-@@ -430,11 +430,14 @@ int bdisp_hw_get_and_clear_irq(struct bdisp_dev *bdisp)
-  */
- void bdisp_hw_free_nodes(struct bdisp_ctx *ctx)
- {
--	if (ctx && ctx->node[0])
-+	if (ctx && ctx->node[0]) {
-+		DEFINE_DMA_ATTRS(attrs);
-+
-+		dma_set_attr(DMA_ATTR_WRITE_COMBINE, &attrs);
- 		dma_free_attrs(ctx->bdisp_dev->dev,
- 			       sizeof(struct bdisp_node) * MAX_NB_NODE,
--			       ctx->node[0], ctx->node_paddr[0],
--			       DMA_ATTR_WRITE_COMBINE);
-+			       ctx->node[0], ctx->node_paddr[0], &attrs);
-+	}
- }
- 
- /**
-@@ -452,10 +455,12 @@ int bdisp_hw_alloc_nodes(struct bdisp_ctx *ctx)
- 	unsigned int i, node_size = sizeof(struct bdisp_node);
- 	void *base;
- 	dma_addr_t paddr;
-+	DEFINE_DMA_ATTRS(attrs);
- 
- 	/* Allocate all the nodes within a single memory page */
-+	dma_set_attr(DMA_ATTR_WRITE_COMBINE, &attrs);
- 	base = dma_alloc_attrs(dev, node_size * MAX_NB_NODE, &paddr,
--			       GFP_KERNEL | GFP_DMA, DMA_ATTR_WRITE_COMBINE);
-+			       GFP_KERNEL | GFP_DMA, &attrs);
- 	if (!base) {
- 		dev_err(dev, "%s no mem\n", __func__);
- 		return -ENOMEM;
-@@ -488,9 +493,13 @@ void bdisp_hw_free_filters(struct device *dev)
- {
- 	int size = (BDISP_HF_NB * NB_H_FILTER) + (BDISP_VF_NB * NB_V_FILTER);
- 
--	if (bdisp_h_filter[0].virt)
-+	if (bdisp_h_filter[0].virt) {
-+		DEFINE_DMA_ATTRS(attrs);
-+
-+		dma_set_attr(DMA_ATTR_WRITE_COMBINE, &attrs);
- 		dma_free_attrs(dev, size, bdisp_h_filter[0].virt,
--			       bdisp_h_filter[0].paddr, DMA_ATTR_WRITE_COMBINE);
-+			       bdisp_h_filter[0].paddr, &attrs);
-+	}
- }
- 
- /**
-@@ -507,11 +516,12 @@ int bdisp_hw_alloc_filters(struct device *dev)
- 	unsigned int i, size;
- 	void *base;
- 	dma_addr_t paddr;
-+	DEFINE_DMA_ATTRS(attrs);
- 
- 	/* Allocate all the filters within a single memory page */
- 	size = (BDISP_HF_NB * NB_H_FILTER) + (BDISP_VF_NB * NB_V_FILTER);
--	base = dma_alloc_attrs(dev, size, &paddr, GFP_KERNEL | GFP_DMA,
--			       DMA_ATTR_WRITE_COMBINE);
-+	dma_set_attr(DMA_ATTR_WRITE_COMBINE, &attrs);
-+	base = dma_alloc_attrs(dev, size, &paddr, GFP_KERNEL | GFP_DMA, &attrs);
- 	if (!base)
- 		return -ENOMEM;
- 
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index fb6a177..e50ef6a 100644
+index 646b5ae..290327c6 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 @@ -27,7 +27,7 @@ struct vb2_dc_buf {
@@ -148,7 +81,7 @@ index fb6a177..e50ef6a 100644
  		pages = frame_vector_pages(buf->vec);
  		/* sgt should exist only if vector contains pages... */
  		BUG_ON(IS_ERR(pages));
-@@ -484,6 +487,9 @@ static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
+@@ -486,6 +489,9 @@ static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
  	struct sg_table *sgt;
  	unsigned long contig_size;
  	unsigned long dma_align = dma_get_cache_alignment();
@@ -158,7 +91,7 @@ index fb6a177..e50ef6a 100644
  
  	/* Only cache aligned DMA transfers are reliable */
  	if (!IS_ALIGNED(vaddr | size, dma_align)) {
-@@ -548,7 +554,7 @@ static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
+@@ -551,7 +557,7 @@ static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
  	 * prepare() memop is called.
  	 */
  	sgt->nents = dma_map_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
@@ -167,7 +100,7 @@ index fb6a177..e50ef6a 100644
  	if (sgt->nents <= 0) {
  		pr_err("failed to map scatterlist\n");
  		ret = -EIO;
-@@ -572,7 +578,7 @@ out:
+@@ -575,7 +581,7 @@ static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
  
  fail_map_sg:
  	dma_unmap_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
@@ -177,7 +110,7 @@ index fb6a177..e50ef6a 100644
  fail_sgt_init:
  	sg_free_table(sgt);
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-index ecff8f4..64a386d 100644
+index ac49dae..8b79a86 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 @@ -95,7 +95,7 @@ static int vb2_dma_sg_alloc_compacted(struct vb2_dma_sg_buf *buf,
@@ -237,7 +170,7 @@ index ecff8f4..64a386d 100644
  	buf = kzalloc(sizeof *buf, GFP_KERNEL);
  	if (!buf)
  		return ERR_PTR(-ENOMEM);
-@@ -258,7 +266,7 @@ static void *vb2_dma_sg_get_userptr(struct device *dev, unsigned long vaddr,
+@@ -259,7 +267,7 @@ static void *vb2_dma_sg_get_userptr(struct device *dev, unsigned long vaddr,
  	 * prepare() memop is called.
  	 */
  	sgt->nents = dma_map_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
@@ -246,7 +179,7 @@ index ecff8f4..64a386d 100644
  	if (!sgt->nents)
  		goto userptr_fail_map;
  
-@@ -282,11 +290,14 @@ static void vb2_dma_sg_put_userptr(void *buf_priv)
+@@ -283,11 +291,14 @@ static void vb2_dma_sg_put_userptr(void *buf_priv)
  	struct vb2_dma_sg_buf *buf = buf_priv;
  	struct sg_table *sgt = &buf->sg_table;
  	int i = buf->num_pages;
@@ -263,7 +196,7 @@ index ecff8f4..64a386d 100644
  		vm_unmap_ram(buf->vaddr, buf->num_pages);
  	sg_free_table(buf->dma_sgt);
 diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-index ab3227b..4fdfefd 100644
+index c5b1fa1..d73faa7 100644
 --- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 +++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 @@ -33,7 +33,7 @@ struct vb2_vmalloc_buf {
@@ -275,11 +208,78 @@ index ab3227b..4fdfefd 100644
  			       unsigned long size, enum dma_data_direction dma_dir,
  			       gfp_t gfp_flags)
  {
+diff --git a/drivers/media/platform/sti/bdisp/bdisp-hw.c b/drivers/media/platform/sti/bdisp/bdisp-hw.c
+index 26d9fa7..7a1d9f0 100644
+--- a/drivers/media/platform/sti/bdisp/bdisp-hw.c
++++ b/drivers/media/platform/sti/bdisp/bdisp-hw.c
+@@ -430,11 +430,14 @@ int bdisp_hw_get_and_clear_irq(struct bdisp_dev *bdisp)
+  */
+ void bdisp_hw_free_nodes(struct bdisp_ctx *ctx)
+ {
+-	if (ctx && ctx->node[0])
++	if (ctx && ctx->node[0]) {
++		DEFINE_DMA_ATTRS(attrs);
++
++		dma_set_attr(DMA_ATTR_WRITE_COMBINE, &attrs);
+ 		dma_free_attrs(ctx->bdisp_dev->dev,
+ 			       sizeof(struct bdisp_node) * MAX_NB_NODE,
+-			       ctx->node[0], ctx->node_paddr[0],
+-			       DMA_ATTR_WRITE_COMBINE);
++			       ctx->node[0], ctx->node_paddr[0], &attrs);
++	}
+ }
+ 
+ /**
+@@ -452,10 +455,12 @@ int bdisp_hw_alloc_nodes(struct bdisp_ctx *ctx)
+ 	unsigned int i, node_size = sizeof(struct bdisp_node);
+ 	void *base;
+ 	dma_addr_t paddr;
++	DEFINE_DMA_ATTRS(attrs);
+ 
+ 	/* Allocate all the nodes within a single memory page */
++	dma_set_attr(DMA_ATTR_WRITE_COMBINE, &attrs);
+ 	base = dma_alloc_attrs(dev, node_size * MAX_NB_NODE, &paddr,
+-			       GFP_KERNEL, DMA_ATTR_WRITE_COMBINE);
++			       GFP_KERNEL, &attrs);
+ 	if (!base) {
+ 		dev_err(dev, "%s no mem\n", __func__);
+ 		return -ENOMEM;
+@@ -488,9 +493,13 @@ void bdisp_hw_free_filters(struct device *dev)
+ {
+ 	int size = (BDISP_HF_NB * NB_H_FILTER) + (BDISP_VF_NB * NB_V_FILTER);
+ 
+-	if (bdisp_h_filter[0].virt)
++	if (bdisp_h_filter[0].virt) {
++		DEFINE_DMA_ATTRS(attrs);
++
++		dma_set_attr(DMA_ATTR_WRITE_COMBINE, &attrs);
+ 		dma_free_attrs(dev, size, bdisp_h_filter[0].virt,
+-			       bdisp_h_filter[0].paddr, DMA_ATTR_WRITE_COMBINE);
++			       bdisp_h_filter[0].paddr, &attrs);
++	}
+ }
+ 
+ /**
+@@ -507,11 +516,12 @@ int bdisp_hw_alloc_filters(struct device *dev)
+ 	unsigned int i, size;
+ 	void *base;
+ 	dma_addr_t paddr;
++	DEFINE_DMA_ATTRS(attrs);
+ 
+ 	/* Allocate all the filters within a single memory page */
+ 	size = (BDISP_HF_NB * NB_H_FILTER) + (BDISP_VF_NB * NB_V_FILTER);
+-	base = dma_alloc_attrs(dev, size, &paddr, GFP_KERNEL | GFP_DMA,
+-			       DMA_ATTR_WRITE_COMBINE);
++	dma_set_attr(DMA_ATTR_WRITE_COMBINE, &attrs);
++	base = dma_alloc_attrs(dev, size, &paddr, GFP_KERNEL | GFP_DMA, &attrs);
+ 	if (!base)
+ 		return -ENOMEM;
+ 
 diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index 9a144f2..c5e3113 100644
+index f6818f73..e7ae732 100644
 --- a/include/media/videobuf2-core.h
 +++ b/include/media/videobuf2-core.h
-@@ -113,7 +113,7 @@ struct vb2_threadio_data;
+@@ -114,7 +114,7 @@ struct vb2_threadio_data;
   *       map_dmabuf, unmap_dmabuf.
   */
  struct vb2_mem_ops {
@@ -288,16 +288,16 @@ index 9a144f2..c5e3113 100644
  				  unsigned long size,
  				  enum dma_data_direction dma_dir,
  				  gfp_t gfp_flags);
-@@ -426,7 +426,7 @@ struct vb2_buf_ops {
-  * @io_modes:	supported io methods (see vb2_io_modes enum)
+@@ -432,7 +432,7 @@ struct vb2_buf_ops {
+  * @alloc_devs:	&struct device memory type/allocator-specific per-plane device
   * @dev:	device to use for the default allocation context if the driver
   *		doesn't fill in the @alloc_devs array.
 - * @dma_attrs:	DMA attributes to use for the DMA.
 + * @dma_attrs:	DMA attributes to use for the DMA. May be NULL.
   * @bidirectional: when this flag is set the DMA direction for the buffers of
-  *		this queue will be overridden with DMA_BIDIRECTIONAL direction.
+  *		this queue will be overridden with %DMA_BIDIRECTIONAL direction.
   *		This is useful in cases where the hardware (firmware) writes to
-@@ -494,7 +494,7 @@ struct vb2_queue {
+@@ -510,7 +510,7 @@ struct vb2_queue {
  	unsigned int			type;
  	unsigned int			io_modes;
  	struct device			*dev;

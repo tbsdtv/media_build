@@ -1,8 +1,8 @@
 diff --git a/drivers/media/pci/cobalt/cobalt-driver.c b/drivers/media/pci/cobalt/cobalt-driver.c
-index d5c911c..9796340 100644
+index c8b1a62..26b08af 100644
 --- a/drivers/media/pci/cobalt/cobalt-driver.c
 +++ b/drivers/media/pci/cobalt/cobalt-driver.c
-@@ -308,7 +308,9 @@ static void cobalt_pci_iounmap(struct cobalt *cobalt, struct pci_dev *pci_dev)
+@@ -298,7 +298,9 @@ static void cobalt_pci_iounmap(struct cobalt *cobalt, struct pci_dev *pci_dev)
  static void cobalt_free_msi(struct cobalt *cobalt, struct pci_dev *pci_dev)
  {
  	free_irq(pci_dev->irq, (void *)cobalt);
@@ -13,7 +13,7 @@ index d5c911c..9796340 100644
  }
  
  static int cobalt_setup_pci(struct cobalt *cobalt, struct pci_dev *pci_dev,
-@@ -385,12 +387,14 @@ static int cobalt_setup_pci(struct cobalt *cobalt, struct pci_dev *pci_dev,
+@@ -375,12 +377,14 @@ static int cobalt_setup_pci(struct cobalt *cobalt, struct pci_dev *pci_dev,
  	   from being generated. */
  	cobalt_set_interrupt(cobalt, false);
  
@@ -30,10 +30,10 @@ index d5c911c..9796340 100644
  	/* Register IRQ */
  	if (request_irq(pci_dev->irq, cobalt_irq_handler, IRQF_SHARED,
 diff --git a/drivers/media/pci/cobalt/cobalt-driver.h b/drivers/media/pci/cobalt/cobalt-driver.h
-index 00f773e..ed00dc9 100644
+index 429bee4..cc33b3a 100644
 --- a/drivers/media/pci/cobalt/cobalt-driver.h
 +++ b/drivers/media/pci/cobalt/cobalt-driver.h
-@@ -287,6 +287,8 @@ struct cobalt {
+@@ -275,6 +275,8 @@ struct cobalt {
  	u32 irq_none;
  	u32 irq_full_fifo;
  
@@ -42,15 +42,16 @@ index 00f773e..ed00dc9 100644
  	/* omnitek dma */
  	int dma_channels;
  	int first_fifo_channel;
-diff --git a/drivers/media/pci/ddbridge/ddbridge.c b/drivers/media/pci/ddbridge/ddbridge.c
-index fab421f..031288a 100644
+diff --git a/drivers/media/pci/ddbridge/ddbridge-main.c b/drivers/media/pci/ddbridge/ddbridge-main.c
+index 21cce8c..3db28de 100644
 --- a/drivers/media/pci/ddbridge/ddbridge-main.c
 +++ b/drivers/media/pci/ddbridge/ddbridge-main.c
-@@ -109,7 +109,7 @@ static void ddb_irq_msi(struct ddb *dev, int nr)
+@@ -106,8 +106,7 @@ static void ddb_irq_msi(struct ddb *dev, int nr)
  	int stat;
  
  	if (msi && pci_msi_enabled()) {
--		stat = pci_alloc_irq_vectors(dev->pdev, 1, nr, PCI_IRQ_MSI);
+-		stat = pci_alloc_irq_vectors(dev->pdev, 1, nr,
+-					     PCI_IRQ_MSI | PCI_IRQ_MSIX);
 +		stat = pci_enable_msi_range(dev->pdev, 1, nr);
  		if (stat >= 1) {
  			dev->msi = stat;

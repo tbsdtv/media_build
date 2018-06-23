@@ -1,5 +1,19 @@
 # From mm/Makefile
 
+kver_ge = $(shell \
+echo test | awk ' \
+{if ($(VERSION) < $(1)) {print 0} else { \
+    if ($(VERSION) > $(1)) {print 1} else { \
+        if ($(PATCHLEVEL) < $(2)) {print 0} else { \
+            if ($(PATCHLEVEL) >= $(2)) {print 1} \
+}}}}' \
+)
+
+ifeq ($(call kver_ge,4,3),0)
+# Kernels prior to 4.3 require always frame_vector.ko
+CONFIG_FRAME_VECTOR := m
+endif
+
 obj-$(CONFIG_FRAME_VECTOR) += frame_vector.o
 
 KDIRA          := /lib/modules/$(KERNELRELEASE)/kernel

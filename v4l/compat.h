@@ -8,6 +8,29 @@
 #include <linux/version.h>
 
 #include "config-compat.h"
+/*
+ * config-mycompat.h is for use with kernels/distros whose maintainers
+ * have integrated various backports, which the media_build system does
+ * not pick up on for whatever reason. At that point there are options
+ * defined in config-compat.h, which enable backports here, in compat.h,
+ * but which already exist in the target kernel. This allows disabling of
+ * specific backports for a particular build, allowing compliation to succeed.
+
+ * For example, if the following three statements exist in config-mycompat.h:
+
+ * #undef NEED_WRITEL_RELAXED
+ * #undef NEED_PM_RUNTIME_GET
+ * #undef NEED_PFN_TO_PHYS
+
+ * Those three media_build backports will be disabled in this file and
+ * compilation on a problematic kernel will succeed without issue.
+ * conifg-mycompat.h should be used strictly for disabling media_build
+ * backports causing compilation issues. It will typically be left empty.
+ *
+ * WARNING: v4l/config-mycompat.h is removed by distclean, the file
+ * should be saved externally and copied into v4l/ when required.
+ */
+#include "config-mycompat.h"
 
 #ifndef SZ_512
 #define SZ_512				0x00000200
@@ -2412,6 +2435,76 @@ static inline void *memdup_user_nul(const void __user *src, size_t len)
 #else
 /* be sure STACK_FRAME_NON_STANDARD is defined */
 #include <linux/frame.h>
+#endif
+
+#ifdef NEED_PCI_FREE_IRQ_VECTORS
+#include <linux/pci.h>
+static inline void pci_free_irq_vectors(struct pci_dev *dev)
+{
+}
+#endif
+
+#ifdef NEED_PCI_IRQ_VECTOR
+#include <linux/pci.h>
+static inline int pci_irq_vector(struct pci_dev *dev, unsigned int nr)
+{
+        if (WARN_ON_ONCE(nr > 0))
+                    return -EINVAL;
+            return dev->irq;
+}
+#endif
+
+#ifdef NEED_U8_MAX
+#define U8_MAX      ((u8)~0U)
+#endif
+
+#ifdef NEED_KTHREAD_FREEZABLE_SHOULD_STOP
+#include <linux/kthread.h>
+#include <linux/freezer.h>
+static inline bool kthread_freezable_should_stop(bool *was_frozen)
+{
+	bool frozen = false;
+
+	might_sleep();
+
+	if (unlikely(freezing(current))) {
+		/* __refrigerator is not available for Kernels older than 3.3
+		 * so we can only sa false */
+		frozen = false;
+	}
+
+	if (was_frozen)
+		*was_frozen = frozen;
+
+	return kthread_should_stop();
+}
+#endif
+
+#ifdef NEED_VM_FAULT_T
+typedef int vm_fault_t;
+#endif
+
+/* header location for of_find_i2c_[device,adapter]_by_node */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 12, 0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0)
+#include <linux/i2c.h>
+#include <linux/of_i2c.h>
+#endif
+#endif
+
+#ifdef NEED_ARRAY_INDEX_NOSPEC
+#define array_index_nospec(index, size)    index
+#else
+/* Some older Kernels got a backport, but we removed the include of
+ * "linux/nospec.h" with patch "v4.13_remove_nospec_h.patch". Thus
+ * including it again.
+ */
+#include <linux/nospec.h>
+#endif
+
+#ifdef NEED_LIST_FIRST_ENTRY_OR_NULL
+#define list_first_entry_or_null(ptr, type, member) \
+        (!list_empty(ptr) ? list_first_entry(ptr, type, member) : NULL)
 #endif
 
 #endif /*  _COMPAT_H */

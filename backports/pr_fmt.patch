@@ -120,7 +120,7 @@ index f450912..9c4e466 100644
  
  #include <linux/sched/signal.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index 21a7d4b..aaa67d3 100644
+index bc5eaad..4522701 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
 @@ -25,6 +25,7 @@
@@ -132,7 +132,7 @@ index 21a7d4b..aaa67d3 100644
  
  #include <linux/string.h>
 diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index ba39f99..3efe25c 100644
+index 10f7810..149a2f7 100644
 --- a/drivers/media/dvb-core/dvb_net.c
 +++ b/drivers/media/dvb-core/dvb_net.c
 @@ -51,6 +51,7 @@
@@ -156,7 +156,7 @@ index 787fe06..9030dfb 100644
  
  #include <linux/types.h>
 diff --git a/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c b/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
-index d474dc1b..4653742 100644
+index bd9101e..fd4cf60 100644
 --- a/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
 +++ b/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
 @@ -6,6 +6,7 @@
@@ -297,7 +297,7 @@ index 5a26ad9..b7da86e 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dvb-pll.c b/drivers/media/dvb-frontends/dvb-pll.c
-index 5553b89..d7009db 100644
+index e3894ff..dd753bc 100644
 --- a/drivers/media/dvb-frontends/dvb-pll.c
 +++ b/drivers/media/dvb-frontends/dvb-pll.c
 @@ -14,6 +14,7 @@
@@ -321,7 +321,7 @@ index a772ef8..3c0f22e 100644
  
  #include "gp8psk-fe.h"
 diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
-index 7eb4e14..ab16d3a 100644
+index 32de824..ee8146f 100644
 --- a/drivers/media/dvb-frontends/lgdt3306a.c
 +++ b/drivers/media/dvb-frontends/lgdt3306a.c
 @@ -16,6 +16,7 @@
@@ -405,7 +405,7 @@ index 1902732..06bbbb6 100644
  
  #include <linux/delay.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index f697698..7a9ffcf 100644
+index 707f57a..51343f7 100644
 --- a/drivers/media/pci/bt8xx/bttv-driver.c
 +++ b/drivers/media/pci/bt8xx/bttv-driver.c
 @@ -34,6 +34,7 @@
@@ -453,7 +453,7 @@ index 08266b2..0552001 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
-index 3859dde..6e7b92b 100644
+index 6a6be0b..acfbb58 100644
 --- a/drivers/media/pci/bt8xx/bttv-risc.c
 +++ b/drivers/media/pci/bt8xx/bttv-risc.c
 @@ -24,6 +24,7 @@
@@ -477,7 +477,7 @@ index 67c6583..abeaeb6 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/dst.c b/drivers/media/pci/bt8xx/dst.c
-index 4f0bba9..0b484eb 100644
+index 2e33b72..d06dc92 100644
 --- a/drivers/media/pci/bt8xx/dst.c
 +++ b/drivers/media/pci/bt8xx/dst.c
 @@ -18,6 +18,7 @@
@@ -489,7 +489,7 @@ index 4f0bba9..0b484eb 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
-index f60d69a..512ccfa 100644
+index 5ef6e20..1906fe0 100644
 --- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
 +++ b/drivers/media/pci/bt8xx/dvb-bt8xx.c
 @@ -15,6 +15,7 @@
@@ -633,7 +633,7 @@ index 07a33f0..db40b90 100644
  
  #include <linux/pci.h>
 diff --git a/drivers/media/pci/ddbridge/ddbridge-main.c b/drivers/media/pci/ddbridge/ddbridge-main.c
-index 26497d6..9adb253 100644
+index f4748cf..21cce8c 100644
 --- a/drivers/media/pci/ddbridge/ddbridge-main.c
 +++ b/drivers/media/pci/ddbridge/ddbridge-main.c
 @@ -16,6 +16,7 @@
@@ -657,7 +657,7 @@ index cafba6b..6b099da 100644
  
  /* Internal header for ivtv project:
 diff --git a/drivers/media/pci/ngene/ngene-cards.c b/drivers/media/pci/ngene/ngene-cards.c
-index 65fc8f2..692e6ad 100644
+index 7738565..1caf041 100644
 --- a/drivers/media/pci/ngene/ngene-cards.c
 +++ b/drivers/media/pci/ngene/ngene-cards.c
 @@ -23,6 +23,7 @@
@@ -849,7 +849,7 @@ index 1041c056..6194983 100644
  
  #include <linux/errno.h>
 diff --git a/drivers/media/rc/ir-imon-decoder.c b/drivers/media/rc/ir-imon-decoder.c
-index a1ff06a..53e88dd 100644
+index 67c1b0c..8395ca7 100644
 --- a/drivers/media/rc/ir-imon-decoder.c
 +++ b/drivers/media/rc/ir-imon-decoder.c
 @@ -3,6 +3,7 @@
@@ -861,7 +861,7 @@ index a1ff06a..53e88dd 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index 24e9fbb..2f9e0c1 100644
+index cc58ed7..0b9f81d 100644
 --- a/drivers/media/rc/lirc_dev.c
 +++ b/drivers/media/rc/lirc_dev.c
 @@ -15,6 +15,7 @@
@@ -885,7 +885,7 @@ index 5e1d866..418d57a 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index b67be33..176c4d3 100644
+index b7071bd..0404a15 100644
 --- a/drivers/media/rc/rc-main.c
 +++ b/drivers/media/rc/rc-main.c
 @@ -3,6 +3,7 @@
@@ -933,7 +933,7 @@ index 0adf099..68b48d5 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/spi/cxd2880-spi.c b/drivers/media/spi/cxd2880-spi.c
-index 4df3bd3..b03f18f 100644
+index 11ce510..a6e3d32 100644
 --- a/drivers/media/spi/cxd2880-spi.c
 +++ b/drivers/media/spi/cxd2880-spi.c
 @@ -7,6 +7,7 @@
@@ -944,6 +944,18 @@ index 4df3bd3..b03f18f 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": %s: " fmt, __func__
  
  #include <linux/spi/spi.h>
+diff --git a/drivers/media/tuners/r820t.c b/drivers/media/tuners/r820t.c
+index 3e14b9e..628d146 100644
+--- a/drivers/media/tuners/r820t.c
++++ b/drivers/media/tuners/r820t.c
+@@ -20,6 +20,7 @@
+ //
+ //	RF Gain set/get is not implemented.
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/videodev2.h>
 diff --git a/drivers/media/tuners/tda18271-priv.h b/drivers/media/tuners/tda18271-priv.h
 index 0bcc735..b9f0963 100644
 --- a/drivers/media/tuners/tda18271-priv.h
@@ -1437,7 +1449,7 @@ index f389a8d..8fdbe78 100644
  
  #define MODULE_NAME "spca561"
 diff --git a/drivers/media/usb/gspca/sq905.c b/drivers/media/usb/gspca/sq905.c
-index cc8ff41..57e886b 100644
+index ffea9c3..3afd535 100644
 --- a/drivers/media/usb/gspca/sq905.c
 +++ b/drivers/media/usb/gspca/sq905.c
 @@ -29,6 +29,7 @@
@@ -1449,7 +1461,7 @@ index cc8ff41..57e886b 100644
  
  #define MODULE_NAME "sq905"
 diff --git a/drivers/media/usb/gspca/sq905c.c b/drivers/media/usb/gspca/sq905c.c
-index 5e1269e..4a86760 100644
+index 274921c..187c673 100644
 --- a/drivers/media/usb/gspca/sq905c.c
 +++ b/drivers/media/usb/gspca/sq905c.c
 @@ -23,6 +23,7 @@
@@ -1617,7 +1629,7 @@ index 6b11597..cde8d4e 100644
  
  #define MODULE_NAME "vc032x"
 diff --git a/drivers/media/usb/gspca/vicam.c b/drivers/media/usb/gspca/vicam.c
-index 554b90e..3f8c48c 100644
+index 8562bda..8d4c3de 100644
 --- a/drivers/media/usb/gspca/vicam.c
 +++ b/drivers/media/usb/gspca/vicam.c
 @@ -22,6 +22,7 @@
@@ -1682,6 +1694,18 @@ index 22389b5..ba7fe8e 100644
 +++ b/drivers/media/usb/stkwebcam/stk-webcam.c
 @@ -18,6 +18,7 @@
   * GNU General Public License for more details.
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/module.h>
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index 530db8e..de11349 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -16,6 +16,7 @@
+  *		- Added procfs support
   */
  
 +#undef pr_fmt

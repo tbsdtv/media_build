@@ -25,10 +25,10 @@ index 20b3cb1..07f0734 100644
  	.close = snd_cx23885_close,
  	.ioctl = snd_pcm_lib_ioctl,
 diff --git a/drivers/media/pci/cx25821/cx25821-alsa.c b/drivers/media/pci/cx25821/cx25821-alsa.c
-index a45bf03..f80d9ba 100644
+index 42ba764..f2684ee 100644
 --- a/drivers/media/pci/cx25821/cx25821-alsa.c
 +++ b/drivers/media/pci/cx25821/cx25821-alsa.c
-@@ -645,7 +645,7 @@ static struct page *snd_cx25821_page(struct snd_pcm_substream *substream,
+@@ -646,7 +646,7 @@ static struct page *snd_cx25821_page(struct snd_pcm_substream *substream,
  /*
   * operators
   */
@@ -89,6 +89,19 @@ index 7719076..96e444c 100644
  	.open = tw686x_pcm_open,
  	.close = tw686x_pcm_close,
  	.ioctl = snd_pcm_lib_ioctl,
+diff --git a/drivers/media/usb/cx231xx/cx231xx-audio.c b/drivers/media/usb/cx231xx/cx231xx-audio.c
+index d96236d..92a573e 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-audio.c
++++ b/drivers/media/usb/cx231xx/cx231xx-audio.c
+@@ -631,7 +631,7 @@ static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
+ 	return vmalloc_to_page(pageptr);
+ }
+ 
+-static const struct snd_pcm_ops snd_cx231xx_pcm_capture = {
++static struct snd_pcm_ops snd_cx231xx_pcm_capture = {
+ 	.open = snd_cx231xx_capture_open,
+ 	.close = snd_cx231xx_pcm_close,
+ 	.ioctl = snd_pcm_lib_ioctl,
 diff --git a/drivers/media/usb/em28xx/em28xx-audio.c b/drivers/media/usb/em28xx/em28xx-audio.c
 index 8e799ae..535d7f7 100644
 --- a/drivers/media/usb/em28xx/em28xx-audio.c
@@ -103,7 +116,7 @@ index 8e799ae..535d7f7 100644
  	.close     = snd_em28xx_pcm_close,
  	.ioctl     = snd_pcm_lib_ioctl,
 diff --git a/drivers/media/usb/go7007/snd-go7007.c b/drivers/media/usb/go7007/snd-go7007.c
-index f84a213..8e4006f 100644
+index f84a213..8e4006ff 100644
 --- a/drivers/media/usb/go7007/snd-go7007.c
 +++ b/drivers/media/usb/go7007/snd-go7007.c
 @@ -198,7 +198,7 @@ static struct page *go7007_snd_pcm_page(struct snd_pcm_substream *substream,
@@ -142,7 +155,7 @@ index 2c2ca77..14400f3 100644
  	.close = snd_usbtv_pcm_close,
  	.ioctl = snd_pcm_lib_ioctl,
 diff --git a/sound/pci/bt87x.c b/sound/pci/bt87x.c
-index d8ade87..f9122fa 100644
+index eb3d306..bcc4ec4 100644
 --- a/sound/pci/bt87x.c
 +++ b/sound/pci/bt87x.c
 @@ -550,7 +550,7 @@ static snd_pcm_uframes_t snd_bt87x_pointer(struct snd_pcm_substream *substream)

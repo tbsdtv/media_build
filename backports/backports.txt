@@ -32,6 +32,9 @@ add v4.14_compiler_h.patch
 add v4.14_saa7146_timer_cast.patch
 add v4.14_module_param_call.patch
 
+[4.13.255]
+add v4.13_remove_nospec_h.patch
+
 [4.12.255]
 add v4.12_revert_solo6x10_copykerneluser.patch
 
@@ -43,7 +46,6 @@ add v4.10_refcount.patch
 [4.9.255]
 add v4.9_mm_address.patch
 add v4.9_dvb_net_max_mtu.patch
-add v4.9_ktime_cleanups.patch
 
 [4.8.255]
 add v4.8_user_pages_flag.patch
@@ -142,7 +144,6 @@ add v3.1_no_pm_qos.patch
 
 [3.0.255]
 add no_atomic_include.patch
-add v4l2-compat-timespec.patch
 add v3.0_ida2bit.patch
 add v3.0_remove_ida_lird_dev.patch
 

@@ -66,3 +66,17 @@ index 725c13a..35e3ac1 100644
  				dev /* mux_priv */,
  				0,
  				mux_no /* chan_id */,
+diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
+--- a/drivers/media/dvb-frontends/lgdt3306a.c	2018-01-23 22:15:12.146359404 +0000
++++ b/drivers/media/dvb-frontends/lgdt3306a.c	2018-01-23 22:16:01.055381481 +0000
+@@ -2300,8 +2300,8 @@ static int lgdt3306a_probe(struct i2c_cl
+ 	state = fe->demodulator_priv;
+ 
+ 	/* create mux i2c adapter for tuner */
+-	state->i2c_adap = i2c_add_mux_adapter(client->adapter, &client->dev,
+-			client, 0, 0, lgdt3306a_select, lgdt3306a_deselect);
++	state->i2c_adap = i2c_add_mux_adapter(client->adapter, client,
++				0, 0, lgdt3306a_select, lgdt3306a_deselect);
+ 	if (state->i2c_adap == NULL) {
+ 		ret = -ENODEV;
+ 		goto err_kfree;

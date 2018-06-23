@@ -3,6 +3,10 @@
 INTEL_ATOMISP
 VIDEO_DW9714
 
+[4.16.0]
+# Needs device_get_match_data
+VIDEO_I2C
+
 [4.13.0]
 # Needs multiplexer support
 VIDEO_MUX
@@ -12,10 +16,18 @@ RADIO_WL128X
 [4.10.0]
 # needs *probe_new in struct i2c_driver
 VIDEO_OV5670
+VIDEO_OV7251
+VIDEO_IMX258
+
+[4.8.0]
+# needs i2c_new_secondary_device
+VIDEO_ADV748X
 
 [4.7.0]
 # needs i2c_mux_alloc
-DVB_LGDT3306A
+DVB_RTL2830
+DVB_RTL2832
+DVB_M88DS3103
 # needs struct i2c_mux_core
 DVB_AF9013
 
@@ -80,6 +92,10 @@ VIDEO_OV9650
 VIDEO_OV2685
 VIDEO_TW9910
 SOC_CAMERA_TW9910
+VIDEO_MT9T112
+SOC_CAMERA_MT9T112
+VIDEO_OV772X
+SOC_CAMERA_OV772X
 # needs component_match_add
 VIDEO_VIMC
 
@@ -94,6 +110,8 @@ VIDEO_TDA1997X
 VIDEO_COBALT
 # requires m2m_ctx in struct v4l2_fh
 VIDEO_VIM2M
+# requires devm_phy_optional_get
+VIDEO_CADENCE_CSI2RX
 
 [3.13.0]
 # needs gpio/consumer.h
@@ -121,6 +139,7 @@ VIDEO_RCAR_VIN
 VIDEO_TI_SC
 VIDEO_TI_CSC
 IR_IMG
+VIDEO_CADENCE_CSI2TX
 # needs spi_sync_transfer
 IR_SPI
 
@@ -167,6 +186,9 @@ VIDEO_S5K6AA
 MEDIA_TUNER_E4000
 # needs regmap_init with 4 arguments
 DVB_USB_AF9015
+# needs of_find_i2c_adapter_by_node
+DVB_C8SECTPFE
+SOC_CAMERA
 
 [3.4.0]
 # needs devm_regulator_bulk_get
@@ -211,11 +233,9 @@ VIDEO_GS1662
 
 [3.2.0]
 # due to the rename at include/linux from "pm_qos_params.h" to "pm_qos.h"
-SOC_CAMERA
 SOC_CAMERA_MT9V022
 SOC_CAMERA_MT9M001
 SOC_CAMERA_MT9T031
-SOC_CAMERA_OV772X
 SOC_CAMERA_PLATFORM
 # Needs of_match_ptr
 VIDEO_THS8200

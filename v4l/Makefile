@@ -92,7 +92,7 @@ ifneq ($(filter $(no-makefile-media-targets), $(MAKECMDGOALS)),)
 endif
 
 makefile-mm := 1
-ifeq ($(wildcard $(SUBDIRS)/../linux/mm/frame_vector.c),)
+ifeq ("$(wildcard $(obj)/frame_vector.c)","")
 	makefile-mm := 0
 endif
 
@@ -280,6 +280,7 @@ links::
 	@find ../linux/drivers/misc -name '*.[ch]' -type f -print0 | xargs -0n 255 ln -sf --target-directory=.
 
 config-compat.h:: $(obj)/.version .myconfig scripts/make_config_compat.pl
+	[ ! -f "$(obj)/config-mycompat.h" ] && echo "/* empty config-mycompat.h */" > "$(obj)/config-mycompat.h" || true
 	perl scripts/make_config_compat.pl $(SRCDIR) $(obj)/.myconfig $(obj)/config-compat.h
 
 kernel-links makelinks::
@@ -306,7 +307,7 @@ clean::
 distclean:: clean
 	-rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
 		Kconfig Kconfig.kern .config .config.cmd .myconfig \
-		.kconfig.dep
+		.kconfig.dep config-mycompat.h
 	-rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
 	-rm -f scripts/lxdialog scripts/kconfig
 	@find .. -name '*.orig' -exec rm '{}' \;
