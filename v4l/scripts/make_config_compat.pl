@@ -728,6 +728,8 @@ sub check_other_dependencies()
 	check_files_for_func(" vm_fault_t;", "NEED_VM_FAULT_T", "include/linux/mm_types.h");
 	check_files_for_func("array_index_nospec", "NEED_ARRAY_INDEX_NOSPEC", "include/linux/nospec.h");
 	check_files_for_func("list_first_entry_or_null", "NEED_LIST_FIRST_ENTRY_OR_NULL", "include/linux/list.h");
+	check_files_for_func("struct_size", "NEED_STRUCT_SIZE", "linux/overflow.h");
+	check_files_for_func("list_last_entry", "NEED_LIST_LAST_ENTRY", "include/linux/list.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

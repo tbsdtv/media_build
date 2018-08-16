@@ -59,6 +59,7 @@ TARFILES += include/uapi/linux/cec-funcs.h
 
 # Other random files
 TARFILES += include/linux/fixp-arith.h
+TARFILES += include/linux/overflow.h
 
 DATE := `git --git-dir $(DIR)/.git log -n1 '--pretty=format:%h %ai' |perl -ne 'print "$$2-$$1" if (m/([\da-f]+)\s+(\S+)/)'`
 #TODAY_TAR := linux-media-${DATE}.tar

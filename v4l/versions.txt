@@ -7,6 +7,10 @@ VIDEO_DW9714
 # Needs device_get_match_data
 VIDEO_I2C
 
+[4.15.0]
+# Needs idle_bias_on and other flags in struct snd_soc_component_driver
+VIDEO_TDA1997X
+
 [4.13.0]
 # Needs multiplexer support
 VIDEO_MUX
@@ -18,6 +22,15 @@ RADIO_WL128X
 VIDEO_OV5670
 VIDEO_OV7251
 VIDEO_IMX258
+VIDEO_DW9807
+VIDEO_AK7375
+VIDEO_DW9807_VCM
+VIDEO_OV2680
+VIDEO_MT9V111
+
+[4.9.0]
+# needs linux/bitfield.h
+DVB_MN88443X
 
 [4.8.0]
 # needs i2c_new_secondary_device
@@ -64,6 +77,7 @@ SDR_MAX2175
 VIDEO_IPU3_CIO2
 # needs fwnode_property_present
 VIDEO_OV7670
+VIDEO_OV5640
 
 [3.18.0]
 # needs LED brightness support
@@ -83,7 +97,6 @@ VIDEO_ADV7180
 VIDEO_ET8EK8
 VIDEO_OV2640
 VIDEO_OV5645
-VIDEO_OV5640
 VIDEO_IMX274
 IR_GPIO_TX
 IR_GPIO_CIR
@@ -96,20 +109,23 @@ VIDEO_MT9T112
 SOC_CAMERA_MT9T112
 VIDEO_OV772X
 SOC_CAMERA_OV772X
+VIDEO_RJ54N1
+SOC_CAMERA_RJ54N1
 # needs component_match_add
 VIDEO_VIMC
+# needs bpf.h
+BPF_LIRC_MODE2
 
 [3.15.0]
 # needs reset_control_get_optional
 RC_ST
-# needs of_property_count_u32_elems
-VIDEO_TDA1997X
 
 [3.14.0]
 # needs pci_enable_msi_range
 VIDEO_COBALT
 # requires m2m_ctx in struct v4l2_fh
 VIDEO_VIM2M
+VIDEO_VICODEC
 # requires devm_phy_optional_get
 VIDEO_CADENCE_CSI2RX
 

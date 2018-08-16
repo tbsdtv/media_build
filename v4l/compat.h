@@ -2507,4 +2507,28 @@ typedef int vm_fault_t;
         (!list_empty(ptr) ? list_first_entry(ptr, type, member) : NULL)
 #endif
 
+#ifdef NEED_STRUCT_SIZE
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 10, 0)
+/* This older Kernels define "is_signed_type" different (and wrong)
+ * in "ftrace_event.h". "overflow.h" will correct this, which results
+ * in a warning because of different definitions. We include the file
+ * with the wrong definition first at this place and undefine the wrong
+ * definition, so that overflow can set it correctly without a warning.
+ * Moreover, "ftrace_event.h" will be never included again, because it
+ * is already included here. Thus, we will get no warning, if another
+ * file does include "ftrace_event.h".
+ */
+#include <linux/ftrace_event.h>
+#undef is_signed_type
+#endif
+
+#include <linux/overflow.h>
+#endif
+
+#ifdef NEED_LIST_LAST_ENTRY
+#define list_last_entry(ptr, type, member) \
+        list_entry((ptr)->prev, type, member)
+#endif
+
 #endif /*  _COMPAT_H */

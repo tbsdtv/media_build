@@ -1,0 +1,64 @@
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index d697e1a..fca36a4 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -1122,11 +1122,23 @@ static int saa7164_proc_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ 
++static int saa7164_proc_open(struct inode *inode, struct file *filp)
++{
++	return single_open(filp, saa7164_proc_show, NULL);
++}
++
++static const struct file_operations saa7164_proc_fops = {
++	.open		= saa7164_proc_open,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++
+ static int saa7164_proc_create(void)
+ {
+ 	struct proc_dir_entry *pe;
+ 
+-	pe = proc_create_single("saa7164", S_IRUGO, NULL, saa7164_proc_show);
++	pe = proc_create("saa7164", S_IRUGO, NULL, &saa7164_proc_fops);
+ 	if (!pe)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
+index 4427ae7..5ff23ef 100644
+--- a/drivers/staging/media/zoran/videocodec.c
++++ b/drivers/staging/media/zoran/videocodec.c
+@@ -344,6 +344,19 @@ static int proc_videocodecs_show(struct seq_file *m, void *v)
+ 
+ 	return 0;
+ }
++
++static int proc_videocodecs_open(struct inode *inode, struct file *file)
++{
++	return single_open(file, proc_videocodecs_show, NULL);
++}
++
++static const struct file_operations videocodecs_proc_fops = {
++	.owner		= THIS_MODULE,
++	.open		= proc_videocodecs_open,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
+ #endif
+ 
+ /* ===================== */
+@@ -360,8 +373,7 @@ videocodec_init (void)
+ 	       VIDEOCODEC_VERSION);
+ 
+ #ifdef CONFIG_PROC_FS
+-	videocodec_proc_entry = proc_create_single("videocodecs", 0, NULL,
+-			proc_videocodecs_show);
++	videocodec_proc_entry = proc_create("videocodecs", 0, NULL, &videocodecs_proc_fops);
+ 	if (!videocodec_proc_entry) {
+ 		dprintk(1, KERN_ERR "videocodec: can't init procfs.\n");
+ 	}
+

@@ -1,17 +1,17 @@
 diff --git a/drivers/media/pci/pt3/pt3.h b/drivers/media/pci/pt3/pt3.h
-index 1b3f2ad25db3..44ba0f4c298d 100644
+index 495891a..ed739b6 100644
 --- a/drivers/media/pci/pt3/pt3.h
 +++ b/drivers/media/pci/pt3/pt3.h
-@@ -17,7 +17,6 @@
+@@ -8,7 +8,6 @@
  #ifndef PT3_H
  #define PT3_H
  
 -#include <linux/atomic.h>
  #include <linux/types.h>
  
- #include "dvb_demux.h"
+ #include <media/dvb_demux.h>
 diff --git a/drivers/media/pci/solo6x10/solo6x10.h b/drivers/media/pci/solo6x10/solo6x10.h
-index 3f8da5e8c430..291ec932e1bf 100644
+index 3a1893a..cef7010 100644
 --- a/drivers/media/pci/solo6x10/solo6x10.h
 +++ b/drivers/media/pci/solo6x10/solo6x10.h
 @@ -28,7 +28,6 @@
@@ -21,9 +21,9 @@ index 3f8da5e8c430..291ec932e1bf 100644
 -#include <linux/atomic.h>
  #include <linux/slab.h>
  #include <linux/videodev2.h>
- 
+ #include <linux/gpio/driver.h>
 diff --git a/drivers/media/radio/radio-si476x.c b/drivers/media/radio/radio-si476x.c
-index 271f725b17e8..e39c9717016c 100644
+index b52e678..e17573a 100644
 --- a/drivers/media/radio/radio-si476x.c
 +++ b/drivers/media/radio/radio-si476x.c
 @@ -21,7 +21,6 @@
@@ -35,7 +35,7 @@ index 271f725b17e8..e39c9717016c 100644
  #include <linux/mutex.h>
  #include <linux/debugfs.h>
 diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
-index 15f016ad5b89..d4030e6fdf13 100644
+index 29ac7fc..848ef16 100644
 --- a/drivers/media/usb/hdpvr/hdpvr-core.c
 +++ b/drivers/media/usb/hdpvr/hdpvr-core.c
 @@ -17,7 +17,6 @@
@@ -47,19 +47,19 @@ index 15f016ad5b89..d4030e6fdf13 100644
  #include <linux/mutex.h>
  #include <linux/i2c.h>
 diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index c2ee6e39fd0c..5a24edfe64aa 100644
+index c2ad102..86d2ec1 100644
 --- a/drivers/media/usb/uvc/uvc_ctrl.c
 +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -20,7 +20,6 @@
- #include <linux/videodev2.h>
+@@ -21,7 +21,6 @@
  #include <linux/vmalloc.h>
  #include <linux/wait.h>
+ #include <linux/workqueue.h>
 -#include <linux/atomic.h>
  #include <media/v4l2-ctrls.h>
  
  #include "uvcvideo.h"
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 70842c5af05b..20ebfd17503a 100644
+index 4a2edfa..67df7cc 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
 @@ -11,7 +11,6 @@
@@ -71,7 +71,7 @@ index 70842c5af05b..20ebfd17503a 100644
  #include <linux/list.h>
  #include <linux/module.h>
 diff --git a/drivers/media/usb/uvc/uvc_queue.c b/drivers/media/usb/uvc/uvc_queue.c
-index aa2199775cb8..c155671702b3 100644
+index fecccb5..e144e5c 100644
 --- a/drivers/media/usb/uvc/uvc_queue.c
 +++ b/drivers/media/usb/uvc/uvc_queue.c
 @@ -11,7 +11,6 @@
@@ -83,7 +83,7 @@ index aa2199775cb8..c155671702b3 100644
  #include <linux/mm.h>
  #include <linux/list.h>
 diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 3e7e283a44a8..17d85bfaee08 100644
+index 18a7384..eb349be 100644
 --- a/drivers/media/usb/uvc/uvc_v4l2.c
 +++ b/drivers/media/usb/uvc/uvc_v4l2.c
 @@ -21,7 +21,6 @@
@@ -95,7 +95,7 @@ index 3e7e283a44a8..17d85bfaee08 100644
  #include <media/v4l2-common.h>
  #include <media/v4l2-ctrls.h>
 diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index fb86d6af398d..3fa820f2ffae 100644
+index eab6610..bf53842 100644
 --- a/drivers/media/usb/uvc/uvc_video.c
 +++ b/drivers/media/usb/uvc/uvc_video.c
 @@ -19,7 +19,6 @@
@@ -107,7 +107,7 @@ index fb86d6af398d..3fa820f2ffae 100644
  
  #include <media/v4l2-common.h>
 diff --git a/drivers/media/v4l2-core/v4l2-clk.c b/drivers/media/v4l2-core/v4l2-clk.c
-index 297e10e69898..5019e2a9fcc8 100644
+index c8f930a..9862790 100644
 --- a/drivers/media/v4l2-core/v4l2-clk.c
 +++ b/drivers/media/v4l2-core/v4l2-clk.c
 @@ -8,7 +8,6 @@
@@ -119,7 +119,7 @@ index 297e10e69898..5019e2a9fcc8 100644
  #include <linux/device.h>
  #include <linux/errno.h>
 diff --git a/include/media/v4l2-clk.h b/include/media/v4l2-clk.h
-index d3ed44072544..573b909f1113 100644
+index ddc78d4..232710e 100644
 --- a/include/media/v4l2-clk.h
 +++ b/include/media/v4l2-clk.h
 @@ -14,7 +14,6 @@

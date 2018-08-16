@@ -1,0 +1,99 @@
+diff --git b/drivers/media/pci/netup_unidvb/netup_unidvb_i2c.c a/drivers/media/pci/netup_unidvb/netup_unidvb_i2c.c
+index 5f1613aec93c..b13e319d24b7 100644
+--- b/drivers/media/pci/netup_unidvb/netup_unidvb_i2c.c
++++ a/drivers/media/pci/netup_unidvb/netup_unidvb_i2c.c
+@@ -214,6 +214,11 @@ static int netup_i2c_xfer(struct i2c_adapter *adap,
+ 	struct netup_i2c *i2c = i2c_get_adapdata(adap);
+ 	u16 reg;
+ 
++	if (num <= 0) {
++		dev_dbg(i2c->adap.dev.parent,
++			"%s(): num == %d\n", __func__, num);
++		return -EINVAL;
++	}
+ 	spin_lock_irqsave(&i2c->lock, flags);
+ 	if (i2c->state != STATE_DONE) {
+ 		dev_dbg(i2c->adap.dev.parent,
+diff --git b/drivers/media/radio/si4713/radio-usb-si4713.c a/drivers/media/radio/si4713/radio-usb-si4713.c
+index 1ebbf0217142..05c66701a899 100644
+--- b/drivers/media/radio/si4713/radio-usb-si4713.c
++++ a/drivers/media/radio/si4713/radio-usb-si4713.c
+@@ -370,6 +370,9 @@ static int si4713_transfer(struct i2c_adapter *i2c_adapter,
+ 	int retval = -EINVAL;
+ 	int i;
+ 
++	if (num <= 0)
++		return 0;
++
+ 	for (i = 0; i < num; i++) {
+ 		if (msgs[i].flags & I2C_M_RD)
+ 			retval = si4713_i2c_read(radio, msgs[i].buf, msgs[i].len);
+diff --git b/drivers/media/usb/cx231xx/cx231xx-i2c.c a/drivers/media/usb/cx231xx/cx231xx-i2c.c
+index 15a91169e749..6e1bef2a45bb 100644
+--- b/drivers/media/usb/cx231xx/cx231xx-i2c.c
++++ a/drivers/media/usb/cx231xx/cx231xx-i2c.c
+@@ -376,6 +376,8 @@ static int cx231xx_i2c_xfer(struct i2c_adapter *i2c_adap,
+ 	struct cx231xx *dev = bus->dev;
+ 	int addr, rc, i, byte;
+ 
++	if (num <= 0)
++		return 0;
+ 	mutex_lock(&dev->i2c_lock);
+ 	for (i = 0; i < num; i++) {
+ 
+diff --git b/drivers/media/usb/dvb-usb/m920x.c a/drivers/media/usb/dvb-usb/m920x.c
+index 22554d9abd43..51b026fa6bfb 100644
+--- b/drivers/media/usb/dvb-usb/m920x.c
++++ a/drivers/media/usb/dvb-usb/m920x.c
+@@ -255,6 +255,9 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+ 	int i, j;
+ 	int ret = 0;
+ 
++	if (!num)
++		return -EINVAL;
++
+ 	if (mutex_lock_interruptible(&d->i2c_mutex) < 0)
+ 		return -EAGAIN;
+ 
+diff --git b/drivers/media/usb/em28xx/em28xx-i2c.c a/drivers/media/usb/em28xx/em28xx-i2c.c
+index e19d6342e0d0..6458682bc6e2 100644
+--- b/drivers/media/usb/em28xx/em28xx-i2c.c
++++ a/drivers/media/usb/em28xx/em28xx-i2c.c
+@@ -559,6 +559,10 @@ static int em28xx_i2c_xfer(struct i2c_adapter *i2c_adap,
+ 		dev->cur_i2c_bus = bus;
+ 	}
+ 
++	if (num <= 0) {
++		rt_mutex_unlock(&dev->i2c_bus_lock);
++		return 0;
++	}
+ 	for (i = 0; i < num; i++) {
+ 		addr = msgs[i].addr << 1;
+ 		if (!msgs[i].len) {
+diff --git b/drivers/media/usb/hdpvr/hdpvr-i2c.c a/drivers/media/usb/hdpvr/hdpvr-i2c.c
+index 5a3cb614a211..c71ddefd2e58 100644
+--- b/drivers/media/usb/hdpvr/hdpvr-i2c.c
++++ a/drivers/media/usb/hdpvr/hdpvr-i2c.c
+@@ -117,6 +117,9 @@ static int hdpvr_transfer(struct i2c_adapter *i2c_adapter, struct i2c_msg *msgs,
+ 	struct hdpvr_device *dev = i2c_get_adapdata(i2c_adapter);
+ 	int retval = 0, addr;
+ 
++	if (num <= 0)
++		return 0;
++
+ 	mutex_lock(&dev->i2c_mutex);
+ 
+ 	addr = msgs[0].addr << 1;
+diff --git b/drivers/media/usb/tm6000/tm6000-i2c.c a/drivers/media/usb/tm6000/tm6000-i2c.c
+index ccd1adf862b1..659b63febf85 100644
+--- b/drivers/media/usb/tm6000/tm6000-i2c.c
++++ a/drivers/media/usb/tm6000/tm6000-i2c.c
+@@ -145,6 +145,8 @@ static int tm6000_i2c_xfer(struct i2c_adapter *i2c_adap,
+ 	struct tm6000_core *dev = i2c_adap->algo_data;
+ 	int addr, rc, i, byte;
+ 
++	if (num <= 0)
++		return 0;
+ 	for (i = 0; i < num; i++) {
+ 		addr = (msgs[i].addr << 1) & 0xff;
+ 		i2c_dprintk(2, "%s %s addr=0x%x len=%d:",

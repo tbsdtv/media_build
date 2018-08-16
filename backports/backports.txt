@@ -27,6 +27,13 @@ add debug.patch
 add drx39xxj.patch
 add noretpoline.patch
 
+[4.17.255]
+add v4.17_proc_create_single.patch
+add v4.17_i2c_check_num_msgs.patch
+
+[4.15.255]
+add v4.15_pmdown_time.patch
+
 [4.14.255]
 add v4.14_compiler_h.patch
 add v4.14_saa7146_timer_cast.patch
@@ -96,6 +103,7 @@ add v3.18_ktime_get_real_seconds.patch
 
 [3.17.255]
 add v3.17_fix_clamp.patch
+add v3.17_remove_bpf_h.patch
 
 [3.16.255]
 add v3.16_netdev.patch

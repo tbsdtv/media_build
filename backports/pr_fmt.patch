@@ -536,18 +536,6 @@ index a45bf03..42ba764 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include <linux/module.h>
-diff --git a/drivers/media/pci/cx25821/cx25821-audio-upstream.c b/drivers/media/pci/cx25821/cx25821-audio-upstream.c
-index ada26d4a..1334869 100644
---- a/drivers/media/pci/cx25821/cx25821-audio-upstream.c
-+++ b/drivers/media/pci/cx25821/cx25821-audio-upstream.c
-@@ -16,6 +16,7 @@
-  *  GNU General Public License for more details.
-  */
- 
-+#undef pr_fmt
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "cx25821-video.h"
 diff --git a/drivers/media/pci/cx25821/cx25821-cards.c b/drivers/media/pci/cx25821/cx25821-cards.c
 index f3b4d89..96beae1 100644
 --- a/drivers/media/pci/cx25821/cx25821-cards.c
@@ -596,18 +584,6 @@ index 0a9db05..ff7a293 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include "cx25821.h"
-diff --git a/drivers/media/pci/cx25821/cx25821-video-upstream.c b/drivers/media/pci/cx25821/cx25821-video-upstream.c
-index 6c838c8..6c23d6a 100644
---- a/drivers/media/pci/cx25821/cx25821-video-upstream.c
-+++ b/drivers/media/pci/cx25821/cx25821-video-upstream.c
-@@ -16,6 +16,7 @@
-  *  GNU General Public License for more details.
-  */
- 
-+#undef pr_fmt
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "cx25821-video.h"
 diff --git a/drivers/media/pci/cx25821/cx25821-video.c b/drivers/media/pci/cx25821/cx25821-video.c
 index dbaf42e..8f28456 100644
 --- a/drivers/media/pci/cx25821/cx25821-video.c
