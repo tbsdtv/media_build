@@ -1,1690 +1,1132 @@
 diff --git a/drivers/media/common/saa7146/saa7146_core.c b/drivers/media/common/saa7146/saa7146_core.c
-index 9f7c5b0..03b3af5 100644
+index 9f7c5b0a6b45..03b3af5d8495 100644
 --- a/drivers/media/common/saa7146/saa7146_core.c
 +++ b/drivers/media/common/saa7146/saa7146_core.c
-@@ -18,6 +18,7 @@
-     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+@@ -20,2 +20,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <media/drv-intf/saa7146.h>
 diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index d4987fd..d139750 100644
+index d4987fd05d05..d139750acea9 100644
 --- a/drivers/media/common/saa7146/saa7146_fops.c
 +++ b/drivers/media/common/saa7146/saa7146_fops.c
-@@ -1,3 +1,4 @@
+@@ -1 +1,2 @@
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <media/drv-intf/saa7146_vv.h>
 diff --git a/drivers/media/common/saa7146/saa7146_hlp.c b/drivers/media/common/saa7146/saa7146_hlp.c
-index 6ebcbc6..a06dc4d 100644
+index 6ebcbc6450f5..a06dc4d69a37 100644
 --- a/drivers/media/common/saa7146/saa7146_hlp.c
 +++ b/drivers/media/common/saa7146/saa7146_hlp.c
-@@ -1,3 +1,4 @@
+@@ -1 +1,2 @@
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/common/saa7146/saa7146_i2c.c b/drivers/media/common/saa7146/saa7146_i2c.c
-index f9e099d..8b8ed13 100644
+index 3feddc52c446..b607c08f2b83 100644
 --- a/drivers/media/common/saa7146/saa7146_i2c.c
 +++ b/drivers/media/common/saa7146/saa7146_i2c.c
-@@ -1,4 +1,5 @@
+@@ -1,2 +1,3 @@
  // SPDX-License-Identifier: GPL-2.0
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <media/drv-intf/saa7146_vv.h>
 diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
-index 0dfa0c0..76a0f55 100644
+index 0dfa0c09d646..76a0f55c84a4 100644
 --- a/drivers/media/common/saa7146/saa7146_video.c
 +++ b/drivers/media/common/saa7146/saa7146_video.c
-@@ -1,3 +1,4 @@
+@@ -1 +1,2 @@
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <media/drv-intf/saa7146_vv.h>
 diff --git a/drivers/media/common/siano/smscoreapi.h b/drivers/media/common/siano/smscoreapi.h
-index 134c69f..a25e8a0 100644
+index eb58853008c9..afde66b96dcc 100644
 --- a/drivers/media/common/siano/smscoreapi.h
 +++ b/drivers/media/common/siano/smscoreapi.h
-@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
- #ifndef __SMS_CORE_API_H__
- #define __SMS_CORE_API_H__
+@@ -24,2 +24,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 +#undef pr_fmt
  #define pr_fmt(fmt) "%s:%s: " fmt, KBUILD_MODNAME, __func__
- 
- #include <linux/device.h>
 diff --git a/drivers/media/common/tveeprom.c b/drivers/media/common/tveeprom.c
-index ccf2d3b..f684cf3 100644
+index ccf2d3b12aec..f684cf3bded7 100644
 --- a/drivers/media/common/tveeprom.c
 +++ b/drivers/media/common/tveeprom.c
-@@ -24,6 +24,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -26,2 +26,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index d3f7bb3..914b50a 100644
+index 5653e8eebe2b..105340ed7b51 100644
 --- a/drivers/media/common/videobuf2/videobuf2-core.c
 +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -14,6 +14,7 @@
-  * the Free Software Foundation.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/err.h>
 diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
-index 61a750f..b71b2da 100644
+index d548f98c7a67..5ed65b823845 100644
 --- a/drivers/media/dvb-core/dmxdev.c
 +++ b/drivers/media/dvb-core/dmxdev.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) "dmxdev: " fmt
- 
- #include <linux/sched.h>
 diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index 97365a8..f0298b5 100644
+index 4d371cea0d5d..ae56af776dec 100644
 --- a/drivers/media/dvb-core/dvb_ca_en50221.c
 +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
-@@ -25,6 +25,7 @@
-  * http://www.gnu.org/copyleft/gpl.html
-  */
+@@ -27,2 +27,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) "dvb_ca_en50221: " fmt
- 
- #include <linux/errno.h>
 diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-index f450912..9c4e466 100644
+index 39a2c6ccf31d..6c7b5689b191 100644
 --- a/drivers/media/dvb-core/dvb_demux.c
 +++ b/drivers/media/dvb-core/dvb_demux.c
-@@ -17,6 +17,7 @@
-  *
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) "dvb_demux: " fmt
- 
- #include <linux/sched/signal.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index bc5eaad..4522701 100644
+index c4e7ebfe4d29..8b39dc843d7a 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
-@@ -25,6 +25,7 @@
- /* Enables DVBv3 compatibility bits at the headers */
- #define __DVB_CORE__
+@@ -27,2 +27,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) "dvb_frontend: " fmt
- 
- #include <linux/string.h>
 diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index 10f7810..149a2f7 100644
+index 10f78109bb3f..149a2f7e4323 100644
 --- a/drivers/media/dvb-core/dvb_net.c
 +++ b/drivers/media/dvb-core/dvb_net.c
-@@ -51,6 +51,7 @@
-  *
-  */
+@@ -53,2 +53,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) "dvb_net: " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index 787fe06..9030dfb 100644
+index 3c8778570331..5468b0fd22b0 100644
 --- a/drivers/media/dvb-core/dvbdev.c
 +++ b/drivers/media/dvb-core/dvbdev.c
-@@ -17,6 +17,7 @@
-  *
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) "dvbdev: " fmt
- 
- #include <linux/types.h>
 diff --git a/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c b/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
-index bd9101e..fd4cf60 100644
+index f87e27481ea7..4d979dc7c5a9 100644
 --- a/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
 +++ b/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
-@@ -6,6 +6,7 @@
-  * Copyright (C) 2016, 2017, 2018 Sony Semiconductor Solutions Corporation
-  */
+@@ -8,2 +8,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": %s: " fmt, __func__
- 
- #include <linux/spi/spi.h>
 diff --git a/drivers/media/dvb-frontends/dib0070.c b/drivers/media/dvb-frontends/dib0070.c
-index 932d235..f232017 100644
+index 37ebd5af8fd4..adc2ae04f23a 100644
 --- a/drivers/media/dvb-frontends/dib0070.c
 +++ b/drivers/media/dvb-frontends/dib0070.c
-@@ -20,6 +20,7 @@
-  *
-  */
+@@ -22,2 +22,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib0090.c b/drivers/media/dvb-frontends/dib0090.c
-index ee7af34..4255942 100644
+index 44a074261e69..60f531634215 100644
 --- a/drivers/media/dvb-frontends/dib0090.c
 +++ b/drivers/media/dvb-frontends/dib0090.c
-@@ -20,6 +20,7 @@
-  *
-  */
+@@ -22,2 +22,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib3000mb.c b/drivers/media/dvb-frontends/dib3000mb.c
-index de3ce27..6ee38f2 100644
+index bbbd53280477..f72ec9ef9220 100644
 --- a/drivers/media/dvb-frontends/dib3000mb.c
 +++ b/drivers/media/dvb-frontends/dib3000mb.c
-@@ -21,6 +21,7 @@
-  *
-  */
+@@ -23,2 +23,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib3000mc.c b/drivers/media/dvb-frontends/dib3000mc.c
-index 7e5d4748..407445e 100644
+index c9e1db251723..68c7d9997a43 100644
 --- a/drivers/media/dvb-frontends/dib3000mc.c
 +++ b/drivers/media/dvb-frontends/dib3000mc.c
-@@ -11,6 +11,7 @@
-  *	published by the Free Software Foundation, version 2.
-  */
+@@ -13,2 +13,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib7000m.c b/drivers/media/dvb-frontends/dib7000m.c
-index 6a1d357..438906a 100644
+index b79358d09de6..b6dc3d5a994d 100644
 --- a/drivers/media/dvb-frontends/dib7000m.c
 +++ b/drivers/media/dvb-frontends/dib7000m.c
-@@ -9,6 +9,7 @@
-  *	published by the Free Software Foundation, version 2.
-  */
+@@ -11,2 +11,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib7000p.c b/drivers/media/dvb-frontends/dib7000p.c
-index 902af48..73a61b9 100644
+index 58387860b62d..9ddf74254ef8 100644
 --- a/drivers/media/dvb-frontends/dib7000p.c
 +++ b/drivers/media/dvb-frontends/dib7000p.c
-@@ -8,6 +8,7 @@
-  *	published by the Free Software Foundation, version 2.
-  */
+@@ -10,2 +10,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index 6f35173..b7ee741 100644
+index 3c3f8cb14845..1dc9c73ad16f 100644
 --- a/drivers/media/dvb-frontends/dib8000.c
 +++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -8,6 +8,7 @@
-  *  published by the Free Software Foundation, version 2.
-  */
+@@ -10,2 +10,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib9000.c b/drivers/media/dvb-frontends/dib9000.c
-index f9289f4..7143a03 100644
+index 0183fb1346ef..e5811c1a6da7 100644
 --- a/drivers/media/dvb-frontends/dib9000.c
 +++ b/drivers/media/dvb-frontends/dib9000.c
-@@ -8,6 +8,7 @@
-  *	published by the Free Software Foundation, version 2.
-  */
+@@ -10,2 +10,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dibx000_common.c b/drivers/media/dvb-frontends/dibx000_common.c
-index 70119c7..18224c9 100644
+index 70119c79ac2b..18224c9f846a 100644
 --- a/drivers/media/dvb-frontends/dibx000_common.c
 +++ b/drivers/media/dvb-frontends/dibx000_common.c
-@@ -1,3 +1,4 @@
+@@ -1 +1,2 @@
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/i2c.h>
 diff --git a/drivers/media/dvb-frontends/drx39xyj/drxj.c b/drivers/media/dvb-frontends/drx39xyj/drxj.c
-index 5706898..b2178ae 100644
+index 9628d4067fe1..37396c58033a 100644
 --- a/drivers/media/dvb-frontends/drx39xyj/drxj.c
 +++ b/drivers/media/dvb-frontends/drx39xyj/drxj.c
-@@ -53,6 +53,7 @@
- INCLUDE FILES
- ----------------------------------------------------------------------------*/
+@@ -55,2 +55,3 @@ INCLUDE FILES
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ":%s: " fmt, __func__
- 
- #include <linux/module.h>
 diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index 5a26ad9..b7da86e 100644
+index 84ac3f73f8fe..7ec20b0314dc 100644
 --- a/drivers/media/dvb-frontends/drxk_hard.c
 +++ b/drivers/media/dvb-frontends/drxk_hard.c
-@@ -17,6 +17,7 @@
-  * http://www.gnu.org/copyleft/gpl.html
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dvb-pll.c b/drivers/media/dvb-frontends/dvb-pll.c
-index e3894ff..dd753bc 100644
+index 6d4b2eec67b4..116346e73601 100644
 --- a/drivers/media/dvb-frontends/dvb-pll.c
 +++ b/drivers/media/dvb-frontends/dvb-pll.c
-@@ -14,6 +14,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/slab.h>
 diff --git a/drivers/media/dvb-frontends/gp8psk-fe.c b/drivers/media/dvb-frontends/gp8psk-fe.c
-index a772ef8..3c0f22e 100644
+index 238f09aa72f2..526ea7ef8f0a 100644
 --- a/drivers/media/dvb-frontends/gp8psk-fe.c
 +++ b/drivers/media/dvb-frontends/gp8psk-fe.c
-@@ -13,6 +13,7 @@
-  * Software Foundation, version 2.
-  */
+@@ -15,2 +15,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "gp8psk-fe.h"
 diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
-index 32de824..ee8146f 100644
+index 0e1f5daaf20c..3a0ea52be0d0 100644
 --- a/drivers/media/dvb-frontends/lgdt3306a.c
 +++ b/drivers/media/dvb-frontends/lgdt3306a.c
-@@ -16,6 +16,7 @@
-  *    GNU General Public License for more details.
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <asm/div64.h>
 diff --git a/drivers/media/dvb-frontends/nxt200x.c b/drivers/media/dvb-frontends/nxt200x.c
-index 7aa7440..c1168eb 100644
+index 0961e686ff68..2c84e4765fbe 100644
 --- a/drivers/media/dvb-frontends/nxt200x.c
 +++ b/drivers/media/dvb-frontends/nxt200x.c
-@@ -33,6 +33,7 @@
-  * /usr/lib/hotplug/firmware/ or /lib/firmware/
-  * (depending on configuration of firmware hotplug).
+@@ -35,2 +35,3 @@
   */
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- /* Max transfer size done by I2C transfer functions */
 diff --git a/drivers/media/dvb-frontends/nxt6000.c b/drivers/media/dvb-frontends/nxt6000.c
-index 109a635..44d7887 100644
+index 72e447e8ba64..16ad731d8942 100644
 --- a/drivers/media/dvb-frontends/nxt6000.c
 +++ b/drivers/media/dvb-frontends/nxt6000.c
-@@ -19,6 +19,7 @@
-     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+@@ -21,2 +21,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/init.h>
 diff --git a/drivers/media/dvb-frontends/or51211.c b/drivers/media/dvb-frontends/or51211.c
-index a1b7c30..5723906 100644
+index a39bbd8ff1f0..b516625205ff 100644
 --- a/drivers/media/dvb-frontends/or51211.c
 +++ b/drivers/media/dvb-frontends/or51211.c
-@@ -18,6 +18,7 @@
-  *
- */
+@@ -20,2 +20,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt)	KBUILD_MODNAME ": %s: " fmt, __func__
- 
- /*
 diff --git a/drivers/media/media-devnode.c b/drivers/media/media-devnode.c
-index 67ac51e..041effa 100644
+index 6b87a721dc49..77dac01e7705 100644
 --- a/drivers/media/media-devnode.c
 +++ b/drivers/media/media-devnode.c
-@@ -26,6 +26,7 @@
-  * counting.
-  */
+@@ -28,2 +28,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/errno.h>
 diff --git a/drivers/media/pci/bt8xx/btcx-risc.c b/drivers/media/pci/bt8xx/btcx-risc.c
-index 70bdf93..1f12fc4 100644
+index 70bdf93fc020..1f12fc4f32e2 100644
 --- a/drivers/media/pci/bt8xx/btcx-risc.c
 +++ b/drivers/media/pci/bt8xx/btcx-risc.c
-@@ -22,6 +22,7 @@
- 
- */
+@@ -24,2 +24,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-cards.c b/drivers/media/pci/bt8xx/bttv-cards.c
-index 1902732..06bbbb6 100644
+index 2616243b2c49..977077073e2c 100644
 --- a/drivers/media/pci/bt8xx/bttv-cards.c
 +++ b/drivers/media/pci/bt8xx/bttv-cards.c
-@@ -25,6 +25,7 @@
- 
- */
+@@ -27,2 +27,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/delay.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 707f57a..51343f7 100644
+index cf05e11da01b..575e3e088194 100644
 --- a/drivers/media/pci/bt8xx/bttv-driver.c
 +++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -34,6 +34,7 @@
-     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+@@ -36,2 +36,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/init.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-gpio.c b/drivers/media/pci/bt8xx/bttv-gpio.c
-index 25b9916..654001e 100644
+index 25b9916906d5..654001e019b7 100644
 --- a/drivers/media/pci/bt8xx/bttv-gpio.c
 +++ b/drivers/media/pci/bt8xx/bttv-gpio.c
-@@ -26,6 +26,7 @@
- 
- */
+@@ -28,2 +28,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-i2c.c b/drivers/media/pci/bt8xx/bttv-i2c.c
-index eccd1e3..fe5bd28 100644
+index c76823eb399d..bba02d20b458 100644
 --- a/drivers/media/pci/bt8xx/bttv-i2c.c
 +++ b/drivers/media/pci/bt8xx/bttv-i2c.c
-@@ -27,6 +27,7 @@
- 
- */
+@@ -29,2 +29,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-input.c b/drivers/media/pci/bt8xx/bttv-input.c
-index 08266b2..0552001 100644
+index 08266b23826e..0552001cc38e 100644
 --- a/drivers/media/pci/bt8xx/bttv-input.c
 +++ b/drivers/media/pci/bt8xx/bttv-input.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
-index 6a6be0b..acfbb58 100644
+index 74aff6877d9c..3d67660d1be3 100644
 --- a/drivers/media/pci/bt8xx/bttv-risc.c
 +++ b/drivers/media/pci/bt8xx/bttv-risc.c
-@@ -24,6 +24,7 @@
- 
- */
+@@ -26,2 +26,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-vbi.c b/drivers/media/pci/bt8xx/bttv-vbi.c
-index 67c6583..abeaeb6 100644
+index 67c6583f1d79..abeaeb6656de 100644
 --- a/drivers/media/pci/bt8xx/bttv-vbi.c
 +++ b/drivers/media/pci/bt8xx/bttv-vbi.c
-@@ -23,6 +23,7 @@
-     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+@@ -25,2 +25,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/dst.c b/drivers/media/pci/bt8xx/dst.c
-index 2e33b72..d06dc92 100644
+index b98de2a22f78..111997beb8df 100644
 --- a/drivers/media/pci/bt8xx/dst.c
 +++ b/drivers/media/pci/bt8xx/dst.c
-@@ -18,6 +18,7 @@
- 	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+@@ -20,2 +20,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
-index 5ef6e20..1906fe0 100644
+index 2f810b7130e6..31530c582e65 100644
 --- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
 +++ b/drivers/media/pci/bt8xx/dvb-bt8xx.c
-@@ -15,6 +15,7 @@
-  *
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/bitops.h>
 diff --git a/drivers/media/pci/cx23885/altera-ci.c b/drivers/media/pci/cx23885/altera-ci.c
-index 70aec9b..cac37d0 100644
+index 62bc8049b320..18de58b960c9 100644
 --- a/drivers/media/pci/cx23885/altera-ci.c
 +++ b/drivers/media/pci/cx23885/altera-ci.c
-@@ -49,6 +49,7 @@
-  * +-------+-------+-------+-------+-------+-------+-------+-------+
-  */
+@@ -51,2 +51,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <media/dvb_demux.h>
 diff --git a/drivers/media/pci/cx23885/cx23885.h b/drivers/media/pci/cx23885/cx23885.h
-index d54c7ee..b54e20c 100644
+index d54c7ee1ab21..b54e20c09b14 100644
 --- a/drivers/media/pci/cx23885/cx23885.h
 +++ b/drivers/media/pci/cx23885/cx23885.h
-@@ -15,6 +15,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/pci.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-alsa.c b/drivers/media/pci/cx25821/cx25821-alsa.c
-index a45bf03..42ba764 100644
+index ef6380651c10..f775c083312d 100644
 --- a/drivers/media/pci/cx25821/cx25821-alsa.c
 +++ b/drivers/media/pci/cx25821/cx25821-alsa.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-cards.c b/drivers/media/pci/cx25821/cx25821-cards.c
-index f3b4d89..96beae1 100644
+index f3b4d89d90c8..96beae119691 100644
 --- a/drivers/media/pci/cx25821/cx25821-cards.c
 +++ b/drivers/media/pci/cx25821/cx25821-cards.c
-@@ -17,6 +17,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/init.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 040c6c2..4fce6ba 100644
+index 2f0171134f7e..0b3077b915c9 100644
 --- a/drivers/media/pci/cx25821/cx25821-core.c
 +++ b/drivers/media/pci/cx25821/cx25821-core.c
-@@ -17,6 +17,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/i2c.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-i2c.c b/drivers/media/pci/cx25821/cx25821-i2c.c
-index 31479a4..dacef76 100644
+index 31479a41f359..dacef76ad4ea 100644
 --- a/drivers/media/pci/cx25821/cx25821-i2c.c
 +++ b/drivers/media/pci/cx25821/cx25821-i2c.c
-@@ -17,6 +17,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-medusa-video.c b/drivers/media/pci/cx25821/cx25821-medusa-video.c
-index 0a9db05..ff7a293 100644
+index 0a9db050b175..ff7a29325977 100644
 --- a/drivers/media/pci/cx25821/cx25821-medusa-video.c
 +++ b/drivers/media/pci/cx25821/cx25821-medusa-video.c
-@@ -16,6 +16,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "cx25821.h"
 diff --git a/drivers/media/pci/cx25821/cx25821-video.c b/drivers/media/pci/cx25821/cx25821-video.c
-index dbaf42e..8f28456 100644
+index dbaf42ec26cd..8f2845672f9a 100644
 --- a/drivers/media/pci/cx25821/cx25821-video.c
 +++ b/drivers/media/pci/cx25821/cx25821-video.c
-@@ -20,6 +20,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -22,2 +22,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "cx25821-video.h"
 diff --git a/drivers/media/pci/cx88/cx88.h b/drivers/media/pci/cx88/cx88.h
-index 07a33f0..db40b90 100644
+index 07a33f02fef4..db40b90a860c 100644
 --- a/drivers/media/pci/cx88/cx88.h
 +++ b/drivers/media/pci/cx88/cx88.h
-@@ -17,6 +17,7 @@
- #ifndef CX88_H
- #define CX88_H
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/pci.h>
 diff --git a/drivers/media/pci/ddbridge/ddbridge-main.c b/drivers/media/pci/ddbridge/ddbridge-main.c
-index f4748cf..21cce8c 100644
+index f4748cfd904b..21cce8cdc966 100644
 --- a/drivers/media/pci/ddbridge/ddbridge-main.c
 +++ b/drivers/media/pci/ddbridge/ddbridge-main.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
-index cafba6b..6b099da 100644
+index cafba6b1055d..6b099da5a1f6 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.h
 +++ b/drivers/media/pci/ivtv/ivtv-driver.h
-@@ -22,6 +22,7 @@
- #ifndef IVTV_DRIVER_H
- #define IVTV_DRIVER_H
+@@ -24,2 +24,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- /* Internal header for ivtv project:
 diff --git a/drivers/media/pci/ngene/ngene-cards.c b/drivers/media/pci/ngene/ngene-cards.c
-index 7738565..1caf041 100644
+index 7a106bc11a2b..f68a50ffafbd 100644
 --- a/drivers/media/pci/ngene/ngene-cards.c
 +++ b/drivers/media/pci/ngene/ngene-cards.c
-@@ -23,6 +23,7 @@
-  * http://www.gnu.org/copyleft/gpl.html
-  */
+@@ -25,2 +25,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/pci/saa7134/saa7134.h b/drivers/media/pci/saa7134/saa7134.h
-index d99e937..6bf824e 100644
+index d99e937a98c1..6bf824e98e35 100644
 --- a/drivers/media/pci/saa7134/saa7134.h
 +++ b/drivers/media/pci/saa7134/saa7134.h
-@@ -17,6 +17,7 @@
- 
- #define SAA7134_VERSION "0, 2, 17"
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/pci.h>
 diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index 5817d9c..58803dd 100644
+index 5817d9cde4d0..58803dd87a95 100644
 --- a/drivers/media/pci/saa7146/hexium_gemini.c
 +++ b/drivers/media/pci/saa7146/hexium_gemini.c
-@@ -21,6 +21,7 @@
-     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+@@ -23,2 +23,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define DEBUG_VARIABLE debug
 diff --git a/drivers/media/pci/saa7146/hexium_orion.c b/drivers/media/pci/saa7146/hexium_orion.c
-index 0a05176..15aa6a4 100644
+index 0a05176c18ab..15aa6a435bbc 100644
 --- a/drivers/media/pci/saa7146/hexium_orion.c
 +++ b/drivers/media/pci/saa7146/hexium_orion.c
-@@ -21,6 +21,7 @@
-     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+@@ -23,2 +23,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define DEBUG_VARIABLE debug
 diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
-index 6b5582b..61da097 100644
+index 6b5582b7c595..61da0975028b 100644
 --- a/drivers/media/pci/saa7146/mxb.c
 +++ b/drivers/media/pci/saa7146/mxb.c
-@@ -21,6 +21,7 @@
-     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+@@ -23,2 +23,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define DEBUG_VARIABLE debug
 diff --git a/drivers/media/pci/ttpci/av7110_v4l.c b/drivers/media/pci/ttpci/av7110_v4l.c
-index e4cf42c..5401028 100644
+index e4cf42c32284..540102811bb5 100644
 --- a/drivers/media/pci/ttpci/av7110_v4l.c
 +++ b/drivers/media/pci/ttpci/av7110_v4l.c
-@@ -22,6 +22,7 @@
-  * the project's page is at https://linuxtv.org
-  */
+@@ -24,2 +24,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/pci/ttpci/budget-av.c b/drivers/media/pci/ttpci/budget-av.c
-index abc98f1..6b99e4e9 100644
+index abc98f1ad26c..6b99e4e9c61d 100644
 --- a/drivers/media/pci/ttpci/budget-av.c
 +++ b/drivers/media/pci/ttpci/budget-av.c
-@@ -30,6 +30,7 @@
-  * the project's page is at https://linuxtv.org
-  */
+@@ -32,2 +32,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "budget.h"
 diff --git a/drivers/media/platform/exynos4-is/fimc-is-param.c b/drivers/media/platform/exynos4-is/fimc-is-param.c
-index 72b9b43..e08e900 100644
+index 72b9b436c5c0..e08e90046f16 100644
 --- a/drivers/media/platform/exynos4-is/fimc-is-param.c
 +++ b/drivers/media/platform/exynos4-is/fimc-is-param.c
-@@ -10,6 +10,7 @@
-  * it under the terms of the GNU General Public License version 2 as
-  * published by the Free Software Foundation.
+@@ -12,2 +12,3 @@
   */
 +#undef pr_fmt
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
- 
- #include <linux/bitops.h>
 diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
-index 5ddb232..045d7af 100644
+index 5ddb2321e9e4..045d7af5cede 100644
 --- a/drivers/media/platform/exynos4-is/fimc-is.c
 +++ b/drivers/media/platform/exynos4-is/fimc-is.c
-@@ -10,6 +10,7 @@
-  * it under the terms of the GNU General Public License version 2 as
-  * published by the Free Software Foundation.
+@@ -12,2 +12,3 @@
   */
 +#undef pr_fmt
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
- 
- #include <linux/device.h>
 diff --git a/drivers/media/platform/exynos4-is/fimc-isp.c b/drivers/media/platform/exynos4-is/fimc-isp.c
-index 9a48c0f..e1f42e0 100644
+index 9a48c0f69320..e1f42e0882d3 100644
 --- a/drivers/media/platform/exynos4-is/fimc-isp.c
 +++ b/drivers/media/platform/exynos4-is/fimc-isp.c
-@@ -10,6 +10,7 @@
-  * it under the terms of the GNU General Public License version 2 as
-  * published by the Free Software Foundation.
+@@ -12,2 +12,3 @@
   */
 +#undef pr_fmt
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
- 
- #include <linux/device.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
-index 9ab8e7e..07d1c47 100644
+index c02dce8b4c6c..9a1c6a23c196 100644
 --- a/drivers/media/platform/s3c-camif/camif-capture.c
 +++ b/drivers/media/platform/s3c-camif/camif-capture.c
-@@ -11,6 +11,7 @@
-  * it under the terms of the GNU General Public License version 2 as
-  * published by the Free Software Foundation.
+@@ -13,2 +13,3 @@
  */
 +#undef pr_fmt
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
- 
- #include <linux/bug.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index 79bc0ef..8b6d6f0 100644
+index 79bc0ef6bb41..8b6d6f047ac4 100644
 --- a/drivers/media/platform/s3c-camif/camif-core.c
 +++ b/drivers/media/platform/s3c-camif/camif-core.c
-@@ -9,6 +9,7 @@
-  * by the Free Software Foundation, either version 2 of the License,
-  * or (at your option) any later version.
+@@ -11,2 +11,3 @@
   */
 +#undef pr_fmt
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
- 
- #include <linux/bug.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-regs.c b/drivers/media/platform/s3c-camif/camif-regs.c
-index 812fb3a..8241eb4 100644
+index 812fb3a7c4e3..8241eb481845 100644
 --- a/drivers/media/platform/s3c-camif/camif-regs.c
 +++ b/drivers/media/platform/s3c-camif/camif-regs.c
-@@ -8,6 +8,7 @@
-  * it under the terms of the GNU General Public License version 2 as
-  * published by the Free Software Foundation.
+@@ -10,2 +10,3 @@
  */
 +#undef pr_fmt
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
- 
- #include <linux/delay.h>
 diff --git a/drivers/media/rc/ene_ir.c b/drivers/media/rc/ene_ir.c
-index 71b8c9b..1c9e129 100644
+index 71b8c9bbf6c4..1c9e129f5694 100644
 --- a/drivers/media/rc/ene_ir.c
 +++ b/drivers/media/rc/ene_ir.c
-@@ -25,6 +25,7 @@
-  *
-  */
+@@ -27,2 +27,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/rc/fintek-cir.c b/drivers/media/rc/fintek-cir.c
-index f2639d0..1040fa1 100644
+index f2639d0c2fca..1040fa1794f5 100644
 --- a/drivers/media/rc/fintek-cir.c
 +++ b/drivers/media/rc/fintek-cir.c
-@@ -18,6 +18,7 @@
-  * General Public License for more details.
-  */
+@@ -20,2 +20,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
-index 1041c056..6194983 100644
+index 1041c056854d..619498366d55 100644
 --- a/drivers/media/rc/imon.c
 +++ b/drivers/media/rc/imon.c
-@@ -22,6 +22,7 @@
-  *   GNU General Public License for more details.
-  */
+@@ -24,2 +24,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ":%s: " fmt, __func__
- 
- #include <linux/errno.h>
 diff --git a/drivers/media/rc/ir-imon-decoder.c b/drivers/media/rc/ir-imon-decoder.c
-index 67c1b0c..8395ca7 100644
+index 67c1b0c15aae..8395ca753403 100644
 --- a/drivers/media/rc/ir-imon-decoder.c
 +++ b/drivers/media/rc/ir-imon-decoder.c
-@@ -3,6 +3,7 @@
- //
- // Copyright (C) 2018 by Sean Young <sean@mess.org>
+@@ -5,2 +5,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index cc58ed7..0b9f81d 100644
+index f862f1b7f996..5387be0b9bd7 100644
 --- a/drivers/media/rc/lirc_dev.c
 +++ b/drivers/media/rc/lirc_dev.c
-@@ -15,6 +15,7 @@
-  *
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/rc/nuvoton-cir.c b/drivers/media/rc/nuvoton-cir.c
-index 5e1d866..418d57a 100644
+index b8299c9a9744..6a777feddf81 100644
 --- a/drivers/media/rc/nuvoton-cir.c
 +++ b/drivers/media/rc/nuvoton-cir.c
-@@ -20,6 +20,7 @@
-  * General Public License for more details.
-  */
+@@ -22,2 +22,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index b7071bd..0404a15 100644
+index ca68e1d2b2f9..d082d86f8a52 100644
 --- a/drivers/media/rc/rc-main.c
 +++ b/drivers/media/rc/rc-main.c
-@@ -3,6 +3,7 @@
- //
- // Copyright (C) 2009-2010 by Mauro Carvalho Chehab
+@@ -5,2 +5,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <media/rc-core.h>
 diff --git a/drivers/media/rc/serial_ir.c b/drivers/media/rc/serial_ir.c
-index 8bf5637..90c7f8e 100644
+index 8bf5637b3a69..90c7f8e69c5d 100644
 --- a/drivers/media/rc/serial_ir.c
 +++ b/drivers/media/rc/serial_ir.c
-@@ -21,6 +21,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -23,2 +23,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/rc/sir_ir.c b/drivers/media/rc/sir_ir.c
-index 9ee2c91..511e7d8 100644
+index 9ee2c9196b4d..511e7d874ad0 100644
 --- a/drivers/media/rc/sir_ir.c
 +++ b/drivers/media/rc/sir_ir.c
-@@ -10,6 +10,7 @@
-  *  (at your option) any later version.
-  */
+@@ -12,2 +12,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/rc/winbond-cir.c b/drivers/media/rc/winbond-cir.c
-index 0adf099..68b48d5 100644
+index 851acba9b436..db1b9de8860b 100644
 --- a/drivers/media/rc/winbond-cir.c
 +++ b/drivers/media/rc/winbond-cir.c
-@@ -36,6 +36,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -38,2 +38,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/spi/cxd2880-spi.c b/drivers/media/spi/cxd2880-spi.c
-index 11ce510..a6e3d32 100644
+index 11ce5101e19f..a6e3d32197fa 100644
 --- a/drivers/media/spi/cxd2880-spi.c
 +++ b/drivers/media/spi/cxd2880-spi.c
-@@ -7,6 +7,7 @@
-  * Copyright (C) 2016, 2017, 2018 Sony Semiconductor Solutions Corporation
-  */
+@@ -9,2 +9,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": %s: " fmt, __func__
- 
- #include <linux/spi/spi.h>
 diff --git a/drivers/media/tuners/r820t.c b/drivers/media/tuners/r820t.c
-index 3e14b9e..628d146 100644
+index ba4be08a8551..9a35f33045f9 100644
 --- a/drivers/media/tuners/r820t.c
 +++ b/drivers/media/tuners/r820t.c
-@@ -20,6 +20,7 @@
- //
- //	RF Gain set/get is not implemented.
+@@ -22,2 +22,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/videodev2.h>
 diff --git a/drivers/media/tuners/tda18271-priv.h b/drivers/media/tuners/tda18271-priv.h
-index 0bcc735..b9f0963 100644
+index 0bcc735a0427..b9f0963febf1 100644
 --- a/drivers/media/tuners/tda18271-priv.h
 +++ b/drivers/media/tuners/tda18271-priv.h
-@@ -21,6 +21,7 @@
- #ifndef __TDA18271_PRIV_H__
- #define __TDA18271_PRIV_H__
+@@ -23,2 +23,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kernel.h>
 diff --git a/drivers/media/tuners/tea5767.c b/drivers/media/tuners/tea5767.c
-index 2b2c064..2e367ef 100644
+index 016d0d5ec50b..63468acb0dee 100644
 --- a/drivers/media/tuners/tea5767.c
 +++ b/drivers/media/tuners/tea5767.c
-@@ -7,6 +7,7 @@
- // tea5767 autodetection thanks to Torsten Seeboth and Atsushi Nakagawa
- // from their contributions on DScaler.
+@@ -9,2 +9,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/i2c.h>
 diff --git a/drivers/media/usb/au0828/au0828.h b/drivers/media/usb/au0828/au0828.h
-index 004eade..873fca4 100644
+index 004eadef55c7..873fca4875d8 100644
 --- a/drivers/media/usb/au0828/au0828.h
 +++ b/drivers/media/usb/au0828/au0828.h
-@@ -15,6 +15,7 @@
-  *  GNU General Public License for more details.
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/bitops.h>
 diff --git a/drivers/media/usb/go7007/go7007-usb.c b/drivers/media/usb/go7007/go7007-usb.c
-index ed9bcaf..91a9d46 100644
+index 19c6a0354ce0..1f9706dee7b2 100644
 --- a/drivers/media/usb/go7007/go7007-usb.c
 +++ b/drivers/media/usb/go7007/go7007-usb.c
-@@ -11,6 +11,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -13,2 +13,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/usb/gspca/benq.c b/drivers/media/usb/gspca/benq.c
-index 8a8db5e..25ecb82 100644
+index 8a8db5eb6d5f..25ecb825bf38 100644
 --- a/drivers/media/usb/gspca/benq.c
 +++ b/drivers/media/usb/gspca/benq.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "benq"
 diff --git a/drivers/media/usb/gspca/conex.c b/drivers/media/usb/gspca/conex.c
-index 6df4e20..fa68a71 100644
+index 6df4e204e291..fa68a71cd249 100644
 --- a/drivers/media/usb/gspca/conex.c
 +++ b/drivers/media/usb/gspca/conex.c
-@@ -15,6 +15,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "conex"
 diff --git a/drivers/media/usb/gspca/cpia1.c b/drivers/media/usb/gspca/cpia1.c
-index 2b09af8..67afabf 100644
+index 2b09af8865f4..67afabf5e4a9 100644
 --- a/drivers/media/usb/gspca/cpia1.c
 +++ b/drivers/media/usb/gspca/cpia1.c
-@@ -22,6 +22,7 @@
-  *
-  */
+@@ -24,2 +24,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "cpia1"
 diff --git a/drivers/media/usb/gspca/dtcs033.c b/drivers/media/usb/gspca/dtcs033.c
-index 7654c8c..0d0cb5d 100644
+index 7654c8c08eda..0d0cb5d70886 100644
 --- a/drivers/media/usb/gspca/dtcs033.c
 +++ b/drivers/media/usb/gspca/dtcs033.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- #define MODULE_NAME "dtcs033"
- #include "gspca.h"
 diff --git a/drivers/media/usb/gspca/etoms.c b/drivers/media/usb/gspca/etoms.c
-index 48b2889..0a64ab5 100644
+index 48b28897051f..0a64ab5a793c 100644
 --- a/drivers/media/usb/gspca/etoms.c
 +++ b/drivers/media/usb/gspca/etoms.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "etoms"
 diff --git a/drivers/media/usb/gspca/finepix.c b/drivers/media/usb/gspca/finepix.c
-index 1ef1239..89df74f 100644
+index 1ef1239eb3db..89df74f0fcc8 100644
 --- a/drivers/media/usb/gspca/finepix.c
 +++ b/drivers/media/usb/gspca/finepix.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "finepix"
 diff --git a/drivers/media/usb/gspca/gl860/gl860.c b/drivers/media/usb/gspca/gl860/gl860.c
-index 262200a..c4403a8 100644
+index 262200af76a3..c4403a8e83f3 100644
 --- a/drivers/media/usb/gspca/gl860/gl860.c
 +++ b/drivers/media/usb/gspca/gl860/gl860.c
-@@ -19,6 +19,7 @@
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  */
+@@ -21,2 +21,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "gspca.h"
 diff --git a/drivers/media/usb/gspca/gspca.c b/drivers/media/usb/gspca/gspca.c
-index d29773b..c26dc28 100644
+index 57aa521e16b1..7d7ec48b7bbc 100644
 --- a/drivers/media/usb/gspca/gspca.c
 +++ b/drivers/media/usb/gspca/gspca.c
-@@ -17,6 +17,7 @@
-  * for more details.
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define GSPCA_VERSION	"2.14.0"
 diff --git a/drivers/media/usb/gspca/jeilinj.c b/drivers/media/usb/gspca/jeilinj.c
-index 86d0a0a..fbc965c 100644
+index 86d0a0a45631..fbc965c4e82b 100644
 --- a/drivers/media/usb/gspca/jeilinj.c
 +++ b/drivers/media/usb/gspca/jeilinj.c
-@@ -20,6 +20,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -22,2 +22,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "jeilinj"
 diff --git a/drivers/media/usb/gspca/kinect.c b/drivers/media/usb/gspca/kinect.c
-index 0cfdf8a..f5b40503 100644
+index f993f6280c56..44ca308b7d59 100644
 --- a/drivers/media/usb/gspca/kinect.c
 +++ b/drivers/media/usb/gspca/kinect.c
-@@ -20,6 +20,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -22,2 +22,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "kinect"
 diff --git a/drivers/media/usb/gspca/konica.c b/drivers/media/usb/gspca/konica.c
-index 989ae99..21fc502 100644
+index 989ae997f66d..21fc502c67e5 100644
 --- a/drivers/media/usb/gspca/konica.c
 +++ b/drivers/media/usb/gspca/konica.c
-@@ -24,6 +24,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -26,2 +26,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "konica"
 diff --git a/drivers/media/usb/gspca/m5602/m5602_core.c b/drivers/media/usb/gspca/m5602/m5602_core.c
-index b83ec42..6e0c9d4 100644
+index 30b7cf1feedd..98e24ccade6a 100644
 --- a/drivers/media/usb/gspca/m5602/m5602_core.c
 +++ b/drivers/media/usb/gspca/m5602/m5602_core.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "m5602_ov9650.h"
 diff --git a/drivers/media/usb/gspca/m5602/m5602_mt9m111.c b/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
-index c9947c4..3bfa8ab 100644
+index c9947c4a0f63..3bfa8ab6ac3b 100644
 --- a/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
 +++ b/drivers/media/usb/gspca/m5602/m5602_mt9m111.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "m5602_mt9m111.h"
 diff --git a/drivers/media/usb/gspca/m5602/m5602_ov7660.c b/drivers/media/usb/gspca/m5602/m5602_ov7660.c
-index aa1f569..d8ee60a 100644
+index aa1f569c82fd..d8ee60ad3e84 100644
 --- a/drivers/media/usb/gspca/m5602/m5602_ov7660.c
 +++ b/drivers/media/usb/gspca/m5602/m5602_ov7660.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "m5602_ov7660.h"
 diff --git a/drivers/media/usb/gspca/m5602/m5602_ov9650.c b/drivers/media/usb/gspca/m5602/m5602_ov9650.c
-index 2ffbb54..467f6e0 100644
+index 2ffbb54e89f9..467f6e088fc3 100644
 --- a/drivers/media/usb/gspca/m5602/m5602_ov9650.c
 +++ b/drivers/media/usb/gspca/m5602/m5602_ov9650.c
-@@ -17,6 +17,7 @@
-  *
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "m5602_ov9650.h"
 diff --git a/drivers/media/usb/gspca/m5602/m5602_po1030.c b/drivers/media/usb/gspca/m5602/m5602_po1030.c
-index 37d2891..9cddb3b 100644
+index 37d2891e5f5b..9cddb3b1bb96 100644
 --- a/drivers/media/usb/gspca/m5602/m5602_po1030.c
 +++ b/drivers/media/usb/gspca/m5602/m5602_po1030.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "m5602_po1030.h"
 diff --git a/drivers/media/usb/gspca/m5602/m5602_s5k4aa.c b/drivers/media/usb/gspca/m5602/m5602_s5k4aa.c
-index cec4a58..0f60b59 100644
+index cec4a5838aec..0f60b5929e7e 100644
 --- a/drivers/media/usb/gspca/m5602/m5602_s5k4aa.c
 +++ b/drivers/media/usb/gspca/m5602/m5602_s5k4aa.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "m5602_s5k4aa.h"
 diff --git a/drivers/media/usb/gspca/m5602/m5602_s5k83a.c b/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
-index 3d8ab18..78aa206 100644
+index 3d8ab18138aa..78aa206070e4 100644
 --- a/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
 +++ b/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
-@@ -16,6 +16,7 @@
-  *
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/kthread.h>
 diff --git a/drivers/media/usb/gspca/mars.c b/drivers/media/usb/gspca/mars.c
-index a537cb1..e40f485 100644
+index a537cb195c46..e40f485d3f0d 100644
 --- a/drivers/media/usb/gspca/mars.c
 +++ b/drivers/media/usb/gspca/mars.c
-@@ -15,6 +15,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "mars"
 diff --git a/drivers/media/usb/gspca/mr97310a.c b/drivers/media/usb/gspca/mr97310a.c
-index bea1963..deb34c2 100644
+index bea196361215..deb34c273cdb 100644
 --- a/drivers/media/usb/gspca/mr97310a.c
 +++ b/drivers/media/usb/gspca/mr97310a.c
-@@ -36,6 +36,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -38,2 +38,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "mr97310a"
 diff --git a/drivers/media/usb/gspca/nw80x.c b/drivers/media/usb/gspca/nw80x.c
-index bedc04a..3d61f3a 100644
+index bedc04a72e97..3d61f3a10157 100644
 --- a/drivers/media/usb/gspca/nw80x.c
 +++ b/drivers/media/usb/gspca/nw80x.c
-@@ -16,6 +16,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "nw80x"
 diff --git a/drivers/media/usb/gspca/ov519.c b/drivers/media/usb/gspca/ov519.c
-index 10fcbe9..7ad55aa 100644
+index 10fcbe9e8614..7ad55aa1132f 100644
 --- a/drivers/media/usb/gspca/ov519.c
 +++ b/drivers/media/usb/gspca/ov519.c
-@@ -33,6 +33,7 @@
-  *
-  */
+@@ -35,2 +35,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "ov519"
 diff --git a/drivers/media/usb/gspca/ov534.c b/drivers/media/usb/gspca/ov534.c
-index f293921..ed5a366 100644
+index d06dc0755b9a..f740eb308dab 100644
 --- a/drivers/media/usb/gspca/ov534.c
 +++ b/drivers/media/usb/gspca/ov534.c
-@@ -26,6 +26,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -28,2 +28,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "ov534"
 diff --git a/drivers/media/usb/gspca/ov534_9.c b/drivers/media/usb/gspca/ov534_9.c
-index 3d1364d..344c85a 100644
+index 3d1364d2f83e..344c85ab7bf0 100644
 --- a/drivers/media/usb/gspca/ov534_9.c
 +++ b/drivers/media/usb/gspca/ov534_9.c
-@@ -20,6 +20,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -22,2 +22,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "ov534_9"
 diff --git a/drivers/media/usb/gspca/pac207.c b/drivers/media/usb/gspca/pac207.c
-index a1df7af..d4e5db1 100644
+index a1df7af8fef5..d4e5db18ba0e 100644
 --- a/drivers/media/usb/gspca/pac207.c
 +++ b/drivers/media/usb/gspca/pac207.c
-@@ -19,6 +19,7 @@
-  *
-  */
+@@ -21,2 +21,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "pac207"
 diff --git a/drivers/media/usb/gspca/pac7302.c b/drivers/media/usb/gspca/pac7302.c
-index b8ff201..05a5027 100644
+index b8ff201c7bb9..05a5027cb4cd 100644
 --- a/drivers/media/usb/gspca/pac7302.c
 +++ b/drivers/media/usb/gspca/pac7302.c
-@@ -86,6 +86,7 @@
-  *  3   | 0x21       | sethvflip()
-  */
+@@ -88,2 +88,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/input.h>
 diff --git a/drivers/media/usb/gspca/pac7311.c b/drivers/media/usb/gspca/pac7311.c
-index 44db4f4..2b6bacb 100644
+index 44db4f4afa22..2b6bacb82ddf 100644
 --- a/drivers/media/usb/gspca/pac7311.c
 +++ b/drivers/media/usb/gspca/pac7311.c
-@@ -53,6 +53,7 @@
-  *		for max gain, 0x14 for minimal gain.
-  */
+@@ -55,2 +55,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "pac7311"
 diff --git a/drivers/media/usb/gspca/se401.c b/drivers/media/usb/gspca/se401.c
-index 477da06..fb7cc41 100644
+index 477da0664b7d..fb7cc415c37b 100644
 --- a/drivers/media/usb/gspca/se401.c
 +++ b/drivers/media/usb/gspca/se401.c
-@@ -19,6 +19,7 @@
-  *
-  */
+@@ -21,2 +21,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "se401"
 diff --git a/drivers/media/usb/gspca/sn9c2028.c b/drivers/media/usb/gspca/sn9c2028.c
-index a1f7189..2a003cc 100644
+index a1f7189545e1..2a003cc6da4c 100644
 --- a/drivers/media/usb/gspca/sn9c2028.c
 +++ b/drivers/media/usb/gspca/sn9c2028.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "sn9c2028"
 diff --git a/drivers/media/usb/gspca/sn9c20x.c b/drivers/media/usb/gspca/sn9c20x.c
-index cfa2a04..3d5e61b 100644
+index cfa2a04d9f3f..3d5e61b7a8aa 100644
 --- a/drivers/media/usb/gspca/sn9c20x.c
 +++ b/drivers/media/usb/gspca/sn9c20x.c
-@@ -16,6 +16,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/input.h>
 diff --git a/drivers/media/usb/gspca/sonixj.c b/drivers/media/usb/gspca/sonixj.c
-index df8d848..da017d2 100644
+index df8d8482b795..da017d2f4fdb 100644
 --- a/drivers/media/usb/gspca/sonixj.c
 +++ b/drivers/media/usb/gspca/sonixj.c
-@@ -15,6 +15,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "sonixj"
 diff --git a/drivers/media/usb/gspca/spca1528.c b/drivers/media/usb/gspca/spca1528.c
-index d25924e..abd8d99 100644
+index d25924e430f3..abd8d99d9105 100644
 --- a/drivers/media/usb/gspca/spca1528.c
 +++ b/drivers/media/usb/gspca/spca1528.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "spca1528"
 diff --git a/drivers/media/usb/gspca/spca500.c b/drivers/media/usb/gspca/spca500.c
-index e90d2f3..fa706a1 100644
+index e90d2f3b4a67..fa706a187db0 100644
 --- a/drivers/media/usb/gspca/spca500.c
 +++ b/drivers/media/usb/gspca/spca500.c
-@@ -15,6 +15,7 @@
-  *
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "spca500"
 diff --git a/drivers/media/usb/gspca/spca501.c b/drivers/media/usb/gspca/spca501.c
-index 2cce74b..238bae9 100644
+index 2cce74b166d8..238bae9932b7 100644
 --- a/drivers/media/usb/gspca/spca501.c
 +++ b/drivers/media/usb/gspca/spca501.c
-@@ -15,6 +15,7 @@
-  *
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "spca501"
 diff --git a/drivers/media/usb/gspca/spca505.c b/drivers/media/usb/gspca/spca505.c
-index 07aae9c..8f5ca2e 100644
+index 07aae9cd5a30..8f5ca2eba779 100644
 --- a/drivers/media/usb/gspca/spca505.c
 +++ b/drivers/media/usb/gspca/spca505.c
-@@ -15,6 +15,7 @@
-  *
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "spca505"
 diff --git a/drivers/media/usb/gspca/spca508.c b/drivers/media/usb/gspca/spca508.c
-index d80fd39..329f23a 100644
+index d80fd397eaf2..329f23acff04 100644
 --- a/drivers/media/usb/gspca/spca508.c
 +++ b/drivers/media/usb/gspca/spca508.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "spca508"
 diff --git a/drivers/media/usb/gspca/spca561.c b/drivers/media/usb/gspca/spca561.c
-index f389a8d..8fdbe78 100644
+index f389a8d0937d..8fdbe7857541 100644
 --- a/drivers/media/usb/gspca/spca561.c
 +++ b/drivers/media/usb/gspca/spca561.c
-@@ -16,6 +16,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "spca561"
 diff --git a/drivers/media/usb/gspca/sq905.c b/drivers/media/usb/gspca/sq905.c
-index ffea9c3..3afd535 100644
+index ffea9c35b0a0..3afd53540efd 100644
 --- a/drivers/media/usb/gspca/sq905.c
 +++ b/drivers/media/usb/gspca/sq905.c
-@@ -29,6 +29,7 @@
-  * drivers.
-  */
+@@ -31,2 +31,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "sq905"
 diff --git a/drivers/media/usb/gspca/sq905c.c b/drivers/media/usb/gspca/sq905c.c
-index 274921c..187c673 100644
+index 274921c0bb46..187c673edd53 100644
 --- a/drivers/media/usb/gspca/sq905c.c
 +++ b/drivers/media/usb/gspca/sq905c.c
-@@ -23,6 +23,7 @@
-  * and may contain code fragments from it.
-  */
+@@ -25,2 +25,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "sq905c"
 diff --git a/drivers/media/usb/gspca/sq930x.c b/drivers/media/usb/gspca/sq930x.c
-index d7cbcf2..b4194d4 100644
+index d7cbcf2b3947..b4194d4a436f 100644
 --- a/drivers/media/usb/gspca/sq930x.c
 +++ b/drivers/media/usb/gspca/sq930x.c
-@@ -16,6 +16,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "sq930x"
 diff --git a/drivers/media/usb/gspca/stk014.c b/drivers/media/usb/gspca/stk014.c
-index 0d8f489..e009b4e 100644
+index 0d8f489ddef2..e009b4ea02b0 100644
 --- a/drivers/media/usb/gspca/stk014.c
 +++ b/drivers/media/usb/gspca/stk014.c
-@@ -14,6 +14,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -16,2 +16,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "stk014"
 diff --git a/drivers/media/usb/gspca/stk1135.c b/drivers/media/usb/gspca/stk1135.c
-index 6f52a48..13867b7 100644
+index 6f52a480c2d8..13867b7e088c 100644
 --- a/drivers/media/usb/gspca/stk1135.c
 +++ b/drivers/media/usb/gspca/stk1135.c
-@@ -17,6 +17,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -19,2 +19,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "stk1135"
 diff --git a/drivers/media/usb/gspca/stv0680.c b/drivers/media/usb/gspca/stv0680.c
-index 3ff5ed7..1223fe9 100644
+index 3ff5ed74bd9f..1223fe904715 100644
 --- a/drivers/media/usb/gspca/stv0680.c
 +++ b/drivers/media/usb/gspca/stv0680.c
-@@ -23,6 +23,7 @@
-  *
-  */
+@@ -25,2 +25,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "stv0680"
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx.c b/drivers/media/usb/gspca/stv06xx/stv06xx.c
-index 6080a35..0c72953 100644
+index 6080a35310ca..0c72953f29ac 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx.c
-@@ -23,6 +23,7 @@
-  * P/N 861040-0000: Sensor ST VV6410       ASIC STV0610   - QuickCam Web
-  */
+@@ -25,2 +25,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/input.h>
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx_hdcs.c b/drivers/media/usb/gspca/stv06xx/stv06xx_hdcs.c
-index d8db2c8..fb221d8 100644
+index d8db2c89718f..fb221d882643 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx_hdcs.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx_hdcs.c
-@@ -24,6 +24,7 @@
-  * P/N 861040-0000: Sensor ST VV6410       ASIC STV0610   - QuickCam Web
-  */
+@@ -26,2 +26,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "stv06xx_hdcs.h"
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx_pb0100.c b/drivers/media/usb/gspca/stv06xx/stv06xx_pb0100.c
-index 7374aeb..85c37d7 100644
+index 7374aeb0a67a..85c37d7231e1 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx_pb0100.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx_pb0100.c
-@@ -40,6 +40,7 @@
-  * PB_CFILLIN       = R5  = 0x0E (14 dec)     : Sets the frame rate
-  */
+@@ -42,2 +42,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "stv06xx_pb0100.h"
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c b/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
-index 51a135c..9577ac5 100644
+index 51a135c2f9f7..9577ac5580d5 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
-@@ -22,6 +22,7 @@
-  *
-  */
+@@ -24,2 +24,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "stv06xx_st6422.h"
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx_vv6410.c b/drivers/media/usb/gspca/stv06xx/stv06xx_vv6410.c
-index b2f16c2..a9952fe 100644
+index b2f16c2754fb..a9952fe6b192 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx_vv6410.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx_vv6410.c
-@@ -23,6 +23,7 @@
-  * P/N 861040-0000: Sensor ST VV6410       ASIC STV0610   - QuickCam Web
-  */
+@@ -25,2 +25,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "stv06xx_vv6410.h"
 diff --git a/drivers/media/usb/gspca/sunplus.c b/drivers/media/usb/gspca/sunplus.c
-index 437a336..5258a00 100644
+index 437a3367ab97..5258a00f4e69 100644
 --- a/drivers/media/usb/gspca/sunplus.c
 +++ b/drivers/media/usb/gspca/sunplus.c
-@@ -15,6 +15,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "sunplus"
 diff --git a/drivers/media/usb/gspca/t613.c b/drivers/media/usb/gspca/t613.c
-index 0ae557c..ea478a7 100644
+index 445782919446..9a1a36659929 100644
 --- a/drivers/media/usb/gspca/t613.c
 +++ b/drivers/media/usb/gspca/t613.c
-@@ -22,6 +22,7 @@
-  *			Costantino Leandro
-  */
+@@ -24,2 +24,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "t613"
 diff --git a/drivers/media/usb/gspca/topro.c b/drivers/media/usb/gspca/topro.c
-index 82e2be1..da5416e 100644
+index 6f3ec0366a2f..9b3d36cfe779 100644
 --- a/drivers/media/usb/gspca/topro.c
 +++ b/drivers/media/usb/gspca/topro.c
-@@ -19,6 +19,7 @@
-  * along with this program; If not, see <http://www.gnu.org/licenses/>.
-  */
+@@ -21,2 +21,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "gspca.h"
 diff --git a/drivers/media/usb/gspca/vc032x.c b/drivers/media/usb/gspca/vc032x.c
-index 6b11597..cde8d4e 100644
+index 52d071659634..f4db6e275838 100644
 --- a/drivers/media/usb/gspca/vc032x.c
 +++ b/drivers/media/usb/gspca/vc032x.c
-@@ -16,6 +16,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "vc032x"
 diff --git a/drivers/media/usb/gspca/vicam.c b/drivers/media/usb/gspca/vicam.c
-index 8562bda..8d4c3de 100644
+index 8562bda0ef88..8d4c3de14bcf 100644
 --- a/drivers/media/usb/gspca/vicam.c
 +++ b/drivers/media/usb/gspca/vicam.c
-@@ -22,6 +22,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -24,2 +24,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "vicam"
 diff --git a/drivers/media/usb/gspca/w996Xcf.c b/drivers/media/usb/gspca/w996Xcf.c
-index abfab3d..1a5ab87 100644
+index abfab3de1866..1a5ab8712d2d 100644
 --- a/drivers/media/usb/gspca/w996Xcf.c
 +++ b/drivers/media/usb/gspca/w996Xcf.c
-@@ -27,6 +27,7 @@
-    the sensor drivers to v4l2 sub drivers, and properly split of this
-    driver from ov519.c */
+@@ -29,2 +29,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define W9968CF_I2C_BUS_DELAY    4 /* delay in us for I2C bit r/w operations */
 diff --git a/drivers/media/usb/gspca/xirlink_cit.c b/drivers/media/usb/gspca/xirlink_cit.c
-index 58deb0c..1a81691 100644
+index 58deb0c38826..1a816918aa7c 100644
 --- a/drivers/media/usb/gspca/xirlink_cit.c
 +++ b/drivers/media/usb/gspca/xirlink_cit.c
-@@ -23,6 +23,7 @@
-  *
-  */
+@@ -25,2 +25,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #define MODULE_NAME "xirlink-cit"
 diff --git a/drivers/media/usb/gspca/zc3xx.c b/drivers/media/usb/gspca/zc3xx.c
-index 25b4dbe..92919af 100644
+index cf21991e3d99..1073741a0473 100644
 --- a/drivers/media/usb/gspca/zc3xx.c
 +++ b/drivers/media/usb/gspca/zc3xx.c
-@@ -15,6 +15,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -17,2 +17,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/input.h>
 diff --git a/drivers/media/usb/stkwebcam/stk-sensor.c b/drivers/media/usb/stkwebcam/stk-sensor.c
-index 9a7dbef..497fb981 100644
+index 9a7dbeff1337..497fb981f103 100644
 --- a/drivers/media/usb/stkwebcam/stk-sensor.c
 +++ b/drivers/media/usb/stkwebcam/stk-sensor.c
-@@ -41,6 +41,7 @@
- 
- /* It seems the i2c bus is controlled with these registers */
+@@ -43,2 +43,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "stk-webcam.h"
 diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
-index 22389b5..ba7fe8e 100644
+index 5accb5241072..d55fb85ccbb9 100644
 --- a/drivers/media/usb/stkwebcam/stk-webcam.c
 +++ b/drivers/media/usb/stkwebcam/stk-webcam.c
-@@ -18,6 +18,7 @@
-  * GNU General Public License for more details.
-  */
+@@ -20,2 +20,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index 530db8e..de11349 100644
+index 69e775930fc4..aed971f18fb0 100644
 --- a/drivers/media/v4l2-core/v4l2-dev.c
 +++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -16,6 +16,7 @@
-  *		- Added procfs support
-  */
+@@ -18,2 +18,3 @@
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>

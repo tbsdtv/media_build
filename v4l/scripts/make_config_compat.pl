@@ -341,7 +341,8 @@ sub check_snd_BUG_ON()
 
 sub check_bitops()
 {
-	my @files = ( "$kdir/include/linux/bitops.h" );
+	my @files = ( "$kdir/include/linux/bitops.h",
+                  "$kdir/include/linux/bits.h" );
 
 	foreach my $file ( @files ) {
 		open IN, "<$file" or next;
@@ -622,7 +623,6 @@ sub check_other_dependencies()
 	check_files_for_func("kstrtoul", "NEED_KSTRTOUL", "include/linux/kernel.h");
 	check_files_for_func("memweight", "NEED_MEMWEIGHT", "include/linux/string.h");
 	check_files_for_func("dev_dbg_ratelimited", "NEED_DEV_DBG_RATELIMITED", "include/linux/device.h");
-	check_files_for_func("i2c_lock_adapter", "NEED_LOCK_ADAPTER", "include/linux/i2c.h");
 	check_files_for_func("i2c_probe_func_quick_read", "NEED_I2C_PROBE_FUNC_QUICK_READ", "include/linux/i2c.h");
 	check_files_for_func("abs64", "NEED_ABS64", "include/linux/kernel.h");
 	check_files_for_func("VM_DONTDUMP", "NEED_DONTDUMP", "include/linux/mm.h");
@@ -657,7 +657,7 @@ sub check_other_dependencies()
 	check_files_for_func("kref_get_unless_zero", "NEED_KREF_GET_UNLESS_ZERO", "include/linux/kref.h");
 	check_files_for_func("prandom_u32_max", "NEED_PRANDOM_U32_MAX", "include/linux/random.h");
 	check_files_for_func("prandom_u32", "NEED_PRANDOM_U32", "include/linux/random.h");
-	check_files_for_func("GENMASK", "NEED_GENMASK", "include/linux/bitops.h");
+	check_files_for_func("GENMASK", "NEED_GENMASK", "include/linux/bitops.h", "include/linux/bits.h");
 	check_files_for_func("mult_frac", "NEED_MULT_FRAC", "include/linux/kernel.h");
 	check_files_for_func("clk_prepare_enable", "NEED_CLOCK_HELPERS", "include/linux/clk.h");
 	check_files_for_func("IS_MODULE", "NEED_IS_MODULE", "include/linux/kconfig.h");
@@ -681,12 +681,13 @@ sub check_other_dependencies()
 	check_files_for_func("ktime_get_ns", "NEED_KTIME_GET_NS", "include/linux/timekeeping.h");
 	check_files_for_func("div64_u64_rem", "NEED_DIV64_U64_REM", "include/linux/math64.h");
 	check_files_for_func("led_set_brightness_sync", "NEED_LED_SET_BRIGHTNESS", "include/linux/leds.h");
-	check_files_for_func("GENMASK_ULL", "NEED_GENMASK_ULL", "include/linux/bitops.h");
+	check_files_for_func("GENMASK_ULL", "NEED_GENMASK_ULL", "include/linux/bitops.h", "include/linux/bits.h");
 	check_files_for_func("ida_simple_remove", "NEED_IDA_SIMPLE_REMOVE", "include/linux/idr.h");
 	check_files_for_func("ktime_get_boottime", "NEED_KTIME_GET_BOOTTIME", "include/linux/hrtimer.h", "include/linux/timekeeping.h");
 	check_files_for_func("BUS_CEC", "NEED_BUS_CEC", "include/uapi/linux/input.h");
 	check_files_for_func("smp_load_acquire", "NEED_SMP_LOAD_ACQUIRE", "include/asm-generic/barrier.h");
 	check_files_for_func("dev_err_once", "NEED_DEV_ERR_ONCE", "include/linux/device.h");
+	check_files_for_func("dev_warn_once", "NEED_DEV_WARN_ONCE", "include/linux/device.h");
 	check_files_for_func("kthread_init_worker", "NEED_KTHREAD_INIT_WORKER", "include/linux/kthread.h");
 	check_files_for_func("print_hex_dump_debug", "NEED_PRINT_HEX_DUMP_DEBUG", "include/linux/printk.h");
 	check_files_for_func("min3", "NEED_MIN3", "include/linux/kernel.h");
@@ -703,13 +704,13 @@ sub check_other_dependencies()
 	check_files_for_func("pm_runtime_get_if_in_use", "NEED_PM_RUNTIME_GET", "include/linux/pm_runtime.h");
 	check_files_for_func("KEY_APPSELECT", "NEED_KEY_APPSELECT", "include/uapi/linux/input-event-codes.h");
 	check_files_for_func("PCI_DEVICE_SUB", "NEED_PCI_DEVICE_SUB", "include/linux/pci.h");
-	check_files_for_func("annotate_reachable", "NEED_ANNOTATE_REACHABLE", "include/linux/compiler.h");
 	check_files_for_func("U32_MAX", "NEED_U32_MAX", "include/linux/kernel.h");
 	check_files_for_func("bsearch", "NEED_BSEARCH", "include/linux/bsearch.h");
 	check_files_for_func("timer_setup", "NEED_TIMER_SETUP", "include/linux/timer.h");
 	check_files_for_func("__setup_timer", "NEED_SETUP_TIMER", "include/linux/timer.h");
 	check_files_for_func("fwnode_reference_args", "NEED_FWNODE_REF_ARGS", "include/linux/fwnode.h");
 	check_files_for_func("fwnode_for_each_child_node", "NEED_FWNODE_FOR_EACH_CHILD_NODE", "include/linux/property.h");
+	check_files_for_func("fwnode_graph_for_each_endpoint", "NEED_FWNODE_GRAPH_FOR_EACH_ENDPOINT", "include/linux/property.h");
 	check_files_for_func("fwnode_graph_get_port_parent", "NEED_FWNODE_GRAPH_GET_PORT_PARENT", "include/linux/property.h");
 	check_files_for_func("timer_setup_on_stack", "NEED_TIMER_SETUP_ON_STACK", "include/linux/timer.h");
 	check_files_for_func("time64_to_tm", "NEED_TIME64_TO_TM", "include/linux/time.h");
@@ -730,6 +731,10 @@ sub check_other_dependencies()
 	check_files_for_func("list_first_entry_or_null", "NEED_LIST_FIRST_ENTRY_OR_NULL", "include/linux/list.h");
 	check_files_for_func("struct_size", "NEED_STRUCT_SIZE", "linux/overflow.h");
 	check_files_for_func("list_last_entry", "NEED_LIST_LAST_ENTRY", "include/linux/list.h");
+	check_files_for_func("xa_lock_irqsave", "NEED_XA_LOCK_IRQSAVE", "include/linux/xarray.h");
+	check_files_for_func("ida_alloc_min", "NEED_IDA_ALLOC_MIN", "include/linux/idr.h");
+	check_files_for_func("i2c_lock_bus", "NEED_I2C_LOCK_BUS", "include/linux/i2c.h");
+	check_files_for_func("strscpy", "NEED_STRSCPY", "include/linux/string.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

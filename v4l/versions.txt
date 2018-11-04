@@ -3,6 +3,14 @@
 INTEL_ATOMISP
 VIDEO_DW9714
 
+[4.19.0]
+# Needs union ec_response_get_next_data_v1.cec_message
+VIDEO_CROS_EC_CEC
+
+[4.18.0]
+# Needs devm_regmap_init_sccb
+VIDEO_OV772X
+
 [4.16.0]
 # Needs device_get_match_data
 VIDEO_I2C
@@ -27,6 +35,8 @@ VIDEO_AK7375
 VIDEO_DW9807_VCM
 VIDEO_OV2680
 VIDEO_MT9V111
+VIDEO_IMX319
+VIDEO_IMX355
 
 [4.9.0]
 # needs linux/bitfield.h
@@ -107,7 +117,6 @@ VIDEO_TW9910
 SOC_CAMERA_TW9910
 VIDEO_MT9T112
 SOC_CAMERA_MT9T112
-VIDEO_OV772X
 SOC_CAMERA_OV772X
 VIDEO_RJ54N1
 SOC_CAMERA_RJ54N1

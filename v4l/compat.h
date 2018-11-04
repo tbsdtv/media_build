@@ -42,12 +42,18 @@
 #define SZ_8K				0x00002000
 #endif
 
-#ifdef NEED_ANNOTATE_REACHABLE
-#define annotate_reachable()
-#define annotate_unreachable()
+#include <linux/compiler.h>
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 16, 0)
+/* we got a lot of warnings for Kernels older than 4.16 because strscpy has
+ * been declared with "__must_check" prior to 4.16. In fact it is really not
+ * necessary to check the return value of strscpy, so we clear the
+ * "__must_check" definition.
+ */
+#undef __must_check
+#define __must_check
 #endif
 
-#include <linux/compiler.h>
 #include <linux/input.h>
 #include <linux/init.h>
 #include <linux/idr.h>
@@ -1163,17 +1169,6 @@ static inline size_t memweight(const void *ptr, size_t bytes)
 		       pci_unregister_driver)
 #endif
 
-#ifdef NEED_LOCK_ADAPTER
-static inline void i2c_lock_adapter(struct i2c_adapter *adapter)
-{
-	mutex_lock(&adapter->bus_lock);
-}
-static inline void i2c_unlock_adapter(struct i2c_adapter *adapter)
-{
-	mutex_unlock(&adapter->bus_lock);
-}
-#endif
-
 #ifdef NEED_I2C_PROBE_FUNC_QUICK_READ
 static inline int i2c_probe_func_quick_read(struct i2c_adapter *adap, unsigned short addr)
 {
@@ -1697,6 +1692,10 @@ static inline long get_user_pages_unlocked(struct task_struct *tsk, struct mm_st
 
 #ifdef NEED_PR_WARN_ONCE
 #define pr_warn_once pr_warn
+#endif
+
+#ifdef NEED_DEV_WARN_ONCE
+#define dev_warn_once dev_warn
 #endif
 
 #ifdef NEED_DEV_ERR_ONCE
@@ -2529,6 +2528,128 @@ typedef int vm_fault_t;
 #ifdef NEED_LIST_LAST_ENTRY
 #define list_last_entry(ptr, type, member) \
         list_entry((ptr)->prev, type, member)
+#endif
+
+#ifdef NEED_XA_LOCK_IRQSAVE
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 17, 0)
+#define xa_lock_irqsave(xa, flags) (void)flags
+#define xa_unlock_irqrestore(xa, flags) (void)flags
+#else
+#define xa_lock_irqsave(xa, flags) \
+				spin_lock_irqsave(&(xa)->xa_lock, flags)
+#define xa_unlock_irqrestore(xa, flags) \
+				spin_unlock_irqrestore(&(xa)->xa_lock, flags)
+#endif
+#endif
+
+
+#ifdef NEED_IDA_ALLOC_MIN
+#include <linux/idr.h>
+static inline
+int ida_alloc_range(struct ida *ida, unsigned int min, unsigned int max,
+			gfp_t gfp)
+{
+	int id = 0, err;
+	unsigned long flags;
+
+	if ((int)min < 0)
+		return -ENOSPC;
+
+	if ((int)max < 0)
+		max = INT_MAX;
+
+again:
+	xa_lock_irqsave(&ida->ida_rt, flags);
+	err = ida_get_new_above(ida, min, &id);
+	if (err < 0)
+		id = err;
+	if (id > (int)max) {
+		ida_remove(ida, id);
+		id = -ENOSPC;
+	}
+	xa_unlock_irqrestore(&ida->ida_rt, flags);
+
+	if (unlikely(id == -EAGAIN)) {
+		if (!ida_pre_get(ida, gfp))
+			return -ENOMEM;
+		goto again;
+	}
+
+	return id;
+}
+
+static inline int ida_alloc_min(struct ida *ida, unsigned int min, gfp_t gfp)
+{
+	return ida_alloc_range(ida, min, ~0, gfp);
+}
+
+static inline
+void ida_free(struct ida *ida, unsigned int id)
+{
+	unsigned long flags;
+
+	BUG_ON((int)id < 0);
+	xa_lock_irqsave(&ida->ida_rt, flags);
+	ida_remove(ida, id);
+	xa_unlock_irqrestore(&ida->ida_rt, flags);
+}
+#endif
+
+#ifdef NEED_I2C_LOCK_BUS
+
+#define I2C_LOCK_ROOT_ADAPTER 0
+#define I2C_LOCK_SEGMENT      1
+
+static inline void
+i2c_lock_bus(struct i2c_adapter *adapter, unsigned int flags)
+{
+	/* there is no bus implementation for Kernels < 4.7
+	 * fallback to adapter locking */
+	i2c_lock_adapter(adapter);
+}
+
+static inline void
+i2c_unlock_bus(struct i2c_adapter *adapter, unsigned int flags)
+{
+	/* there is no bus implementation for Kernels < 4.7
+	 * fallback to adapter unlocking */
+	i2c_unlock_adapter(adapter);
+}
+#endif
+
+#ifdef NEED_STRSCPY
+#include <linux/string.h>
+static inline
+ssize_t strscpy(char *dest, const char *src, size_t count)
+{
+	long res = 0;
+
+	if (count == 0)
+		return -E2BIG;
+
+	while (count) {
+		char c;
+
+		c = src[res];
+		dest[res] = c;
+		if (!c)
+			return res;
+		res++;
+		count--;
+	}
+
+	/* Hit buffer length without finding a NUL; force NUL-termination. */
+	if (res)
+		dest[res-1] = '\0';
+
+	return -E2BIG;
+}
+#endif
+
+#ifdef NEED_FWNODE_GRAPH_FOR_EACH_ENDPOINT
+#define fwnode_graph_for_each_endpoint(fwnode, child)			\
+	for (child = NULL;						\
+	     (child = fwnode_graph_get_next_endpoint(fwnode, child)); )
 #endif
 
 #endif /*  _COMPAT_H */

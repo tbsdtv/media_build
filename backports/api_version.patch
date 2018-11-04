@@ -1,39 +1,21 @@
 diff --git a/drivers/media/cec/cec-api.c b/drivers/media/cec/cec-api.c
-index 10b67fc..64b0250 100644
+index b6536bbad530..401ed65c834b 100644
 --- a/drivers/media/cec/cec-api.c
 +++ b/drivers/media/cec/cec-api.c
-@@ -82,7 +82,7 @@ static long cec_adap_g_caps(struct cec_adapter *adap,
- 	strlcpy(caps.name, adap->name, sizeof(caps.name));
- 	caps.available_log_addrs = adap->available_log_addrs;
- 	caps.capabilities = adap->capabilities;
+@@ -85 +85 @@ static long cec_adap_g_caps(struct cec_adapter *adap,
 -	caps.version = LINUX_VERSION_CODE;
 +	caps.version = V4L2_VERSION;
- 	if (copy_to_user(parg, &caps, sizeof(caps)))
- 		return -EFAULT;
- 	return 0;
 diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
-index 35e81f7..9c3361c 100644
+index 3bae24b15eaa..7f7cc64c637c 100644
 --- a/drivers/media/media-device.c
 +++ b/drivers/media/media-device.c
-@@ -69,7 +69,7 @@ static int media_device_get_info(struct media_device *dev,
- 	strlcpy(info->serial, dev->serial, sizeof(info->serial));
- 	strlcpy(info->bus_info, dev->bus_info, sizeof(info->bus_info));
- 
+@@ -81 +81 @@ static long media_device_get_info(struct media_device *dev, void *arg)
 -	info->media_version = LINUX_VERSION_CODE;
 +	info->media_version = V4L2_VERSION;
- 	info->driver_version = info->media_version;
- 	info->hw_revision = dev->hw_revision;
- 
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index a5dab16..ce0d711 100644
+index 54afc9c7ee6e..4572a87acc0b 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1004,7 +1004,7 @@ static int v4l_querycap(const struct v4l2_ioctl_ops *ops,
- 	struct video_device *vfd = video_devdata(file);
- 	int ret;
- 
+@@ -1044 +1044 @@ static int v4l_querycap(const struct v4l2_ioctl_ops *ops,
 -	cap->version = LINUX_VERSION_CODE;
 +	cap->version = V4L2_VERSION;
- 	cap->device_caps = vfd->device_caps;
- 	cap->capabilities = vfd->device_caps | V4L2_CAP_DEVICE_CAPS;
- 
