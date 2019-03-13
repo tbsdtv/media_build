@@ -731,10 +731,15 @@ sub check_other_dependencies()
 	check_files_for_func("list_first_entry_or_null", "NEED_LIST_FIRST_ENTRY_OR_NULL", "include/linux/list.h");
 	check_files_for_func("struct_size", "NEED_STRUCT_SIZE", "linux/overflow.h");
 	check_files_for_func("list_last_entry", "NEED_LIST_LAST_ENTRY", "include/linux/list.h");
+	check_files_for_func("list_next_entry", "NEED_LIST_NEXT_ENTRY", "include/linux/list.h");
 	check_files_for_func("xa_lock_irqsave", "NEED_XA_LOCK_IRQSAVE", "include/linux/xarray.h");
 	check_files_for_func("ida_alloc_min", "NEED_IDA_ALLOC_MIN", "include/linux/idr.h");
 	check_files_for_func("i2c_lock_bus", "NEED_I2C_LOCK_BUS", "include/linux/i2c.h");
 	check_files_for_func("strscpy", "NEED_STRSCPY", "include/linux/string.h");
+	check_files_for_func("strchrnul", "NEED_STRCHRNUL", "include/linux/string.h");
+	check_files_for_func("i2c_8bit_addr_from_msg", "NEED_I2C_8BIT_ADDR_FROM_MSG", "include/linux/i2c.h");
+	check_files_for_func("lockdep_assert_irqs_enabled", "NEED_LOCKDEP_ASSERT_IRQS", "include/linux/lockdep.h");
+	check_files_for_func("of_node_name_eq", "NEED_OF_NODE_NAME_EQ", "include/linux/of.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

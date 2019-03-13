@@ -163,16 +163,17 @@ sub getobsolete()
 sub removeobsolete()
 {
 	while ( my ($dir, $files) = each(%obsolete) ) {
-		print OUT "\t\@echo \"\\nRemoving obsolete files from \$(DESTDIR)\$(KDIR26)/$dir:\"\n";
+		print OUT "\t\@if [ -d \$(DESTDIR)\$(KDIR26)/$dir ]; then echo -e \"\\nRemoving obsolete files from \$(DESTDIR)\$(KDIR26)/$dir:\"; fi\n";
 		print OUT "\t\@files='", join(' ', keys %$files), "'; ";
 
 		print OUT "for i in \$\$files;do if [ -f \"\$(DESTDIR)\$(KDIR26)/$dir/\$\$i\" ]; then ";
 		print OUT "echo -n \"\$\$i \";";
 		print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i; fi; done; ";
 
-		print OUT "for i in \$\$files;do if [ -f \"\$(DESTDIR)\$(KDIR26)/$dir/\$\$i.gz\" ]; then ";
-		print OUT "echo -n \"\$\$i.gz \";";
-		print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i.gz; fi; done; echo;\n\n";
+		print OUT "for i in \$\$files;do if [ -f \"\$(DESTDIR)\$(KDIR26)/$dir/\$\$i.(gz|bz2|xz)\" ]; then ";
+		print OUT "echo -n \"\$\$i.* \";";
+		print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i.*; fi; done\n\n";
+		print OUT "\t\@if [ -d \$(DESTDIR)\$(KDIR26)/$dir ]; then echo; echo; fi\n";
 	}
 }
 
@@ -224,7 +225,7 @@ find({wanted => \&parse_dir, no_chdir => 1}, '../linux/drivers/staging');
 find({wanted => \&parse_dir, no_chdir => 1}, '../linux/drivers/misc');
 
 # Creating Install rule
-print OUT "media-install::\n";
+print OUT "media-install:: media-rminstall\n";
 
 removeobsolete();
 removeubuntu("kernel/ubuntu/media");
@@ -267,16 +268,17 @@ removeubuntu("/ubuntu/media");
 removeubuntu("/updates/dkms");
 
 while ( my ($dir, $files) = each(%instdir) ) {
-	print OUT "\t\@echo \"\\nRemoving old \$(KDIR26)/$dir files:\"\n";
+	print OUT "\t\@if [ -d \$(DESTDIR)\$(KDIR26)/$dir ]; then echo -e \"\\nRemoving old \$(KDIR26)/$dir files:\"; fi\n";
 	print OUT "\t\@files='", join(' ', keys %$files), "'; ";
 
 	print OUT "for i in \$\$files;do if [ -f \"\$(DESTDIR)\$(KDIR26)/$dir/\$\$i\" ]; then ";
 	print OUT "echo -n \"\$\$i \";";
-	print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i; fi; done; ";
+	print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i; fi; ";
 
-	print OUT "for i in \$\$files;do if [ -f \"\$(DESTDIR)\$(KDIR26)/$dir/\$\$i.gz\" ]; then ";
-	print OUT "echo -n \"\$\$i.gz \";";
-	print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i.gz; fi; done; echo;\n\n";
+	print OUT "if [ -f \$(DESTDIR)\$(KDIR26)/$dir/\$\$i.* ]; then ";
+	print OUT "echo -n \"\$\$i.* \";";
+	print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i.*; fi; done\n\n";
+	print OUT "\t\@if [ -d \$(DESTDIR)\$(KDIR26)/$dir ]; then echo; fi\n";
 }
 
 my $mediadeps = join(" \\\n", map("\t$_/Makefile", keys %srcdir ));

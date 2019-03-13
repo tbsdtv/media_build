@@ -2530,6 +2530,11 @@ typedef int vm_fault_t;
         list_entry((ptr)->prev, type, member)
 #endif
 
+#ifdef NEED_LIST_NEXT_ENTRY
+#define list_next_entry(pos, member) \
+	list_entry((pos)->member.next, typeof(*(pos)), member)
+#endif
+
 #ifdef NEED_XA_LOCK_IRQSAVE
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 17, 0)
 #define xa_lock_irqsave(xa, flags) (void)flags
@@ -2646,10 +2651,53 @@ ssize_t strscpy(char *dest, const char *src, size_t count)
 }
 #endif
 
+#ifdef NEED_STRCHRNUL
+#include <linux/string.h>
+static inline char *strchrnul(const char *s, int c)
+{
+        while (*s && *s != (char)c)
+                s++;
+        return (char *)s;
+}
+#endif
+
 #ifdef NEED_FWNODE_GRAPH_FOR_EACH_ENDPOINT
 #define fwnode_graph_for_each_endpoint(fwnode, child)			\
 	for (child = NULL;						\
 	     (child = fwnode_graph_get_next_endpoint(fwnode, child)); )
+#endif
+
+#ifdef NEED_LOCKDEP_ASSERT_IRQS
+#define lockdep_assert_irqs_enabled() do { } while (0)
+#define lockdep_assert_irqs_disabled() do { } while (0)
+#endif
+
+
+#ifdef NEED_OF_NODE_NAME_EQ
+#include <linux/of.h>
+#include <linux/string.h>
+static inline
+bool of_node_name_eq(const struct device_node *np, const char *name)
+{
+	const char *node_name;
+	size_t len;
+
+	if (!np)
+		return false;
+
+	node_name = kbasename(np->full_name);
+	len = strchrnul(node_name, '@') - node_name;
+
+	return (strlen(name) == len) && (strncmp(node_name, name, len) == 0);
+}
+#endif
+
+#ifdef NEED_I2C_8BIT_ADDR_FROM_MSG
+#include <linux/i2c.h>
+static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
+{
+	return (msg->addr << 1) | (msg->flags & I2C_M_RD ? 1 : 0);
+}
 #endif
 
 #endif /*  _COMPAT_H */

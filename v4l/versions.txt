@@ -1,6 +1,6 @@
 # Use this for stuff for drivers that don't compile
 [9.255.255]
-INTEL_ATOMISP
+VIDEO_IPU3_IMGU
 VIDEO_DW9714
 
 [4.19.0]
@@ -11,8 +11,8 @@ VIDEO_CROS_EC_CEC
 # Needs devm_regmap_init_sccb
 VIDEO_OV772X
 
-[4.16.0]
-# Needs device_get_match_data
+[4.17.0]
+# Needs devm_nvmem_register
 VIDEO_I2C
 
 [4.15.0]
@@ -28,6 +28,7 @@ RADIO_WL128X
 [4.10.0]
 # needs *probe_new in struct i2c_driver
 VIDEO_OV5670
+VIDEO_OV8856
 VIDEO_OV7251
 VIDEO_IMX258
 VIDEO_DW9807
@@ -37,10 +38,13 @@ VIDEO_OV2680
 VIDEO_MT9V111
 VIDEO_IMX319
 VIDEO_IMX355
+VIDEO_IMX214
+I2C_BCM2048
 
 [4.9.0]
 # needs linux/bitfield.h
 DVB_MN88443X
+VIDEO_ASPEED
 
 [4.8.0]
 # needs i2c_new_secondary_device
@@ -67,6 +71,10 @@ MEDIA_TUNER_TDA18250
 # needs struct reg_sequence
 VIDEO_OV7740
 
+[4.1.0]
+# needs has_acpi_companion
+VIDEO_SECO_CEC
+
 [4.2.0]
 # needs led_trigger_remove
 V4L2_FLASH_LED_CLASS
@@ -92,6 +100,8 @@ VIDEO_OV5640
 [3.18.0]
 # needs LED brightness support
 V4L2_FLASH_LED_CLASS
+# includes property.h
+VIDEO_MT9M111
 
 [3.17.0]
 # needs GPIOD_OUT_LOW/HIGH
@@ -111,15 +121,15 @@ VIDEO_IMX274
 IR_GPIO_TX
 IR_GPIO_CIR
 VIDEO_OV5695
+VIDEO_OV9640
 VIDEO_OV9650
 VIDEO_OV2685
 VIDEO_TW9910
-SOC_CAMERA_TW9910
 VIDEO_MT9T112
-SOC_CAMERA_MT9T112
-SOC_CAMERA_OV772X
+VIDEO_MT9M001
 VIDEO_RJ54N1
 SOC_CAMERA_RJ54N1
+RADIO_SI470X
 # needs component_match_add
 VIDEO_VIMC
 # needs bpf.h
@@ -145,6 +155,8 @@ RADIO_SI4713
 [3.12.0]
 # BIN_ATTR_RW was changed
 IR_NUVOTON
+# needs devm_regulator_get_optional
+CXD2880_SPI_DRV
 
 [3.11.0]
 # needs freezable_schedule_hrtimeout_range
@@ -155,276 +167,3 @@ VIDEO_FB_IVTV
 [3.10.0]
 # needs include/linux/mfd/syscon.h
 IR_HIX5HD2
-
-[3.9.0]
-# needs devm_ioremap_resource
-VIDEO_SH_VEU
-VIDEO_RENESAS_VSP1
-VIDEO_RCAR_VIN
-VIDEO_TI_SC
-VIDEO_TI_CSC
-IR_IMG
-VIDEO_CADENCE_CSI2TX
-# needs spi_sync_transfer
-IR_SPI
-
-[3.8.0]
-# needs regmap lock/unlock ops
-DVB_M88DS3103
-DVB_TS2020
-DVB_RTL2830
-DVB_RTL2832
-
-[3.7.0]
-# i2c_add_mux_adapter prototype change
-# Needs PLATFORM_DEVID_AUTO
-DVB_USB_RTL28XXU
-DVB_USB_AF9035
-DVB_USB_ZD1301
-# needs pcie_capability_clear_and_set_word
-DVB_NETUP_UNIDVB
-# needs devm_pwm_get
-IR_PWM_TX
-
-[3.6.0]
-# needs include/linux/sizes.h
-VIDEO_M5MOLS
-VIDEO_S5C73M3
-# needs dma_mmap_coherent and sg_alloc_table_from_pages.
-VIDEOBUF2_DMA_CONTIG
-
-[3.5.0]
-# needs devm_clk_get, clk_enable, clk_disable
-VIDEO_CODA
-VIDEO_MT9T001
-VIDEO_S5K5BAF
-VIDEO_S5K6A3
-VIDEO_OV2659
-VIDEO_OV5647
-# needs devm_gpio_request_one
-VIDEO_ADV7183
-VIDEO_VS6624
-VIDEO_NOON010PC30
-# needs GPIOF_EXPORT
-VIDEO_S5K6AA
-# needs dev_err_ratelimited
-MEDIA_TUNER_E4000
-# needs regmap_init with 4 arguments
-DVB_USB_AF9015
-# needs of_find_i2c_adapter_by_node
-DVB_C8SECTPFE
-SOC_CAMERA
-
-[3.4.0]
-# needs devm_regulator_bulk_get
-VIDEO_S5K4ECGX
-# needs EPROBE_DEFER
-VIDEO_AD5820
-VIDEO_MT9M111
-# needs of_property_read_bool
-VIDEO_ADV7343
-# needs devm_regmap_init_i2c
-VIDEO_LM3560
-VIDEO_LM3646
-MEDIA_TUNER_TDA18212
-MEDIA_TUNER_M88RS6000T
-MEDIA_TUNER_TUA9001
-MEDIA_TUNER_FC2580
-DVB_TDA10071
-DVB_SI2165
-# needs spi_finalize_current_message
-USB_MSI3101
-USB_MSI2500
-MEDIA_TUNER_MSI001
-# needs regmap_bulk_write
-MEDIA_TUNER_M88TS2022
-MEDIA_TUNER_IT913X
-DVB_AF9033
-DVB_MN88472
-DVB_MN88473
-# does not compile for older kernels
-CXD2880_SPI_DRV
-
-[3.3.0]
-# Needs struct dma_interleaved_template in dmaengine.h
-VIDEO_MEM2MEM_DEINTERLACE
-# Needs of_node_put
-VIDEO_TVP514X
-VIDEO_TVP7002
-# requires new interface for alloc_ordered_workqueue
-VIDEO_VIVID
-# needs SPI driver framework
-VIDEO_GS1662
-
-[3.2.0]
-# due to the rename at include/linux from "pm_qos_params.h" to "pm_qos.h"
-SOC_CAMERA_MT9V022
-SOC_CAMERA_MT9M001
-SOC_CAMERA_MT9T031
-SOC_CAMERA_PLATFORM
-# Needs of_match_ptr
-VIDEO_THS8200
-
-[3.0.0]
-# fw_iso_context_queue_flush
-DVB_FIREDTV
-
-[2.6.39]
-# mfd header changes for 2.6.39 prevents compilation on 2.6.38.
-RADIO_WL1273
-RADIO_TIMBERDALE
-VIDEO_TIMBERDALE
-
-[2.6.37]
-# Some stuff at viafb struct
-VIDEO_VIA_CAMERA
-# needs div64_s64
-MEDIA_TUNER_QM1D1C0042
-DVB_TC90522
-# requires linux/atomic.h
-DVB_CXD2880
-
-[2.6.36]
-
-[2.6.35]
-# Needs usb_pipe_endpoint
-DVB_USB_LME2510
-
-[2.6.34]
-MACH_DAVINCI_DM6467_EVM
-MFD_TIMBERDALE
-RADIO_SAA7706H
-# Needs dma_set_coherent_mask
-VIDEO_DT3155
-# Needs include/linux/lcm.h
-VIDEO_APTINA_PLL
-# Depends on VIDEO_APTINA_PLL
-VIDEO_MT9M032
-# Needs include/linux/lcm.h
-VIDEO_SMIAPP_PLL
-
-[2.6.33]
-VIDEO_AK881X
-V4L2_MEM2MEM_DEV
-# Requires sound/aci.h introduced in 2.6.33
-RADIO_MIROPCM20
-# Problem with printk_ratelimited
-DVB_PT1
-
-[2.6.32]
-# These rely on arch support that wasn't available until 2.6.32
-VIDEO_SH_MOBILE_CEU
-VIDEO_PXA27x
-VIDEO_TLG2300
-# Relies on some changes at PnP API
-IR_ENE
-IR_WINBOND_CIR
-IR_ITE_CIR
-IR_FINTEK
-# Relies on i2c_lock_adapter
-DVB_DRXK
-# Requires ss_ep_comp in usb_host_endpoint
-USB_VIDEO_CLASS
-
-[2.6.31]
-# These rely on arch support that wasn't available until 2.6.31
-VIDEO_VPSS_SYSTEM
-VIDEO_VPFE_CAPTURE
-VIDEO_DM6446_CCDC
-VIDEO_DM355_CCDC
-# Start version for those drivers - probably compile with older versions
-VIDEO_CX25821
-VIDEO_CX25821_ALSA
-RADIO_TEF6862
-# follow_pfn needed by VIDEOBUF_DMA_CONTIG and drivers that use it
-VIDEOBUF_DMA_CONTIG
-VIDEOBUF_VMALLOC
-DISPLAY_DAVINCI_DM646X_EVM
-VIDEO_VPFE_CAPTURE
-VIDEO_MX1
-VIDEO_MX3
-
-[2.6.26]
-# requires id_table and new i2c stuff
-RADIO_TEA5764
-VIDEO_THS7303
-
-[2.6.24]
-# Some freezer routines
-USB_GSPCA_SN9C20X_EVDEV
-# Requires linux/mmc/sdio_func.h
-SMS_SDIO_DRV
-VIDEO_SAA7164
-
-[2.6.23]
-# writel/readl headers moved
-DVB_MANTIS
-MANTIS_CORE
-
-
-[2.6.22]
-#This driver requires I2C probe/remove fields
-VIDEO_TCM825X
-# This driver requires list_first_entry
-USB_STKWEBCAM
-# This driver needs div64_64
-DVB_DRX397XD
-# Assumes struct input_dev has a dev field
-DVB_DM1105
-# This driver needs hrtimer API
-VIDEO_CX88
-
-[2.6.20]
-#This driver requires HID_REQ_GET_REPORT
-USB_SI470X
-RADIO_SI470X
-# use of struct delayed_work
-USB_GSPCA_FINEPIX
-USB_GSPCA_JEILINJ
-# uses linux/hid.h and struct delayed_work
-USB_SI470X
-# due to INIT_WORK changes
-USB_GSPCA_SQ905
-USB_GSPCA_SQ905C
-VIDEO_HDPVR
-# due to device_move
-VIDEO_PVRUSB2
-# due to struct file.f_path
-VIDEO_CPIA
-
-[2.6.19]
-# requires vmalloc_user/remap_vmalloc_range
-VIDEO_CAFE_CCIC
-VIDEO_TM6000
-#struct device vs struct class_device issues
-USB_ET61X251
-USB_SN9C102
-USB_PWC
-USB_PWC_DEBUG
-USB_OV511
-USB_STV680
-USB_S2255
-VIDEO_USBVISION
-# Uses supports_autosuspend
-USB_MR800
-USB_DSBR
-# Uses MODULE_FIRMWARE
-DVB_AV7110
-# usb_complete_t changed prototype
-USB_ZR364XX
-
-[2.6.18]
-# Uses remap_vmalloc_range()
-VIDEOBUF_VMALLOC
-# Uses new class interface, which did not start to appear until 2.6.18.
-VIDEO_PVRUSB2_SYSFS
-# linux/uaccess.h
-VIDEO_PMS
-
-[2.6.17]
-# DVB_CORE_ATTACH relies on symbol_put_addr which hangs pre-2.6.17
-DVB_CORE_ATTACH
-# Various changes to ALSA structs
-VIDEO_CX18_ALSA
-# cx18 needs list_for_each_entry_from
-VIDEO_CX18
