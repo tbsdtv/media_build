@@ -363,9 +363,4 @@ video/vpx3220
 video/w9966
 video/wm8739
 video/wm8775
-video/zoran/videocodec
-video/zoran/zr36016
-video/zoran/zr36050
-video/zoran/zr36060
-video/zoran/zr36067
 video/zr364xx

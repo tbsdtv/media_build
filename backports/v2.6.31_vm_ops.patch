@@ -37,19 +37,6 @@ index 2381b05..09b4a49 100644
  	.open		= meye_vm_open,
  	.close		= meye_vm_close,
  };
-diff --git a/drivers/media/pci/zoran/zoran_driver.c b/drivers/media/pci/zoran/zoran_driver.c
-index e7e9840..1a3ee0f 100644
---- a/drivers/media/pci/zoran/zoran_driver.c
-+++ b/drivers/media/pci/zoran/zoran_driver.c
-@@ -2838,7 +2838,7 @@ zoran_vm_close (struct vm_area_struct *vma)
- 	mutex_unlock(&zr->resource_lock);
- }
- 
--static const struct vm_operations_struct zoran_vm_ops = {
-+static struct vm_operations_struct zoran_vm_ops = {
- 	.open = zoran_vm_open,
- 	.close = zoran_vm_close,
- };
 diff --git a/drivers/media/usb/gspca/gspca.c b/drivers/media/usb/gspca/gspca.c
 index b7ae872..30a450e 100644
 --- a/drivers/media/usb/gspca/gspca.c
