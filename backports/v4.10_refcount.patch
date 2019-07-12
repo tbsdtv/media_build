@@ -195,10 +195,10 @@ index 6dfbd5b05907..03aae4744a9c 100644
  
  	return dbuf;
  }
-diff --git a/drivers/media/media-request.c b/drivers/media/media-request.c
+diff --git a/drivers/media/mc/mc-request.c b/drivers/media/mc/mc-request.c
 index 4e9db1fed697..860ba64c4554 100644
---- a/drivers/media/media-request.c
-+++ b/drivers/media/media-request.c
+--- a/drivers/media/mc/mc-request.c
++++ b/drivers/media/mc/mc-request.c
 @@ -12,7 +12,6 @@
  
  #include <linux/anon_inodes.h>

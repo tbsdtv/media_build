@@ -250,10 +250,10 @@ index a39bbd8ff1f0..b516625205ff 100644
  
 +#undef pr_fmt
  #define pr_fmt(fmt)	KBUILD_MODNAME ": %s: " fmt, __func__
-diff --git a/drivers/media/media-devnode.c b/drivers/media/media-devnode.c
+diff --git a/drivers/media/mc/mc-devnode.c b/drivers/media/mc/mc-devnode.c
 index 6b87a721dc49..77dac01e7705 100644
---- a/drivers/media/media-devnode.c
-+++ b/drivers/media/media-devnode.c
+--- a/drivers/media/mc/mc-devnode.c
++++ b/drivers/media/mc/mc-devnode.c
 @@ -28,2 +28,3 @@
  
 +#undef pr_fmt

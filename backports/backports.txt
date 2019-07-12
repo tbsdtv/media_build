@@ -26,15 +26,18 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 
+[5.1.255]
+add v5.1_vm_map_pages.patch
+
 [5.0.255]
 add v5.0_ipu3-cio2.patch
+
+[4.20.255]
+add v4.20_access_ok.patch
 
 [4.18.255]
 add v4.18_fwnode_args_args.patch
 add v4.18_add_map_atomic.patch
-
-[4.20.255]
-add v4.20_access_ok.patch
 
 [4.17.255]
 add v4.17_proc_create_single.patch
@@ -49,9 +52,13 @@ add v4.14_module_param_call.patch
 
 [4.13.255]
 add v4.13_remove_nospec_h.patch
+add v4.13_drmP.patch
 
 [4.12.255]
 add v4.12_revert_solo6x10_copykerneluser.patch
+
+[4.11.255]
+add v4.11_drop_drm_file.patch
 
 [4.10.255]
 add v4.10_sched_signal.patch
@@ -66,6 +73,7 @@ add v4.9_dvb_net_max_mtu.patch
 add v4.8_user_pages_flag.patch
 add v4.8_em28xx_bitfield.patch
 add v4.8_dma_map_resource.patch
+add v4.8_drm_crtc.patch
 
 [4.7.255]
 add v4.7_dma_attrs.patch
@@ -86,7 +94,6 @@ add v4.5_copy_to_user_warning.patch
 add v4.4_gpio_chip_parent.patch
 
 [4.3.255]
-add v4.3_add_autorepeat_handling.patch
 add v4.3_bt87x_const_fix.patch
 
 [4.2.255]

@@ -2700,4 +2700,12 @@ static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
 }
 #endif
 
+#ifdef NEED_FOLL_LONGTERM
+#define FOLL_LONGTERM 0
+#endif
+
+#ifdef NEED_STREAM_OPEN
+#define stream_open nonseekable_open
+#endif
+
 #endif /*  _COMPAT_H */

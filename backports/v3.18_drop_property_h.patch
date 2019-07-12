@@ -1,7 +1,7 @@
-diff --git a/drivers/media/media-entity.c b/drivers/media/media-entity.c
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
 index a998a2e0ea1d..9fa66a2dee00 100644
---- a/drivers/media/media-entity.c
-+++ b/drivers/media/media-entity.c
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
 @@ -17,7 +17,6 @@
   */
  

@@ -72,6 +72,10 @@ MEDIA_TUNER_TDA18250
 # needs struct reg_sequence
 VIDEO_OV7740
 
+[4.2.0]
+# needs clkdev_create
+VIDEO_CAFE_CCIC
+
 [4.1.0]
 # needs has_acpi_companion
 VIDEO_SECO_CEC

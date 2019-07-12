@@ -5,10 +5,10 @@ index b6536bbad530..401ed65c834b 100644
 @@ -85 +85 @@ static long cec_adap_g_caps(struct cec_adapter *adap,
 -	caps.version = LINUX_VERSION_CODE;
 +	caps.version = V4L2_VERSION;
-diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
+diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
 index 3bae24b15eaa..7f7cc64c637c 100644
---- a/drivers/media/media-device.c
-+++ b/drivers/media/media-device.c
+--- a/drivers/media/mc/mc-device.c
++++ b/drivers/media/mc/mc-device.c
 @@ -81 +81 @@ static long media_device_get_info(struct media_device *dev, void *arg)
 -	info->media_version = LINUX_VERSION_CODE;
 +	info->media_version = V4L2_VERSION;

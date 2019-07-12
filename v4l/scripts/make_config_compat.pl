@@ -740,6 +740,8 @@ sub check_other_dependencies()
 	check_files_for_func("i2c_8bit_addr_from_msg", "NEED_I2C_8BIT_ADDR_FROM_MSG", "include/linux/i2c.h");
 	check_files_for_func("lockdep_assert_irqs_enabled", "NEED_LOCKDEP_ASSERT_IRQS", "include/linux/lockdep.h");
 	check_files_for_func("of_node_name_eq", "NEED_OF_NODE_NAME_EQ", "include/linux/of.h");
+	check_files_for_func("FOLL_LONGTERM", "NEED_FOLL_LONGTERM", "include/linux/mm.h");
+	check_files_for_func("stream_open", "NEED_STREAM_OPEN", "include/linux/fs.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

@@ -34,10 +34,10 @@ index bfe831c10b1c..d1aa20e6f0cd 100644
  #include <asm/byteorder.h>
  
  #include "smsendian.h"
-diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
+diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
 index 760e3e424e23..feb5d759711b 100644
---- a/drivers/media/media-device.c
-+++ b/drivers/media/media-device.c
+--- a/drivers/media/mc/mc-device.c
++++ b/drivers/media/mc/mc-device.c
 @@ -20,7 +20,6 @@
  #define __NEED_MEDIA_LEGACY_API
  

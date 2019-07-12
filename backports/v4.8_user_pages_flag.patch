@@ -1,5 +1,26 @@
+diff --git a/drivers/media/common/videobuf2/videobuf2-memops.c b/drivers/media/common/videobuf2/videobuf2-memops.c
+index 6e9e05153f4e..6c029616977f 100644
+--- a/drivers/media/common/videobuf2/videobuf2-memops.c
++++ b/drivers/media/common/videobuf2/videobuf2-memops.c
+@@ -40,7 +40,6 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
+ 	unsigned long first, last;
+ 	unsigned long nr;
+ 	struct frame_vector *vec;
+-	unsigned int flags = FOLL_FORCE | FOLL_WRITE;
+ 
+ 	first = start >> PAGE_SHIFT;
+ 	last = (start + length - 1) >> PAGE_SHIFT;
+@@ -48,7 +47,7 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
+ 	vec = frame_vector_create(nr);
+ 	if (!vec)
+ 		return ERR_PTR(-ENOMEM);
+-	ret = get_vaddr_frames(start & PAGE_MASK, nr, flags, vec);
++	ret = get_vaddr_frames(start & PAGE_MASK, nr, true, true, vec);
+ 	if (ret < 0)
+ 		goto out_destroy;
+ 	/* We accept only complete set of PFNs */
 diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
-index 3b33e87..f98f7a0 100644
+index 3b33e87ed73b..f98f7a0bd69f 100644
 --- a/drivers/media/pci/ivtv/ivtv-udma.c
 +++ b/drivers/media/pci/ivtv/ivtv-udma.c
 @@ -124,8 +124,8 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
@@ -14,7 +35,7 @@ index 3b33e87..f98f7a0 100644
  	if (user_dma.page_count != err) {
  		IVTV_DEBUG_WARN("failed to map user pages, returned %d instead of %d\n",
 diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
-index 44936d6..a61f632 100644
+index c3c2c79585f5..d45eeeb3dd93 100644
 --- a/drivers/media/pci/ivtv/ivtv-yuv.c
 +++ b/drivers/media/pci/ivtv/ivtv-yuv.c
 @@ -76,12 +76,11 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
@@ -33,7 +54,7 @@ index 44936d6..a61f632 100644
  
  	if (y_pages != y_dma.page_count || uv_pages != uv_dma.page_count) {
 diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index b6189a4..c799917 100644
+index 870a2a526e0b..8e1915074673 100644
 --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
 +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
 @@ -156,7 +156,6 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
@@ -44,7 +65,7 @@ index b6189a4..c799917 100644
  
  	dma->direction = direction;
  	switch (dma->direction) {
-@@ -179,18 +178,16 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+@@ -180,14 +179,12 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
  	if (NULL == dma->pages)
  		return -ENOMEM;
  
@@ -54,40 +75,10 @@ index b6189a4..c799917 100644
  	dprintk(1, "init user [0x%lx+0x%lx => %d pages]\n",
  		data, size, dma->nr_pages);
  
--	err = get_user_pages_longterm(data & PAGE_MASK, dma->nr_pages,
--			     flags, dma->pages, NULL);
-+	err = get_user_pages(data & PAGE_MASK, dma->nr_pages,
+ 	err = get_user_pages(data & PAGE_MASK, dma->nr_pages,
+-			     flags | FOLL_LONGTERM, dma->pages, NULL);
 +			     rw == READ, 1, /* force */
 +			     dma->pages, NULL);
  
  	if (err != dma->nr_pages) {
  		dma->nr_pages = (err >= 0) ? err : 0;
--		dprintk(1, "get_user_pages_longterm: err=%d [%d]\n", err,
-+		dprintk(1, "get_user_pages: err=%d [%d]\n", err,
- 			dma->nr_pages);
- 		return err < 0 ? err : -EINVAL;
- 	}
-diff --git a/drivers/media/common/videobuf2/videobuf2-memops.c b/drivers/media/common/videobuf2/videobuf2-memops.c
-index 00bb08f..9e65048 100644
---- a/drivers/media/common/videobuf2/videobuf2-memops.c
-+++ b/drivers/media/common/videobuf2/videobuf2-memops.c
-@@ -42,10 +42,6 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
- 	unsigned long first, last;
- 	unsigned long nr;
- 	struct frame_vector *vec;
--	unsigned int flags = FOLL_FORCE;
--
--	if (write)
--		flags |= FOLL_WRITE;
- 
- 	first = start >> PAGE_SHIFT;
- 	last = (start + length - 1) >> PAGE_SHIFT;
-@@ -53,7 +49,7 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
- 	vec = frame_vector_create(nr);
- 	if (!vec)
- 		return ERR_PTR(-ENOMEM);
--	ret = get_vaddr_frames(start & PAGE_MASK, nr, flags, vec);
-+	ret = get_vaddr_frames(start & PAGE_MASK, nr, write, true, vec);
- 	if (ret < 0)
- 		goto out_destroy;
- 	/* We accept only complete set of PFNs */
