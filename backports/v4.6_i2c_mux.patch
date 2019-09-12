@@ -1,8 +1,221 @@
+diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
+index 6c4adec58174..f73ba3bbe199 100644
+--- a/drivers/media/dvb-frontends/lgdt3306a.c
++++ b/drivers/media/dvb-frontends/lgdt3306a.c
+@@ -69,8 +69,6 @@ struct lgdt3306a_state {
+ 	enum fe_modulation current_modulation;
+ 	u32 current_frequency;
+ 	u32 snr;
+-
+-	struct i2c_mux_core *muxc;
+ };
+ 
+ /*
+@@ -2175,20 +2173,142 @@ static const struct dvb_frontend_ops lgdt3306a_ops = {
+ 	.search               = lgdt3306a_search,
+ };
+ 
+-static int lgdt3306a_select(struct i2c_mux_core *muxc, u32 chan)
++/*
++ * I2C gate logic
++ * We must use unlocked I2C I/O because I2C adapter lock is already taken
++ * by the caller (usually tuner driver).
++ * select/unselect are unlocked versions of lgdt3306a_i2c_gate_ctrl
++ */
++static int lgdt3306a_select(struct i2c_adapter *adap, void *mux_priv, u32 chan)
+ {
+-	struct i2c_client *client = i2c_mux_priv(muxc);
+-	struct lgdt3306a_state *state = i2c_get_clientdata(client);
++	struct i2c_client *client = mux_priv;
++	int ret;
++	u8 val;
++	u8 buf[3];
++
++	struct i2c_msg read_msg_1 = {
++		.addr = client->addr,
++		.flags = 0,
++		.buf = "\x00\x02",
++		.len = 2,
++	};
++	struct i2c_msg read_msg_2 = {
++		.addr = client->addr,
++		.flags = I2C_M_RD,
++		.buf = &val,
++		.len = 1,
++	};
++
++	struct i2c_msg write_msg = {
++		.addr = client->addr,
++		.flags = 0,
++		.len = 3,
++		.buf = buf,
++	};
++
++	ret = __i2c_transfer(client->adapter, &read_msg_1, 1);
++	if (ret != 1)
++	{
++		pr_err("error (addr %02x reg 0x002 error (ret == %i)\n",
++		       client->addr, ret);
++		if (ret < 0)
++			return ret;
++		else
++			return -EREMOTEIO;
++	}
+ 
+-	return lgdt3306a_i2c_gate_ctrl(&state->frontend, 1);
++	ret = __i2c_transfer(client->adapter, &read_msg_2, 1);
++	if (ret != 1)
++	{
++		pr_err("error (addr %02x reg 0x002 error (ret == %i)\n",
++		       client->addr, ret);
++		if (ret < 0)
++			return ret;
++		else
++			return -EREMOTEIO;
++	}
++
++	buf[0] = 0x00;
++	buf[1] = 0x02;
++	val &= 0x7F;
++	val |= LG3306_TUNERI2C_ON;
++	buf[2] = val;
++	ret = __i2c_transfer(client->adapter, &write_msg, 1);
++	if (ret != 1) {
++		pr_err("error (addr %02x %02x <- %02x, err = %i)\n",
++		       write_msg.buf[0], write_msg.buf[1], write_msg.buf[2], ret);
++		if (ret < 0)
++			return ret;
++		else
++			return -EREMOTEIO;
++	}
++	return 0;
+ }
+ 
+-static int lgdt3306a_deselect(struct i2c_mux_core *muxc, u32 chan)
++static int lgdt3306a_deselect(struct i2c_adapter *adap, void *mux_priv, u32 chan)
+ {
+-	struct i2c_client *client = i2c_mux_priv(muxc);
+-	struct lgdt3306a_state *state = i2c_get_clientdata(client);
++	struct i2c_client *client = mux_priv;
++	int ret;
++	u8 val;
++	u8 buf[3];
++
++	struct i2c_msg read_msg_1 = {
++		.addr = client->addr,
++		.flags = 0,
++		.buf = "\x00\x02",
++		.len = 2,
++	};
++	struct i2c_msg read_msg_2 = {
++		.addr = client->addr,
++		.flags = I2C_M_RD,
++		.buf = &val,
++		.len = 1,
++	};
+ 
+-	return lgdt3306a_i2c_gate_ctrl(&state->frontend, 0);
++	struct i2c_msg write_msg = {
++		.addr = client->addr,
++		.flags = 0,
++		.len = 3,
++		.buf = buf,
++	};
++
++	ret = __i2c_transfer(client->adapter, &read_msg_1, 1);
++	if (ret != 1)
++	{
++		pr_err("error (addr %02x reg 0x002 error (ret == %i)\n",
++		       client->addr, ret);
++		if (ret < 0)
++			return ret;
++		else
++			return -EREMOTEIO;
++	}
++
++	ret = __i2c_transfer(client->adapter, &read_msg_2, 1);
++	if (ret != 1)
++	{
++		pr_err("error (addr %02x reg 0x002 error (ret == %i)\n",
++		       client->addr, ret);
++		if (ret < 0)
++			return ret;
++		else
++			return -EREMOTEIO;
++	}
++
++	buf[0] = 0x00;
++	buf[1] = 0x02;
++	val &= 0x7F;
++	val |= LG3306_TUNERI2C_OFF;
++	buf[2] = val;
++	ret = __i2c_transfer(client->adapter, &write_msg, 1);
++	if (ret != 1) {
++		pr_err("error (addr %02x %02x <- %02x, err = %i)\n",
++		       write_msg.buf[0], write_msg.buf[1], write_msg.buf[2], ret);
++		if (ret < 0)
++			return ret;
++		else
++			return -EREMOTEIO;
++	}
++	return 0;
+ }
+ 
+ static int lgdt3306a_probe(struct i2c_client *client,
+@@ -2218,21 +2338,16 @@ static int lgdt3306a_probe(struct i2c_client *client,
+ 	state->frontend.ops.release = NULL;
+ 
+ 	/* create mux i2c adapter for tuner */
+-	state->muxc = i2c_mux_alloc(client->adapter, &client->dev,
+-				  1, 0, I2C_MUX_LOCKED,
+-				  lgdt3306a_select, lgdt3306a_deselect);
+-	if (!state->muxc) {
+-		ret = -ENOMEM;
++	state->i2c_adap = i2c_add_mux_adapter(client->adapter, &client->dev,
++			client, 0, 0, 0, lgdt3306a_select, lgdt3306a_deselect);
++	if (state->i2c_adap == NULL) {
++		ret = -ENODEV;
+ 		goto err_kfree;
+ 	}
+-	state->muxc->priv = client;
+-	ret = i2c_mux_add_adapter(state->muxc, 0, 0, 0);
+-	if (ret)
+-		goto err_kfree;
+ 
+ 	/* create dvb_frontend */
+ 	fe->ops.i2c_gate_ctrl = NULL;
+-	*config->i2c_adapter = state->muxc->adapter[0];
++	*config->i2c_adapter = state->i2c_adap;
+ 	*config->fe = fe;
+ 
+ 	dev_info(&client->dev, "LG Electronics LGDT3306A successfully identified\n");
+@@ -2252,7 +2367,7 @@ static int lgdt3306a_remove(struct i2c_client *client)
+ {
+ 	struct lgdt3306a_state *state = i2c_get_clientdata(client);
+ 
+-	i2c_mux_del_adapters(state->muxc);
++	i2c_del_mux_adapter(state->i2c_adap);
+ 
+ 	state->frontend.ops.release = NULL;
+ 	state->frontend.demodulator_priv = NULL;
+diff --git a/drivers/media/dvb-frontends/lgdt3306a.h b/drivers/media/dvb-frontends/lgdt3306a.h
+index 407e74b5d195..4bbcd485613e 100644
+--- a/drivers/media/dvb-frontends/lgdt3306a.h
++++ b/drivers/media/dvb-frontends/lgdt3306a.h
+@@ -12,6 +12,8 @@
+ #include <linux/i2c.h>
+ #include <media/dvb_frontend.h>
+ 
++#define LG3306_TUNERI2C_ON  0x00
++#define LG3306_TUNERI2C_OFF 0x80
+ 
+ enum lgdt3306a_mpeg_mode {
+ 	LGDT3306A_MPEG_PARALLEL = 0,
 diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-frontends/m88ds3103.c
-index 65d157f..4ce48ab 100644
+index 3a367a585084..0510a7605d3a 100644
 --- a/drivers/media/dvb-frontends/m88ds3103.c
 +++ b/drivers/media/dvb-frontends/m88ds3103.c
-@@ -1232,9 +1232,9 @@ static void m88ds3103_release(struct dvb_frontend *fe)
+@@ -1222,9 +1222,9 @@ static void m88ds3103_release(struct dvb_frontend *fe)
  	i2c_unregister_device(client);
  }
  
@@ -14,7 +227,7 @@ index 65d157f..4ce48ab 100644
  	struct i2c_client *client = dev->client;
  	int ret;
  	struct i2c_msg msg = {
-@@ -1356,7 +1356,7 @@ static struct i2c_adapter *m88ds3103_get_i2c_adapter(struct i2c_client *client)
+@@ -1346,7 +1346,7 @@ static struct i2c_adapter *m88ds3103_get_i2c_adapter(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -23,7 +236,7 @@ index 65d157f..4ce48ab 100644
  }
  
  static int m88ds3103_probe(struct i2c_client *client,
-@@ -1456,16 +1456,13 @@ static int m88ds3103_probe(struct i2c_client *client,
+@@ -1446,16 +1446,13 @@ static int m88ds3103_probe(struct i2c_client *client,
  		goto err_kfree;
  
  	/* create mux i2c adapter for tuner */
@@ -44,7 +257,7 @@ index 65d157f..4ce48ab 100644
  
  	/* create dvb_frontend */
  	memcpy(&dev->fe.ops, &m88ds3103_ops, sizeof(struct dvb_frontend_ops));
-@@ -1494,7 +1491,7 @@ static int m88ds3103_remove(struct i2c_client *client)
+@@ -1484,7 +1481,7 @@ static int m88ds3103_remove(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -54,10 +267,10 @@ index 65d157f..4ce48ab 100644
  	kfree(dev);
  	return 0;
 diff --git a/drivers/media/dvb-frontends/m88ds3103_priv.h b/drivers/media/dvb-frontends/m88ds3103_priv.h
-index 1ba0b79..6c7efd8 100644
+index c825032f07ab..697741673ef1 100644
 --- a/drivers/media/dvb-frontends/m88ds3103_priv.h
 +++ b/drivers/media/dvb-frontends/m88ds3103_priv.h
-@@ -41,7 +41,7 @@ struct m88ds3103_dev {
+@@ -32,7 +32,7 @@ struct m88ds3103_dev {
  	enum fe_status fe_status;
  	u32 dvbv3_ber; /* for old DVBv3 API read_ber */
  	bool warm; /* FW running */
@@ -67,10 +280,10 @@ index 1ba0b79..6c7efd8 100644
  	u8 chip_id;
  	/* main mclk is calculated for M88RS6000 dynamically */
 diff --git a/drivers/media/dvb-frontends/rtl2830.c b/drivers/media/dvb-frontends/rtl2830.c
-index 7bbfe11..56e9e5b 100644
+index e6b8367c8cce..21d0d0f542e7 100644
 --- a/drivers/media/dvb-frontends/rtl2830.c
 +++ b/drivers/media/dvb-frontends/rtl2830.c
-@@ -655,9 +655,9 @@ static int rtl2830_pid_filter(struct dvb_frontend *fe, u8 index, u16 pid, int on
+@@ -645,9 +645,9 @@ static int rtl2830_pid_filter(struct dvb_frontend *fe, u8 index, u16 pid, int on
   * adapter lock is already taken by tuner driver.
   * Gate is closed automatically after single I2C transfer.
   */
@@ -82,7 +295,7 @@ index 7bbfe11..56e9e5b 100644
  	struct rtl2830_dev *dev = i2c_get_clientdata(client);
  	int ret;
  
-@@ -690,7 +690,7 @@ static struct i2c_adapter *rtl2830_get_i2c_adapter(struct i2c_client *client)
+@@ -680,7 +680,7 @@ static struct i2c_adapter *rtl2830_get_i2c_adapter(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -91,7 +304,7 @@ index 7bbfe11..56e9e5b 100644
  }
  
  /*
-@@ -842,16 +842,12 @@ static int rtl2830_probe(struct i2c_client *client,
+@@ -832,16 +832,12 @@ static int rtl2830_probe(struct i2c_client *client,
  		goto err_regmap_exit;
  
  	/* create muxed i2c adapter for tuner */
@@ -112,7 +325,7 @@ index 7bbfe11..56e9e5b 100644
  
  	/* create dvb frontend */
  	memcpy(&dev->fe.ops, &rtl2830_ops, sizeof(dev->fe.ops));
-@@ -881,7 +877,7 @@ static int rtl2830_remove(struct i2c_client *client)
+@@ -871,7 +867,7 @@ static int rtl2830_remove(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -122,10 +335,10 @@ index 7bbfe11..56e9e5b 100644
  	kfree(dev);
  
 diff --git a/drivers/media/dvb-frontends/rtl2830_priv.h b/drivers/media/dvb-frontends/rtl2830_priv.h
-index 72d3f35..dc438c4 100644
+index fae78ed78522..d26981675263 100644
 --- a/drivers/media/dvb-frontends/rtl2830_priv.h
 +++ b/drivers/media/dvb-frontends/rtl2830_priv.h
-@@ -30,7 +30,7 @@ struct rtl2830_dev {
+@@ -20,7 +20,7 @@ struct rtl2830_dev {
  	struct rtl2830_platform_data *pdata;
  	struct i2c_client *client;
  	struct regmap *regmap;
@@ -135,10 +348,10 @@ index 72d3f35..dc438c4 100644
  	bool sleeping;
  	unsigned long filters;
 diff --git a/drivers/media/dvb-frontends/rtl2832.c b/drivers/media/dvb-frontends/rtl2832.c
-index fa3b816..1c11d50 100644
+index 6ec277421390..f11667899c5e 100644
 --- a/drivers/media/dvb-frontends/rtl2832.c
 +++ b/drivers/media/dvb-frontends/rtl2832.c
-@@ -153,6 +153,43 @@ static const struct rtl2832_reg_entry registers[] = {
+@@ -140,6 +140,43 @@ static const struct rtl2832_reg_entry registers[] = {
  	[DVBT_REG_4MSEL]	= {0x013,  0, 0},
  };
  
@@ -182,7 +395,7 @@ index fa3b816..1c11d50 100644
  static int rtl2832_rd_demod_reg(struct rtl2832_dev *dev, int reg, u32 *val)
  {
  	struct i2c_client *client = dev->client;
-@@ -167,7 +204,7 @@ static int rtl2832_rd_demod_reg(struct rtl2832_dev *dev, int reg, u32 *val)
+@@ -154,7 +191,7 @@ static int rtl2832_rd_demod_reg(struct rtl2832_dev *dev, int reg, u32 *val)
  	len = (msb >> 3) + 1;
  	mask = REG_MASK(msb - lsb);
  
@@ -191,7 +404,7 @@ index fa3b816..1c11d50 100644
  	if (ret)
  		goto err;
  
-@@ -197,7 +234,7 @@ static int rtl2832_wr_demod_reg(struct rtl2832_dev *dev, int reg, u32 val)
+@@ -184,7 +221,7 @@ static int rtl2832_wr_demod_reg(struct rtl2832_dev *dev, int reg, u32 val)
  	len = (msb >> 3) + 1;
  	mask = REG_MASK(msb - lsb);
  
@@ -200,7 +413,7 @@ index fa3b816..1c11d50 100644
  	if (ret)
  		goto err;
  
-@@ -211,7 +248,7 @@ static int rtl2832_wr_demod_reg(struct rtl2832_dev *dev, int reg, u32 val)
+@@ -198,7 +235,7 @@ static int rtl2832_wr_demod_reg(struct rtl2832_dev *dev, int reg, u32 val)
  	for (i = 0; i < len; i++)
  		writing[i] = (writing_tmp >> ((len - 1 - i) * 8)) & 0xff;
  
@@ -209,7 +422,7 @@ index fa3b816..1c11d50 100644
  	if (ret)
  		goto err;
  
-@@ -488,8 +525,7 @@ static int rtl2832_set_frontend(struct dvb_frontend *fe)
+@@ -475,8 +512,7 @@ static int rtl2832_set_frontend(struct dvb_frontend *fe)
  	}
  
  	for (j = 0; j < sizeof(bw_params[0]); j++) {
@@ -219,7 +432,7 @@ index fa3b816..1c11d50 100644
  		if (ret)
  			goto err;
  	}
-@@ -545,11 +581,11 @@ static int rtl2832_get_frontend(struct dvb_frontend *fe,
+@@ -532,11 +568,11 @@ static int rtl2832_get_frontend(struct dvb_frontend *fe,
  	if (dev->sleeping)
  		return 0;
  
@@ -233,7 +446,7 @@ index fa3b816..1c11d50 100644
  	if (ret)
  		goto err;
  
-@@ -680,7 +716,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
+@@ -667,7 +703,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
  	/* signal strength */
  	if (dev->fe_status & FE_HAS_SIGNAL) {
  		/* read digital AGC */
@@ -242,7 +455,7 @@ index fa3b816..1c11d50 100644
  		if (ret)
  			goto err;
  
-@@ -706,7 +742,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
+@@ -693,7 +729,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
  			{87659938, 87659938, 87885178, 88241743},
  		};
  
@@ -251,7 +464,7 @@ index fa3b816..1c11d50 100644
  		if (ret)
  			goto err;
  
-@@ -718,7 +754,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
+@@ -705,7 +741,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
  		if (hierarchy > HIERARCHY_NUM - 1)
  			goto err;
  
@@ -260,7 +473,7 @@ index fa3b816..1c11d50 100644
  		if (ret)
  			goto err;
  
-@@ -739,7 +775,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
+@@ -726,7 +762,7 @@ static int rtl2832_read_status(struct dvb_frontend *fe, enum fe_status *status)
  
  	/* BER */
  	if (dev->fe_status & FE_HAS_LOCK) {
@@ -269,7 +482,7 @@ index fa3b816..1c11d50 100644
  		if (ret)
  			goto err;
  
-@@ -789,6 +825,8 @@ static int rtl2832_read_ber(struct dvb_frontend *fe, u32 *ber)
+@@ -776,6 +812,8 @@ static int rtl2832_read_ber(struct dvb_frontend *fe, u32 *ber)
  
  /*
   * I2C gate/mux/repeater logic
@@ -278,7 +491,7 @@ index fa3b816..1c11d50 100644
   * There is delay mechanism to avoid unneeded I2C gate open / close. Gate close
   * is delayed here a little bit in order to see if there is sequence of I2C
   * messages sent to same I2C bus.
-@@ -800,7 +838,7 @@ static void rtl2832_i2c_gate_work(struct work_struct *work)
+@@ -787,7 +825,7 @@ static void rtl2832_i2c_gate_work(struct work_struct *work)
  	int ret;
  
  	/* close gate */
@@ -287,7 +500,7 @@ index fa3b816..1c11d50 100644
  	if (ret)
  		goto err;
  
-@@ -809,16 +847,19 @@ static void rtl2832_i2c_gate_work(struct work_struct *work)
+@@ -796,16 +834,19 @@ static void rtl2832_i2c_gate_work(struct work_struct *work)
  	dev_dbg(&client->dev, "failed=%d\n", ret);
  }
  
@@ -310,7 +523,7 @@ index fa3b816..1c11d50 100644
  	ret = regmap_update_bits(dev->regmap, 0x101, 0x08, 0x08);
  	if (ret)
  		goto err;
-@@ -829,9 +870,10 @@ static int rtl2832_select(struct i2c_mux_core *muxc, u32 chan_id)
+@@ -816,9 +857,10 @@ static int rtl2832_select(struct i2c_mux_core *muxc, u32 chan_id)
  	return ret;
  }
  
@@ -323,7 +536,7 @@ index fa3b816..1c11d50 100644
  
  	schedule_delayed_work(&dev->i2c_gate_work, usecs_to_jiffies(100));
  	return 0;
-@@ -890,6 +932,120 @@ static bool rtl2832_volatile_reg(struct device *dev, unsigned int reg)
+@@ -877,6 +919,120 @@ static bool rtl2832_volatile_reg(struct device *dev, unsigned int reg)
  	return false;
  }
  
@@ -444,7 +657,7 @@ index fa3b816..1c11d50 100644
  static struct dvb_frontend *rtl2832_get_dvb_frontend(struct i2c_client *client)
  {
  	struct rtl2832_dev *dev = i2c_get_clientdata(client);
-@@ -903,7 +1059,7 @@ static struct i2c_adapter *rtl2832_get_i2c_adapter(struct i2c_client *client)
+@@ -890,7 +1046,7 @@ static struct i2c_adapter *rtl2832_get_i2c_adapter(struct i2c_client *client)
  	struct rtl2832_dev *dev = i2c_get_clientdata(client);
  
  	dev_dbg(&client->dev, "\n");
@@ -453,7 +666,7 @@ index fa3b816..1c11d50 100644
  }
  
  static int rtl2832_slave_ts_ctrl(struct i2c_client *client, bool enable)
-@@ -917,29 +1073,29 @@ static int rtl2832_slave_ts_ctrl(struct i2c_client *client, bool enable)
+@@ -904,29 +1060,29 @@ static int rtl2832_slave_ts_ctrl(struct i2c_client *client, bool enable)
  		ret = rtl2832_wr_demod_reg(dev, DVBT_SOFT_RST, 0x0);
  		if (ret)
  			goto err;
@@ -489,7 +702,7 @@ index fa3b816..1c11d50 100644
  		if (ret)
  			goto err;
  		ret = rtl2832_wr_demod_reg(dev, DVBT_SOFT_RST, 0x1);
-@@ -971,9 +1127,9 @@ static int rtl2832_pid_filter_ctrl(struct dvb_frontend *fe, int onoff)
+@@ -958,9 +1114,9 @@ static int rtl2832_pid_filter_ctrl(struct dvb_frontend *fe, int onoff)
  		u8tmp = 0x00;
  
  	if (dev->slave_ts)
@@ -501,7 +714,7 @@ index fa3b816..1c11d50 100644
  	if (ret)
  		goto err;
  
-@@ -1010,9 +1166,9 @@ static int rtl2832_pid_filter(struct dvb_frontend *fe, u8 index, u16 pid,
+@@ -997,9 +1153,9 @@ static int rtl2832_pid_filter(struct dvb_frontend *fe, u8 index, u16 pid,
  	buf[3] = (dev->filters >> 24) & 0xff;
  
  	if (dev->slave_ts)
@@ -513,7 +726,7 @@ index fa3b816..1c11d50 100644
  	if (ret)
  		goto err;
  
-@@ -1021,9 +1177,9 @@ static int rtl2832_pid_filter(struct dvb_frontend *fe, u8 index, u16 pid,
+@@ -1008,9 +1164,9 @@ static int rtl2832_pid_filter(struct dvb_frontend *fe, u8 index, u16 pid,
  	buf[1] = (pid >> 0) & 0xff;
  
  	if (dev->slave_ts)
@@ -525,7 +738,7 @@ index fa3b816..1c11d50 100644
  	if (ret)
  		goto err;
  
-@@ -1041,6 +1197,12 @@ static int rtl2832_probe(struct i2c_client *client,
+@@ -1028,6 +1184,12 @@ static int rtl2832_probe(struct i2c_client *client,
  	struct rtl2832_dev *dev;
  	int ret;
  	u8 tmp;
@@ -538,7 +751,7 @@ index fa3b816..1c11d50 100644
  	static const struct regmap_range_cfg regmap_range_cfg[] = {
  		{
  			.selector_reg     = 0x00,
-@@ -1069,35 +1231,36 @@ static int rtl2832_probe(struct i2c_client *client,
+@@ -1056,35 +1218,36 @@ static int rtl2832_probe(struct i2c_client *client,
  	dev->sleeping = true;
  	INIT_DELAYED_WORK(&dev->i2c_gate_work, rtl2832_i2c_gate_work);
  	/* create regmap */
@@ -585,7 +798,7 @@ index fa3b816..1c11d50 100644
  
  	/* create dvb_frontend */
  	memcpy(&dev->fe.ops, &rtl2832_ops, sizeof(struct dvb_frontend_ops));
-@@ -1109,7 +1272,9 @@ static int rtl2832_probe(struct i2c_client *client,
+@@ -1096,7 +1259,9 @@ static int rtl2832_probe(struct i2c_client *client,
  	pdata->slave_ts_ctrl = rtl2832_slave_ts_ctrl;
  	pdata->pid_filter = rtl2832_pid_filter;
  	pdata->pid_filter_ctrl = rtl2832_pid_filter_ctrl;
@@ -596,7 +809,7 @@ index fa3b816..1c11d50 100644
  
  	dev_info(&client->dev, "Realtek RTL2832 successfully attached\n");
  	return 0;
-@@ -1130,7 +1295,7 @@ static int rtl2832_remove(struct i2c_client *client)
+@@ -1117,7 +1282,7 @@ static int rtl2832_remove(struct i2c_client *client)
  
  	cancel_delayed_work_sync(&dev->i2c_gate_work);
  
@@ -606,10 +819,10 @@ index fa3b816..1c11d50 100644
  	regmap_exit(dev->regmap);
  
 diff --git a/drivers/media/dvb-frontends/rtl2832.h b/drivers/media/dvb-frontends/rtl2832.h
-index 6a124ff..cb56cb2 100644
+index 85a8064bf933..d4ac4e842b50 100644
 --- a/drivers/media/dvb-frontends/rtl2832.h
 +++ b/drivers/media/dvb-frontends/rtl2832.h
-@@ -56,7 +56,9 @@ struct rtl2832_platform_data {
+@@ -43,7 +43,9 @@ struct rtl2832_platform_data {
  	int (*pid_filter)(struct dvb_frontend *, u8, u16, int);
  	int (*pid_filter_ctrl)(struct dvb_frontend *, int);
  /* private: Register access for SDR module use only */
@@ -621,10 +834,10 @@ index 6a124ff..cb56cb2 100644
  
  #endif /* RTL2832_H */
 diff --git a/drivers/media/dvb-frontends/rtl2832_priv.h b/drivers/media/dvb-frontends/rtl2832_priv.h
-index bd13d9a..6f3b69e 100644
+index 5f79f95b9475..826bba723361 100644
 --- a/drivers/media/dvb-frontends/rtl2832_priv.h
 +++ b/drivers/media/dvb-frontends/rtl2832_priv.h
-@@ -33,9 +33,10 @@
+@@ -20,9 +20,10 @@
  struct rtl2832_dev {
  	struct rtl2832_platform_data *pdata;
  	struct i2c_client *client;
@@ -637,10 +850,10 @@ index bd13d9a..6f3b69e 100644
  	enum fe_status fe_status;
  	u64 post_bit_error_prev; /* for old DVBv3 read_ber() calculation */
 diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
-index c6e78d8..6d2863f 100644
+index 60d1e59d2292..827e7baee82e 100644
 --- a/drivers/media/dvb-frontends/rtl2832_sdr.c
 +++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
-@@ -35,7 +35,6 @@
+@@ -21,7 +21,6 @@
  #include <linux/platform_device.h>
  #include <linux/jiffies.h>
  #include <linux/math64.h>
@@ -648,7 +861,7 @@ index c6e78d8..6d2863f 100644
  
  static bool rtl2832_sdr_emulated_fmt;
  module_param_named(emulated_formats, rtl2832_sdr_emulated_fmt, bool, 0644);
-@@ -120,7 +119,6 @@ struct rtl2832_sdr_dev {
+@@ -104,7 +103,6 @@ struct rtl2832_sdr_dev {
  	unsigned long flags;
  
  	struct platform_device *pdev;
@@ -656,7 +869,7 @@ index c6e78d8..6d2863f 100644
  
  	struct video_device vdev;
  	struct v4l2_device v4l2_dev;
-@@ -165,6 +163,47 @@ struct rtl2832_sdr_dev {
+@@ -149,6 +147,47 @@ struct rtl2832_sdr_dev {
  	unsigned long jiffies_next;
  };
  
@@ -704,7 +917,7 @@ index c6e78d8..6d2863f 100644
  /* Private functions */
  static struct rtl2832_sdr_frame_buf *rtl2832_sdr_get_next_fill_buf(
  		struct rtl2832_sdr_dev *dev)
-@@ -518,11 +557,11 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
+@@ -499,11 +538,11 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
  
  	f_sr = dev->f_adc;
  
@@ -718,7 +931,7 @@ index c6e78d8..6d2863f 100644
  	if (ret)
  		goto err;
  
-@@ -548,7 +587,7 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
+@@ -529,7 +568,7 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
  	buf[1] = (u32tmp >>  8) & 0xff;
  	buf[2] = (u32tmp >>  0) & 0xff;
  
@@ -727,7 +940,7 @@ index c6e78d8..6d2863f 100644
  	if (ret)
  		goto err;
  
-@@ -562,15 +601,15 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
+@@ -543,15 +582,15 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
  		u8tmp2 = 0xcd; /* enable ADC I, ADC Q */
  	}
  
@@ -746,7 +959,7 @@ index c6e78d8..6d2863f 100644
  	if (ret)
  		goto err;
  
-@@ -581,169 +620,168 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
+@@ -562,169 +601,168 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
  	buf[1] = (u32tmp >> 16) & 0xff;
  	buf[2] = (u32tmp >>  8) & 0xff;
  	buf[3] = (u32tmp >>  0) & 0xff;
@@ -1033,7 +1246,7 @@ index c6e78d8..6d2863f 100644
  	if (ret)
  		goto err;
  err:
-@@ -758,29 +796,29 @@ static void rtl2832_sdr_unset_adc(struct rtl2832_sdr_dev *dev)
+@@ -739,29 +777,29 @@ static void rtl2832_sdr_unset_adc(struct rtl2832_sdr_dev *dev)
  	dev_dbg(&pdev->dev, "\n");
  
  	/* PID filter */
@@ -1069,7 +1282,7 @@ index c6e78d8..6d2863f 100644
  	if (ret)
  		goto err;
  err:
-@@ -1360,7 +1398,6 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
+@@ -1342,7 +1380,6 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
  	subdev = pdata->v4l2_subdev;
  	dev->v4l2_subdev = pdata->v4l2_subdev;
  	dev->pdev = pdev;
@@ -1078,10 +1291,10 @@ index c6e78d8..6d2863f 100644
  	dev->f_adc = bands_adc[0].rangelow;
  	dev->f_tuner = bands_fm[0].rangelow;
 diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.h b/drivers/media/dvb-frontends/rtl2832_sdr.h
-index d28735c..71b73da 100644
+index 26ad709ccd98..22e9d8cd162c 100644
 --- a/drivers/media/dvb-frontends/rtl2832_sdr.h
 +++ b/drivers/media/dvb-frontends/rtl2832_sdr.h
-@@ -52,7 +52,10 @@ struct rtl2832_sdr_platform_data {
+@@ -38,7 +38,10 @@ struct rtl2832_sdr_platform_data {
  #define RTL2832_SDR_TUNER_R828D     0x2b
  	u8 tuner;
  
@@ -1094,12 +1307,12 @@ index d28735c..71b73da 100644
  	struct v4l2_subdev *v4l2_subdev;
  	struct dvb_usb_device *dvb_usb_device;
 diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
-index 324493e..ca1637e 100644
+index 14b93a7d3358..b1d0941a009d 100644
 --- a/drivers/media/dvb-frontends/si2168.c
 +++ b/drivers/media/dvb-frontends/si2168.c
-@@ -20,23 +20,53 @@
- 
- static const struct dvb_frontend_ops si2168_ops;
+@@ -18,23 +18,53 @@ static void cmd_init(struct si2168_cmd *cmd, const u8 *buf, int wlen, int rlen)
+ 	cmd->rlen = rlen;
+ }
  
 +/* Own I2C adapter locking is needed because of I2C gate logic. */
 +static int si2168_i2c_master_send_unlocked(const struct i2c_client *client,
@@ -1158,7 +1371,7 @@ index 324493e..ca1637e 100644
  		}
  	}
  
-@@ -45,12 +75,13 @@ static int si2168_cmd_execute(struct i2c_client *client, struct si2168_cmd *cmd)
+@@ -43,12 +73,13 @@ static int si2168_cmd_execute(struct i2c_client *client, struct si2168_cmd *cmd)
  		#define TIMEOUT 70
  		timeout = jiffies + msecs_to_jiffies(TIMEOUT);
  		while (!time_after(jiffies, timeout)) {
@@ -1175,7 +1388,7 @@ index 324493e..ca1637e 100644
  			}
  
  			/* firmware ready? */
-@@ -65,23 +96,32 @@ static int si2168_cmd_execute(struct i2c_client *client, struct si2168_cmd *cmd)
+@@ -63,23 +94,32 @@ static int si2168_cmd_execute(struct i2c_client *client, struct si2168_cmd *cmd)
  		/* error bit set? */
  		if ((cmd->args[0] >> 6) & 0x01) {
  			ret = -EREMOTEIO;
@@ -1213,7 +1426,7 @@ index 324493e..ca1637e 100644
  static int si2168_ts_bus_ctrl(struct dvb_frontend *fe, int acquire)
  {
  	struct i2c_client *client = fe->demodulator_priv;
-@@ -639,9 +679,14 @@ static int si2168_get_tune_settings(struct dvb_frontend *fe,
+@@ -587,15 +627,20 @@ static int si2168_get_tune_settings(struct dvb_frontend *fe,
  	return 0;
  }
  
@@ -1230,16 +1443,14 @@ index 324493e..ca1637e 100644
  	int ret;
  	struct si2168_cmd cmd;
  
-@@ -649,7 +694,7 @@ static int si2168_select(struct i2c_mux_core *muxc, u32 chan)
- 	memcpy(cmd.args, "\xc0\x0d\x01", 3);
- 	cmd.wlen = 3;
- 	cmd.rlen = 0;
+ 	/* open I2C gate */
+ 	cmd_init(&cmd, "\xc0\x0d\x01", 3, 0);
 -	ret = si2168_cmd_execute(client, &cmd);
 +	ret = si2168_cmd_execute_unlocked(client, &cmd);
  	if (ret)
  		goto err;
  
-@@ -659,9 +704,9 @@ static int si2168_select(struct i2c_mux_core *muxc, u32 chan)
+@@ -605,15 +650,15 @@ static int si2168_select(struct i2c_mux_core *muxc, u32 chan)
  	return ret;
  }
  
@@ -1251,24 +1462,22 @@ index 324493e..ca1637e 100644
  	int ret;
  	struct si2168_cmd cmd;
  
-@@ -669,7 +714,7 @@ static int si2168_deselect(struct i2c_mux_core *muxc, u32 chan)
- 	memcpy(cmd.args, "\xc0\x0d\x00", 3);
- 	cmd.wlen = 3;
- 	cmd.rlen = 0;
+ 	/* close I2C gate */
+ 	cmd_init(&cmd, "\xc0\x0d\x00", 3, 0);
 -	ret = si2168_cmd_execute(client, &cmd);
 +	ret = si2168_cmd_execute_unlocked(client, &cmd);
  	if (ret)
  		goto err;
  
-@@ -733,7 +778,6 @@ static int si2168_probe(struct i2c_client *client,
+@@ -680,7 +725,6 @@ static int si2168_probe(struct i2c_client *client,
  	}
  
  	i2c_set_clientdata(client, dev);
 -	mutex_init(&dev->i2c_mutex);
  
  	/* Initialize */
- 	memcpy(cmd.args, "\xc0\x12\x00\x0c\x00\x0d\x16\x00\x00\x00\x00\x00\x00", 13);
-@@ -786,22 +830,17 @@ static int si2168_probe(struct i2c_client *client,
+ 	cmd_init(&cmd, "\xc0\x12\x00\x0c\x00\x0d\x16\x00\x00\x00\x00\x00\x00",
+@@ -728,22 +772,17 @@ static int si2168_probe(struct i2c_client *client,
  		       (cmd.args[4] - '0') << 8 | (cmd.args[5]) << 0;
  
  	/* create mux i2c adapter for tuner */
@@ -1296,7 +1505,7 @@ index 324493e..ca1637e 100644
  	*config->fe = &dev->fe;
  	dev->ts_mode = config->ts_mode;
  	dev->ts_clock_inv = config->ts_clock_inv;
-@@ -829,7 +868,7 @@ static int si2168_remove(struct i2c_client *client)
+@@ -771,7 +810,7 @@ static int si2168_remove(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -1306,10 +1515,10 @@ index 324493e..ca1637e 100644
  	dev->fe.ops.release = NULL;
  	dev->fe.demodulator_priv = NULL;
 diff --git a/drivers/media/dvb-frontends/si2168_priv.h b/drivers/media/dvb-frontends/si2168_priv.h
-index 2d362e1..da3cdb6 100644
+index 804d5b30c697..d9e051d2e055 100644
 --- a/drivers/media/dvb-frontends/si2168_priv.h
 +++ b/drivers/media/dvb-frontends/si2168_priv.h
-@@ -31,8 +31,7 @@
+@@ -22,8 +22,7 @@
  
  /* state struct */
  struct si2168_dev {
@@ -1320,10 +1529,10 @@ index 2d362e1..da3cdb6 100644
  	enum fe_delivery_system delivery_system;
  	enum fe_status fe_status;
 diff --git a/drivers/media/usb/cx231xx/cx231xx-core.c b/drivers/media/usb/cx231xx/cx231xx-core.c
-index 4f43668..4e34a99 100644
+index 982cb56e97e9..ba984066179c 100644
 --- a/drivers/media/usb/cx231xx/cx231xx-core.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-core.c
-@@ -1340,12 +1340,6 @@ int cx231xx_dev_init(struct cx231xx *dev)
+@@ -1330,12 +1330,6 @@ int cx231xx_dev_init(struct cx231xx *dev)
  	if (errCode < 0)
  		return errCode;
  
@@ -1336,7 +1545,7 @@ index 4f43668..4e34a99 100644
  	errCode = cx231xx_i2c_mux_register(dev, 0);
  	if (errCode < 0)
  		return errCode;
-@@ -1473,7 +1467,8 @@ EXPORT_SYMBOL_GPL(cx231xx_dev_init);
+@@ -1463,7 +1457,8 @@ EXPORT_SYMBOL_GPL(cx231xx_dev_init);
  void cx231xx_dev_uninit(struct cx231xx *dev)
  {
  	/* Un Initialize I2C bus */
@@ -1347,10 +1556,10 @@ index 4f43668..4e34a99 100644
  	cx231xx_i2c_unregister(&dev->i2c_bus[1]);
  	cx231xx_i2c_unregister(&dev->i2c_bus[0]);
 diff --git a/drivers/media/usb/cx231xx/cx231xx-i2c.c b/drivers/media/usb/cx231xx/cx231xx-i2c.c
-index 6e1bef2..ad4f36f 100644
+index f33b6a077d57..0a0f9c159afd 100644
 --- a/drivers/media/usb/cx231xx/cx231xx-i2c.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-i2c.c
-@@ -561,34 +561,35 @@ void cx231xx_i2c_unregister(struct cx231xx_i2c *bus)
+@@ -547,34 +547,35 @@ void cx231xx_i2c_unregister(struct cx231xx_i2c *bus)
   * cx231xx_i2c_mux_select()
   * switch i2c master number 1 between port1 and port3
   */
@@ -1404,7 +1613,7 @@ index 6e1bef2..ad4f36f 100644
  }
  
  struct i2c_adapter *cx231xx_get_i2c_adap(struct cx231xx *dev, int i2c_port)
-@@ -601,9 +602,9 @@ struct i2c_adapter *cx231xx_get_i2c_adap(struct cx231xx *dev, int i2c_port)
+@@ -587,9 +588,9 @@ struct i2c_adapter *cx231xx_get_i2c_adap(struct cx231xx *dev, int i2c_port)
  	case I2C_2:
  		return &dev->i2c_bus[2].i2c_adap;
  	case I2C_1_MUX_1:
@@ -1417,10 +1626,10 @@ index 6e1bef2..ad4f36f 100644
  		BUG();
  	}
 diff --git a/drivers/media/usb/cx231xx/cx231xx.h b/drivers/media/usb/cx231xx/cx231xx.h
-index 6ffa4bd..fa35642 100644
+index b007611abc37..6ac806a9b203 100644
 --- a/drivers/media/usb/cx231xx/cx231xx.h
 +++ b/drivers/media/usb/cx231xx/cx231xx.h
-@@ -630,7 +630,6 @@ struct cx231xx {
+@@ -614,7 +614,6 @@ struct cx231xx {
  
  	/* I2C adapters: Master 1 & 2 (External) & Master 3 (Internal only) */
  	struct cx231xx_i2c i2c_bus[3];
@@ -1428,7 +1637,7 @@ index 6ffa4bd..fa35642 100644
  	struct i2c_adapter *i2c_mux_adap[2];
  
  	unsigned int xc_fw_load_done:1;
-@@ -767,9 +766,8 @@ int cx231xx_reset_analog_tuner(struct cx231xx *dev);
+@@ -751,9 +750,8 @@ int cx231xx_reset_analog_tuner(struct cx231xx *dev);
  void cx231xx_do_i2c_scan(struct cx231xx *dev, int i2c_port);
  int cx231xx_i2c_register(struct cx231xx_i2c *bus);
  void cx231xx_i2c_unregister(struct cx231xx_i2c *bus);
@@ -1440,10 +1649,10 @@ index 6ffa4bd..fa35642 100644
  
  /* Internal block control functions */
 diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-index c76e78f..5c805f8 100644
+index 1a36bda28542..8321fa186561 100644
 --- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
 +++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-@@ -1333,7 +1333,10 @@ static int rtl2832u_tuner_attach(struct dvb_usb_adapter *adap)
+@@ -1356,7 +1356,10 @@ static int rtl2832u_tuner_attach(struct dvb_usb_adapter *adap)
  	case TUNER_RTL2832_R828D:
  		pdata.clk = dev->rtl2832_platform_data.clk;
  		pdata.tuner = dev->tuner;
@@ -1455,216 +1664,3 @@ index c76e78f..5c805f8 100644
  		pdata.dvb_frontend = adap->fe[0];
  		pdata.dvb_usb_device = d;
  		pdata.v4l2_subdev = subdev;
-diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
-index ab16d3a..2988262 100644
---- a/drivers/media/dvb-frontends/lgdt3306a.c
-+++ b/drivers/media/dvb-frontends/lgdt3306a.c
-@@ -79,8 +79,6 @@ struct lgdt3306a_state {
- 	enum fe_modulation current_modulation;
- 	u32 current_frequency;
- 	u32 snr;
--
--	struct i2c_mux_core *muxc;
- };
- 
- /*
-@@ -2182,20 +2180,142 @@ static const struct dvb_frontend_ops lgdt3306a_ops = {
- 	.search               = lgdt3306a_search,
- };
- 
--static int lgdt3306a_select(struct i2c_mux_core *muxc, u32 chan)
-+/*
-+ * I2C gate logic
-+ * We must use unlocked I2C I/O because I2C adapter lock is already taken
-+ * by the caller (usually tuner driver).
-+ * select/unselect are unlocked versions of lgdt3306a_i2c_gate_ctrl
-+ */
-+static int lgdt3306a_select(struct i2c_adapter *adap, void *mux_priv, u32 chan)
- {
--	struct i2c_client *client = i2c_mux_priv(muxc);
--	struct lgdt3306a_state *state = i2c_get_clientdata(client);
-+	struct i2c_client *client = mux_priv;
-+	int ret;
-+	u8 val;
-+	u8 buf[3];
-+
-+	struct i2c_msg read_msg_1 = {
-+		.addr = client->addr,
-+		.flags = 0,
-+		.buf = "\x00\x02",
-+		.len = 2,
-+	};
-+	struct i2c_msg read_msg_2 = {
-+		.addr = client->addr,
-+		.flags = I2C_M_RD,
-+		.buf = &val,
-+		.len = 1,
-+	};
-+
-+	struct i2c_msg write_msg = {
-+		.addr = client->addr,
-+		.flags = 0,
-+		.len = 3,
-+		.buf = buf,
-+	};
-+
-+	ret = __i2c_transfer(client->adapter, &read_msg_1, 1);
-+	if (ret != 1)
-+	{
-+		pr_err("error (addr %02x reg 0x002 error (ret == %i)\n",
-+		       client->addr, ret);
-+		if (ret < 0)
-+			return ret;
-+		else
-+			return -EREMOTEIO;
-+	}
- 
--	return lgdt3306a_i2c_gate_ctrl(&state->frontend, 1);
-+	ret = __i2c_transfer(client->adapter, &read_msg_2, 1);
-+	if (ret != 1)
-+	{
-+		pr_err("error (addr %02x reg 0x002 error (ret == %i)\n",
-+		       client->addr, ret);
-+		if (ret < 0)
-+			return ret;
-+		else
-+			return -EREMOTEIO;
-+	}
-+
-+	buf[0] = 0x00;
-+	buf[1] = 0x02;
-+	val &= 0x7F;
-+	val |= LG3306_TUNERI2C_ON;
-+	buf[2] = val;
-+	ret = __i2c_transfer(client->adapter, &write_msg, 1);
-+	if (ret != 1) {
-+		pr_err("error (addr %02x %02x <- %02x, err = %i)\n",
-+		       write_msg.buf[0], write_msg.buf[1], write_msg.buf[2], ret);
-+		if (ret < 0)
-+			return ret;
-+		else
-+			return -EREMOTEIO;
-+	}
-+	return 0;
- }
- 
--static int lgdt3306a_deselect(struct i2c_mux_core *muxc, u32 chan)
-+static int lgdt3306a_deselect(struct i2c_adapter *adap, void *mux_priv, u32 chan)
- {
--	struct i2c_client *client = i2c_mux_priv(muxc);
--	struct lgdt3306a_state *state = i2c_get_clientdata(client);
-+	struct i2c_client *client = mux_priv;
-+	int ret;
-+	u8 val;
-+	u8 buf[3];
-+
-+	struct i2c_msg read_msg_1 = {
-+		.addr = client->addr,
-+		.flags = 0,
-+		.buf = "\x00\x02",
-+		.len = 2,
-+	};
-+	struct i2c_msg read_msg_2 = {
-+		.addr = client->addr,
-+		.flags = I2C_M_RD,
-+		.buf = &val,
-+		.len = 1,
-+	};
- 
--	return lgdt3306a_i2c_gate_ctrl(&state->frontend, 0);
-+	struct i2c_msg write_msg = {
-+		.addr = client->addr,
-+		.flags = 0,
-+		.len = 3,
-+		.buf = buf,
-+	};
-+
-+	ret = __i2c_transfer(client->adapter, &read_msg_1, 1);
-+	if (ret != 1)
-+	{
-+		pr_err("error (addr %02x reg 0x002 error (ret == %i)\n",
-+		       client->addr, ret);
-+		if (ret < 0)
-+			return ret;
-+		else
-+			return -EREMOTEIO;
-+	}
-+
-+	ret = __i2c_transfer(client->adapter, &read_msg_2, 1);
-+	if (ret != 1)
-+	{
-+		pr_err("error (addr %02x reg 0x002 error (ret == %i)\n",
-+		       client->addr, ret);
-+		if (ret < 0)
-+			return ret;
-+		else
-+			return -EREMOTEIO;
-+	}
-+
-+	buf[0] = 0x00;
-+	buf[1] = 0x02;
-+	val &= 0x7F;
-+	val |= LG3306_TUNERI2C_OFF;
-+	buf[2] = val;
-+	ret = __i2c_transfer(client->adapter, &write_msg, 1);
-+	if (ret != 1) {
-+		pr_err("error (addr %02x %02x <- %02x, err = %i)\n",
-+		       write_msg.buf[0], write_msg.buf[1], write_msg.buf[2], ret);
-+		if (ret < 0)
-+			return ret;
-+		else
-+			return -EREMOTEIO;
-+	}
-+	return 0;
- }
- 
- static int lgdt3306a_probe(struct i2c_client *client,
-@@ -2227,21 +2347,16 @@ static int lgdt3306a_probe(struct i2c_client *client,
- 	state->frontend.ops.release = NULL;
- 
- 	/* create mux i2c adapter for tuner */
--	state->muxc = i2c_mux_alloc(client->adapter, &client->dev,
--				  1, 0, I2C_MUX_LOCKED,
--				  lgdt3306a_select, lgdt3306a_deselect);
--	if (!state->muxc) {
--		ret = -ENOMEM;
-+	state->i2c_adap = i2c_add_mux_adapter(client->adapter, &client->dev,
-+			client, 0, 0, 0, lgdt3306a_select, lgdt3306a_deselect);
-+	if (state->i2c_adap == NULL) {
-+		ret = -ENODEV;
- 		goto err_kfree;
- 	}
--	state->muxc->priv = client;
--	ret = i2c_mux_add_adapter(state->muxc, 0, 0, 0);
--	if (ret)
--		goto err_kfree;
- 
- 	/* create dvb_frontend */
- 	fe->ops.i2c_gate_ctrl = NULL;
--	*config->i2c_adapter = state->muxc->adapter[0];
-+	*config->i2c_adapter = state->i2c_adap;
- 	*config->fe = fe;
- 
- 	dev_info(&client->dev, "LG Electronics LGDT3306A successfully identified\n");
-@@ -2261,7 +2376,7 @@ static int lgdt3306a_remove(struct i2c_client *client)
- {
- 	struct lgdt3306a_state *state = i2c_get_clientdata(client);
- 
--	i2c_mux_del_adapters(state->muxc);
-+	i2c_del_mux_adapter(state->i2c_adap);
- 
- 	state->frontend.ops.release = NULL;
- 	state->frontend.demodulator_priv = NULL;
-diff --git a/drivers/media/dvb-frontends/lgdt3306a.h b/drivers/media/dvb-frontends/lgdt3306a.h
-index 8b53044..99b28be 100644
---- a/drivers/media/dvb-frontends/lgdt3306a.h
-+++ b/drivers/media/dvb-frontends/lgdt3306a.h
-@@ -21,6 +21,8 @@
- #include <linux/i2c.h>
- #include <media/dvb_frontend.h>
- 
-+#define LG3306_TUNERI2C_ON  0x00
-+#define LG3306_TUNERI2C_OFF 0x80
- 
- enum lgdt3306a_mpeg_mode {
- 	LGDT3306A_MPEG_PARALLEL = 0,

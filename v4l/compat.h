@@ -57,6 +57,7 @@
 #include <linux/input.h>
 #include <linux/init.h>
 #include <linux/idr.h>
+#include <linux/kernel.h>
 #include "../linux/kernel_version.h"
 
 #ifdef RETPOLINE
@@ -256,7 +257,11 @@ static inline int pci_msi_enabled(void)
 #endif
 
 #ifndef KEY_IMAGES
-#define KEY_IMAGES           0x1ba   /* AL Image Browser */
+#define KEY_IMAGES		0x1ba   /* AL Image Browser */
+#endif
+
+#ifndef KEY_FULL_SCREEN
+#define KEY_FULL_SCREEN		0x174   /* AC View Toggle */
 #endif
 
 #ifdef NEED_DEFINE_PCI_DEVICE_TABLE
@@ -1095,7 +1100,6 @@ static inline int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
 #endif
 
 #ifdef NEED_KSTRTOU16
-#include <linux/kernel.h>
 
 static inline int kstrtou16(const char *s, unsigned int base, u16 *res)
 {
@@ -1109,7 +1113,6 @@ static inline int kstrtou16(const char *s, unsigned int base, u16 *res)
 #endif
 
 #ifdef NEED_KSTRTOUL
-#include <linux/kernel.h>
 
 #define kstrtoul strict_strtoul
 
@@ -2011,9 +2014,11 @@ static inline s64 ktime_ms_delta(const ktime_t later, const ktime_t earlier)
 
 #define of_node_cmp(s1, s2)          strcasecmp((s1), (s2))
 
+#ifndef BIT_ULL
 #define BIT_ULL(nr)        (1ULL << (nr))
 #define BIT_ULL_MASK(nr)   (1ULL << ((nr) % BITS_PER_LONG_LONG))
 #define BIT_ULL_WORD(nr)   ((nr) / BITS_PER_LONG_LONG)
+#endif
 
 #ifdef NEED_DMA_COERCE_MASK
 #include <linux/dma-mapping.h>
@@ -2322,6 +2327,39 @@ fwnode_graph_get_port_parent(const struct fwnode_handle *fwnode)
 static inline bool fwnode_device_is_available(struct fwnode_handle *fwnode)
 {
 	return false;
+}
+#endif
+
+#ifdef NEED_PROP_COUNT
+
+#ifdef NEED_PROP_READ_U32_ARRAY
+static inline int fwnode_property_read_u32_array(struct fwnode_handle *fwnode,
+						 const char *propname,
+						 u32 *val, size_t nval)
+{
+	return -ENODATA;
+}
+
+static inline int fwnode_property_read_u64_array(struct fwnode_handle *fwnode,
+						 const char *propnam,
+						 u64 *val, size_t nval)
+{
+	return -ENODATA;
+}
+#else
+#include <linux/property.h>
+#endif
+
+static inline int fwnode_property_count_u32(struct fwnode_handle *fwnode,
+					    const char *propname)
+{
+	return fwnode_property_read_u32_array(fwnode, propname, NULL, 0);
+}
+
+static inline int fwnode_property_count_u64(struct fwnode_handle *fwnode,
+					    const char *propname)
+{
+	return fwnode_property_read_u64_array(fwnode, propname, NULL, 0);
 }
 #endif
 
@@ -2706,6 +2744,10 @@ static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
 
 #ifdef NEED_STREAM_OPEN
 #define stream_open nonseekable_open
+#endif
+
+#ifdef NEED_I2C_NEW_DUMMY_DEVICE
+#define i2c_new_dummy_device(adap, addr) (i2c_new_dummy(adap, addr) ? : (struct i2c_client *)ERR_PTR(-ENODEV))
 #endif
 
 #endif /*  _COMPAT_H */

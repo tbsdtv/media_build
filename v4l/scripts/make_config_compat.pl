@@ -742,6 +742,9 @@ sub check_other_dependencies()
 	check_files_for_func("of_node_name_eq", "NEED_OF_NODE_NAME_EQ", "include/linux/of.h");
 	check_files_for_func("FOLL_LONGTERM", "NEED_FOLL_LONGTERM", "include/linux/mm.h");
 	check_files_for_func("stream_open", "NEED_STREAM_OPEN", "include/linux/fs.h");
+	check_files_for_func("fwnode_property_read_u32_array", "NEED_PROP_READ_U32_ARRAY", "include/linux/property.h");
+	check_files_for_func("fwnode_property_count_u32", "NEED_PROP_COUNT", "include/linux/property.h");
+	check_files_for_func("^i2c_new_dummy_device", "NEED_I2C_NEW_DUMMY_DEVICE", "include/linux/i2c.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

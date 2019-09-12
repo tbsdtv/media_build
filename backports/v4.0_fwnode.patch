@@ -1,22 +1,26 @@
-diff --git a/drivers/media/v4l2-core/v4l2-device.c b/drivers/media/v4l2-core/v4l2-device.c
-index 7129e43..9ed59da 100644
---- a/drivers/media/v4l2-core/v4l2-device.c
-+++ b/drivers/media/v4l2-core/v4l2-device.c
-@@ -131,7 +131,7 @@ void v4l2_device_unregister(struct v4l2_device *v4l2_dev)
- 			 * re-created by just probing the V4L2 driver.
- 			 */
- 			if (client &&
--			    !client->dev.of_node && !client->dev.fwnode)
-+			    !client->dev.of_node)
- 				i2c_unregister_device(client);
- 			continue;
- 		}
-@@ -140,7 +140,7 @@ void v4l2_device_unregister(struct v4l2_device *v4l2_dev)
- 		if (sd->flags & V4L2_SUBDEV_FL_IS_SPI) {
- 			struct spi_device *spi = v4l2_get_subdevdata(sd);
+diff --git a/drivers/media/v4l2-core/v4l2-i2c.c b/drivers/media/v4l2-core/v4l2-i2c.c
+index 5bf99e7c0c09..241c079ae28e 100644
+--- a/drivers/media/v4l2-core/v4l2-i2c.c
++++ b/drivers/media/v4l2-core/v4l2-i2c.c
+@@ -24,7 +24,7 @@ void v4l2_i2c_subdev_unregister(struct v4l2_subdev *sd)
+ 	 * registered by us, and would not be
+ 	 * re-created by just probing the V4L2 driver.
+ 	 */
+-	if (client && !client->dev.of_node && !client->dev.fwnode)
++	if (client && !client->dev.of_node)
+ 		i2c_unregister_device(client);
+ }
  
--			if (spi && !spi->dev.of_node && !spi->dev.fwnode)
-+			if (spi && !spi->dev.of_node)
- 				spi_unregister_device(spi);
- 			continue;
- 		}
+diff --git a/drivers/media/v4l2-core/v4l2-spi.c b/drivers/media/v4l2-core/v4l2-spi.c
+index eadecdff7349..65ac92a23fb3 100644
+--- a/drivers/media/v4l2-core/v4l2-spi.c
++++ b/drivers/media/v4l2-core/v4l2-spi.c
+@@ -12,7 +12,7 @@ void v4l2_spi_subdev_unregister(struct v4l2_subdev *sd)
+ {
+ 	struct spi_device *spi = v4l2_get_subdevdata(sd);
+ 
+-	if (spi && !spi->dev.of_node && !spi->dev.fwnode)
++	if (spi && !spi->dev.of_node)
+ 		spi_unregister_device(spi);
+ }
+ 

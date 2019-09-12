@@ -1,0 +1,590 @@
+diff --git a/drivers/media/i2c/adv7343.c b/drivers/media/i2c/adv7343.c
+index 63e94dfcb5d3..4a441ee99dd8 100644
+--- a/drivers/media/i2c/adv7343.c
++++ b/drivers/media/i2c/adv7343.c
+@@ -428,7 +428,8 @@ adv7343_get_pdata(struct i2c_client *client)
+ 	return pdata;
+ }
+ 
+-static int adv7343_probe(struct i2c_client *client)
++static int adv7343_probe(struct i2c_client *client,
++				const struct i2c_device_id *id)
+ {
+ 	struct adv7343_state *state;
+ 	int err;
+@@ -523,7 +524,7 @@ static struct i2c_driver adv7343_driver = {
+ 		.of_match_table = of_match_ptr(adv7343_of_match),
+ 		.name	= "adv7343",
+ 	},
+-	.probe_new	= adv7343_probe,
++	.probe		= adv7343_probe,
+ 	.remove		= adv7343_remove,
+ 	.id_table	= adv7343_id,
+ };
+diff --git a/drivers/media/i2c/adv748x/adv748x-core.c b/drivers/media/i2c/adv748x/adv748x-core.c
+index 0a47d474e97a..f57cd77a32fa 100644
+--- a/drivers/media/i2c/adv748x/adv748x-core.c
++++ b/drivers/media/i2c/adv748x/adv748x-core.c
+@@ -668,7 +668,8 @@ static void adv748x_dt_cleanup(struct adv748x_state *state)
+ 		of_node_put(state->endpoints[i]);
+ }
+ 
+-static int adv748x_probe(struct i2c_client *client)
++static int adv748x_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
+ {
+ 	struct adv748x_state *state;
+ 	int ret;
+@@ -796,6 +797,13 @@ static int adv748x_remove(struct i2c_client *client)
+ 	return 0;
+ }
+ 
++static const struct i2c_device_id adv748x_id[] = {
++	{ "adv7481", 0 },
++	{ "adv7482", 0 },
++	{ },
++};
++MODULE_DEVICE_TABLE(i2c, adv748x_id);
++
+ static const struct of_device_id adv748x_of_table[] = {
+ 	{ .compatible = "adi,adv7481", },
+ 	{ .compatible = "adi,adv7482", },
+@@ -808,8 +816,9 @@ static struct i2c_driver adv748x_driver = {
+ 		.name = "adv748x",
+ 		.of_match_table = adv748x_of_table,
+ 	},
+-	.probe_new = adv748x_probe,
++	.probe = adv748x_probe,
+ 	.remove = adv748x_remove,
++	.id_table = adv748x_id,
+ };
+ 
+ module_i2c_driver(adv748x_driver);
+diff --git a/drivers/media/i2c/et8ek8/et8ek8_driver.c b/drivers/media/i2c/et8ek8/et8ek8_driver.c
+index 256acf73d5ea..e6c06cb75d33 100644
+--- a/drivers/media/i2c/et8ek8/et8ek8_driver.c
++++ b/drivers/media/i2c/et8ek8/et8ek8_driver.c
+@@ -1396,7 +1396,8 @@ static int __maybe_unused et8ek8_resume(struct device *dev)
+ 	return __et8ek8_set_power(sensor, true);
+ }
+ 
+-static int et8ek8_probe(struct i2c_client *client)
++static int et8ek8_probe(struct i2c_client *client,
++			const struct i2c_device_id *devid)
+ {
+ 	struct et8ek8_sensor *sensor;
+ 	struct device *dev = &client->dev;
+@@ -1503,7 +1504,7 @@ static struct i2c_driver et8ek8_i2c_driver = {
+ 		.pm	= &et8ek8_pm_ops,
+ 		.of_match_table	= et8ek8_of_table,
+ 	},
+-	.probe_new	= et8ek8_probe,
++	.probe		= et8ek8_probe,
+ 	.remove		= __exit_p(et8ek8_remove),
+ 	.id_table	= et8ek8_id_table,
+ };
+diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+index 6011cec5e351..f3ff1af209f9 100644
+--- a/drivers/media/i2c/imx274.c
++++ b/drivers/media/i2c/imx274.c
+@@ -1821,7 +1821,8 @@ static const struct i2c_device_id imx274_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, imx274_id);
+ 
+-static int imx274_probe(struct i2c_client *client)
++static int imx274_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
+ {
+ 	struct v4l2_subdev *sd;
+ 	struct stimx274 *imx274;
+@@ -1983,7 +1984,7 @@ static struct i2c_driver imx274_i2c_driver = {
+ 		.name	= DRIVER_NAME,
+ 		.of_match_table	= imx274_of_id_table,
+ 	},
+-	.probe_new	= imx274_probe,
++	.probe		= imx274_probe,
+ 	.remove		= imx274_remove,
+ 	.id_table	= imx274_id,
+ };
+diff --git a/drivers/media/i2c/max2175.c b/drivers/media/i2c/max2175.c
+index 19a3ceea3bc2..7b226fadcdb8 100644
+--- a/drivers/media/i2c/max2175.c
++++ b/drivers/media/i2c/max2175.c
+@@ -1271,7 +1271,8 @@ static int max2175_refout_load_to_bits(struct i2c_client *client, u32 load,
+ 	return 0;
+ }
+ 
+-static int max2175_probe(struct i2c_client *client)
++static int max2175_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
+ {
+ 	bool master = true, am_hiz = false;
+ 	u32 refout_load, refout_bits = 0;	/* REFOUT disabled */
+@@ -1432,7 +1433,7 @@ static struct i2c_driver max2175_driver = {
+ 		.name	= DRIVER_NAME,
+ 		.of_match_table = max2175_of_ids,
+ 	},
+-	.probe_new	= max2175_probe,
++	.probe		= max2175_probe,
+ 	.remove		= max2175_remove,
+ 	.id_table	= max2175_id,
+ };
+diff --git a/drivers/media/i2c/mt9m001.c b/drivers/media/i2c/mt9m001.c
+index 5613072908ac..2df743cbe09d 100644
+--- a/drivers/media/i2c/mt9m001.c
++++ b/drivers/media/i2c/mt9m001.c
+@@ -726,7 +726,8 @@ static const struct v4l2_subdev_ops mt9m001_subdev_ops = {
+ 	.pad	= &mt9m001_subdev_pad_ops,
+ };
+ 
+-static int mt9m001_probe(struct i2c_client *client)
++static int mt9m001_probe(struct i2c_client *client,
++			 const struct i2c_device_id *did)
+ {
+ 	struct mt9m001 *mt9m001;
+ 	struct i2c_adapter *adapter = client->adapter;
+@@ -871,7 +872,7 @@ static struct i2c_driver mt9m001_i2c_driver = {
+ 		.pm = &mt9m001_pm_ops,
+ 		.of_match_table = mt9m001_of_match,
+ 	},
+-	.probe_new	= mt9m001_probe,
++	.probe		= mt9m001_probe,
+ 	.remove		= mt9m001_remove,
+ 	.id_table	= mt9m001_id,
+ };
+diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+index 17e8253f5748..3e01d1b86a25 100644
+--- a/drivers/media/i2c/mt9m111.c
++++ b/drivers/media/i2c/mt9m111.c
+@@ -1243,7 +1243,8 @@ static int mt9m111_probe_fw(struct i2c_client *client, struct mt9m111 *mt9m111)
+ 	return ret;
+ }
+ 
+-static int mt9m111_probe(struct i2c_client *client)
++static int mt9m111_probe(struct i2c_client *client,
++			 const struct i2c_device_id *did)
+ {
+ 	struct mt9m111 *mt9m111;
+ 	struct i2c_adapter *adapter = client->adapter;
+@@ -1387,7 +1388,7 @@ static struct i2c_driver mt9m111_i2c_driver = {
+ 		.name = "mt9m111",
+ 		.of_match_table = of_match_ptr(mt9m111_of_match),
+ 	},
+-	.probe_new	= mt9m111_probe,
++	.probe		= mt9m111_probe,
+ 	.remove		= mt9m111_remove,
+ 	.id_table	= mt9m111_id,
+ };
+diff --git a/drivers/media/i2c/ov2640.c b/drivers/media/i2c/ov2640.c
+index 4a4bd5b665a1..8fd17661dd78 100644
+--- a/drivers/media/i2c/ov2640.c
++++ b/drivers/media/i2c/ov2640.c
+@@ -1190,7 +1190,8 @@ static int ov2640_probe_dt(struct i2c_client *client,
+ /*
+  * i2c_driver functions
+  */
+-static int ov2640_probe(struct i2c_client *client)
++static int ov2640_probe(struct i2c_client *client,
++			const struct i2c_device_id *did)
+ {
+ 	struct ov2640_priv	*priv;
+ 	struct i2c_adapter	*adapter = client->adapter;
+@@ -1301,7 +1302,7 @@ static struct i2c_driver ov2640_i2c_driver = {
+ 		.name = "ov2640",
+ 		.of_match_table = of_match_ptr(ov2640_of_match),
+ 	},
+-	.probe_new = ov2640_probe,
++	.probe    = ov2640_probe,
+ 	.remove   = ov2640_remove,
+ 	.id_table = ov2640_id,
+ };
+diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
+index f4ded0669ff9..a71277e361ff 100644
+--- a/drivers/media/i2c/ov2659.c
++++ b/drivers/media/i2c/ov2659.c
+@@ -1384,7 +1384,8 @@ ov2659_get_pdata(struct i2c_client *client)
+ 	return pdata;
+ }
+ 
+-static int ov2659_probe(struct i2c_client *client)
++static int ov2659_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
+ {
+ 	const struct ov2659_platform_data *pdata = ov2659_get_pdata(client);
+ 	struct v4l2_subdev *sd;
+@@ -1512,7 +1513,7 @@ static struct i2c_driver ov2659_i2c_driver = {
+ 		.name	= DRIVER_NAME,
+ 		.of_match_table = of_match_ptr(ov2659_of_match),
+ 	},
+-	.probe_new	= ov2659_probe,
++	.probe		= ov2659_probe,
+ 	.remove		= ov2659_remove,
+ 	.id_table	= ov2659_id,
+ };
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index a0229dfe1983..4cd246812ae2 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -2936,7 +2936,8 @@ static int ov5640_check_chip_id(struct ov5640_dev *sensor)
+ 	return ret;
+ }
+ 
+-static int ov5640_probe(struct i2c_client *client)
++static int ov5640_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct fwnode_handle *endpoint;
+@@ -3099,7 +3100,7 @@ static struct i2c_driver ov5640_i2c_driver = {
+ 		.of_match_table	= ov5640_dt_ids,
+ 	},
+ 	.id_table = ov5640_id,
+-	.probe_new = ov5640_probe,
++	.probe    = ov5640_probe,
+ 	.remove   = ov5640_remove,
+ };
+ 
+diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+index 7721cce8353c..9602b9201b3e 100644
+--- a/drivers/media/i2c/ov5645.c
++++ b/drivers/media/i2c/ov5645.c
+@@ -1039,7 +1039,8 @@ static const struct v4l2_subdev_ops ov5645_subdev_ops = {
+ 	.pad = &ov5645_subdev_pad_ops,
+ };
+ 
+-static int ov5645_probe(struct i2c_client *client)
++static int ov5645_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct device_node *endpoint;
+@@ -1274,7 +1275,7 @@ static struct i2c_driver ov5645_i2c_driver = {
+ 		.of_match_table = of_match_ptr(ov5645_of_match),
+ 		.name  = "ov5645",
+ 	},
+-	.probe_new = ov5645_probe,
++	.probe  = ov5645_probe,
+ 	.remove = ov5645_remove,
+ 	.id_table = ov5645_id,
+ };
+diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
+index e7d2e5b4ad4b..4589631798c9 100644
+--- a/drivers/media/i2c/ov5647.c
++++ b/drivers/media/i2c/ov5647.c
+@@ -547,7 +547,8 @@ static int ov5647_parse_dt(struct device_node *np)
+ 	return ret;
+ }
+ 
+-static int ov5647_probe(struct i2c_client *client)
++static int ov5647_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct ov5647 *sensor;
+@@ -643,7 +644,7 @@ static struct i2c_driver ov5647_driver = {
+ 		.of_match_table = of_match_ptr(ov5647_of_match),
+ 		.name	= SENSOR_NAME,
+ 	},
+-	.probe_new	= ov5647_probe,
++	.probe		= ov5647_probe,
+ 	.remove		= ov5647_remove,
+ 	.id_table	= ov5647_id,
+ };
+diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
+index 2cc6a678069a..2e9a758736a1 100644
+--- a/drivers/media/i2c/ov772x.c
++++ b/drivers/media/i2c/ov772x.c
+@@ -1352,7 +1352,8 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
+  * i2c_driver function
+  */
+ 
+-static int ov772x_probe(struct i2c_client *client)
++static int ov772x_probe(struct i2c_client *client,
++			const struct i2c_device_id *did)
+ {
+ 	struct ov772x_priv	*priv;
+ 	int			ret;
+@@ -1485,7 +1486,7 @@ static struct i2c_driver ov772x_i2c_driver = {
+ 		.name = "ov772x",
+ 		.of_match_table = ov772x_of_match,
+ 	},
+-	.probe_new = ov772x_probe,
++	.probe    = ov772x_probe,
+ 	.remove   = ov772x_remove,
+ 	.id_table = ov772x_id,
+ };
+diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
+index 732655fe4ba3..a2f8f19bca7c 100644
+--- a/drivers/media/i2c/ov7740.c
++++ b/drivers/media/i2c/ov7740.c
+@@ -1062,7 +1062,8 @@ static const struct regmap_config ov7740_regmap_config = {
+ 	.max_register	= OV7740_MAX_REGISTER,
+ };
+ 
+-static int ov7740_probe(struct i2c_client *client)
++static int ov7740_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
+ {
+ 	struct ov7740 *ov7740;
+ 	struct v4l2_subdev *sd;
+@@ -1224,7 +1225,7 @@ static struct i2c_driver ov7740_i2c_driver = {
+ 		.pm = &ov7740_pm_ops,
+ 		.of_match_table = of_match_ptr(ov7740_of_match),
+ 	},
+-	.probe_new = ov7740_probe,
++	.probe    = ov7740_probe,
+ 	.remove   = ov7740_remove,
+ 	.id_table = ov7740_id,
+ };
+diff --git a/drivers/media/i2c/ov9650.c b/drivers/media/i2c/ov9650.c
+index 8b56011446a9..30ab2225fbd0 100644
+--- a/drivers/media/i2c/ov9650.c
++++ b/drivers/media/i2c/ov9650.c
+@@ -1485,7 +1485,8 @@ static int ov965x_detect_sensor(struct v4l2_subdev *sd)
+ 	return ret;
+ }
+ 
+-static int ov965x_probe(struct i2c_client *client)
++static int ov965x_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
+ {
+ 	const struct ov9650_platform_data *pdata = client->dev.platform_data;
+ 	struct v4l2_subdev *sd;
+@@ -1612,7 +1613,7 @@ static struct i2c_driver ov965x_i2c_driver = {
+ 		.name	= DRIVER_NAME,
+ 		.of_match_table = of_match_ptr(ov965x_of_match),
+ 	},
+-	.probe_new	= ov965x_probe,
++	.probe		= ov965x_probe,
+ 	.remove		= ov965x_remove,
+ 	.id_table	= ov965x_id,
+ };
+diff --git a/drivers/media/i2c/s5c73m3/s5c73m3-core.c b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+index 5b4c4a3547c9..7633aebd8c06 100644
+--- a/drivers/media/i2c/s5c73m3/s5c73m3-core.c
++++ b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+@@ -1650,7 +1650,8 @@ static int s5c73m3_get_platform_data(struct s5c73m3 *state)
+ 	return 0;
+ }
+ 
+-static int s5c73m3_probe(struct i2c_client *client)
++static int s5c73m3_probe(struct i2c_client *client,
++				const struct i2c_device_id *id)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct v4l2_subdev *sd;
+@@ -1805,7 +1806,7 @@ static struct i2c_driver s5c73m3_i2c_driver = {
+ 		.of_match_table = of_match_ptr(s5c73m3_of_match),
+ 		.name	= DRIVER_NAME,
+ 	},
+-	.probe_new	= s5c73m3_probe,
++	.probe		= s5c73m3_probe,
+ 	.remove		= s5c73m3_remove,
+ 	.id_table	= s5c73m3_id,
+ };
+diff --git a/drivers/media/i2c/s5k5baf.c b/drivers/media/i2c/s5k5baf.c
+index cdfe008ba39f..8e6de06b3e72 100644
+--- a/drivers/media/i2c/s5k5baf.c
++++ b/drivers/media/i2c/s5k5baf.c
+@@ -1946,7 +1946,8 @@ static int s5k5baf_configure_regulators(struct s5k5baf *state)
+ 	return ret;
+ }
+ 
+-static int s5k5baf_probe(struct i2c_client *c)
++static int s5k5baf_probe(struct i2c_client *c,
++			const struct i2c_device_id *id)
+ {
+ 	struct s5k5baf *state;
+ 	int ret;
+@@ -2045,7 +2046,7 @@ static struct i2c_driver s5k5baf_i2c_driver = {
+ 		.of_match_table = s5k5baf_of_match,
+ 		.name = S5K5BAF_DRIVER_NAME
+ 	},
+-	.probe_new	= s5k5baf_probe,
++	.probe		= s5k5baf_probe,
+ 	.remove		= s5k5baf_remove,
+ 	.id_table	= s5k5baf_id,
+ };
+diff --git a/drivers/media/i2c/s5k6a3.c b/drivers/media/i2c/s5k6a3.c
+index bc6cc5a558db..3b7721f81be2 100644
+--- a/drivers/media/i2c/s5k6a3.c
++++ b/drivers/media/i2c/s5k6a3.c
+@@ -275,7 +275,8 @@ static const struct v4l2_subdev_ops s5k6a3_subdev_ops = {
+ 	.pad = &s5k6a3_pad_ops,
+ };
+ 
+-static int s5k6a3_probe(struct i2c_client *client)
++static int s5k6a3_probe(struct i2c_client *client,
++				const struct i2c_device_id *id)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct s5k6a3 *sensor;
+@@ -377,7 +378,7 @@ static struct i2c_driver s5k6a3_driver = {
+ 		.of_match_table	= of_match_ptr(s5k6a3_of_match),
+ 		.name		= S5K6A3_DRV_NAME,
+ 	},
+-	.probe_new	= s5k6a3_probe,
++	.probe		= s5k6a3_probe,
+ 	.remove		= s5k6a3_remove,
+ 	.id_table	= s5k6a3_ids,
+ };
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index 9adf8e034e7d..2d78e846d822 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -2847,7 +2847,8 @@ static struct smiapp_hwconfig *smiapp_get_hwconfig(struct device *dev)
+ 	return NULL;
+ }
+ 
+-static int smiapp_probe(struct i2c_client *client)
++static int smiapp_probe(struct i2c_client *client,
++			const struct i2c_device_id *devid)
+ {
+ 	struct smiapp_sensor *sensor;
+ 	struct smiapp_hwconfig *hwcfg = smiapp_get_hwconfig(&client->dev);
+@@ -3171,7 +3172,7 @@ static struct i2c_driver smiapp_i2c_driver = {
+ 		.name = SMIAPP_NAME,
+ 		.pm = &smiapp_pm_ops,
+ 	},
+-	.probe_new = smiapp_probe,
++	.probe	= smiapp_probe,
+ 	.remove	= smiapp_remove,
+ 	.id_table = smiapp_id_table,
+ };
+diff --git a/drivers/media/i2c/tc358743.c b/drivers/media/i2c/tc358743.c
+index dbbab75f135e..bc2e35e5ce61 100644
+--- a/drivers/media/i2c/tc358743.c
++++ b/drivers/media/i2c/tc358743.c
+@@ -2026,7 +2026,8 @@ static inline int tc358743_probe_of(struct tc358743_state *state)
+ }
+ #endif
+ 
+-static int tc358743_probe(struct i2c_client *client)
++static int tc358743_probe(struct i2c_client *client,
++			  const struct i2c_device_id *id)
+ {
+ 	static struct v4l2_dv_timings default_timing =
+ 		V4L2_DV_BT_CEA_640X480P59_94;
+@@ -2221,7 +2222,7 @@ static struct i2c_driver tc358743_driver = {
+ 		.name = "tc358743",
+ 		.of_match_table = of_match_ptr(tc358743_of_match),
+ 	},
+-	.probe_new = tc358743_probe,
++	.probe = tc358743_probe,
+ 	.remove = tc358743_remove,
+ 	.id_table = tc358743_id,
+ };
+diff --git a/drivers/media/i2c/ths8200.c b/drivers/media/i2c/ths8200.c
+index c52fe84cba1b..f5ee28058ea2 100644
+--- a/drivers/media/i2c/ths8200.c
++++ b/drivers/media/i2c/ths8200.c
+@@ -436,7 +436,8 @@ static const struct v4l2_subdev_ops ths8200_ops = {
+ 	.pad = &ths8200_pad_ops,
+ };
+ 
+-static int ths8200_probe(struct i2c_client *client)
++static int ths8200_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
+ {
+ 	struct ths8200_state *state;
+ 	struct v4l2_subdev *sd;
+@@ -501,7 +502,7 @@ static struct i2c_driver ths8200_driver = {
+ 		.name = "ths8200",
+ 		.of_match_table = of_match_ptr(ths8200_of_match),
+ 	},
+-	.probe_new = ths8200_probe,
++	.probe = ths8200_probe,
+ 	.remove = ths8200_remove,
+ 	.id_table = ths8200_id,
+ };
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index edad49cebcdf..dffe357e9f7a 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -1695,7 +1695,8 @@ static const char * const tvp5150_test_patterns[2] = {
+ 	"Black screen"
+ };
+ 
+-static int tvp5150_probe(struct i2c_client *c)
++static int tvp5150_probe(struct i2c_client *c,
++			 const struct i2c_device_id *id)
+ {
+ 	struct tvp5150 *core;
+ 	struct v4l2_subdev *sd;
+@@ -1844,7 +1845,7 @@ static struct i2c_driver tvp5150_driver = {
+ 		.of_match_table = of_match_ptr(tvp5150_of_match),
+ 		.name	= "tvp5150",
+ 	},
+-	.probe_new	= tvp5150_probe,
++	.probe		= tvp5150_probe,
+ 	.remove		= tvp5150_remove,
+ 	.id_table	= tvp5150_id,
+ };
+diff --git a/drivers/media/i2c/tvp7002.c b/drivers/media/i2c/tvp7002.c
+index de313b1306da..1b8175cab017 100644
+--- a/drivers/media/i2c/tvp7002.c
++++ b/drivers/media/i2c/tvp7002.c
+@@ -930,7 +930,7 @@ tvp7002_get_pdata(struct i2c_client *client)
+  * Returns zero when successful, -EINVAL if register read fails or
+  * -EIO if i2c access is not available.
+  */
+-static int tvp7002_probe(struct i2c_client *c)
++static int tvp7002_probe(struct i2c_client *c, const struct i2c_device_id *id)
+ {
+ 	struct tvp7002_config *pdata = tvp7002_get_pdata(c);
+ 	struct v4l2_subdev *sd;
+@@ -1075,7 +1075,7 @@ static struct i2c_driver tvp7002_driver = {
+ 		.of_match_table = of_match_ptr(tvp7002_of_match),
+ 		.name = TVP7002_MODULE_NAME,
+ 	},
+-	.probe_new = tvp7002_probe,
++	.probe = tvp7002_probe,
+ 	.remove = tvp7002_remove,
+ 	.id_table = tvp7002_id,
+ };
+diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
+index 7541698a0be1..7d53422b3b56 100644
+--- a/drivers/media/radio/si470x/radio-si470x-i2c.c
++++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
+@@ -330,7 +330,8 @@ static irqreturn_t si470x_i2c_interrupt(int irq, void *dev_id)
+ /*
+  * si470x_i2c_probe - probe for the device
+  */
+-static int si470x_i2c_probe(struct i2c_client *client)
++static int si470x_i2c_probe(struct i2c_client *client,
++			    const struct i2c_device_id *id)
+ {
+ 	struct si470x_device *radio;
+ 	int retval = 0;
+@@ -543,7 +544,7 @@ static struct i2c_driver si470x_i2c_driver = {
+ 		.pm		= &si470x_i2c_pm,
+ #endif
+ 	},
+-	.probe_new		= si470x_i2c_probe,
++	.probe			= si470x_i2c_probe,
+ 	.remove			= si470x_i2c_remove,
+ 	.id_table		= si470x_i2c_id,
+ };
+diff --git a/drivers/media/radio/si4713/si4713.c b/drivers/media/radio/si4713/si4713.c
+index 7f3aee495ed3..7d97de2fa56c 100644
+--- a/drivers/media/radio/si4713/si4713.c
++++ b/drivers/media/radio/si4713/si4713.c
+@@ -1427,7 +1427,8 @@ static const struct v4l2_ctrl_config si4713_alt_freqs_ctrl = {
+  * I2C driver interface
+  */
+ /* si4713_probe - probe for the device */
+-static int si4713_probe(struct i2c_client *client)
++static int si4713_probe(struct i2c_client *client,
++					const struct i2c_device_id *id)
+ {
+ 	struct si4713_device *sdev;
+ 	struct v4l2_ctrl_handler *hdl;
+@@ -1659,7 +1660,7 @@ static struct i2c_driver si4713_i2c_driver = {
+ 		.name	= "si4713",
+ 		.of_match_table = of_match_ptr(si4713_of_match),
+ 	},
+-	.probe_new	= si4713_probe,
++	.probe		= si4713_probe,
+ 	.remove         = si4713_remove,
+ 	.id_table       = si4713_id,
+ };

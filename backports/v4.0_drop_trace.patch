@@ -1,8 +1,8 @@
 diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 914b50a..8429f18 100644
+index 4489744fbbd9..b10977cdcfa0 100644
 --- a/drivers/media/common/videobuf2/videobuf2-core.c
 +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -30,8 +30,6 @@
+@@ -29,8 +29,6 @@
  #include <media/videobuf2-core.h>
  #include <media/v4l2-mc.h>
  
@@ -11,15 +11,15 @@ index 914b50a..8429f18 100644
  static int debug;
  module_param(debug, int, 0644);
  
-@@ -933,7 +931,6 @@ void vb2_buffer_done(struct vb2_buffer *vb, enum vb2_buffer_state state)
- 	atomic_dec(&q->owned_by_drv_count);
+@@ -966,7 +964,6 @@ void vb2_buffer_done(struct vb2_buffer *vb, enum vb2_buffer_state state)
+ 
  	spin_unlock_irqrestore(&q->done_lock, flags);
  
 -	trace_vb2_buf_done(q, vb);
  
  	switch (state) {
  	case VB2_BUF_STATE_QUEUED:
-@@ -1234,7 +1231,6 @@ static void __enqueue_in_driver(struct vb2_buffer *vb)
+@@ -1263,7 +1260,6 @@ static void __enqueue_in_driver(struct vb2_buffer *vb)
  	vb->state = VB2_BUF_STATE_ACTIVE;
  	atomic_inc(&q->owned_by_drv_count);
  
@@ -27,7 +27,7 @@ index 914b50a..8429f18 100644
  
  	call_void_vb_qop(vb, buf_queue, vb);
  }
-@@ -1405,7 +1401,6 @@ int vb2_core_qbuf(struct vb2_queue *q, unsigned int index, void *pb)
+@@ -1619,7 +1615,6 @@ int vb2_core_qbuf(struct vb2_queue *q, unsigned int index, void *pb,
  	if (pb)
  		call_void_bufop(q, copy_timestamp, vb, pb);
  
@@ -35,7 +35,7 @@ index 914b50a..8429f18 100644
  
  	/*
  	 * If already streaming, give the buffer to driver for processing.
-@@ -1621,7 +1616,6 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
+@@ -1835,7 +1830,6 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
  	list_del(&vb->queued_entry);
  	q->queued_count--;
  
@@ -44,33 +44,32 @@ index 914b50a..8429f18 100644
  	/* go back to dequeued state */
  	__vb2_dqbuf(vb);
 diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
-index b50c9cc..942c741 100644
+index d4c35b9c7d75..7003ea9db688 100644
 --- a/drivers/media/v4l2-core/Makefile
 +++ b/drivers/media/v4l2-core/Makefile
-@@ -12,9 +12,6 @@ ifeq ($(CONFIG_COMPAT),y)
-   videodev-objs += v4l2-compat-ioctl32.o
- endif
- #obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
--ifeq ($(CONFIG_TRACEPOINTS),y)
--  videodev-objs += v4l2-trace.o
--endif
+@@ -9,7 +9,7 @@ videodev-objs	:=	v4l2-dev.o v4l2-ioctl.o v4l2-device.o v4l2-fh.o \
+ 			v4l2-event.o v4l2-ctrls.o v4l2-subdev.o v4l2-clk.o \
+ 			v4l2-async.o
+ videodev-$(CONFIG_COMPAT) += v4l2-compat-ioctl32.o
+-videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
++#videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
  videodev-$(CONFIG_MEDIA_CONTROLLER) += v4l2-mc.o
  
- obj-$(CONFIG_VIDEO_V4L2) += videodev.o
+ #obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index ce0d711..84cab64 100644
+index 9484cc2619e4..d7522e1831b0 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -30,8 +30,6 @@
- #include <media/videobuf2-v4l2.h>
+@@ -27,8 +27,6 @@
  #include <media/v4l2-mc.h>
+ #include <media/v4l2-mem2mem.h>
  
 -#include <trace/events/v4l2.h>
 -
  /* Zero out the end of the struct pointed to by p.  Everything after, but
   * not including, the specified field is cleared. */
  #define CLEAR_AFTER_FIELD(p, field) \
-@@ -2907,13 +2905,6 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
+@@ -3095,13 +3093,6 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
  		goto out;
  	}
  

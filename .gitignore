@@ -1,3 +1,4 @@
 patches/
 .pc
 dvb-firmwares.tar.bz2
+v4l/*.mod

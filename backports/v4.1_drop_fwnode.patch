@@ -1,21 +1,21 @@
 diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
-index 098ad5fd5231..c70b8d7a02b5 100644
+index 4d42418e603e..d4c35b9c7d75 100644
 --- a/drivers/media/v4l2-core/Makefile
 +++ b/drivers/media/v4l2-core/Makefile
-@@ -10,7 +10,7 @@ videodev-objs	:=	v4l2-dev.o v4l2-ioctl.o v4l2-device.o v4l2-fh.o \
- ifeq ($(CONFIG_COMPAT),y)
-   videodev-objs += v4l2-compat-ioctl32.o
- endif
+@@ -12,7 +12,7 @@ videodev-$(CONFIG_COMPAT) += v4l2-compat-ioctl32.o
+ videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
+ videodev-$(CONFIG_MEDIA_CONTROLLER) += v4l2-mc.o
+ 
 -obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
 +#obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
- ifeq ($(CONFIG_TRACEPOINTS),y)
-   videodev-objs += vb2-trace.o v4l2-trace.o
- endif
+ obj-$(CONFIG_VIDEO_V4L2) += videodev.o
+ obj-$(CONFIG_VIDEO_V4L2) += v4l2-common.o
+ obj-$(CONFIG_VIDEO_V4L2) += v4l2-dv-timings.o
 diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index 754182d29668..03be03031df2 100644
+index 8cb2c504a05c..3de214237d1c 100644
 --- a/include/media/media-entity.h
 +++ b/include/media/media-entity.h
-@@ -21,7 +21,6 @@
+@@ -13,7 +13,6 @@
  
  #include <linux/bitmap.h>
  #include <linux/bug.h>
@@ -24,10 +24,10 @@ index 754182d29668..03be03031df2 100644
  #include <linux/list.h>
  #include <linux/media.h>
 diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-index ecc1233a873e..af0a10f15d1d 100644
+index f6a7bcd13197..b28eeef45959 100644
 --- a/include/media/v4l2-fwnode.h
 +++ b/include/media/v4l2-fwnode.h
-@@ -18,7 +18,6 @@
+@@ -15,7 +15,6 @@
  #define _V4L2_FWNODE_H
  
  #include <linux/errno.h>

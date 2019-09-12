@@ -1,8 +1,8 @@
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index aff0ab7bf83d..12d0072c52c2 100644
+index 7d77e4d30c8a..c5544db37e67 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -358,6 +358,7 @@ static const struct dma_buf_ops vb2_dc_dmabuf_ops = {
+@@ -352,6 +352,7 @@ static const struct dma_buf_ops vb2_dc_dmabuf_ops = {
  	.map_dma_buf = vb2_dc_dmabuf_ops_map,
  	.unmap_dma_buf = vb2_dc_dmabuf_ops_unmap,
  	.map = vb2_dc_dmabuf_ops_kmap,
@@ -11,10 +11,10 @@ index aff0ab7bf83d..12d0072c52c2 100644
  	.mmap = vb2_dc_dmabuf_ops_mmap,
  	.release = vb2_dc_dmabuf_ops_release,
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-index f02876d971d7..3ed3f9791116 100644
+index ed706b2a263c..154dc1c94653 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-@@ -507,6 +507,7 @@ static const struct dma_buf_ops vb2_dma_sg_dmabuf_ops = {
+@@ -496,6 +496,7 @@ static const struct dma_buf_ops vb2_dma_sg_dmabuf_ops = {
  	.map_dma_buf = vb2_dma_sg_dmabuf_ops_map,
  	.unmap_dma_buf = vb2_dma_sg_dmabuf_ops_unmap,
  	.map = vb2_dma_sg_dmabuf_ops_kmap,
@@ -23,10 +23,10 @@ index f02876d971d7..3ed3f9791116 100644
  	.mmap = vb2_dma_sg_dmabuf_ops_mmap,
  	.release = vb2_dma_sg_dmabuf_ops_release,
 diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-index 6dfbd5b05907..cdec023a918d 100644
+index 04d51ca63223..9c0bf5c0034e 100644
 --- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 +++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-@@ -346,6 +346,7 @@ static const struct dma_buf_ops vb2_vmalloc_dmabuf_ops = {
+@@ -345,6 +345,7 @@ static const struct dma_buf_ops vb2_vmalloc_dmabuf_ops = {
  	.map_dma_buf = vb2_vmalloc_dmabuf_ops_map,
  	.unmap_dma_buf = vb2_vmalloc_dmabuf_ops_unmap,
  	.map = vb2_vmalloc_dmabuf_ops_kmap,
@@ -35,15 +35,15 @@ index 6dfbd5b05907..cdec023a918d 100644
  	.mmap = vb2_vmalloc_dmabuf_ops_mmap,
  	.release = vb2_vmalloc_dmabuf_ops_release,
 diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 58725f890b5b..30157b592666 100644
+index bae060fae862..7795dc1b0e4e 100644
 --- a/include/linux/dma-buf.h
 +++ b/include/linux/dma-buf.h
-@@ -205,6 +205,8 @@ struct dma_buf_ops {
- 	 * to be restarted.
+@@ -234,6 +234,8 @@ struct dma_buf_ops {
  	 */
- 	int (*end_cpu_access)(struct dma_buf *, enum dma_data_direction);
+ 	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
+ 
 +	void *(*map_atomic)(struct dma_buf *, unsigned long);
 +	void (*unmap_atomic)(struct dma_buf *, unsigned long, void *);
- 	void *(*map)(struct dma_buf *, unsigned long);
- 	void (*unmap)(struct dma_buf *, unsigned long, void *);
- 
+ 	/**
+ 	 * @map:
+ 	 *

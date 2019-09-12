@@ -28,6 +28,7 @@ add drx39xxj.patch
 
 [5.1.255]
 add v5.1_vm_map_pages.patch
+add v5.1_devm_i2c_new_dummy_device.patch
 
 [5.0.255]
 add v5.0_ipu3-cio2.patch
@@ -49,6 +50,7 @@ add v4.15_pmdown_time.patch
 [4.14.255]
 add v4.14_saa7146_timer_cast.patch
 add v4.14_module_param_call.patch
+add v4.14_fwnode_handle_get.patch
 
 [4.13.255]
 add v4.13_remove_nospec_h.patch
@@ -68,6 +70,7 @@ add v4.10_refcount.patch
 [4.9.255]
 add v4.9_mm_address.patch
 add v4.9_dvb_net_max_mtu.patch
+add v4.9_probe_new.patch
 
 [4.8.255]
 add v4.8_user_pages_flag.patch

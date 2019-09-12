@@ -3,6 +3,11 @@
 VIDEO_IPU3_IMGU
 VIDEO_DW9714
 
+[5.2]
+# Needs fwnode_graph_get_endpoint_by_id
+VIDEO_IPU3_CIO2
+VIDEO_OMAP3
+
 [4.19.0]
 # Needs union ec_response_get_next_data_v1.cec_message
 VIDEO_CROS_EC_CEC
@@ -28,6 +33,7 @@ RADIO_WL128X
 [4.10.0]
 # needs *probe_new in struct i2c_driver
 VIDEO_OV5670
+VIDEO_OV5675
 VIDEO_OV8856
 VIDEO_OV7251
 VIDEO_IMX258
@@ -96,8 +102,6 @@ CEC_CORE
 MEDIA_CEC_SUPPORT
 # needs fwnode_property_read_u32
 SDR_MAX2175
-# needs dma_wmb
-VIDEO_IPU3_CIO2
 # needs fwnode_property_present
 VIDEO_OV7670
 VIDEO_OV5640

@@ -50,13 +50,13 @@ endif	# TOPDIR
 default:: prepare firmware
 	@echo Kernel build directory is $(OUTDIR)
 	$(MAKE) -C ../linux apply_patches
-	$(MAKE) -C $(OUTDIR) SUBDIRS=$(PWD) $(MYCFLAGS) modules
+	$(MAKE) -C $(OUTDIR) M=$(PWD) $(MYCFLAGS) modules
 	./scripts/rmmod.pl check
 #	$(MAKE) checkpatch
 
 mismatch:: prepare firmware
 	@echo Kernel build directory is $(OUTDIR)
-	$(MAKE) -Wfatal-errors -C $(OUTDIR) SUBDIRS=$(PWD) $(MYCFLAGS) CONFIG_DEBUG_SECTION_MISMATCH=y modules
+	$(MAKE) -Wfatal-errors -C $(OUTDIR) M=$(PWD) $(MYCFLAGS) CONFIG_DEBUG_SECTION_MISMATCH=y modules
 	./scripts/rmmod.pl check
 
 # Anything in this target shouldn't be build in parallel.
@@ -173,13 +173,13 @@ KDIR26		:= /lib/modules/$(KERNELRELEASE)/kernel/drivers/media
 HOSTCC:=$(CC)
 CC += -I$(obj)
 
-CPPFLAGS := -I$(SUBDIRS)/../linux/include -I$(SUBDIRS)/../linux/include/uapi $(CPPFLAGS) -I$(SUBDIRS)/
+CPPFLAGS := -I$(M)/../linux/include -I$(M)/../linux/include/uapi $(CPPFLAGS) -I$(M)/
 
 # Needed for kernel 2.6.24 or up
-KBUILD_CPPFLAGS := -I$(SUBDIRS)/../linux/include -I$(SUBDIRS)/../linux/include/uapi $(KBUILD_CPPFLAGS) -I$(SUBDIRS)/
+KBUILD_CPPFLAGS := -I$(M)/../linux/include -I$(M)/../linux/include/uapi $(KBUILD_CPPFLAGS) -I$(M)/
 
 # Needed for kernel 2.6.29 or up
-LINUXINCLUDE    := -I$(SUBDIRS)/../linux/include -I$(SUBDIRS)/../linux/include/uapi $(LINUXINCLUDE) -I$(SUBDIRS)/
+LINUXINCLUDE    := -I$(M)/../linux/include -I$(M)/../linux/include/uapi $(LINUXINCLUDE) -I$(M)/
 
 MYCFLAGS :=
 
