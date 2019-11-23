@@ -745,6 +745,8 @@ sub check_other_dependencies()
 	check_files_for_func("fwnode_property_read_u32_array", "NEED_PROP_READ_U32_ARRAY", "include/linux/property.h");
 	check_files_for_func("fwnode_property_count_u32", "NEED_PROP_COUNT", "include/linux/property.h");
 	check_files_for_func("^i2c_new_dummy_device", "NEED_I2C_NEW_DUMMY_DEVICE", "include/linux/i2c.h");
+	check_files_for_func("i2c_new_ancillary_device", "NEED_I2C_NEW_ANCILLARY_DEVICE", "include/linux/i2c.h");
+	check_files_for_func("untagged_addr", "NEED_UNTAGGED_ADDR", "include/linux/mm.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

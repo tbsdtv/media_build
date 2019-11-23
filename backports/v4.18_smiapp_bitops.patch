@@ -1,0 +1,13 @@
+diff --git a/drivers/media/i2c/smiapp/smiapp-reg.h b/drivers/media/i2c/smiapp/smiapp-reg.h
+index 43505cd0616e..1562d962f6ba 100644
+--- a/drivers/media/i2c/smiapp/smiapp-reg.h
++++ b/drivers/media/i2c/smiapp/smiapp-reg.h
+@@ -11,7 +11,7 @@
+ #ifndef __SMIAPP_REG_H_
+ #define __SMIAPP_REG_H_
+ 
+-#include <linux/bits.h>
++#include <linux/bitops.h>
+ 
+ #include "smiapp-reg-defs.h"
+ 

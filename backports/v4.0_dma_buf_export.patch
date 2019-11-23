@@ -81,7 +81,7 @@ index 2f0b431..e287e66 100644
 -struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info);
 +struct dma_buf *dma_buf_export_named(void *priv, const struct dma_buf_ops *ops,
 +			       size_t size, int flags, const char *,
-+			       struct reservation_object *);
++			       void *);
 +
 +#define dma_buf_export(priv, ops, size, flags, resv)	\
 +	dma_buf_export_named(priv, ops, size, flags, KBUILD_MODNAME, resv)
