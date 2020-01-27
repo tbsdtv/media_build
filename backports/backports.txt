@@ -26,12 +26,16 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 
+[5.5.255]
+add v5.5_alsa_pcm_api_updates.patch
+
 [5.1.255]
 add v5.1_vm_map_pages.patch
 add v5.1_devm_i2c_new_dummy_device.patch
 
 [5.0.255]
 add v5.0_ipu3-cio2.patch
+add v5.0_time32.patch
 
 [4.20.255]
 add v4.20_access_ok.patch

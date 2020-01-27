@@ -2755,8 +2755,68 @@ static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
 	(i2c_new_secondary_device(client, name, addr) ? : (struct i2c_client *)ERR_PTR(-ENODEV))
 #endif
 
+#ifdef NEED_I2C_NEW_CLIENT_DEVICE
+#include <linux/i2c.h>
+static inline struct i2c_client *
+i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *info)
+{
+	struct i2c_client *ret;
+
+	ret = i2c_new_device(adap, info);
+	return ret ? : ERR_PTR(-ENOMEM);
+}
+#endif
+
+#ifdef NEED_I2C_NEW_SCANNED_DEVICE
+#include <linux/i2c.h>
+static inline struct i2c_client *
+i2c_new_scanned_device(struct i2c_adapter *adap,
+		       struct i2c_board_info *info,
+		       unsigned short const *addr_list,
+		       int (*probe)(struct i2c_adapter *adap, unsigned short addr))
+{
+	struct i2c_client *client;
+
+	client = i2c_new_probed_device(adap, info, addr_list, probe);
+	return client ? : ERR_PTR(-ENOMEM);
+}
+#endif
+
+#ifdef NEED_I2C_CLIENT_HAS_DRIVER
+#include <linux/i2c.h>
+static inline bool i2c_client_has_driver(struct i2c_client *client)
+{
+	return !IS_ERR_OR_NULL(client) && client->dev.driver;
+}
+#endif
+
 #ifdef NEED_UNTAGGED_ADDR
 #define untagged_addr(addr) (addr)
+#endif
+
+#ifdef NEED_COMPAT_PTR_IOCTL
+#ifdef CONFIG_COMPAT
+#include <linux/compat.h>
+
+static inline long compat_ptr_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+        if (!file->f_op->unlocked_ioctl)
+                return -ENOIOCTLCMD;
+
+        return file->f_op->unlocked_ioctl(file, cmd, (unsigned long)compat_ptr(arg));
+}
+#else
+#define compat_ptr_ioctl NULL
+#endif
+#endif
+
+#ifdef NEED_TIMESPEC64
+#define timespec64 timespec
+#define ns_to_timespec64 ns_to_timespec
+#endif
+
+#ifdef NEED_SIZEOF_FIELD
+#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
 #endif
 
 #endif /*  _COMPAT_H */

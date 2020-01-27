@@ -1,0 +1,1016 @@
+diff --git b/drivers/media/pci/cobalt/cobalt-alsa-pcm.c a/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
+index 9e7504e3cfd8..38d00935a292 100644
+--- b/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
++++ a/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/init.h>
+ #include <linux/kernel.h>
++#include <linux/vmalloc.h>
+ #include <linux/delay.h>
+ 
+ #include <media/v4l2-device.h>
+@@ -237,6 +238,54 @@ static int snd_cobalt_pcm_capture_close(struct snd_pcm_substream *substream)
+ 	return 0;
+ }
+ 
++static int snd_cobalt_pcm_ioctl(struct snd_pcm_substream *substream,
++		     unsigned int cmd, void *arg)
++{
++	return snd_pcm_lib_ioctl(substream, cmd, arg);
++}
++
++
++static int snd_pcm_alloc_vmalloc_buffer(struct snd_pcm_substream *subs,
++					size_t size)
++{
++	struct snd_pcm_runtime *runtime = subs->runtime;
++
++	dprintk("Allocating vbuffer\n");
++	if (runtime->dma_area) {
++		if (runtime->dma_bytes > size)
++			return 0;
++
++		vfree(runtime->dma_area);
++	}
++	runtime->dma_area = vmalloc(size);
++	if (!runtime->dma_area)
++		return -ENOMEM;
++
++	runtime->dma_bytes = size;
++
++	return 0;
++}
++
++static int snd_cobalt_pcm_hw_params(struct snd_pcm_substream *substream,
++			 struct snd_pcm_hw_params *params)
++{
++	dprintk("%s called\n", __func__);
++
++	return snd_pcm_alloc_vmalloc_buffer(substream,
++					   params_buffer_bytes(params));
++}
++
++static int snd_cobalt_pcm_hw_free(struct snd_pcm_substream *substream)
++{
++	if (substream->runtime->dma_area) {
++		dprintk("freeing pcm capture region\n");
++		vfree(substream->runtime->dma_area);
++		substream->runtime->dma_area = NULL;
++	}
++
++	return 0;
++}
++
+ static int snd_cobalt_pcm_prepare(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_cobalt_card *cobsc = snd_pcm_substream_chip(substream);
+@@ -441,20 +490,36 @@ snd_pcm_uframes_t snd_cobalt_pcm_pb_pointer(struct snd_pcm_substream *substream)
+ 	       substream->runtime->buffer_size;
+ }
+ 
++static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
++					     unsigned long offset)
++{
++	void *pageptr = subs->runtime->dma_area + offset;
++
++	return vmalloc_to_page(pageptr);
++}
++
+ static const struct snd_pcm_ops snd_cobalt_pcm_capture_ops = {
+ 	.open		= snd_cobalt_pcm_capture_open,
+ 	.close		= snd_cobalt_pcm_capture_close,
++	.ioctl		= snd_cobalt_pcm_ioctl,
++	.hw_params	= snd_cobalt_pcm_hw_params,
++	.hw_free	= snd_cobalt_pcm_hw_free,
+ 	.prepare	= snd_cobalt_pcm_prepare,
+ 	.trigger	= snd_cobalt_pcm_trigger,
+ 	.pointer	= snd_cobalt_pcm_pointer,
++	.page		= snd_pcm_get_vmalloc_page,
+ };
+ 
+ static const struct snd_pcm_ops snd_cobalt_pcm_playback_ops = {
+ 	.open		= snd_cobalt_pcm_playback_open,
+ 	.close		= snd_cobalt_pcm_playback_close,
++	.ioctl		= snd_cobalt_pcm_ioctl,
++	.hw_params	= snd_cobalt_pcm_hw_params,
++	.hw_free	= snd_cobalt_pcm_hw_free,
+ 	.prepare	= snd_cobalt_pcm_pb_prepare,
+ 	.trigger	= snd_cobalt_pcm_pb_trigger,
+ 	.pointer	= snd_cobalt_pcm_pb_pointer,
++	.page		= snd_pcm_get_vmalloc_page,
+ };
+ 
+ int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
+@@ -490,8 +555,6 @@ int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
+ 
+ 		snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_CAPTURE,
+ 				&snd_cobalt_pcm_capture_ops);
+-		snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC,
+-					       NULL, 0, 0);
+ 		sp->info_flags = 0;
+ 		sp->private_data = cobsc;
+ 		strscpy(sp->name, "cobalt", sizeof(sp->name));
+@@ -516,8 +579,6 @@ int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
+ 
+ 		snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_PLAYBACK,
+ 				&snd_cobalt_pcm_playback_ops);
+-		snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC,
+-					       NULL, 0, 0);
+ 		sp->info_flags = 0;
+ 		sp->private_data = cobsc;
+ 		strscpy(sp->name, "cobalt", sizeof(sp->name));
+diff --git b/drivers/media/pci/cx18/cx18-alsa-pcm.c a/drivers/media/pci/cx18/cx18-alsa-pcm.c
+index bed28b4b41f7..13f858c41836 100644
+--- b/drivers/media/pci/cx18/cx18-alsa-pcm.c
++++ a/drivers/media/pci/cx18/cx18-alsa-pcm.c
+@@ -11,6 +11,7 @@
+ 
+ #include <linux/init.h>
+ #include <linux/kernel.h>
++#include <linux/vmalloc.h>
+ 
+ #include <media/v4l2-device.h>
+ 
+@@ -200,6 +201,67 @@ static int snd_cx18_pcm_capture_close(struct snd_pcm_substream *substream)
+ 	return 0;
+ }
+ 
++static int snd_cx18_pcm_ioctl(struct snd_pcm_substream *substream,
++		     unsigned int cmd, void *arg)
++{
++	struct snd_cx18_card *cxsc = snd_pcm_substream_chip(substream);
++	int ret;
++
++	snd_cx18_lock(cxsc);
++	ret = snd_pcm_lib_ioctl(substream, cmd, arg);
++	snd_cx18_unlock(cxsc);
++	return ret;
++}
++
++
++static int snd_pcm_alloc_vmalloc_buffer(struct snd_pcm_substream *subs,
++					size_t size)
++{
++	struct snd_pcm_runtime *runtime = subs->runtime;
++
++	dprintk("Allocating vbuffer\n");
++	if (runtime->dma_area) {
++		if (runtime->dma_bytes > size)
++			return 0;
++
++		vfree(runtime->dma_area);
++	}
++	runtime->dma_area = vmalloc(size);
++	if (!runtime->dma_area)
++		return -ENOMEM;
++
++	runtime->dma_bytes = size;
++
++	return 0;
++}
++
++static int snd_cx18_pcm_hw_params(struct snd_pcm_substream *substream,
++			 struct snd_pcm_hw_params *params)
++{
++	dprintk("%s called\n", __func__);
++
++	return snd_pcm_alloc_vmalloc_buffer(substream,
++					   params_buffer_bytes(params));
++}
++
++static int snd_cx18_pcm_hw_free(struct snd_pcm_substream *substream)
++{
++	struct snd_cx18_card *cxsc = snd_pcm_substream_chip(substream);
++	unsigned long flags;
++	unsigned char *dma_area = NULL;
++
++	spin_lock_irqsave(&cxsc->slock, flags);
++	if (substream->runtime->dma_area) {
++		dprintk("freeing pcm capture region\n");
++		dma_area = substream->runtime->dma_area;
++		substream->runtime->dma_area = NULL;
++	}
++	spin_unlock_irqrestore(&cxsc->slock, flags);
++	vfree(dma_area);
++
++	return 0;
++}
++
+ static int snd_cx18_pcm_prepare(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_cx18_card *cxsc = snd_pcm_substream_chip(substream);
+@@ -229,12 +291,24 @@ snd_pcm_uframes_t snd_cx18_pcm_pointer(struct snd_pcm_substream *substream)
+ 	return hwptr_done;
+ }
+ 
++static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
++					     unsigned long offset)
++{
++	void *pageptr = subs->runtime->dma_area + offset;
++
++	return vmalloc_to_page(pageptr);
++}
++
+ static const struct snd_pcm_ops snd_cx18_pcm_capture_ops = {
+ 	.open		= snd_cx18_pcm_capture_open,
+ 	.close		= snd_cx18_pcm_capture_close,
++	.ioctl		= snd_cx18_pcm_ioctl,
++	.hw_params	= snd_cx18_pcm_hw_params,
++	.hw_free	= snd_cx18_pcm_hw_free,
+ 	.prepare	= snd_cx18_pcm_prepare,
+ 	.trigger	= snd_cx18_pcm_trigger,
+ 	.pointer	= snd_cx18_pcm_pointer,
++	.page		= snd_pcm_get_vmalloc_page,
+ };
+ 
+ int snd_cx18_pcm_create(struct snd_cx18_card *cxsc)
+@@ -260,7 +334,6 @@ int snd_cx18_pcm_create(struct snd_cx18_card *cxsc)
+ 
+ 	snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_CAPTURE,
+ 			&snd_cx18_pcm_capture_ops);
+-	snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
+ 	sp->info_flags = 0;
+ 	sp->private_data = cxsc;
+ 	strscpy(sp->name, cx->card_name, sizeof(sp->name));
+diff --git b/drivers/media/pci/cx23885/cx23885-alsa.c a/drivers/media/pci/cx23885/cx23885-alsa.c
+index df44ed7393a0..a8e980c6dacb 100644
+--- b/drivers/media/pci/cx23885/cx23885-alsa.c
++++ a/drivers/media/pci/cx23885/cx23885-alsa.c
+@@ -495,6 +495,7 @@ static struct page *snd_cx23885_page(struct snd_pcm_substream *substream,
+ static const struct snd_pcm_ops snd_cx23885_pcm_ops = {
+ 	.open = snd_cx23885_pcm_open,
+ 	.close = snd_cx23885_close,
++	.ioctl = snd_pcm_lib_ioctl,
+ 	.hw_params = snd_cx23885_hw_params,
+ 	.hw_free = snd_cx23885_hw_free,
+ 	.prepare = snd_cx23885_prepare,
+diff --git b/drivers/media/pci/cx25821/cx25821-alsa.c a/drivers/media/pci/cx25821/cx25821-alsa.c
+index 301616426d8a..c2f2d7c782c7 100644
+--- b/drivers/media/pci/cx25821/cx25821-alsa.c
++++ a/drivers/media/pci/cx25821/cx25821-alsa.c
+@@ -639,6 +639,7 @@ static struct page *snd_cx25821_page(struct snd_pcm_substream *substream,
+ static const struct snd_pcm_ops snd_cx25821_pcm_ops = {
+ 	.open = snd_cx25821_pcm_open,
+ 	.close = snd_cx25821_close,
++	.ioctl = snd_pcm_lib_ioctl,
+ 	.hw_params = snd_cx25821_hw_params,
+ 	.hw_free = snd_cx25821_hw_free,
+ 	.prepare = snd_cx25821_prepare,
+diff --git b/drivers/media/pci/cx88/cx88-alsa.c a/drivers/media/pci/cx88/cx88-alsa.c
+index 7d7aceecc985..e1e71ae293ed 100644
+--- b/drivers/media/pci/cx88/cx88-alsa.c
++++ a/drivers/media/pci/cx88/cx88-alsa.c
+@@ -585,6 +585,7 @@ static struct page *snd_cx88_page(struct snd_pcm_substream *substream,
+ static const struct snd_pcm_ops snd_cx88_pcm_ops = {
+ 	.open = snd_cx88_pcm_open,
+ 	.close = snd_cx88_close,
++	.ioctl = snd_pcm_lib_ioctl,
+ 	.hw_params = snd_cx88_hw_params,
+ 	.hw_free = snd_cx88_hw_free,
+ 	.prepare = snd_cx88_prepare,
+diff --git b/drivers/media/pci/ivtv/ivtv-alsa-pcm.c a/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
+index 8f346d7da9c8..9e6019a159f4 100644
+--- b/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
++++ a/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
+@@ -16,6 +16,8 @@
+ #include "ivtv-alsa.h"
+ #include "ivtv-alsa-pcm.h"
+ 
++#include <linux/vmalloc.h>
++
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+ 
+@@ -204,6 +206,67 @@ static int snd_ivtv_pcm_capture_close(struct snd_pcm_substream *substream)
+ 	return 0;
+ }
+ 
++static int snd_ivtv_pcm_ioctl(struct snd_pcm_substream *substream,
++		     unsigned int cmd, void *arg)
++{
++	struct snd_ivtv_card *itvsc = snd_pcm_substream_chip(substream);
++	int ret;
++
++	snd_ivtv_lock(itvsc);
++	ret = snd_pcm_lib_ioctl(substream, cmd, arg);
++	snd_ivtv_unlock(itvsc);
++	return ret;
++}
++
++
++static int snd_pcm_alloc_vmalloc_buffer(struct snd_pcm_substream *subs,
++					size_t size)
++{
++	struct snd_pcm_runtime *runtime = subs->runtime;
++
++	dprintk("Allocating vbuffer\n");
++	if (runtime->dma_area) {
++		if (runtime->dma_bytes > size)
++			return 0;
++
++		vfree(runtime->dma_area);
++	}
++	runtime->dma_area = vmalloc(size);
++	if (!runtime->dma_area)
++		return -ENOMEM;
++
++	runtime->dma_bytes = size;
++
++	return 0;
++}
++
++static int snd_ivtv_pcm_hw_params(struct snd_pcm_substream *substream,
++			 struct snd_pcm_hw_params *params)
++{
++	dprintk("%s called\n", __func__);
++
++	return snd_pcm_alloc_vmalloc_buffer(substream,
++					   params_buffer_bytes(params));
++}
++
++static int snd_ivtv_pcm_hw_free(struct snd_pcm_substream *substream)
++{
++	struct snd_ivtv_card *itvsc = snd_pcm_substream_chip(substream);
++	unsigned long flags;
++	unsigned char *dma_area = NULL;
++
++	spin_lock_irqsave(&itvsc->slock, flags);
++	if (substream->runtime->dma_area) {
++		dprintk("freeing pcm capture region\n");
++		dma_area = substream->runtime->dma_area;
++		substream->runtime->dma_area = NULL;
++	}
++	spin_unlock_irqrestore(&itvsc->slock, flags);
++	vfree(dma_area);
++
++	return 0;
++}
++
+ static int snd_ivtv_pcm_prepare(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_ivtv_card *itvsc = snd_pcm_substream_chip(substream);
+@@ -233,12 +296,24 @@ snd_pcm_uframes_t snd_ivtv_pcm_pointer(struct snd_pcm_substream *substream)
+ 	return hwptr_done;
+ }
+ 
++static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
++					     unsigned long offset)
++{
++	void *pageptr = subs->runtime->dma_area + offset;
++
++	return vmalloc_to_page(pageptr);
++}
++
+ static const struct snd_pcm_ops snd_ivtv_pcm_capture_ops = {
+ 	.open		= snd_ivtv_pcm_capture_open,
+ 	.close		= snd_ivtv_pcm_capture_close,
++	.ioctl		= snd_ivtv_pcm_ioctl,
++	.hw_params	= snd_ivtv_pcm_hw_params,
++	.hw_free	= snd_ivtv_pcm_hw_free,
+ 	.prepare	= snd_ivtv_pcm_prepare,
+ 	.trigger	= snd_ivtv_pcm_trigger,
+ 	.pointer	= snd_ivtv_pcm_pointer,
++	.page		= snd_pcm_get_vmalloc_page,
+ };
+ 
+ int snd_ivtv_pcm_create(struct snd_ivtv_card *itvsc)
+@@ -264,7 +339,6 @@ int snd_ivtv_pcm_create(struct snd_ivtv_card *itvsc)
+ 
+ 	snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_CAPTURE,
+ 			&snd_ivtv_pcm_capture_ops);
+-	snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
+ 	sp->info_flags = 0;
+ 	sp->private_data = itvsc;
+ 	strscpy(sp->name, itv->card_name, sizeof(sp->name));
+diff --git b/drivers/media/pci/saa7134/saa7134-alsa.c a/drivers/media/pci/saa7134/saa7134-alsa.c
+index 544ca57eee75..0385127dd7ff 100644
+--- b/drivers/media/pci/saa7134/saa7134-alsa.c
++++ a/drivers/media/pci/saa7134/saa7134-alsa.c
+@@ -865,6 +865,7 @@ static struct page *snd_card_saa7134_page(struct snd_pcm_substream *substream,
+ static const struct snd_pcm_ops snd_card_saa7134_capture_ops = {
+ 	.open =			snd_card_saa7134_capture_open,
+ 	.close =		snd_card_saa7134_capture_close,
++	.ioctl =		snd_pcm_lib_ioctl,
+ 	.hw_params =		snd_card_saa7134_hw_params,
+ 	.hw_free =		snd_card_saa7134_hw_free,
+ 	.prepare =		snd_card_saa7134_capture_prepare,
+diff --git b/drivers/media/pci/solo6x10/solo6x10-g723.c a/drivers/media/pci/solo6x10/solo6x10-g723.c
+index d6d16e8fd997..eaa57d835ea8 100644
+--- b/drivers/media/pci/solo6x10/solo6x10-g723.c
++++ a/drivers/media/pci/solo6x10/solo6x10-g723.c
+@@ -97,6 +97,17 @@ void solo_g723_isr(struct solo_dev *solo_dev)
+ 	}
+ }
+ 
++static int snd_solo_hw_params(struct snd_pcm_substream *ss,
++			      struct snd_pcm_hw_params *hw_params)
++{
++	return snd_pcm_lib_malloc_pages(ss, params_buffer_bytes(hw_params));
++}
++
++static int snd_solo_hw_free(struct snd_pcm_substream *ss)
++{
++	return snd_pcm_lib_free_pages(ss);
++}
++
+ static const struct snd_pcm_hardware snd_solo_pcm_hw = {
+ 	.info			= (SNDRV_PCM_INFO_MMAP |
+ 				   SNDRV_PCM_INFO_INTERLEAVED |
+@@ -259,6 +270,9 @@ static int snd_solo_pcm_copy_kernel(struct snd_pcm_substream *ss, int channel,
+ static const struct snd_pcm_ops snd_solo_pcm_ops = {
+ 	.open = snd_solo_pcm_open,
+ 	.close = snd_solo_pcm_close,
++	.ioctl = snd_pcm_lib_ioctl,
++	.hw_params = snd_solo_hw_params,
++	.hw_free = snd_solo_hw_free,
+ 	.prepare = snd_solo_pcm_prepare,
+ 	.trigger = snd_solo_pcm_trigger,
+ 	.pointer = snd_solo_pcm_pointer,
+@@ -337,11 +351,11 @@ static int solo_snd_pcm_init(struct solo_dev *solo_dev)
+ 	     ss; ss = ss->next, i++)
+ 		sprintf(ss->name, "Camera #%d Audio", i);
+ 
+-	snd_pcm_set_managed_buffer_all(pcm,
+-				       SNDRV_DMA_TYPE_CONTINUOUS,
+-				       NULL,
+-				       G723_PERIOD_BYTES * PERIODS,
+-				       G723_PERIOD_BYTES * PERIODS);
++	snd_pcm_lib_preallocate_pages_for_all(pcm,
++					SNDRV_DMA_TYPE_CONTINUOUS,
++					NULL,
++					G723_PERIOD_BYTES * PERIODS,
++					G723_PERIOD_BYTES * PERIODS);
+ 
+ 	solo_dev->snd_pcm = pcm;
+ 
+diff --git b/drivers/media/pci/tw686x/tw686x-audio.c a/drivers/media/pci/tw686x/tw686x-audio.c
+index 54144e23a487..7786e51d19ae 100644
+--- b/drivers/media/pci/tw686x/tw686x-audio.c
++++ a/drivers/media/pci/tw686x/tw686x-audio.c
+@@ -78,6 +78,17 @@ void tw686x_audio_irq(struct tw686x_dev *dev, unsigned long requests,
+ 	}
+ }
+ 
++static int tw686x_pcm_hw_params(struct snd_pcm_substream *ss,
++				struct snd_pcm_hw_params *hw_params)
++{
++	return snd_pcm_lib_malloc_pages(ss, params_buffer_bytes(hw_params));
++}
++
++static int tw686x_pcm_hw_free(struct snd_pcm_substream *ss)
++{
++	return snd_pcm_lib_free_pages(ss);
++}
++
+ /*
+  * Audio parameters are global and shared among all
+  * capture channels. The driver prevents changes to
+@@ -258,6 +269,9 @@ static snd_pcm_uframes_t tw686x_pcm_pointer(struct snd_pcm_substream *ss)
+ static const struct snd_pcm_ops tw686x_pcm_ops = {
+ 	.open = tw686x_pcm_open,
+ 	.close = tw686x_pcm_close,
++	.ioctl = snd_pcm_lib_ioctl,
++	.hw_params = tw686x_pcm_hw_params,
++	.hw_free = tw686x_pcm_hw_free,
+ 	.prepare = tw686x_pcm_prepare,
+ 	.trigger = tw686x_pcm_trigger,
+ 	.pointer = tw686x_pcm_pointer,
+@@ -284,7 +298,7 @@ static int tw686x_snd_pcm_init(struct tw686x_dev *dev)
+ 	     ss; ss = ss->next, i++)
+ 		snprintf(ss->name, sizeof(ss->name), "vch%u audio", i);
+ 
+-	snd_pcm_set_managed_buffer_all(pcm,
++	snd_pcm_lib_preallocate_pages_for_all(pcm,
+ 				SNDRV_DMA_TYPE_DEV,
+ 				&dev->pci_dev->dev,
+ 				TW686X_AUDIO_PAGE_MAX * AUDIO_DMA_SIZE_MAX,
+diff --git b/drivers/media/usb/cx231xx/cx231xx-audio.c a/drivers/media/usb/cx231xx/cx231xx-audio.c
+index de42db6f6ad1..fd6e2df3d1b7 100644
+--- b/drivers/media/usb/cx231xx/cx231xx-audio.c
++++ a/drivers/media/usb/cx231xx/cx231xx-audio.c
+@@ -13,6 +13,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/soundcard.h>
+ #include <linux/slab.h>
++#include <linux/vmalloc.h>
+ #include <linux/module.h>
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+@@ -371,6 +372,28 @@ static int cx231xx_init_audio_bulk(struct cx231xx *dev)
+ 	return errCode;
+ }
+ 
++static int snd_pcm_alloc_vmalloc_buffer(struct snd_pcm_substream *subs,
++					size_t size)
++{
++	struct snd_pcm_runtime *runtime = subs->runtime;
++	struct cx231xx *dev = snd_pcm_substream_chip(subs);
++
++	dev_dbg(dev->dev, "Allocating vbuffer\n");
++	if (runtime->dma_area) {
++		if (runtime->dma_bytes > size)
++			return 0;
++
++		vfree(runtime->dma_area);
++	}
++	runtime->dma_area = vmalloc(size);
++	if (!runtime->dma_area)
++		return -ENOMEM;
++
++	runtime->dma_bytes = size;
++
++	return 0;
++}
++
+ static const struct snd_pcm_hardware snd_cx231xx_hw_capture = {
+ 	.info = SNDRV_PCM_INFO_BLOCK_TRANSFER	|
+ 	    SNDRV_PCM_INFO_MMAP			|
+@@ -461,6 +484,11 @@ static int snd_cx231xx_pcm_close(struct snd_pcm_substream *substream)
+ 	}
+ 
+ 	dev->adev.users--;
++	if (substream->runtime->dma_area) {
++		dev_dbg(dev->dev, "freeing\n");
++		vfree(substream->runtime->dma_area);
++		substream->runtime->dma_area = NULL;
++	}
+ 	mutex_unlock(&dev->lock);
+ 
+ 	if (dev->adev.users == 0 && dev->adev.shutdown == 1) {
+@@ -476,6 +504,44 @@ static int snd_cx231xx_pcm_close(struct snd_pcm_substream *substream)
+ 	return 0;
+ }
+ 
++static int snd_cx231xx_hw_capture_params(struct snd_pcm_substream *substream,
++					 struct snd_pcm_hw_params *hw_params)
++{
++	struct cx231xx *dev = snd_pcm_substream_chip(substream);
++	int ret;
++
++	dev_dbg(dev->dev, "Setting capture parameters\n");
++
++	ret = snd_pcm_alloc_vmalloc_buffer(substream,
++					   params_buffer_bytes(hw_params));
++#if 0
++	/* TODO: set up cx231xx audio chip to deliver the correct audio format,
++	   current default is 48000hz multiplexed => 96000hz mono
++	   which shouldn't matter since analogue TV only supports mono */
++	unsigned int channels, rate, format;
++
++	format = params_format(hw_params);
++	rate = params_rate(hw_params);
++	channels = params_channels(hw_params);
++#endif
++
++	return ret;
++}
++
++static int snd_cx231xx_hw_capture_free(struct snd_pcm_substream *substream)
++{
++	struct cx231xx *dev = snd_pcm_substream_chip(substream);
++
++	dev_dbg(dev->dev, "Stop capture, if needed\n");
++
++	if (atomic_read(&dev->stream_started) > 0) {
++		atomic_set(&dev->stream_started, 0);
++		schedule_work(&dev->wq_trigger);
++	}
++
++	return 0;
++}
++
+ static int snd_cx231xx_prepare(struct snd_pcm_substream *substream)
+ {
+ 	struct cx231xx *dev = snd_pcm_substream_chip(substream);
+@@ -548,12 +614,24 @@ static snd_pcm_uframes_t snd_cx231xx_capture_pointer(struct snd_pcm_substream
+ 	return hwptr_done;
+ }
+ 
++static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
++					     unsigned long offset)
++{
++	void *pageptr = subs->runtime->dma_area + offset;
++
++	return vmalloc_to_page(pageptr);
++}
++
+ static const struct snd_pcm_ops snd_cx231xx_pcm_capture = {
+ 	.open = snd_cx231xx_capture_open,
+ 	.close = snd_cx231xx_pcm_close,
++	.ioctl = snd_pcm_lib_ioctl,
++	.hw_params = snd_cx231xx_hw_capture_params,
++	.hw_free = snd_cx231xx_hw_capture_free,
+ 	.prepare = snd_cx231xx_prepare,
+ 	.trigger = snd_cx231xx_capture_trigger,
+ 	.pointer = snd_cx231xx_capture_pointer,
++	.page = snd_pcm_get_vmalloc_page,
+ };
+ 
+ static int cx231xx_audio_init(struct cx231xx *dev)
+@@ -588,7 +666,6 @@ static int cx231xx_audio_init(struct cx231xx *dev)
+ 
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE,
+ 			&snd_cx231xx_pcm_capture);
+-	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
+ 	pcm->info_flags = 0;
+ 	pcm->private_data = dev;
+ 	strscpy(pcm->name, "Conexant cx231xx Capture", sizeof(pcm->name));
+diff --git b/drivers/media/usb/em28xx/em28xx-audio.c a/drivers/media/usb/em28xx/em28xx-audio.c
+index 6833b5bfe293..79dfbb25714b 100644
+--- b/drivers/media/usb/em28xx/em28xx-audio.c
++++ a/drivers/media/usb/em28xx/em28xx-audio.c
+@@ -30,6 +30,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/soundcard.h>
+ #include <linux/slab.h>
++#include <linux/vmalloc.h>
+ #include <linux/module.h>
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+@@ -191,6 +192,28 @@ static int em28xx_init_audio_isoc(struct em28xx *dev)
+ 	return 0;
+ }
+ 
++static int snd_pcm_alloc_vmalloc_buffer(struct snd_pcm_substream *subs,
++					size_t size)
++{
++	struct em28xx *dev = snd_pcm_substream_chip(subs);
++	struct snd_pcm_runtime *runtime = subs->runtime;
++
++	dprintk("Allocating vbuffer\n");
++	if (runtime->dma_area) {
++		if (runtime->dma_bytes > size)
++			return 0;
++
++		vfree(runtime->dma_area);
++	}
++	runtime->dma_area = vmalloc(size);
++	if (!runtime->dma_area)
++		return -ENOMEM;
++
++	runtime->dma_bytes = size;
++
++	return 0;
++}
++
+ static const struct snd_pcm_hardware snd_em28xx_hw_capture = {
+ 	.info = SNDRV_PCM_INFO_BLOCK_TRANSFER |
+ 		SNDRV_PCM_INFO_MMAP           |
+@@ -318,12 +341,63 @@ static int snd_em28xx_pcm_close(struct snd_pcm_substream *substream)
+ 	}
+ 
+ 	em28xx_audio_analog_set(dev);
++	if (substream->runtime->dma_area) {
++		dprintk("freeing\n");
++		vfree(substream->runtime->dma_area);
++		substream->runtime->dma_area = NULL;
++	}
+ 	mutex_unlock(&dev->lock);
+ 	kref_put(&dev->ref, em28xx_free_device);
+ 
+ 	return 0;
+ }
+ 
++static int snd_em28xx_hw_capture_params(struct snd_pcm_substream *substream,
++					struct snd_pcm_hw_params *hw_params)
++{
++	int ret;
++	struct em28xx *dev = snd_pcm_substream_chip(substream);
++
++	if (dev->disconnected)
++		return -ENODEV;
++
++	dprintk("Setting capture parameters\n");
++
++	ret = snd_pcm_alloc_vmalloc_buffer(substream,
++					   params_buffer_bytes(hw_params));
++	if (ret < 0)
++		return ret;
++#if 0
++	/*
++	 * TODO: set up em28xx audio chip to deliver the correct audio format,
++	 * current default is 48000hz multiplexed => 96000hz mono
++	 * which shouldn't matter since analogue TV only supports mono
++	 */
++	unsigned int channels, rate, format;
++
++	format = params_format(hw_params);
++	rate = params_rate(hw_params);
++	channels = params_channels(hw_params);
++#endif
++
++	return 0;
++}
++
++static int snd_em28xx_hw_capture_free(struct snd_pcm_substream *substream)
++{
++	struct em28xx *dev = snd_pcm_substream_chip(substream);
++	struct em28xx_audio *adev = &dev->adev;
++
++	dprintk("Stop capture, if needed\n");
++
++	if (atomic_read(&adev->stream_started) > 0) {
++		atomic_set(&adev->stream_started, 0);
++		schedule_work(&adev->wq_trigger);
++	}
++
++	return 0;
++}
++
+ static int snd_em28xx_prepare(struct snd_pcm_substream *substream)
+ {
+ 	struct em28xx *dev = snd_pcm_substream_chip(substream);
+@@ -397,6 +471,14 @@ static snd_pcm_uframes_t snd_em28xx_capture_pointer(struct snd_pcm_substream
+ 	return hwptr_done;
+ }
+ 
++static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
++					     unsigned long offset)
++{
++	void *pageptr = subs->runtime->dma_area + offset;
++
++	return vmalloc_to_page(pageptr);
++}
++
+ /*
+  * AC97 volume control support
+  */
+@@ -626,9 +708,13 @@ static int em28xx_cvol_new(struct snd_card *card, struct em28xx *dev,
+ static const struct snd_pcm_ops snd_em28xx_pcm_capture = {
+ 	.open      = snd_em28xx_capture_open,
+ 	.close     = snd_em28xx_pcm_close,
++	.ioctl     = snd_pcm_lib_ioctl,
++	.hw_params = snd_em28xx_hw_capture_params,
++	.hw_free   = snd_em28xx_hw_capture_free,
+ 	.prepare   = snd_em28xx_prepare,
+ 	.trigger   = snd_em28xx_capture_trigger,
+ 	.pointer   = snd_em28xx_capture_pointer,
++	.page      = snd_pcm_get_vmalloc_page,
+ };
+ 
+ static void em28xx_audio_free_urb(struct em28xx *dev)
+@@ -850,7 +936,6 @@ static int em28xx_audio_init(struct em28xx *dev)
+ 		goto card_free;
+ 
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_em28xx_pcm_capture);
+-	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
+ 	pcm->info_flags = 0;
+ 	pcm->private_data = dev;
+ 	strscpy(pcm->name, "Empia 28xx Capture", sizeof(pcm->name));
+diff --git b/drivers/media/usb/go7007/snd-go7007.c a/drivers/media/usb/go7007/snd-go7007.c
+index ae27e988e578..b05fa227ffb2 100644
+--- b/drivers/media/usb/go7007/snd-go7007.c
++++ a/drivers/media/usb/go7007/snd-go7007.c
+@@ -9,6 +9,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/delay.h>
+ #include <linux/sched.h>
++#include <linux/vmalloc.h>
+ #include <linux/time.h>
+ #include <linux/mm.h>
+ #include <linux/i2c.h>
+@@ -99,7 +100,16 @@ static int go7007_snd_hw_params(struct snd_pcm_substream *substream,
+ 				struct snd_pcm_hw_params *hw_params)
+ {
+ 	struct go7007 *go = snd_pcm_substream_chip(substream);
+-
++	unsigned int bytes;
++
++	bytes = params_buffer_bytes(hw_params);
++	if (substream->runtime->dma_bytes > 0)
++		vfree(substream->runtime->dma_area);
++	substream->runtime->dma_bytes = 0;
++	substream->runtime->dma_area = vmalloc(bytes);
++	if (substream->runtime->dma_area == NULL)
++		return -ENOMEM;
++	substream->runtime->dma_bytes = bytes;
+ 	go->audio_deliver = parse_audio_stream_data;
+ 	return 0;
+ }
+@@ -109,6 +119,9 @@ static int go7007_snd_hw_free(struct snd_pcm_substream *substream)
+ 	struct go7007 *go = snd_pcm_substream_chip(substream);
+ 
+ 	go->audio_deliver = NULL;
++	if (substream->runtime->dma_bytes > 0)
++		vfree(substream->runtime->dma_area);
++	substream->runtime->dma_bytes = 0;
+ 	return 0;
+ }
+ 
+@@ -172,14 +185,22 @@ static snd_pcm_uframes_t go7007_snd_pcm_pointer(struct snd_pcm_substream *substr
+ 	return gosnd->hw_ptr;
+ }
+ 
++static struct page *go7007_snd_pcm_page(struct snd_pcm_substream *substream,
++					unsigned long offset)
++{
++	return vmalloc_to_page(substream->runtime->dma_area + offset);
++}
++
+ static const struct snd_pcm_ops go7007_snd_capture_ops = {
+ 	.open		= go7007_snd_capture_open,
+ 	.close		= go7007_snd_capture_close,
++	.ioctl		= snd_pcm_lib_ioctl,
+ 	.hw_params	= go7007_snd_hw_params,
+ 	.hw_free	= go7007_snd_hw_free,
+ 	.prepare	= go7007_snd_pcm_prepare,
+ 	.trigger	= go7007_snd_pcm_trigger,
+ 	.pointer	= go7007_snd_pcm_pointer,
++	.page		= go7007_snd_pcm_page,
+ };
+ 
+ static int go7007_snd_free(struct snd_device *device)
+@@ -239,8 +260,6 @@ int go7007_snd_init(struct go7007 *go)
+ 	gosnd->pcm->private_data = go;
+ 	snd_pcm_set_ops(gosnd->pcm, SNDRV_PCM_STREAM_CAPTURE,
+ 			&go7007_snd_capture_ops);
+-	snd_pcm_set_managed_buffer_all(gosnd->pcm, SNDRV_DMA_TYPE_VMALLOC,
+-				       NULL, 0, 0);
+ 
+ 	ret = snd_card_register(gosnd->card);
+ 	if (ret < 0) {
+diff --git b/drivers/media/usb/tm6000/tm6000-alsa.c a/drivers/media/usb/tm6000/tm6000-alsa.c
+index c26a0ff60a64..d6c79c13b332 100644
+--- b/drivers/media/usb/tm6000/tm6000-alsa.c
++++ a/drivers/media/usb/tm6000/tm6000-alsa.c
+@@ -10,6 +10,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/usb.h>
+ #include <linux/slab.h>
++#include <linux/vmalloc.h>
+ 
+ #include <linux/delay.h>
+ #include <sound/core.h>
+@@ -93,6 +94,40 @@ static int _tm6000_stop_audio_dma(struct snd_tm6000_card *chip)
+ 	return 0;
+ }
+ 
++static void dsp_buffer_free(struct snd_pcm_substream *substream)
++{
++	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
++
++	dprintk(2, "Freeing buffer\n");
++
++	vfree(substream->runtime->dma_area);
++	substream->runtime->dma_area = NULL;
++	substream->runtime->dma_bytes = 0;
++}
++
++static int dsp_buffer_alloc(struct snd_pcm_substream *substream, int size)
++{
++	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
++
++	dprintk(2, "Allocating buffer\n");
++
++	if (substream->runtime->dma_area) {
++		if (substream->runtime->dma_bytes > size)
++			return 0;
++
++		dsp_buffer_free(substream);
++	}
++
++	substream->runtime->dma_area = vmalloc(size);
++	if (!substream->runtime->dma_area)
++		return -ENOMEM;
++
++	substream->runtime->dma_bytes = size;
++
++	return 0;
++}
++
++
+ /****************************************************************************
+ 				ALSA PCM Interface
+  ****************************************************************************/
+@@ -233,6 +268,40 @@ static int tm6000_fillbuf(struct tm6000_core *core, char *buf, int size)
+ 	return 0;
+ }
+ 
++/*
++ * hw_params callback
++ */
++static int snd_tm6000_hw_params(struct snd_pcm_substream *substream,
++			      struct snd_pcm_hw_params *hw_params)
++{
++	int size, rc;
++
++	size = params_period_bytes(hw_params) * params_periods(hw_params);
++
++	rc = dsp_buffer_alloc(substream, size);
++	if (rc < 0)
++		return rc;
++
++	return 0;
++}
++
++/*
++ * hw free callback
++ */
++static int snd_tm6000_hw_free(struct snd_pcm_substream *substream)
++{
++	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
++	struct tm6000_core *core = chip->core;
++
++	if (atomic_read(&core->stream_started) > 0) {
++		atomic_set(&core->stream_started, 0);
++		schedule_work(&core->wq_trigger);
++	}
++
++	dsp_buffer_free(substream);
++	return 0;
++}
++
+ /*
+  * prepare callback
+  */
+@@ -300,15 +369,27 @@ static snd_pcm_uframes_t snd_tm6000_pointer(struct snd_pcm_substream *substream)
+ 	return chip->buf_pos;
+ }
+ 
++static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
++					     unsigned long offset)
++{
++	void *pageptr = subs->runtime->dma_area + offset;
++
++	return vmalloc_to_page(pageptr);
++}
++
+ /*
+  * operators
+  */
+ static const struct snd_pcm_ops snd_tm6000_pcm_ops = {
+ 	.open = snd_tm6000_pcm_open,
+ 	.close = snd_tm6000_close,
++	.ioctl = snd_pcm_lib_ioctl,
++	.hw_params = snd_tm6000_hw_params,
++	.hw_free = snd_tm6000_hw_free,
+ 	.prepare = snd_tm6000_prepare,
+ 	.trigger = snd_tm6000_card_trigger,
+ 	.pointer = snd_tm6000_pointer,
++	.page = snd_pcm_get_vmalloc_page,
+ };
+ 
+ /*
+@@ -378,7 +459,6 @@ static int tm6000_audio_init(struct tm6000_core *dev)
+ 	strscpy(pcm->name, "Trident TM5600/60x0", sizeof(pcm->name));
+ 
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_tm6000_pcm_ops);
+-	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
+ 
+ 	INIT_WORK(&dev->wq_trigger, audio_trigger);
+ 	rc = snd_card_register(card);
+diff --git b/drivers/media/usb/usbtv/usbtv-audio.c a/drivers/media/usb/usbtv/usbtv-audio.c
+index b57e94fb1977..e746c8ddfc49 100644
+--- b/drivers/media/usb/usbtv/usbtv-audio.c
++++ a/drivers/media/usb/usbtv/usbtv-audio.c
+@@ -85,6 +85,30 @@ static int snd_usbtv_pcm_close(struct snd_pcm_substream *substream)
+ 	return 0;
+ }
+ 
++static int snd_usbtv_hw_params(struct snd_pcm_substream *substream,
++		struct snd_pcm_hw_params *hw_params)
++{
++	int rv;
++	struct usbtv *chip = snd_pcm_substream_chip(substream);
++
++	rv = snd_pcm_lib_malloc_pages(substream,
++		params_buffer_bytes(hw_params));
++
++	if (rv < 0) {
++		dev_warn(chip->dev, "pcm audio buffer allocation failure %i\n",
++			rv);
++		return rv;
++	}
++
++	return 0;
++}
++
++static int snd_usbtv_hw_free(struct snd_pcm_substream *substream)
++{
++	snd_pcm_lib_free_pages(substream);
++	return 0;
++}
++
+ static int snd_usbtv_prepare(struct snd_pcm_substream *substream)
+ {
+ 	struct usbtv *chip = snd_pcm_substream_chip(substream);
+@@ -312,6 +336,9 @@ static snd_pcm_uframes_t snd_usbtv_pointer(struct snd_pcm_substream *substream)
+ static const struct snd_pcm_ops snd_usbtv_pcm_ops = {
+ 	.open = snd_usbtv_pcm_open,
+ 	.close = snd_usbtv_pcm_close,
++	.ioctl = snd_pcm_lib_ioctl,
++	.hw_params = snd_usbtv_hw_params,
++	.hw_free = snd_usbtv_hw_free,
+ 	.prepare = snd_usbtv_prepare,
+ 	.trigger = snd_usbtv_card_trigger,
+ 	.pointer = snd_usbtv_pointer,
+@@ -350,7 +377,7 @@ int usbtv_audio_init(struct usbtv *usbtv)
+ 	pcm->private_data = usbtv;
+ 
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_usbtv_pcm_ops);
+-	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
++	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
+ 		NULL, USBTV_AUDIO_BUFFER, USBTV_AUDIO_BUFFER);
+ 
+ 	rv = snd_card_register(card);
