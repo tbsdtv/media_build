@@ -2414,31 +2414,6 @@ static inline u32 next_pseudo_random32(u32 seed)
 }
 #endif
 
-/* of_property_read_u32_index is available since Kernel 3.10. For older Kernels
- * this will not compile */
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 10, 0)
-#ifdef NEED_I2C_NEW_SECONDARY_DEV
-#include <linux/i2c.h>
-static inline struct i2c_client *i2c_new_secondary_device(struct i2c_client *client,
-							  const char *name,
-							  u16 default_addr)
-{
-	struct device_node *np = client->dev.of_node;
-	u32 addr = default_addr;
-	int i;
-
-	if (np) {
-		i = of_property_match_string(np, "reg-names", name);
-		if (i >= 0)
-			of_property_read_u32_index(np, "reg", i, &addr);
-	}
-
-	dev_dbg(&client->adapter->dev, "Address for %s : 0x%x\n", name, addr);
-	return i2c_new_dummy(client->adapter, addr);
-}
-#endif
-#endif
-
 #ifdef NEED_MEMDUP_USER_NUL
 static inline void *memdup_user_nul(const void __user *src, size_t len)
 {
@@ -2640,6 +2615,8 @@ void ida_free(struct ida *ida, unsigned int id)
 
 #ifdef NEED_I2C_LOCK_BUS
 
+#include <linux/i2c.h>
+
 #define I2C_LOCK_ROOT_ADAPTER 0
 #define I2C_LOCK_SEGMENT      1
 
@@ -2751,6 +2728,28 @@ static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
 #endif
 
 #ifdef NEED_I2C_NEW_ANCILLARY_DEVICE
+#include <linux/i2c.h>
+
+#ifdef NEED_I2C_NEW_SECONDARY_DEV
+static inline struct i2c_client *i2c_new_secondary_device(struct i2c_client *client,
+							  const char *name,
+							  u16 default_addr)
+{
+	struct device_node *np = client->dev.of_node;
+	u32 addr = default_addr;
+	int i;
+
+	if (np) {
+		i = of_property_match_string(np, "reg-names", name);
+		if (i >= 0)
+			of_property_read_u32_index(np, "reg", i, &addr);
+	}
+
+	dev_dbg(&client->adapter->dev, "Address for %s : 0x%x\n", name, addr);
+	return i2c_new_dummy(client->adapter, addr);
+}
+#endif
+
 #define i2c_new_ancillary_device(client, name, addr) \
 	(i2c_new_secondary_device(client, name, addr) ? : (struct i2c_client *)ERR_PTR(-ENODEV))
 #endif

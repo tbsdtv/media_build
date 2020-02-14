@@ -1,0 +1,26 @@
+diff --git a/drivers/media/pci/ivtv/ivtvfb.c b/drivers/media/pci/ivtv/ivtvfb.c
+index 0c2859844081..a5d96ef7c6e9 100644
+--- a/drivers/media/pci/ivtv/ivtvfb.c
++++ b/drivers/media/pci/ivtv/ivtvfb.c
+@@ -925,7 +925,7 @@ static int ivtvfb_blank(int blank_mode, struct fb_info *info)
+ 	return 0;
+ }
+ 
+-static const struct fb_ops ivtvfb_ops = {
++static struct fb_ops ivtvfb_ops = {
+ 	.owner = THIS_MODULE,
+ 	.fb_write       = ivtvfb_write,
+ 	.fb_check_var   = ivtvfb_check_var,
+diff --git a/drivers/media/platform/vivid/vivid-osd.c b/drivers/media/platform/vivid/vivid-osd.c
+index fbaec8acc161..2160a4d3c2f2 100644
+--- a/drivers/media/platform/vivid/vivid-osd.c
++++ b/drivers/media/platform/vivid/vivid-osd.c
+@@ -244,7 +244,7 @@ static int vivid_fb_blank(int blank_mode, struct fb_info *info)
+ 	return 0;
+ }
+ 
+-static const struct fb_ops vivid_fb_ops = {
++static struct fb_ops vivid_fb_ops = {
+ 	.owner = THIS_MODULE,
+ 	.fb_check_var   = vivid_fb_check_var,
+ 	.fb_set_par     = vivid_fb_set_par,

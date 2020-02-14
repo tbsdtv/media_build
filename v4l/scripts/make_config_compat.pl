@@ -622,7 +622,7 @@ sub check_other_dependencies()
 	check_files_for_func("kstrtou16", "NEED_KSTRTOU16", "include/linux/kernel.h");
 	check_files_for_func("kstrtoul", "NEED_KSTRTOUL", "include/linux/kernel.h");
 	check_files_for_func("memweight", "NEED_MEMWEIGHT", "include/linux/string.h");
-	check_files_for_func("dev_dbg_ratelimited", "NEED_DEV_DBG_RATELIMITED", "include/linux/device.h");
+	check_files_for_func("dev_dbg_ratelimited", "NEED_DEV_DBG_RATELIMITED", "include/linux/device.h", "include/linux/dev_printk.h");
 	check_files_for_func("i2c_probe_func_quick_read", "NEED_I2C_PROBE_FUNC_QUICK_READ", "include/linux/i2c.h");
 	check_files_for_func("abs64", "NEED_ABS64", "include/linux/kernel.h");
 	check_files_for_func("VM_DONTDUMP", "NEED_DONTDUMP", "include/linux/mm.h");
@@ -686,8 +686,8 @@ sub check_other_dependencies()
 	check_files_for_func("ktime_get_boottime", "NEED_KTIME_GET_BOOTTIME", "include/linux/hrtimer.h", "include/linux/timekeeping.h");
 	check_files_for_func("BUS_CEC", "NEED_BUS_CEC", "include/uapi/linux/input.h");
 	check_files_for_func("smp_load_acquire", "NEED_SMP_LOAD_ACQUIRE", "include/asm-generic/barrier.h");
-	check_files_for_func("dev_err_once", "NEED_DEV_ERR_ONCE", "include/linux/device.h");
-	check_files_for_func("dev_warn_once", "NEED_DEV_WARN_ONCE", "include/linux/device.h");
+	check_files_for_func("dev_err_once", "NEED_DEV_ERR_ONCE", "include/linux/device.h", "include/linux/dev_printk.h");
+	check_files_for_func("dev_warn_once", "NEED_DEV_WARN_ONCE", "include/linux/device.h", "include/linux/dev_printk.h");
 	check_files_for_func("kthread_init_worker", "NEED_KTHREAD_INIT_WORKER", "include/linux/kthread.h");
 	check_files_for_func("print_hex_dump_debug", "NEED_PRINT_HEX_DUMP_DEBUG", "include/linux/printk.h");
 	check_files_for_func("min3", "NEED_MIN3", "include/linux/kernel.h");
@@ -719,7 +719,6 @@ sub check_other_dependencies()
 	check_files_for_func("get_user_pages_longterm", "NEED_GET_USER_PAGES_LONGTERM", "include/linux/mm.h");
 	check_files_for_func("__pfn_to_phys", "NEED_PFN_TO_PHYS", "include/asm-generic/memory_model.h");
 	check_files_for_func("next_pseudo_random32", "NEED_NEXT_PSEUDO_RANDOM32", "include/linux/random.h");
-	check_files_for_func("i2c_new_secondary_device", "NEED_I2C_NEW_SECONDARY_DEV", "include/linux/i2c.h");
 	check_files_for_func("memdup_user_nul", "NEED_MEMDUP_USER_NUL", "include/linux/string.h");
 	check_files_for_func("STACK_FRAME_NON_STANDARD", "NEED_STACK_FRAME_NON_STANDARD", "include/linux/frame.h");
 	check_files_for_func("pci_free_irq_vectors", "NEED_PCI_FREE_IRQ_VECTORS", "include/linux/pci.h");
@@ -744,6 +743,7 @@ sub check_other_dependencies()
 	check_files_for_func("stream_open", "NEED_STREAM_OPEN", "include/linux/fs.h");
 	check_files_for_func("fwnode_property_read_u32_array", "NEED_PROP_READ_U32_ARRAY", "include/linux/property.h");
 	check_files_for_func("fwnode_property_count_u32", "NEED_PROP_COUNT", "include/linux/property.h");
+	check_files_for_func("i2c_new_secondary_device", "NEED_I2C_NEW_SECONDARY_DEV", "include/linux/i2c.h");
 	check_files_for_func("^i2c_new_dummy_device", "NEED_I2C_NEW_DUMMY_DEVICE", "include/linux/i2c.h");
 	check_files_for_func("i2c_new_ancillary_device", "NEED_I2C_NEW_ANCILLARY_DEVICE", "include/linux/i2c.h");
 	check_files_for_func("i2c_new_scanned_device", "NEED_I2C_NEW_SCANNED_DEVICE", "include/linux/i2c.h");
