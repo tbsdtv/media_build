@@ -60,8 +60,8 @@ index 00bb08f..9e65048 100644
  	vec = frame_vector_create(nr);
  	if (!vec)
  		return ERR_PTR(-ENOMEM);
--	ret = get_vaddr_frames(start & PAGE_MASK, nr, true, true, vec);
-+	ret = get_vaddr_frames(start & PAGE_MASK, nr, FOLL_FORCE | FOLL_WRITE, vec);
+-	ret = get_vaddr_frames(start & PAGE_MASK, nr, write, true, vec);
++	ret = get_vaddr_frames(start & PAGE_MASK, nr, FOLL_FORCE | (write ? FOLL_WRITE : 0), vec);
  	if (ret < 0)
  		goto out_destroy;
  	/* We accept only complete set of PFNs */
