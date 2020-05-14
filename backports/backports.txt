@@ -32,6 +32,9 @@ add v5.6_pin_user_pages.patch
 add v5.6_memtype_h.patch
 add v5.6_const_fb_ops.patch
 
+[5.4.255]
+add v5.4_revert_spi_transfer.patch
+
 [5.1.255]
 add v5.1_vm_map_pages.patch
 add v5.1_devm_i2c_new_dummy_device.patch

@@ -342,7 +342,8 @@ sub check_snd_BUG_ON()
 sub check_bitops()
 {
 	my @files = ( "$kdir/include/linux/bitops.h",
-                  "$kdir/include/linux/bits.h" );
+                  "$kdir/include/linux/bits.h",
+		  "$kdir/include/vdso/bits.h" );
 
 	foreach my $file ( @files ) {
 		open IN, "<$file" or next;
@@ -743,6 +744,7 @@ sub check_other_dependencies()
 	check_files_for_func("stream_open", "NEED_STREAM_OPEN", "include/linux/fs.h");
 	check_files_for_func("fwnode_property_read_u32_array", "NEED_PROP_READ_U32_ARRAY", "include/linux/property.h");
 	check_files_for_func("fwnode_property_count_u32", "NEED_PROP_COUNT", "include/linux/property.h");
+	check_files_for_func("fwnode_get_name\\(", "NEED_FWNODE_GETNAME", "include/linux/property.h");
 	check_files_for_func("i2c_new_secondary_device", "NEED_I2C_NEW_SECONDARY_DEV", "include/linux/i2c.h");
 	check_files_for_func("^i2c_new_dummy_device", "NEED_I2C_NEW_DUMMY_DEVICE", "include/linux/i2c.h");
 	check_files_for_func("i2c_new_ancillary_device", "NEED_I2C_NEW_ANCILLARY_DEVICE", "include/linux/i2c.h");
@@ -753,6 +755,8 @@ sub check_other_dependencies()
 	check_files_for_func("compat_ptr_ioctl", "NEED_COMPAT_PTR_IOCTL", "include/linux/fs.h");
 	check_files_for_func("ns_to_timespec64", "NEED_TIMESPEC64", "include/linux/time64.h");
 	check_files_for_func("sizeof_field", "NEED_SIZEOF_FIELD", "include/linux/stddef.h");
+	check_files_for_func("devm_platform_ioremap_resource", "NEED_DEVM_PLATFORM_IOREMAP_RESOURCE", "include/linux/platform_device.h");
+	check_files_for_func("cpu_latency_qos_add_request", "NEED_CPU_LATENCY_QOS", "include/linux/pm_qos.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

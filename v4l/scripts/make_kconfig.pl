@@ -596,7 +596,7 @@ kernelcheck();
 open OUT, ">Kconfig" or die "Cannot write Kconfig file";
 print OUT <<"EOF";
 mainmenu "V4L/DVB menu"
-source Kconfig.kern
+source "Kconfig.kern"
 config VIDEO_KERNEL_VERSION
 	bool "Enable drivers not supported by this kernel"
 	default n

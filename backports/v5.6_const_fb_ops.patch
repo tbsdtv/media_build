@@ -11,10 +11,10 @@ index 0c2859844081..a5d96ef7c6e9 100644
  	.owner = THIS_MODULE,
  	.fb_write       = ivtvfb_write,
  	.fb_check_var   = ivtvfb_check_var,
-diff --git a/drivers/media/platform/vivid/vivid-osd.c b/drivers/media/platform/vivid/vivid-osd.c
+diff --git a/drivers/media/test-drivers/vivid/vivid-osd.c b/drivers/media/test-drivers/vivid/vivid-osd.c
 index fbaec8acc161..2160a4d3c2f2 100644
---- a/drivers/media/platform/vivid/vivid-osd.c
-+++ b/drivers/media/platform/vivid/vivid-osd.c
+--- a/drivers/media/test-drivers/vivid/vivid-osd.c
++++ b/drivers/media/test-drivers/vivid/vivid-osd.c
 @@ -244,7 +244,7 @@ static int vivid_fb_blank(int blank_mode, struct fb_info *info)
  	return 0;
  }

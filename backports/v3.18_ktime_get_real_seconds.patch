@@ -1,7 +1,7 @@
-diff --git a/drivers/media/platform/vivid/vivid-rds-gen.c b/drivers/media/platform/vivid/vivid-rds-gen.c
+diff --git a/drivers/media/test-drivers/vivid/vivid-rds-gen.c b/drivers/media/test-drivers/vivid/vivid-rds-gen.c
 index 996e35e..53c7777 100644
---- a/drivers/media/platform/vivid/vivid-rds-gen.c
-+++ b/drivers/media/platform/vivid/vivid-rds-gen.c
+--- a/drivers/media/test-drivers/vivid/vivid-rds-gen.c
++++ b/drivers/media/test-drivers/vivid/vivid-rds-gen.c
 @@ -103,7 +103,7 @@ void vivid_rds_generate(struct vivid_rds_gen *rds)
  			 * EN 50067:1998 to convert a UTC date to an RDS Modified
  			 * Julian Day.
@@ -11,10 +11,10 @@ index 996e35e..53c7777 100644
  			l = tm.tm_mon <= 1;
  			date = 14956 + tm.tm_mday + ((tm.tm_year - l) * 1461) / 4 +
  				((tm.tm_mon + 2 + l * 12) * 306001) / 10000;
-diff --git a/drivers/media/platform/vivid/vivid-vbi-gen.c b/drivers/media/platform/vivid/vivid-vbi-gen.c
+diff --git a/drivers/media/test-drivers/vivid/vivid-vbi-gen.c b/drivers/media/test-drivers/vivid/vivid-vbi-gen.c
 index 02c79d7..a2159de 100644
---- a/drivers/media/platform/vivid/vivid-vbi-gen.c
-+++ b/drivers/media/platform/vivid/vivid-vbi-gen.c
+--- a/drivers/media/test-drivers/vivid/vivid-vbi-gen.c
++++ b/drivers/media/test-drivers/vivid/vivid-vbi-gen.c
 @@ -190,7 +190,7 @@ static void vivid_vbi_gen_set_time_of_day(u8 *packet)
  	struct tm tm;
  	u8 checksum, i;

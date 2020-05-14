@@ -1,0 +1,71 @@
+From 204c7b3c066f48cb636cdd36fe69dc5cea2c513d Mon Sep 17 00:00:00 2001
+From: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
+Date: Thu, 27 Feb 2020 14:24:54 +0100
+Subject: [PATCH 1/1] media: spi: gs1662: Use new structure for SPI transfer
+ delays
+
+In a recent change to the SPI subsystem [1], a new `delay` struct was added
+to replace the `delay_usecs`. This change replaces the current
+`delay_usecs` with `delay` for this driver.
+
+The `spi_transfer_delay_exec()` function [in the SPI framework] makes sure
+that both `delay_usecs` & `delay` are used (in this order to preserve
+backwards compatibility).
+
+[1] commit bebcfd272df6 ("spi: introduce `delay` field for
+`spi_transfer` + spi_transfer_delay_exec()")
+
+Signed-off-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/spi/gs1662.c | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
+
+diff --git b/drivers/media/spi/gs1662.c a/drivers/media/spi/gs1662.c
+index f86ef1ca1288..d789d82df7c4 100644
+--- b/drivers/media/spi/gs1662.c
++++ a/drivers/media/spi/gs1662.c
+@@ -147,17 +147,11 @@ static int gs_read_register(struct spi_device *spi, u16 addr, u16 *value)
+ 		{
+ 			.tx_buf = &buf_addr,
+ 			.len = 2,
+-			.delay = {
+-				.value = 1,
+-				.unit = SPI_DELAY_UNIT_USECS
+-			},
++			.delay_usecs = 1,
+ 		}, {
+ 			.rx_buf = &buf_value,
+ 			.len = 2,
+-			.delay = {
+-				.value = 1,
+-				.unit = SPI_DELAY_UNIT_USECS
+-			},
++			.delay_usecs = 1,
+ 		},
+ 	};
+ 
+@@ -181,17 +175,11 @@ static int gs_write_register(struct spi_device *spi, u16 addr, u16 value)
+ 		{
+ 			.tx_buf = &buf_addr,
+ 			.len = 2,
+-			.delay = {
+-				.value = 1,
+-				.unit = SPI_DELAY_UNIT_USECS
+-			},
++			.delay_usecs = 1,
+ 		}, {
+ 			.tx_buf = &buf_value,
+ 			.len = 2,
+-			.delay = {
+-				.value = 1,
+-				.unit = SPI_DELAY_UNIT_USECS
+-			},
++			.delay_usecs = 1,
+ 		},
+ 	};
+ 
+-- 
+2.25.1
+

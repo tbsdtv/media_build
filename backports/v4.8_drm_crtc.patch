@@ -1,7 +1,7 @@
-diff --git a/drivers/media/cec/cec-adap.c b/drivers/media/cec/cec-adap.c
+diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
 index 56e9ba5013fa..e89903037f9c 100644
---- a/drivers/media/cec/cec-adap.c
-+++ b/drivers/media/cec/cec-adap.c
+--- a/drivers/media/cec/core/cec-adap.c
++++ b/drivers/media/cec/core/cec-adap.c
 @@ -16,7 +16,7 @@
  #include <linux/string.h>
  #include <linux/types.h>

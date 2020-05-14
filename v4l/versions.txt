@@ -1,23 +1,29 @@
 # Use this for stuff for drivers that don't compile
 [9.255.255]
 VIDEO_IPU3_IMGU
-VIDEO_DW9714
 
 [5.5]
 # lots of kAPI changes in 5.6, so disable for older kernels
 SND_BT87X
 
 [5.4]
-VIDEO_CROS_EC_CEC
+CEC_CROS_EC
+
+[5.3]
+# sort_r appeared in 5.4
+VIDEO_HANTRO
+VIDEO_ROCKCHIP_VDEC
+V4L2_H264
 
 [5.2]
 # Needs fwnode_graph_get_endpoint_by_id
 VIDEO_IPU3_CIO2
 VIDEO_OMAP3
 
-[4.18.0]
+[4.19.0]
 # Needs devm_regmap_init_sccb
 VIDEO_OV772X
+VIDEO_OV9650
 
 [4.17.0]
 # Needs devm_nvmem_register
@@ -34,6 +40,8 @@ VIDEO_MUX
 RADIO_WL128X
 
 [4.10.0]
+# needs dma_request_chan
+VIDEO_XILINX
 # needs *probe_new in struct i2c_driver
 VIDEO_OV5670
 VIDEO_OV5675
@@ -49,9 +57,11 @@ VIDEO_IMX319
 VIDEO_IMX355
 VIDEO_IMX290
 VIDEO_IMX214
+VIDEO_IMX219
 VIDEO_ST_MIPID02
 I2C_BCM2048
 VIDEO_HI556
+VIDEO_DW9714
 
 [4.9.0]
 # needs linux/bitfield.h
@@ -89,7 +99,7 @@ VIDEO_CAFE_CCIC
 
 [4.1.0]
 # needs has_acpi_companion
-VIDEO_SECO_CEC
+CEC_SECO
 
 [4.2.0]
 # needs led_trigger_remove
@@ -122,7 +132,6 @@ VIDEO_MT9M111
 VIDEO_ADV7604
 VIDEO_MT9P031
 SOC_CAMERA_OV2640
-VIDEO_XILINX
 I2C_SI4713
 VIDEO_TC358743
 VIDEO_ADP1653
@@ -136,7 +145,6 @@ IR_GPIO_TX
 IR_GPIO_CIR
 VIDEO_OV5695
 VIDEO_OV9640
-VIDEO_OV9650
 VIDEO_OV2685
 VIDEO_OV2659
 VIDEO_TW9910

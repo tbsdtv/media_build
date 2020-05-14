@@ -14,6 +14,7 @@ my $check_only = 0;
 my $main_git = 0;
 my $depth;
 my @git;
+my $kernel_version = '';
 
 #my $main_git_url = "git://linuxtv.org/media_tree.git";
 #my $main_branch = "master";
@@ -32,6 +33,7 @@ GetOptions('v|verbose' => \$level,
 	   'main_git|main-git' => \$main_git,
 	   'depth=i' => \$depth,
 	   'git=s{2}' => \@git,
+	   'version=s' => \$kernel_version,
 	  ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -543,7 +545,12 @@ print "******************\n";
 print "* Start building *\n";
 print "******************\n";
 
-run("make allyesconfig", "can't select all drivers");
+if ($kernel_version =~ /\S/) {
+    print "Building for kernel version $kernel_version\n";
+    run("make allyesconfig VER=$kernel_version", "can't select all drivers");
+} else {
+    run("make allyesconfig", "can't select all drivers");
+}
 run("make -j5", "build failed");
 
 print "**********************************************************\n";
@@ -560,7 +567,7 @@ build - Builds the media drivers without needing to compile a new kernel
 =head1 SYNOPSIS
 
 build [--help] [--man] [--verbose] [--check-only] [<--git> [URL] [BRANCH]]
- [--main-git] [--depth [DEPTH]]
+ [--main-git] [--depth [DEPTH]] [--version [KERNELVERSION]]
 
 =head1 OPTIONS
 
@@ -599,6 +606,11 @@ When doing a git clone (e. g. with --git or --main-git), pass the
 depth parameter, in order to get a smaller tree.
 
 That helps to reduce disk storage and download time.
+
+=item B<--version> [KERNELVERSION]
+
+Try to build for a particular kernel version. The format of the
+version string is the same as the output from 'uname -r'.
 
 =back
 

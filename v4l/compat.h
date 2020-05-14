@@ -2118,6 +2118,8 @@ static inline struct fwnode_handle *dev_fwnode(struct device *dev)
 static inline int fwnode_graph_parse_endpoint(struct fwnode_handle *fwnode,
                                 struct fwnode_endpoint *endpoint)
 {
+	if (endpoint)
+		endpoint->port = endpoint->id = 0;
 	return 0;
 }
 
@@ -2360,6 +2362,13 @@ static inline int fwnode_property_count_u64(struct fwnode_handle *fwnode,
 					    const char *propname)
 {
 	return fwnode_property_read_u64_array(fwnode, propname, NULL, 0);
+}
+#endif
+
+#ifdef NEED_FWNODE_GETNAME
+static inline const char *fwnode_get_name(const struct fwnode_handle *fwnode)
+{
+	return "name";
 }
 #endif
 
@@ -2816,6 +2825,25 @@ static inline long compat_ptr_ioctl(struct file *file, unsigned int cmd, unsigne
 
 #ifdef NEED_SIZEOF_FIELD
 #define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
+#endif
+
+#ifdef NEED_DEVM_PLATFORM_IOREMAP_RESOURCE
+#include <linux/platform_device.h>
+static inline void __iomem *devm_platform_ioremap_resource(struct platform_device *pdev,
+							   unsigned int index)
+{
+        struct resource *res;
+
+        res = platform_get_resource(pdev, IORESOURCE_MEM, index);
+        return devm_ioremap_resource(&pdev->dev, res);
+}
+#endif
+
+#ifdef NEED_CPU_LATENCY_QOS
+#define cpu_latency_qos_add_request(req, val) \
+	pm_qos_add_request((req), PM_QOS_CPU_DMA_LATENCY, (val));
+
+#define cpu_latency_qos_remove_request pm_qos_remove_request
 #endif
 
 #endif /*  _COMPAT_H */

@@ -1,7 +1,7 @@
-diff --git a/drivers/media/cec/cec-pin-error-inj.c b/drivers/media/cec/cec-pin-error-inj.c
+diff --git a/drivers/media/cec/core/cec-pin-error-inj.c b/drivers/media/cec/core/cec-pin-error-inj.c
 index 7132a27..93ccdc7 100644
---- a/drivers/media/cec/cec-pin-error-inj.c
-+++ b/drivers/media/cec/cec-pin-error-inj.c
+--- a/drivers/media/cec/core/cec-pin-error-inj.c
++++ b/drivers/media/cec/core/cec-pin-error-inj.c
 @@ -5,7 +5,6 @@
  
  #include <linux/delay.h>
@@ -10,10 +10,10 @@ index 7132a27..93ccdc7 100644
  
  #include <media/cec-pin.h>
  #include "cec-pin-priv.h"
-diff --git a/drivers/media/cec/cec-pin.c b/drivers/media/cec/cec-pin.c
+diff --git a/drivers/media/cec/core/cec-pin.c b/drivers/media/cec/core/cec-pin.c
 index 6e31142..0f31537 100644
---- a/drivers/media/cec/cec-pin.c
-+++ b/drivers/media/cec/cec-pin.c
+--- a/drivers/media/cec/core/cec-pin.c
++++ b/drivers/media/cec/core/cec-pin.c
 @@ -5,7 +5,6 @@
  
  #include <linux/delay.h>
@@ -182,10 +182,10 @@ index 89f2f2a..0456f2d 100644
  
  #include "solo6x10.h"
  
-diff --git a/drivers/media/platform/vivid/vivid-radio-rx.c b/drivers/media/platform/vivid/vivid-radio-rx.c
+diff --git a/drivers/media/test-drivers/vivid/vivid-radio-rx.c b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
 index 1f86d7d..854325d 100644
---- a/drivers/media/platform/vivid/vivid-radio-rx.c
-+++ b/drivers/media/platform/vivid/vivid-radio-rx.c
+--- a/drivers/media/test-drivers/vivid/vivid-radio-rx.c
++++ b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
 @@ -10,8 +10,6 @@
  #include <linux/delay.h>
  #include <linux/videodev2.h>
@@ -195,10 +195,10 @@ index 1f86d7d..854325d 100644
  #include <media/v4l2-common.h>
  #include <media/v4l2-event.h>
  #include <media/v4l2-dv-timings.h>
-diff --git a/drivers/media/platform/vivid/vivid-radio-tx.c b/drivers/media/platform/vivid/vivid-radio-tx.c
+diff --git a/drivers/media/test-drivers/vivid/vivid-radio-tx.c b/drivers/media/test-drivers/vivid/vivid-radio-tx.c
 index 1a3749b..89a1ee6 100644
---- a/drivers/media/platform/vivid/vivid-radio-tx.c
-+++ b/drivers/media/platform/vivid/vivid-radio-tx.c
+--- a/drivers/media/test-drivers/vivid/vivid-radio-tx.c
++++ b/drivers/media/test-drivers/vivid/vivid-radio-tx.c
 @@ -7,7 +7,6 @@
  
  #include <linux/errno.h>
