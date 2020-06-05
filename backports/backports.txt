@@ -60,10 +60,12 @@ add v4.15_pmdown_time.patch
 add v4.14_saa7146_timer_cast.patch
 add v4.14_module_param_call.patch
 add v4.14_fwnode_handle_get.patch
+delete v4.13_fwnode_graph_get_port_parent.patch
 
 [4.13.255]
 add v4.13_remove_nospec_h.patch
 add v4.13_drmP.patch
+add v4.13_fwnode_graph_get_port_parent.patch
 
 [4.12.255]
 add v4.12_revert_solo6x10_copykerneluser.patch

@@ -2133,6 +2133,20 @@ static inline void fwnode_handle_put(struct fwnode_handle *fwnode)
 
 #endif
 
+#ifdef NEED_FWNODE_GRAPH_GET_ENDPOINT_BY_ID
+
+#define FWNODE_GRAPH_ENDPOINT_NEXT      BIT(0)
+#define FWNODE_GRAPH_DEVICE_DISABLED    BIT(1)
+
+static inline struct fwnode_handle *
+fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
+                                u32 port, u32 endpoint, unsigned long flags)
+{
+	return NULL;
+}
+
+#endif
+
 #ifdef NEED_TO_OF_NODE
 static inline struct device_node *to_of_node(struct fwnode_handle *fwnode)
 {

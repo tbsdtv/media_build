@@ -1,0 +1,13 @@
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 6b989fe5a0a9..1c1c122a8089 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -761,7 +761,7 @@ int v4l2_subdev_get_fwnode_pad_1_to_1(struct media_entity *entity,
+ 
+ 	sd = media_entity_to_v4l2_subdev(entity);
+ 
+-	fwnode = fwnode_graph_get_port_parent(endpoint->local_fwnode);
++	fwnode = fwnode_graph_get_port_parent((struct fwnode_handle *)endpoint->local_fwnode);
+ 	fwnode_handle_put(fwnode);
+ 
+ 	if (dev_fwnode(sd->dev) == fwnode)
