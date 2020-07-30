@@ -1,0 +1,15 @@
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index 8a9c7de0c056..0a8d27481bd1 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -508,7 +508,9 @@ static int smiapp_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	}
+ 
+-	pm_status = pm_runtime_get_if_active(&client->dev, true);
++	pm_runtime_get_noresume(&client->dev);
++	pm_status = pm_runtime_get_if_in_use(&client->dev);
++	pm_runtime_put_noidle(&client->dev);
+ 	if (!pm_status)
+ 		return 0;
+ 

@@ -1,0 +1,140 @@
+diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
+index 0d8372cc364a..5f8883031c9c 100644
+--- a/drivers/media/pci/ivtv/ivtv-udma.c
++++ b/drivers/media/pci/ivtv/ivtv-udma.c
+@@ -92,7 +92,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+ {
+ 	struct ivtv_dma_page_info user_dma;
+ 	struct ivtv_user_dma *dma = &itv->udma;
+-	int err;
++	int i, err;
+ 
+ 	IVTV_DEBUG_DMA("ivtv_udma_setup, dst: 0x%08x\n", (unsigned int)ivtv_dest_addr);
+ 
+@@ -111,15 +111,16 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+ 		return -EINVAL;
+ 	}
+ 
+-	/* Pin user pages for DMA Xfer */
+-	err = pin_user_pages_unlocked(user_dma.uaddr, user_dma.page_count,
++	/* Get user pages for DMA Xfer */
++	err = get_user_pages_unlocked(user_dma.uaddr, user_dma.page_count,
+ 			dma->map, FOLL_FORCE);
+ 
+ 	if (user_dma.page_count != err) {
+ 		IVTV_DEBUG_WARN("failed to map user pages, returned %d instead of %d\n",
+ 			   err, user_dma.page_count);
+ 		if (err >= 0) {
+-			unpin_user_pages(dma->map, err);
++			for (i = 0; i < err; i++)
++				put_page(dma->map[i]);
+ 			return -EINVAL;
+ 		}
+ 		return err;
+@@ -129,7 +130,9 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+ 
+ 	/* Fill SG List with new values */
+ 	if (ivtv_udma_fill_sg_list(dma, &user_dma, 0) < 0) {
+-		unpin_user_pages(dma->map, dma->page_count);
++		for (i = 0; i < dma->page_count; i++) {
++			put_page(dma->map[i]);
++		}
+ 		dma->page_count = 0;
+ 		return -ENOMEM;
+ 	}
+@@ -150,6 +153,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+ void ivtv_udma_unmap(struct ivtv *itv)
+ {
+ 	struct ivtv_user_dma *dma = &itv->udma;
++	int i;
+ 
+ 	IVTV_DEBUG_INFO("ivtv_unmap_user_dma\n");
+ 
+@@ -165,7 +169,10 @@ void ivtv_udma_unmap(struct ivtv *itv)
+ 	/* sync DMA */
+ 	ivtv_udma_sync_for_cpu(itv);
+ 
+-	unpin_user_pages(dma->map, dma->page_count);
++	/* Release User Pages */
++	for (i = 0; i < dma->page_count; i++) {
++		put_page(dma->map[i]);
++	}
+ 	dma->page_count = 0;
+ }
+ 
+diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
+index 5f7dc9771f8d..cd2fe2d444c0 100644
+--- a/drivers/media/pci/ivtv/ivtv-yuv.c
++++ b/drivers/media/pci/ivtv/ivtv-yuv.c
+@@ -30,6 +30,7 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+ 	struct yuv_playback_info *yi = &itv->yuv_info;
+ 	u8 frame = yi->draw_frame;
+ 	struct yuv_frame_info *f = &yi->new_frame_info[frame];
++	int i;
+ 	int y_pages, uv_pages;
+ 	unsigned long y_buffer_offset, uv_buffer_offset;
+ 	int y_decode_height, uv_decode_height, y_size;
+@@ -61,12 +62,12 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+ 	ivtv_udma_get_page_info (&y_dma, (unsigned long)args->y_source, 720 * y_decode_height);
+ 	ivtv_udma_get_page_info (&uv_dma, (unsigned long)args->uv_source, 360 * uv_decode_height);
+ 
+-	/* Pin user pages for DMA Xfer */
+-	y_pages = pin_user_pages_unlocked(y_dma.uaddr,
++	/* Get user pages for DMA Xfer */
++	y_pages = get_user_pages_unlocked(y_dma.uaddr,
+ 			y_dma.page_count, &dma->map[0], FOLL_FORCE);
+ 	uv_pages = 0; /* silence gcc. value is set and consumed only if: */
+ 	if (y_pages == y_dma.page_count) {
+-		uv_pages = pin_user_pages_unlocked(uv_dma.uaddr,
++		uv_pages = get_user_pages_unlocked(uv_dma.uaddr,
+ 				uv_dma.page_count, &dma->map[y_pages],
+ 				FOLL_FORCE);
+ 	}
+@@ -80,7 +81,8 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+ 				 uv_pages, uv_dma.page_count);
+ 
+ 			if (uv_pages >= 0) {
+-				unpin_user_pages(&dma->map[y_pages], uv_pages);
++				for (i = 0; i < uv_pages; i++)
++					put_page(dma->map[y_pages + i]);
+ 				rc = -EFAULT;
+ 			} else {
+ 				rc = uv_pages;
+@@ -91,7 +93,8 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+ 				 y_pages, y_dma.page_count);
+ 		}
+ 		if (y_pages >= 0) {
+-			unpin_user_pages(dma->map, y_pages);
++			for (i = 0; i < y_pages; i++)
++				put_page(dma->map[i]);
+ 			/*
+ 			 * Inherit the -EFAULT from rc's
+ 			 * initialization, but allow it to be
+@@ -109,7 +112,9 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+ 	/* Fill & map SG List */
+ 	if (ivtv_udma_fill_sg_list (dma, &uv_dma, ivtv_udma_fill_sg_list (dma, &y_dma, 0)) < 0) {
+ 		IVTV_DEBUG_WARN("could not allocate bounce buffers for highmem userspace buffers\n");
+-		unpin_user_pages(dma->map, dma->page_count);
++		for (i = 0; i < dma->page_count; i++) {
++			put_page(dma->map[i]);
++		}
+ 		dma->page_count = 0;
+ 		return -ENOMEM;
+ 	}
+diff --git a/drivers/media/pci/ivtv/ivtvfb.c b/drivers/media/pci/ivtv/ivtvfb.c
+index e2d56dca5be4..0c2859844081 100644
+--- a/drivers/media/pci/ivtv/ivtvfb.c
++++ b/drivers/media/pci/ivtv/ivtvfb.c
+@@ -281,10 +281,10 @@ static int ivtvfb_prep_dec_dma_to_device(struct ivtv *itv,
+ 	/* Map User DMA */
+ 	if (ivtv_udma_setup(itv, ivtv_dest_addr, userbuf, size_in_bytes) <= 0) {
+ 		mutex_unlock(&itv->udma.lock);
+-		IVTVFB_WARN("ivtvfb_prep_dec_dma_to_device, Error with pin_user_pages: %d bytes, %d pages returned\n",
++		IVTVFB_WARN("ivtvfb_prep_dec_dma_to_device, Error with get_user_pages: %d bytes, %d pages returned\n",
+ 			       size_in_bytes, itv->udma.page_count);
+ 
+-		/* pin_user_pages must have failed completely */
++		/* get_user_pages must have failed completely */
+ 		return -EIO;
+ 	}
+ 
