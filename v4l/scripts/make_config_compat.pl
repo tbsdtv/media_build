@@ -656,8 +656,8 @@ sub check_other_dependencies()
 	check_files_for_func("mp_mb__after_atomic", "NEED_SMP_MB_AFTER_ATOMIC", "include/asm-generic/barrier.h");
 	check_files_for_func("pci_zalloc_consistent", "NEED_PCI_ZALLOC_CONSISTENT", "include/asm-generic/pci-dma-compat.h", "include/linux/pci-dma-compat.h");
 	check_files_for_func("kref_get_unless_zero", "NEED_KREF_GET_UNLESS_ZERO", "include/linux/kref.h");
-	check_files_for_func("prandom_u32_max", "NEED_PRANDOM_U32_MAX", "include/linux/random.h");
-	check_files_for_func("prandom_u32", "NEED_PRANDOM_U32", "include/linux/random.h");
+	check_files_for_func("prandom_u32_max", "NEED_PRANDOM_U32_MAX", "include/linux/random.h", "include/linux/prandom.h");
+	check_files_for_func("prandom_u32", "NEED_PRANDOM_U32", "include/linux/random.h", "include/linux/prandom.h");
 	check_files_for_func("GENMASK", "NEED_GENMASK", "include/linux/bitops.h", "include/linux/bits.h");
 	check_files_for_func("mult_frac", "NEED_MULT_FRAC", "include/linux/kernel.h");
 	check_files_for_func("clk_prepare_enable", "NEED_CLOCK_HELPERS", "include/linux/clk.h");
@@ -721,7 +721,7 @@ sub check_other_dependencies()
 	check_files_for_func("usb_urb_ep_type_check", "NEED_USB_EP_CHECK", "include/linux/usb.h");
 	check_files_for_func("get_user_pages_longterm", "NEED_GET_USER_PAGES_LONGTERM", "include/linux/mm.h");
 	check_files_for_func("__pfn_to_phys", "NEED_PFN_TO_PHYS", "include/asm-generic/memory_model.h");
-	check_files_for_func("next_pseudo_random32", "NEED_NEXT_PSEUDO_RANDOM32", "include/linux/random.h");
+	check_files_for_func("next_pseudo_random32", "NEED_NEXT_PSEUDO_RANDOM32", "include/linux/random.h", "include/linux/prandom.h");
 	check_files_for_func("memdup_user_nul", "NEED_MEMDUP_USER_NUL", "include/linux/string.h");
 	check_files_for_func("STACK_FRAME_NON_STANDARD", "NEED_STACK_FRAME_NON_STANDARD", "include/linux/frame.h");
 	check_files_for_func("pci_free_irq_vectors", "NEED_PCI_FREE_IRQ_VECTORS", "include/linux/pci.h");
