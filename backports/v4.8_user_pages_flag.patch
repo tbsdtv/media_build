@@ -20,10 +20,10 @@ index 6e9e05153f4e..6c029616977f 100644
  		goto out_destroy;
  	/* We accept only complete set of PFNs */
 diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
-index 3b33e87ed73b..f98f7a0bd69f 100644
+index 5f8883031c9c..8cd24ffe9484 100644
 --- a/drivers/media/pci/ivtv/ivtv-udma.c
 +++ b/drivers/media/pci/ivtv/ivtv-udma.c
-@@ -124,8 +124,8 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+@@ -112,8 +112,8 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
  	}
  
  	/* Get user pages for DMA Xfer */
@@ -35,10 +35,10 @@ index 3b33e87ed73b..f98f7a0bd69f 100644
  	if (user_dma.page_count != err) {
  		IVTV_DEBUG_WARN("failed to map user pages, returned %d instead of %d\n",
 diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
-index c3c2c79585f5..d45eeeb3dd93 100644
+index cd2fe2d444c0..d219f1f84032 100644
 --- a/drivers/media/pci/ivtv/ivtv-yuv.c
 +++ b/drivers/media/pci/ivtv/ivtv-yuv.c
-@@ -76,12 +76,11 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+@@ -64,12 +64,11 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
  
  	/* Get user pages for DMA Xfer */
  	y_pages = get_user_pages_unlocked(y_dma.uaddr,
@@ -54,10 +54,10 @@ index c3c2c79585f5..d45eeeb3dd93 100644
  
  	if (y_pages != y_dma.page_count || uv_pages != uv_dma.page_count) {
 diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index 870a2a526e0b..8e1915074673 100644
+index 111b311fea4d..54badf2416af 100644
 --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
 +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
-@@ -156,7 +156,6 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+@@ -153,7 +153,6 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
  {
  	unsigned long first, last;
  	int err, rw = 0;
@@ -65,14 +65,14 @@ index 870a2a526e0b..8e1915074673 100644
  
  	dma->direction = direction;
  	switch (dma->direction) {
-@@ -180,14 +179,12 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+@@ -177,14 +176,12 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
  	if (NULL == dma->pages)
  		return -ENOMEM;
  
 -	if (rw == READ)
 -		flags |= FOLL_WRITE;
 -
- 	dprintk(1, "init user [0x%lx+0x%lx => %d pages]\n",
+ 	dprintk(1, "init user [0x%lx+0x%lx => %lu pages]\n",
  		data, size, dma->nr_pages);
  
  	err = get_user_pages(data & PAGE_MASK, dma->nr_pages,

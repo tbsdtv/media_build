@@ -1,0 +1,481 @@
+diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
+index 4cb890b949c3..02ebd43e672e 100644
+--- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
++++ b/drivers/media/pci/bt8xx/dvb-bt8xx.c
+@@ -39,10 +39,9 @@ DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
+ 
+ #define IF_FREQUENCYx6 217    /* 6 * 36.16666666667MHz */
+ 
+-static void dvb_bt8xx_task(struct tasklet_struct *t)
++static void dvb_bt8xx_task(unsigned long data)
+ {
+-	struct bt878 *bt = from_tasklet(bt, t, tasklet);
+-	struct dvb_bt8xx_card *card = dev_get_drvdata(&bt->adapter->dev);
++	struct dvb_bt8xx_card *card = (struct dvb_bt8xx_card *)data;
+ 
+ 	dprintk("%d\n", card->bt->finished_block);
+ 
+@@ -778,7 +777,7 @@ static int dvb_bt8xx_load_card(struct dvb_bt8xx_card *card, u32 type)
+ 		goto err_disconnect_frontend;
+ 	}
+ 
+-	tasklet_setup(&card->bt->tasklet, dvb_bt8xx_task);
++	tasklet_init(&card->bt->tasklet, dvb_bt8xx_task, (unsigned long) card);
+ 
+ 	frontend_init(card, type);
+ 
+diff --git a/drivers/media/pci/mantis/mantis_dma.c b/drivers/media/pci/mantis/mantis_dma.c
+index 4df571ff272b..affc5977387f 100644
+--- a/drivers/media/pci/mantis/mantis_dma.c
++++ b/drivers/media/pci/mantis/mantis_dma.c
+@@ -200,9 +200,9 @@ void mantis_dma_stop(struct mantis_pci *mantis)
+ }
+ 
+ 
+-void mantis_dma_xfer(struct tasklet_struct *t)
++void mantis_dma_xfer(unsigned long data)
+ {
+-	struct mantis_pci *mantis = from_tasklet(mantis, t, tasklet);
++	struct mantis_pci *mantis = (struct mantis_pci *) data;
+ 	struct mantis_hwconfig *config = mantis->hwconfig;
+ 
+ 	while (mantis->last_block != mantis->busy_block) {
+diff --git a/drivers/media/pci/mantis/mantis_dma.h b/drivers/media/pci/mantis/mantis_dma.h
+index 37da982c9c29..421663443d62 100644
+--- a/drivers/media/pci/mantis/mantis_dma.h
++++ b/drivers/media/pci/mantis/mantis_dma.h
+@@ -13,6 +13,6 @@ extern int mantis_dma_init(struct mantis_pci *mantis);
+ extern int mantis_dma_exit(struct mantis_pci *mantis);
+ extern void mantis_dma_start(struct mantis_pci *mantis);
+ extern void mantis_dma_stop(struct mantis_pci *mantis);
+-extern void mantis_dma_xfer(struct tasklet_struct *t);
++extern void mantis_dma_xfer(unsigned long data);
+ 
+ #endif /* __MANTIS_DMA_H */
+diff --git a/drivers/media/pci/mantis/mantis_dvb.c b/drivers/media/pci/mantis/mantis_dvb.c
+index c7ba4a76e608..2da94be5b373 100644
+--- a/drivers/media/pci/mantis/mantis_dvb.c
++++ b/drivers/media/pci/mantis/mantis_dvb.c
+@@ -205,7 +205,7 @@ int mantis_dvb_init(struct mantis_pci *mantis)
+ 	}
+ 
+ 	dvb_net_init(&mantis->dvb_adapter, &mantis->dvbnet, &mantis->demux.dmx);
+-	tasklet_setup(&mantis->tasklet, mantis_dma_xfer);
++	tasklet_init(&mantis->tasklet, mantis_dma_xfer, (unsigned long) mantis);
+ 	tasklet_disable(&mantis->tasklet);
+ 	if (mantis->hwconfig) {
+ 		result = config->frontend_init(mantis, mantis->fe);
+diff --git a/drivers/media/pci/ngene/ngene-core.c b/drivers/media/pci/ngene/ngene-core.c
+index f9f94f47d76b..af15ca1c501b 100644
+--- a/drivers/media/pci/ngene/ngene-core.c
++++ b/drivers/media/pci/ngene/ngene-core.c
+@@ -50,9 +50,9 @@ DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
+ /* nGene interrupt handler **************************************************/
+ /****************************************************************************/
+ 
+-static void event_tasklet(struct tasklet_struct *t)
++static void event_tasklet(unsigned long data)
+ {
+-	struct ngene *dev = from_tasklet(dev, t, event_tasklet);
++	struct ngene *dev = (struct ngene *)data;
+ 
+ 	while (dev->EventQueueReadIndex != dev->EventQueueWriteIndex) {
+ 		struct EVENT_BUFFER Event =
+@@ -68,9 +68,9 @@ static void event_tasklet(struct tasklet_struct *t)
+ 	}
+ }
+ 
+-static void demux_tasklet(struct tasklet_struct *t)
++static void demux_tasklet(unsigned long data)
+ {
+-	struct ngene_channel *chan = from_tasklet(chan, t, demux_tasklet);
++	struct ngene_channel *chan = (struct ngene_channel *)data;
+ 	struct device *pdev = &chan->dev->pci_dev->dev;
+ 	struct SBufferHeader *Cur = chan->nextBuffer;
+ 
+@@ -1181,7 +1181,7 @@ static void ngene_init(struct ngene *dev)
+ 	struct device *pdev = &dev->pci_dev->dev;
+ 	int i;
+ 
+-	tasklet_setup(&dev->event_tasklet, event_tasklet);
++	tasklet_init(&dev->event_tasklet, event_tasklet, (unsigned long)dev);
+ 
+ 	memset_io(dev->iomem + 0xc000, 0x00, 0x220);
+ 	memset_io(dev->iomem + 0xc400, 0x00, 0x100);
+@@ -1445,7 +1445,7 @@ static int init_channel(struct ngene_channel *chan)
+ 	struct ngene_info *ni = dev->card_info;
+ 	int io = ni->io_type[nr];
+ 
+-	tasklet_setup(&chan->demux_tasklet, demux_tasklet);
++	tasklet_init(&chan->demux_tasklet, demux_tasklet, (unsigned long)chan);
+ 	chan->users = 0;
+ 	chan->type = io;
+ 	chan->mode = chan->type;	/* for now only one mode */
+diff --git a/drivers/media/pci/smipcie/smipcie-main.c b/drivers/media/pci/smipcie/smipcie-main.c
+index e7604b7ecc8d..9ca0fc3e6f80 100644
+--- a/drivers/media/pci/smipcie/smipcie-main.c
++++ b/drivers/media/pci/smipcie/smipcie-main.c
+@@ -280,9 +280,9 @@ static void smi_port_clearInterrupt(struct smi_port *port)
+ }
+ 
+ /* tasklet handler: DMA data to dmx.*/
+-static void smi_dma_xfer(struct tasklet_struct *t)
++static void smi_dma_xfer(unsigned long data)
+ {
+-	struct smi_port *port = from_tasklet(port, t, tasklet);
++	struct smi_port *port = (struct smi_port *) data;
+ 	struct smi_dev *dev = port->dev;
+ 	u32 intr_status, finishedData, dmaManagement;
+ 	u8 dmaChan0State, dmaChan1State;
+@@ -422,7 +422,7 @@ static int smi_port_init(struct smi_port *port, int dmaChanUsed)
+ 	}
+ 
+ 	smi_port_disableInterrupt(port);
+-	tasklet_setup(&port->tasklet, smi_dma_xfer);
++	tasklet_init(&port->tasklet, smi_dma_xfer, (unsigned long)port);
+ 	tasklet_disable(&port->tasklet);
+ 	port->enable = 1;
+ 	return 0;
+diff --git a/drivers/media/pci/ttpci/av7110.c b/drivers/media/pci/ttpci/av7110.c
+index 885e6bc40c19..bf36b1e22b63 100644
+--- a/drivers/media/pci/ttpci/av7110.c
++++ b/drivers/media/pci/ttpci/av7110.c
+@@ -357,9 +357,9 @@ static inline void start_debi_dma(struct av7110 *av7110, int dir,
+ 		irdebi(av7110, DEBISWAB, addr, 0, len);
+ }
+ 
+-static void debiirq(struct tasklet_struct *t)
++static void debiirq(unsigned long cookie)
+ {
+-	struct av7110 *av7110 = from_tasklet(av7110, t, debi_tasklet);
++	struct av7110 *av7110 = (struct av7110 *)cookie;
+ 	int type = av7110->debitype;
+ 	int handle = (type >> 8) & 0x1f;
+ 	unsigned int xfer = 0;
+@@ -458,9 +458,9 @@ static void debiirq(struct tasklet_struct *t)
+ }
+ 
+ /* irq from av7110 firmware writing the mailbox register in the DPRAM */
+-static void gpioirq(struct tasklet_struct *t)
++static void gpioirq(unsigned long cookie)
+ {
+-	struct av7110 *av7110 = from_tasklet(av7110, t, gpio_tasklet);
++	struct av7110 *av7110 = (struct av7110 *)cookie;
+ 	u32 rxbuf, txbuf;
+ 	int len;
+ 
+@@ -1230,9 +1230,9 @@ static int budget_stop_feed(struct dvb_demux_feed *feed)
+ 	return status;
+ }
+ 
+-static void vpeirq(struct tasklet_struct *t)
++static void vpeirq(unsigned long cookie)
+ {
+-	struct av7110 *budget = from_tasklet(budget, t, vpe_tasklet);
++	struct av7110 *budget = (struct av7110 *)cookie;
+ 	u8 *mem = (u8 *) (budget->grabbing);
+ 	u32 olddma = budget->ttbp;
+ 	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
+@@ -2518,7 +2518,7 @@ static int av7110_attach(struct saa7146_dev* dev,
+ 		saa7146_write(dev, NUM_LINE_BYTE3, (TS_HEIGHT << 16) | TS_WIDTH);
+ 		saa7146_write(dev, MC2, MASK_04 | MASK_20);
+ 
+-		tasklet_setup(&av7110->vpe_tasklet, vpeirq);
++		tasklet_init(&av7110->vpe_tasklet, vpeirq, (unsigned long) av7110);
+ 
+ 	} else if (budgetpatch) {
+ 		spin_lock_init(&av7110->feedlock1);
+@@ -2599,7 +2599,7 @@ static int av7110_attach(struct saa7146_dev* dev,
+ 		saa7146_write(dev, MC1, (MASK_13 | MASK_29));
+ 
+ 		/* end of budgetpatch register initialization */
+-		tasklet_setup(&av7110->vpe_tasklet,  vpeirq);
++		tasklet_init (&av7110->vpe_tasklet,  vpeirq,  (unsigned long) av7110);
+ 	} else {
+ 		saa7146_write(dev, PCI_BT_V1, 0x1c00101f);
+ 		saa7146_write(dev, BCS_CTRL, 0x80400040);
+@@ -2614,8 +2614,8 @@ static int av7110_attach(struct saa7146_dev* dev,
+ 		saa7146_write(dev, GPIO_CTRL, 0x000000);
+ 	}
+ 
+-	tasklet_setup(&av7110->debi_tasklet, debiirq);
+-	tasklet_setup(&av7110->gpio_tasklet, gpioirq);
++	tasklet_init (&av7110->debi_tasklet, debiirq, (unsigned long) av7110);
++	tasklet_init (&av7110->gpio_tasklet, gpioirq, (unsigned long) av7110);
+ 
+ 	mutex_init(&av7110->pid_mutex);
+ 
+diff --git a/drivers/media/pci/ttpci/budget-ci.c b/drivers/media/pci/ttpci/budget-ci.c
+index d59d18647371..77b102b8a013 100644
+--- a/drivers/media/pci/ttpci/budget-ci.c
++++ b/drivers/media/pci/ttpci/budget-ci.c
+@@ -99,10 +99,9 @@ struct budget_ci {
+ 	u8 tuner_pll_address; /* used for philips_tdm1316l configs */
+ };
+ 
+-static void msp430_ir_interrupt(struct tasklet_struct *t)
++static void msp430_ir_interrupt(unsigned long data)
+ {
+-	struct budget_ci_ir *ir = from_tasklet(ir, t, msp430_irq_tasklet);
+-	struct budget_ci *budget_ci = container_of(ir, typeof(*budget_ci), ir);
++	struct budget_ci *budget_ci = (struct budget_ci *) data;
+ 	struct rc_dev *dev = budget_ci->ir.dev;
+ 	u32 command = ttpci_budget_debiread(&budget_ci->budget, DEBINOSWAP, DEBIADDR_IR, 2, 1, 0) >> 8;
+ 
+@@ -230,7 +229,8 @@ static int msp430_ir_init(struct budget_ci *budget_ci)
+ 
+ 	budget_ci->ir.dev = dev;
+ 
+-	tasklet_setup(&budget_ci->ir.msp430_irq_tasklet, msp430_ir_interrupt);
++	tasklet_init(&budget_ci->ir.msp430_irq_tasklet, msp430_ir_interrupt,
++		     (unsigned long) budget_ci);
+ 
+ 	SAA7146_IER_ENABLE(saa, MASK_06);
+ 	saa7146_setgpio(saa, 3, SAA7146_GPIO_IRQHI);
+@@ -348,10 +348,9 @@ static int ciintf_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
+ 	return 0;
+ }
+ 
+-static void ciintf_interrupt(struct tasklet_struct *t)
++static void ciintf_interrupt(unsigned long data)
+ {
+-	struct budget_ci *budget_ci = from_tasklet(budget_ci, t,
+-						   ciintf_irq_tasklet);
++	struct budget_ci *budget_ci = (struct budget_ci *) data;
+ 	struct saa7146_dev *saa = budget_ci->budget.dev;
+ 	unsigned int flags;
+ 
+@@ -492,7 +491,7 @@ static int ciintf_init(struct budget_ci *budget_ci)
+ 
+ 	// Setup CI slot IRQ
+ 	if (budget_ci->ci_irq) {
+-		tasklet_setup(&budget_ci->ciintf_irq_tasklet, ciintf_interrupt);
++		tasklet_init(&budget_ci->ciintf_irq_tasklet, ciintf_interrupt, (unsigned long) budget_ci);
+ 		if (budget_ci->slot_status != SLOTSTATUS_NONE) {
+ 			saa7146_setgpio(saa, 0, SAA7146_GPIO_IRQLO);
+ 		} else {
+diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttpci/budget-core.c
+index d405eea5c37f..293867b9e796 100644
+--- a/drivers/media/pci/ttpci/budget-core.c
++++ b/drivers/media/pci/ttpci/budget-core.c
+@@ -171,9 +171,9 @@ static int budget_read_fe_status(struct dvb_frontend *fe,
+ 	return ret;
+ }
+ 
+-static void vpeirq(struct tasklet_struct *t)
++static void vpeirq(unsigned long data)
+ {
+-	struct budget *budget = from_tasklet(budget, t, vpe_tasklet);
++	struct budget *budget = (struct budget *) data;
+ 	u8 *mem = (u8 *) (budget->grabbing);
+ 	u32 olddma = budget->ttbp;
+ 	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
+@@ -519,7 +519,7 @@ int ttpci_budget_init(struct budget *budget, struct saa7146_dev *dev,
+ 	/* upload all */
+ 	saa7146_write(dev, GPIO_CTRL, 0x000000);
+ 
+-	tasklet_setup(&budget->vpe_tasklet, vpeirq);
++	tasklet_init(&budget->vpe_tasklet, vpeirq, (unsigned long) budget);
+ 
+ 	/* frontend power on */
+ 	if (bi->type != BUDGET_FS_ACTIVY)
+diff --git a/drivers/media/pci/tw5864/tw5864-video.c b/drivers/media/pci/tw5864/tw5864-video.c
+index 9131265c2b87..84a58292a089 100644
+--- a/drivers/media/pci/tw5864/tw5864-video.c
++++ b/drivers/media/pci/tw5864/tw5864-video.c
+@@ -175,7 +175,7 @@ static const unsigned int intra4x4_lambda3[] = {
+ static v4l2_std_id tw5864_get_v4l2_std(enum tw5864_vid_std std);
+ static enum tw5864_vid_std tw5864_from_v4l2_std(v4l2_std_id v4l2_std);
+ 
+-static void tw5864_handle_frame_task(struct tasklet_struct *t);
++static void tw5864_handle_frame_task(unsigned long data);
+ static void tw5864_handle_frame(struct tw5864_h264_frame *frame);
+ static void tw5864_frame_interval_set(struct tw5864_input *input);
+ 
+@@ -1063,7 +1063,8 @@ int tw5864_video_init(struct tw5864_dev *dev, int *video_nr)
+ 	dev->irqmask |= TW5864_INTR_VLC_DONE | TW5864_INTR_TIMER;
+ 	tw5864_irqmask_apply(dev);
+ 
+-	tasklet_setup(&dev->tasklet, tw5864_handle_frame_task);
++	tasklet_init(&dev->tasklet, tw5864_handle_frame_task,
++		     (unsigned long)dev);
+ 
+ 	for (i = 0; i < TW5864_INPUTS; i++) {
+ 		dev->inputs[i].root = dev;
+@@ -1316,9 +1317,9 @@ static int tw5864_is_motion_triggered(struct tw5864_h264_frame *frame)
+ 	return detected;
+ }
+ 
+-static void tw5864_handle_frame_task(struct tasklet_struct *t)
++static void tw5864_handle_frame_task(unsigned long data)
+ {
+-	struct tw5864_dev *dev = from_tasklet(dev, t, tasklet);
++	struct tw5864_dev *dev = (struct tw5864_dev *)data;
+ 	unsigned long flags;
+ 	int batch_size = H264_BUF_CNT;
+ 
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index c012fd2e1d29..cd297d14d2b1 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -439,9 +439,9 @@ static void mcam_ctlr_dma_vmalloc(struct mcam_camera *cam)
+ /*
+  * Copy data out to user space in the vmalloc case
+  */
+-static void mcam_frame_tasklet(struct tasklet_struct *t)
++static void mcam_frame_tasklet(unsigned long data)
+ {
+-	struct mcam_camera *cam = from_tasklet(cam, t, s_tasklet);
++	struct mcam_camera *cam = (struct mcam_camera *) data;
+ 	int i;
+ 	unsigned long flags;
+ 	struct mcam_vb_buffer *buf;
+@@ -1300,7 +1300,8 @@ static int mcam_setup_vb2(struct mcam_camera *cam)
+ 		break;
+ 	case B_vmalloc:
+ #ifdef MCAM_MODE_VMALLOC
+-		tasklet_setup(&cam->s_tasklet, mcam_frame_tasklet);
++		tasklet_init(&cam->s_tasklet, mcam_frame_tasklet,
++				(unsigned long) cam);
+ 		vq->ops = &mcam_vb2_ops;
+ 		vq->mem_ops = &vb2_vmalloc_memops;
+ 		cam->dma_setup = mcam_ctlr_dma_vmalloc;
+diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
+index e47520fcb93c..0366c4a813ce 100644
+--- a/drivers/media/platform/pxa_camera.c
++++ b/drivers/media/platform/pxa_camera.c
+@@ -1150,9 +1150,9 @@ static void pxa_camera_deactivate(struct pxa_camera_dev *pcdev)
+ 	clk_disable_unprepare(pcdev->clk);
+ }
+ 
+-static void pxa_camera_eof(struct tasklet_struct *t)
++static void pxa_camera_eof(unsigned long arg)
+ {
+-	struct pxa_camera_dev *pcdev = from_tasklet(pcdev, t, task_eof);
++	struct pxa_camera_dev *pcdev = (struct pxa_camera_dev *)arg;
+ 	unsigned long cifr;
+ 	struct pxa_buffer *buf;
+ 
+@@ -2391,7 +2391,7 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 		goto exit_free_dma;
+ 	}
+ 
+-	tasklet_setup(&pcdev->task_eof, pxa_camera_eof);
++	tasklet_init(&pcdev->task_eof, pxa_camera_eof, (unsigned long)pcdev);
+ 
+ 	pxa_camera_activate(pcdev);
+ 
+diff --git a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
+index dbe7788083a4..5baada4f65e5 100644
+--- a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
++++ b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
+@@ -77,9 +77,9 @@ static void c8sectpfe_timer_interrupt(struct timer_list *t)
+ 	add_timer(&fei->timer);
+ }
+ 
+-static void channel_swdemux_tsklet(struct tasklet_struct *t)
++static void channel_swdemux_tsklet(unsigned long data)
+ {
+-	struct channel_info *channel = from_tasklet(channel, t, tsklet);
++	struct channel_info *channel = (struct channel_info *)data;
+ 	struct c8sectpfei *fei;
+ 	unsigned long wp, rp;
+ 	int pos, num_packets, n, size;
+@@ -208,7 +208,8 @@ static int c8sectpfe_start_feed(struct dvb_demux_feed *dvbdmxfeed)
+ 
+ 		dev_dbg(fei->dev, "Starting channel=%p\n", channel);
+ 
+-		tasklet_setup(&channel->tsklet, channel_swdemux_tsklet);
++		tasklet_init(&channel->tsklet, channel_swdemux_tsklet,
++			     (unsigned long) channel);
+ 
+ 		/* Reset the internal inputblock sram pointers */
+ 		writel(channel->fifo,
+@@ -637,7 +638,8 @@ static int configure_memdma_and_inputblock(struct c8sectpfei *fei,
+ 	writel(tsin->back_buffer_busaddr, tsin->irec + DMA_PRDS_BUSRP_TP(0));
+ 
+ 	/* initialize tasklet */
+-	tasklet_setup(&tsin->tsklet, channel_swdemux_tsklet);
++	tasklet_init(&tsin->tsklet, channel_swdemux_tsklet,
++		(unsigned long) tsin);
+ 
+ 	return 0;
+ 
+diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
+index 5c395da74e17..cce97c9d5409 100644
+--- a/drivers/media/radio/wl128x/fmdrv_common.c
++++ b/drivers/media/radio/wl128x/fmdrv_common.c
+@@ -244,7 +244,7 @@ void fmc_update_region_info(struct fmdev *fmdev, u8 region_to_set)
+  * FM common sub-module will schedule this tasklet whenever it receives
+  * FM packet from ST driver.
+  */
+-static void recv_tasklet(struct tasklet_struct *t)
++static void recv_tasklet(unsigned long arg)
+ {
+ 	struct fmdev *fmdev;
+ 	struct fm_irq *irq_info;
+@@ -253,7 +253,7 @@ static void recv_tasklet(struct tasklet_struct *t)
+ 	u8 num_fm_hci_cmds;
+ 	unsigned long flags;
+ 
+-	fmdev = from_tasklet(fmdev, t, tx_task);
++	fmdev = (struct fmdev *)arg;
+ 	irq_info = &fmdev->irq_info;
+ 	/* Process all packets in the RX queue */
+ 	while ((skb = skb_dequeue(&fmdev->rx_q))) {
+@@ -328,13 +328,13 @@ static void recv_tasklet(struct tasklet_struct *t)
+ }
+ 
+ /* FM send tasklet: is scheduled when FM packet has to be sent to chip */
+-static void send_tasklet(struct tasklet_struct *t)
++static void send_tasklet(unsigned long arg)
+ {
+ 	struct fmdev *fmdev;
+ 	struct sk_buff *skb;
+ 	int len;
+ 
+-	fmdev = from_tasklet(fmdev, t, tx_task);
++	fmdev = (struct fmdev *)arg;
+ 
+ 	if (!atomic_read(&fmdev->tx_cnt))
+ 		return;
+@@ -1535,11 +1535,11 @@ int fmc_prepare(struct fmdev *fmdev)
+ 
+ 	/* Initialize TX queue and TX tasklet */
+ 	skb_queue_head_init(&fmdev->tx_q);
+-	tasklet_setup(&fmdev->tx_task, send_tasklet);
++	tasklet_init(&fmdev->tx_task, send_tasklet, (unsigned long)fmdev);
+ 
+ 	/* Initialize RX Queue and RX tasklet */
+ 	skb_queue_head_init(&fmdev->rx_q);
+-	tasklet_setup(&fmdev->rx_task, recv_tasklet);
++	tasklet_init(&fmdev->rx_task, recv_tasklet, (unsigned long)fmdev);
+ 
+ 	fmdev->irq_info.stage = 0;
+ 	atomic_set(&fmdev->tx_cnt, 1);
+diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+index df6c5e4a0f05..b8d39b2f777f 100644
+--- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
++++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+@@ -769,9 +769,9 @@ static void ttusb_dec_process_urb_frame(struct ttusb_dec *dec, u8 *b,
+ 	}
+ }
+ 
+-static void ttusb_dec_process_urb_frame_list(struct tasklet_struct *t)
++static void ttusb_dec_process_urb_frame_list(unsigned long data)
+ {
+-	struct ttusb_dec *dec = from_tasklet(dec, t, urb_tasklet);
++	struct ttusb_dec *dec = (struct ttusb_dec *)data;
+ 	struct list_head *item;
+ 	struct urb_frame *frame;
+ 	unsigned long flags;
+@@ -1209,7 +1209,8 @@ static void ttusb_dec_init_tasklet(struct ttusb_dec *dec)
+ {
+ 	spin_lock_init(&dec->urb_frame_list_lock);
+ 	INIT_LIST_HEAD(&dec->urb_frame_list);
+-	tasklet_setup(&dec->urb_tasklet, ttusb_dec_process_urb_frame_list);
++	tasklet_init(&dec->urb_tasklet, ttusb_dec_process_urb_frame_list,
++		     (unsigned long)dec);
+ }
+ 
+ static int ttusb_init_rc( struct ttusb_dec *dec)

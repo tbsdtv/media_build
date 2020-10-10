@@ -1,22 +1,22 @@
 diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index f8020ebe9f05..617fb2e944dc 100644
+index 4e598e937dfe..035cd2449d24 100644
 --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
 +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -846,7 +846,7 @@ static int cio2_vb2_buf_init(struct vb2_buffer *vb)
- 	unsigned int pages = DIV_ROUND_UP(vb->planes[0].length, CIO2_PAGE_SIZE);
- 	unsigned int lops = DIV_ROUND_UP(pages + 1, entries_per_page);
+@@ -836,7 +836,7 @@ static int cio2_vb2_buf_init(struct vb2_buffer *vb)
+ 	unsigned int pages = PFN_UP(vb->planes[0].length);
+ 	unsigned int lops = DIV_ROUND_UP(pages + 1, CIO2_LOP_ENTRIES);
  	struct sg_table *sg;
 -	struct sg_dma_page_iter sg_iter;
 +	struct sg_page_iter sg_iter;
- 	int i, j;
+ 	unsigned int i, j;
  
  	if (lops <= 0 || lops > CIO2_MAX_LOPS) {
-@@ -873,7 +873,7 @@ static int cio2_vb2_buf_init(struct vb2_buffer *vb)
+@@ -863,7 +863,7 @@ static int cio2_vb2_buf_init(struct vb2_buffer *vb)
  		b->offset = sg->sgl->offset;
  
  	i = j = 0;
--	for_each_sg_dma_page (sg->sgl, &sg_iter, sg->nents, 0) {
+-	for_each_sg_dma_page(sg->sgl, &sg_iter, sg->nents, 0) {
 +	for_each_sg_page(sg->sgl, &sg_iter, sg->nents, 0) {
  		if (!pages--)
  			break;
- 		b->lop[i][j] = sg_page_iter_dma_address(&sg_iter) >> PAGE_SHIFT;
+ 		b->lop[i][j] = PFN_DOWN(sg_page_iter_dma_address(&sg_iter));

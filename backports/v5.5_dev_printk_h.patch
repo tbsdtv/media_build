@@ -1,0 +1,39 @@
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
+index 108e7937e9c1..b5d950389aa2 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
+@@ -12,7 +12,7 @@
+ #include <linux/moduleparam.h>
+ #include <linux/mutex.h>
+ #include <linux/platform_device.h>
+-#include <linux/dev_printk.h>
++#include <linux/printk.h>
+ #include <linux/time.h>
+ #include <linux/types.h>
+ #include <linux/workqueue.h>
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+index 0a62b97e6a27..a88aa8b8ee60 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+@@ -20,7 +20,7 @@
+ 
+ #include <linux/types.h>
+ #include <linux/slab.h>
+-#include <linux/dev_printk.h>
++#include <linux/printk.h>
+ #include <linux/ratelimit.h>
+ 
+ #include "vidtv_channel.h"
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.c b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+index 5d1a275d504b..f2864b70e940 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_mux.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+@@ -16,7 +16,7 @@
+ #include <linux/slab.h>
+ #include <linux/jiffies.h>
+ #include <linux/kernel.h>
+-#include <linux/dev_printk.h>
++#include <linux/printk.h>
+ #include <linux/ratelimit.h>
+ #include <linux/delay.h>
+ #include <linux/vmalloc.h>

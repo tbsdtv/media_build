@@ -26,6 +26,9 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 
+[5.9.255]
+add v5.9_tasklet.patch
+
 [5.7.255]
 add v5.7_mmap_read_lock.patch
 add v5.7_vm_map_ram.patch
@@ -39,9 +42,11 @@ add v5.6_pm_runtime_get_if_active.patch
 [5.5.255]
 add v5.5_alsa_pcm_api_updates.patch
 add v5.5_memtype_h.patch
+add v5.5_dev_printk_h.patch
 
 [5.4.255]
 add v5.4_revert_spi_transfer.patch
+add v5.4_dma_buf.patch
 
 [5.1.255]
 add v5.1_vm_map_pages.patch
@@ -159,6 +164,7 @@ add v3.12_kfifo_in.patch
 
 [3.11.255]
 add v3.11_dev_groups.patch
+add v3.11_vidtv.patch
 
 [3.10.255]
 add v3.10_fw_driver_probe.patch

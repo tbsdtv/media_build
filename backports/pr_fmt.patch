@@ -11,7 +11,7 @@ index 6b06ea590074..f72786720746 100644
  
  #include <media/drv-intf/saa7146.h>
 diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index aabb830e7468..827d3e9eb38a 100644
+index d6531874faa6..823c8a391832 100644
 --- a/drivers/media/common/saa7146/saa7146_fops.c
 +++ b/drivers/media/common/saa7146/saa7146_fops.c
 @@ -1,3 +1,4 @@
@@ -39,7 +39,7 @@ index df9ebe2a168c..b69690aaf89e 100644
  
  #include <media/drv-intf/saa7146_vv.h>
 diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
-index d16122039b0c..e51d55323178 100644
+index ccd15b4d4920..39b8e53c45d3 100644
 --- a/drivers/media/common/saa7146/saa7146_video.c
 +++ b/drivers/media/common/saa7146/saa7146_video.c
 @@ -1,3 +1,4 @@
@@ -48,7 +48,7 @@ index d16122039b0c..e51d55323178 100644
  
  #include <media/drv-intf/saa7146_vv.h>
 diff --git a/drivers/media/common/siano/smscoreapi.h b/drivers/media/common/siano/smscoreapi.h
-index a2f95f4899c2..d80e4d091cda 100644
+index b3b793b5caf3..3905d6a4b3ab 100644
 --- a/drivers/media/common/siano/smscoreapi.h
 +++ b/drivers/media/common/siano/smscoreapi.h
 @@ -11,6 +11,7 @@ Copyright (C) 2006-2008, Uri Shkolnik, Anatoly Greenblat
@@ -72,7 +72,7 @@ index b5b9d6de6d9e..19bb646140bf 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 4489744fbbd9..7f6a41f35e1d 100644
+index f544d3393e9d..616af9255072 100644
 --- a/drivers/media/common/videobuf2/videobuf2-core.c
 +++ b/drivers/media/common/videobuf2/videobuf2-core.c
 @@ -14,6 +14,7 @@
@@ -108,7 +108,7 @@ index cfc27629444f..558a35119908 100644
  
  #include <linux/errno.h>
 diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-index 39a2c6ccf31d..6c7b5689b191 100644
+index 5fde1d38b3e3..b7792796a5c5 100644
 --- a/drivers/media/dvb-core/dvb_demux.c
 +++ b/drivers/media/dvb-core/dvb_demux.c
 @@ -17,6 +17,7 @@
@@ -120,7 +120,7 @@ index 39a2c6ccf31d..6c7b5689b191 100644
  
  #include <linux/sched/signal.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index 209186c5cd9b..76c0ab049c76 100644
+index 06ea30a689d7..bfbeb45035cd 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
 @@ -13,6 +13,7 @@
@@ -132,7 +132,7 @@ index 209186c5cd9b..76c0ab049c76 100644
  
  #include <linux/string.h>
 diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index 630509ecee20..d6d21a8c2016 100644
+index 89620da983ba..08021c2161b0 100644
 --- a/drivers/media/dvb-core/dvb_net.c
 +++ b/drivers/media/dvb-core/dvb_net.c
 @@ -40,6 +40,7 @@
@@ -144,7 +144,7 @@ index 630509ecee20..d6d21a8c2016 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index a3393cd4e584..2fbf42a2ba27 100644
+index 959fa2820259..2b0af338942e 100644
 --- a/drivers/media/dvb-core/dvbdev.c
 +++ b/drivers/media/dvb-core/dvbdev.c
 @@ -17,6 +17,7 @@
@@ -156,7 +156,7 @@ index a3393cd4e584..2fbf42a2ba27 100644
  
  #include <linux/types.h>
 diff --git a/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c b/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
-index f87e27481ea7..4d979dc7c5a9 100644
+index d5b1b3788e39..28117395e03d 100644
 --- a/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
 +++ b/drivers/media/dvb-frontends/cxd2880/cxd2880_top.c
 @@ -6,6 +6,7 @@
@@ -168,7 +168,7 @@ index f87e27481ea7..4d979dc7c5a9 100644
  
  #include <linux/spi/spi.h>
 diff --git a/drivers/media/dvb-frontends/dib0070.c b/drivers/media/dvb-frontends/dib0070.c
-index 3b26f61785d8..6bceb053ba19 100644
+index cafb41dba861..f0118188ac3b 100644
 --- a/drivers/media/dvb-frontends/dib0070.c
 +++ b/drivers/media/dvb-frontends/dib0070.c
 @@ -8,6 +8,7 @@
@@ -180,7 +180,7 @@ index 3b26f61785d8..6bceb053ba19 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib0090.c b/drivers/media/dvb-frontends/dib0090.c
-index d13d2e81f8c9..85f2879b463a 100644
+index 08a85831e917..6c45d91b1423 100644
 --- a/drivers/media/dvb-frontends/dib0090.c
 +++ b/drivers/media/dvb-frontends/dib0090.c
 @@ -8,6 +8,7 @@
@@ -192,11 +192,11 @@ index d13d2e81f8c9..85f2879b463a 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib3000mb.c b/drivers/media/dvb-frontends/dib3000mb.c
-index 46ed0e20c8fa..73f0763c706e 100644
+index a6c2fc4586eb..6fcdf7c2e562 100644
 --- a/drivers/media/dvb-frontends/dib3000mb.c
 +++ b/drivers/media/dvb-frontends/dib3000mb.c
 @@ -17,6 +17,7 @@
-  * see Documentation/media/dvb-drivers/dvb-usb.rst for more information
+  * see Documentation/driver-api/media/drivers/dvb-usb.rst for more information
   */
  
 +#undef pr_fmt
@@ -216,7 +216,7 @@ index 692600ce5f23..ce72e2a5ab11 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib7000m.c b/drivers/media/dvb-frontends/dib7000m.c
-index e211830c9c99..27ddcce44ecd 100644
+index 97ce97789c9e..a79dfa89bdbb 100644
 --- a/drivers/media/dvb-frontends/dib7000m.c
 +++ b/drivers/media/dvb-frontends/dib7000m.c
 @@ -6,6 +6,7 @@
@@ -228,7 +228,7 @@ index e211830c9c99..27ddcce44ecd 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib7000p.c b/drivers/media/dvb-frontends/dib7000p.c
-index 52f5e697c5dc..2d2bffaf0c13 100644
+index 55bee50aa871..ac07ad1cfbb7 100644
 --- a/drivers/media/dvb-frontends/dib7000p.c
 +++ b/drivers/media/dvb-frontends/dib7000p.c
 @@ -5,6 +5,7 @@
@@ -273,7 +273,7 @@ index 63a4c6a4afb5..1fbdac917dc2 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
 diff --git a/drivers/media/dvb-frontends/drx39xyj/drxj.c b/drivers/media/dvb-frontends/drx39xyj/drxj.c
-index a6876fa48753..8df883fa1a38 100644
+index 237b9d04c076..263314c91e14 100644
 --- a/drivers/media/dvb-frontends/drx39xyj/drxj.c
 +++ b/drivers/media/dvb-frontends/drx39xyj/drxj.c
 @@ -53,6 +53,7 @@
@@ -285,7 +285,7 @@ index a6876fa48753..8df883fa1a38 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index 0a4875b391d9..eb993742a3a5 100644
+index 32f9346deb3e..aab46b2313c9 100644
 --- a/drivers/media/dvb-frontends/drxk_hard.c
 +++ b/drivers/media/dvb-frontends/drxk_hard.c
 @@ -5,6 +5,7 @@
@@ -297,7 +297,7 @@ index 0a4875b391d9..eb993742a3a5 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dvb-pll.c b/drivers/media/dvb-frontends/dvb-pll.c
-index ba0c49107bd2..f8c526355712 100644
+index d45b4ddc8f91..52de4f867ab0 100644
 --- a/drivers/media/dvb-frontends/dvb-pll.c
 +++ b/drivers/media/dvb-frontends/dvb-pll.c
 @@ -5,6 +5,7 @@
@@ -321,7 +321,7 @@ index ed671e951a17..97b9b3f690f8 100644
  
  #include "gp8psk-fe.h"
 diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
-index 6c4adec58174..f6ab72efb2c4 100644
+index 722576f1732a..9464b5a72040 100644
 --- a/drivers/media/dvb-frontends/lgdt3306a.c
 +++ b/drivers/media/dvb-frontends/lgdt3306a.c
 @@ -7,6 +7,7 @@
@@ -381,7 +381,7 @@ index f11382afe23b..e1a3095736fa 100644
  
  #include <linux/errno.h>
 diff --git a/drivers/media/pci/bt8xx/btcx-risc.c b/drivers/media/pci/bt8xx/btcx-risc.c
-index 1139a5ad2418..8a7dfddeafa4 100644
+index 51257980f539..54f5241ad115 100644
 --- a/drivers/media/pci/bt8xx/btcx-risc.c
 +++ b/drivers/media/pci/bt8xx/btcx-risc.c
 @@ -10,6 +10,7 @@
@@ -405,7 +405,7 @@ index 16148802dabb..4c394a0d37e0 100644
  
  #include <linux/delay.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index a359da7773a9..74c3099238ee 100644
+index 8c61d292dec1..28128c4364b2 100644
 --- a/drivers/media/pci/bt8xx/bttv-driver.c
 +++ b/drivers/media/pci/bt8xx/bttv-driver.c
 @@ -22,6 +22,7 @@
@@ -441,7 +441,7 @@ index 4a8a3f80c6db..6eefddf103aa 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-input.c b/drivers/media/pci/bt8xx/bttv-input.c
-index 9adfac4d5187..79bc9f0e616b 100644
+index 41226f1d0e5b..1bf8fe4194b5 100644
 --- a/drivers/media/pci/bt8xx/bttv-input.c
 +++ b/drivers/media/pci/bt8xx/bttv-input.c
 @@ -5,6 +5,7 @@
@@ -453,7 +453,7 @@ index 9adfac4d5187..79bc9f0e616b 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
-index fc8708047be8..84df256254a7 100644
+index 4af72826b006..102fa9cb18d0 100644
 --- a/drivers/media/pci/bt8xx/bttv-risc.c
 +++ b/drivers/media/pci/bt8xx/bttv-risc.c
 @@ -12,6 +12,7 @@
@@ -489,7 +489,7 @@ index 3e52a51982d7..7e29e7f3f0b3 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
-index 64df9d491941..5c556be1ff74 100644
+index 4cb890b949c3..4d161cca9952 100644
 --- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
 +++ b/drivers/media/pci/bt8xx/dvb-bt8xx.c
 @@ -5,6 +5,7 @@
@@ -513,7 +513,7 @@ index 0dc348215b72..e6f27b6d0046 100644
  
  #include <media/dvb_demux.h>
 diff --git a/drivers/media/pci/cx23885/cx23885.h b/drivers/media/pci/cx23885/cx23885.h
-index a95a2e4c6a0d..2bf7752928ef 100644
+index 349462ee2c48..c4c30446d9b1 100644
 --- a/drivers/media/pci/cx23885/cx23885.h
 +++ b/drivers/media/pci/cx23885/cx23885.h
 @@ -5,6 +5,7 @@
@@ -525,7 +525,7 @@ index a95a2e4c6a0d..2bf7752928ef 100644
  
  #include <linux/pci.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-alsa.c b/drivers/media/pci/cx25821/cx25821-alsa.c
-index c2f2d7c782c7..001fe05c3e4a 100644
+index 49892a88f528..0e9e435f5aaf 100644
 --- a/drivers/media/pci/cx25821/cx25821-alsa.c
 +++ b/drivers/media/pci/cx25821/cx25821-alsa.c
 @@ -7,6 +7,7 @@
@@ -549,7 +549,7 @@ index 5aa67fa51ca5..e40cb52c208c 100644
  
  #include <linux/init.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 41be22ce66f3..7eda2475f50b 100644
+index 55018d9e439f..8931bd306928 100644
 --- a/drivers/media/pci/cx25821/cx25821-core.c
 +++ b/drivers/media/pci/cx25821/cx25821-core.c
 @@ -7,6 +7,7 @@
@@ -585,7 +585,7 @@ index f0a1ac77f048..20481e01625b 100644
  
  #include "cx25821.h"
 diff --git a/drivers/media/pci/cx25821/cx25821-video.c b/drivers/media/pci/cx25821/cx25821-video.c
-index a10261da0db6..174af98f1b34 100644
+index 1b80c990cb94..4f9d7f9d2b28 100644
 --- a/drivers/media/pci/cx25821/cx25821-video.c
 +++ b/drivers/media/pci/cx25821/cx25821-video.c
 @@ -9,6 +9,7 @@
@@ -597,7 +597,7 @@ index a10261da0db6..174af98f1b34 100644
  
  #include "cx25821-video.h"
 diff --git a/drivers/media/pci/cx88/cx88.h b/drivers/media/pci/cx88/cx88.h
-index 744a22328ebc..c2f37e597ecc 100644
+index ce4acf6de6aa..d38ac5d6b02b 100644
 --- a/drivers/media/pci/cx88/cx88.h
 +++ b/drivers/media/pci/cx88/cx88.h
 @@ -8,6 +8,7 @@
@@ -621,7 +621,7 @@ index 03dc9924fa2c..5e8e23c1ad02 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
-index cafba6b1055d..6b099da5a1f6 100644
+index e5efe525ad7b..a70175ec4fec 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.h
 +++ b/drivers/media/pci/ivtv/ivtv-driver.h
 @@ -22,6 +22,7 @@
@@ -633,7 +633,7 @@ index cafba6b1055d..6b099da5a1f6 100644
  
  /* Internal header for ivtv project:
 diff --git a/drivers/media/pci/ngene/ngene-cards.c b/drivers/media/pci/ngene/ngene-cards.c
-index 6185806a00e0..8881f0beb9c7 100644
+index 8bfb3d8ea610..317aa1328d94 100644
 --- a/drivers/media/pci/ngene/ngene-cards.c
 +++ b/drivers/media/pci/ngene/ngene-cards.c
 @@ -10,6 +10,7 @@
@@ -645,7 +645,7 @@ index 6185806a00e0..8881f0beb9c7 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/saa7134/saa7134.h b/drivers/media/pci/saa7134/saa7134.h
-index 77c325e64a97..0f9ac21062ec 100644
+index d29499cd7370..6afac9c21b10 100644
 --- a/drivers/media/pci/saa7134/saa7134.h
 +++ b/drivers/media/pci/saa7134/saa7134.h
 @@ -8,6 +8,7 @@
@@ -657,7 +657,7 @@ index 77c325e64a97..0f9ac21062ec 100644
  
  #include <linux/pci.h>
 diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index dca20a3d98e2..ab40603bd73f 100644
+index 2214c74bbbf1..355555320b5a 100644
 --- a/drivers/media/pci/saa7146/hexium_gemini.c
 +++ b/drivers/media/pci/saa7146/hexium_gemini.c
 @@ -9,6 +9,7 @@
@@ -669,7 +669,7 @@ index dca20a3d98e2..ab40603bd73f 100644
  
  #define DEBUG_VARIABLE debug
 diff --git a/drivers/media/pci/saa7146/hexium_orion.c b/drivers/media/pci/saa7146/hexium_orion.c
-index bf5e55348f15..3879cc2bd3ef 100644
+index 39d14c179d22..010e89d2df82 100644
 --- a/drivers/media/pci/saa7146/hexium_orion.c
 +++ b/drivers/media/pci/saa7146/hexium_orion.c
 @@ -9,6 +9,7 @@
@@ -681,7 +681,7 @@ index bf5e55348f15..3879cc2bd3ef 100644
  
  #define DEBUG_VARIABLE debug
 diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
-index e6a71c17566d..bb612f147ce6 100644
+index 129a1f8ebe1a..3bf4b7ab7655 100644
 --- a/drivers/media/pci/saa7146/mxb.c
 +++ b/drivers/media/pci/saa7146/mxb.c
 @@ -9,6 +9,7 @@
@@ -693,7 +693,7 @@ index e6a71c17566d..bb612f147ce6 100644
  
  #define DEBUG_VARIABLE debug
 diff --git a/drivers/media/pci/ttpci/av7110_v4l.c b/drivers/media/pci/ttpci/av7110_v4l.c
-index f3d6c3cdb872..c10fdfd67aac 100644
+index c89f536f699c..ea769ca04cec 100644
 --- a/drivers/media/pci/ttpci/av7110_v4l.c
 +++ b/drivers/media/pci/ttpci/av7110_v4l.c
 @@ -11,6 +11,7 @@
@@ -705,7 +705,7 @@ index f3d6c3cdb872..c10fdfd67aac 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/pci/ttpci/budget-av.c b/drivers/media/pci/ttpci/budget-av.c
-index e2d482af2367..6f86f53f4739 100644
+index 3cb83005cf09..64e61883a79d 100644
 --- a/drivers/media/pci/ttpci/budget-av.c
 +++ b/drivers/media/pci/ttpci/budget-av.c
 @@ -16,6 +16,7 @@
@@ -729,7 +729,7 @@ index 9c816ae3b3e5..c318a6bd5f55 100644
  
  #include <linux/bitops.h>
 diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
-index b7cc8e651e32..b1f2d5f54021 100644
+index 019bb47df915..5491022bab1b 100644
 --- a/drivers/media/platform/exynos4-is/fimc-is.c
 +++ b/drivers/media/platform/exynos4-is/fimc-is.c
 @@ -7,6 +7,7 @@
@@ -753,7 +753,7 @@ index cde0d254ec1c..afee9240b1bf 100644
  
  #include <linux/device.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
-index 2fb45db8e4ba..c905c4b7c894 100644
+index 9ca49af29542..c8cac8f078f7 100644
 --- a/drivers/media/platform/s3c-camif/camif-capture.c
 +++ b/drivers/media/platform/s3c-camif/camif-capture.c
 @@ -8,6 +8,7 @@
@@ -765,7 +765,7 @@ index 2fb45db8e4ba..c905c4b7c894 100644
  
  #include <linux/bug.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index f0acd6edcbba..161dbfa70ef2 100644
+index 92f43c0cbc0c..2ed56fb3c402 100644
 --- a/drivers/media/platform/s3c-camif/camif-core.c
 +++ b/drivers/media/platform/s3c-camif/camif-core.c
 @@ -5,6 +5,7 @@
@@ -777,7 +777,7 @@ index f0acd6edcbba..161dbfa70ef2 100644
  
  #include <linux/bug.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-regs.c b/drivers/media/platform/s3c-camif/camif-regs.c
-index 1a65532dc36d..47e5ef37e2f8 100644
+index e80204f5720c..235a40337893 100644
 --- a/drivers/media/platform/s3c-camif/camif-regs.c
 +++ b/drivers/media/platform/s3c-camif/camif-regs.c
 @@ -5,6 +5,7 @@
@@ -789,7 +789,7 @@ index 1a65532dc36d..47e5ef37e2f8 100644
  
  #include <linux/delay.h>
 diff --git a/drivers/media/rc/ene_ir.c b/drivers/media/rc/ene_ir.c
-index 82867a2a60b0..75632e799bde 100644
+index 6049e5c95394..cda9c6fac1b5 100644
 --- a/drivers/media/rc/ene_ir.c
 +++ b/drivers/media/rc/ene_ir.c
 @@ -15,6 +15,7 @@
@@ -801,7 +801,7 @@ index 82867a2a60b0..75632e799bde 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/fintek-cir.c b/drivers/media/rc/fintek-cir.c
-index b74bb13161fd..ecf90f7a79a7 100644
+index b0d580566e4e..c7055bc4c4e3 100644
 --- a/drivers/media/rc/fintek-cir.c
 +++ b/drivers/media/rc/fintek-cir.c
 @@ -9,6 +9,7 @@
@@ -813,7 +813,7 @@ index b74bb13161fd..ecf90f7a79a7 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
-index 7bee72108b0e..0c2313ebe1b7 100644
+index a7962ca2ac8e..892f2043095d 100644
 --- a/drivers/media/rc/imon.c
 +++ b/drivers/media/rc/imon.c
 @@ -13,6 +13,7 @@
@@ -825,7 +825,7 @@ index 7bee72108b0e..0c2313ebe1b7 100644
  
  #include <linux/errno.h>
 diff --git a/drivers/media/rc/ir-imon-decoder.c b/drivers/media/rc/ir-imon-decoder.c
-index a0efe2605393..cff6b300899f 100644
+index 41dbbef27fa6..c42a078072ac 100644
 --- a/drivers/media/rc/ir-imon-decoder.c
 +++ b/drivers/media/rc/ir-imon-decoder.c
 @@ -3,6 +3,7 @@
@@ -837,7 +837,7 @@ index a0efe2605393..cff6b300899f 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index f078f8a3aec8..b7a05880fece 100644
+index 220363b9a868..1cab15f11b2e 100644
 --- a/drivers/media/rc/lirc_dev.c
 +++ b/drivers/media/rc/lirc_dev.c
 @@ -5,6 +5,7 @@
@@ -849,7 +849,7 @@ index f078f8a3aec8..b7a05880fece 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/rc/nuvoton-cir.c b/drivers/media/rc/nuvoton-cir.c
-index 5c2cd8d2d155..7fba86843c22 100644
+index 8a37f083fe3d..400b9f10e641 100644
 --- a/drivers/media/rc/nuvoton-cir.c
 +++ b/drivers/media/rc/nuvoton-cir.c
 @@ -20,6 +20,7 @@
@@ -861,7 +861,7 @@ index 5c2cd8d2d155..7fba86843c22 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 13da4c5c7d17..a8fb461d789e 100644
+index 1d811e5ffb55..70bd38178a0d 100644
 --- a/drivers/media/rc/rc-main.c
 +++ b/drivers/media/rc/rc-main.c
 @@ -3,6 +3,7 @@
@@ -873,7 +873,7 @@ index 13da4c5c7d17..a8fb461d789e 100644
  
  #include <media/rc-core.h>
 diff --git a/drivers/media/rc/serial_ir.c b/drivers/media/rc/serial_ir.c
-index 7652e982173f..d71bcf7dbe4f 100644
+index 8cc28c92d05d..66fab3c4fcc7 100644
 --- a/drivers/media/rc/serial_ir.c
 +++ b/drivers/media/rc/serial_ir.c
 @@ -13,6 +13,7 @@
@@ -885,7 +885,7 @@ index 7652e982173f..d71bcf7dbe4f 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/rc/sir_ir.c b/drivers/media/rc/sir_ir.c
-index 80b3a6736dbd..5bcd1575607b 100644
+index 6ec96dc34586..a13d560e8ece 100644
 --- a/drivers/media/rc/sir_ir.c
 +++ b/drivers/media/rc/sir_ir.c
 @@ -6,6 +6,7 @@
@@ -897,7 +897,7 @@ index 80b3a6736dbd..5bcd1575607b 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/rc/winbond-cir.c b/drivers/media/rc/winbond-cir.c
-index 630e376d3688..ddd4c3c83beb 100644
+index aed23ca0fa6c..22b3a1422863 100644
 --- a/drivers/media/rc/winbond-cir.c
 +++ b/drivers/media/rc/winbond-cir.c
 @@ -27,6 +27,7 @@
@@ -920,6 +920,66 @@ index 4077217777f9..1c5157e2423f 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": %s: " fmt, __func__
  
  #include <linux/spi/spi.h>
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_common.c b/drivers/media/test-drivers/vidtv/vidtv_common.c
+index 9093df32e0ab..dfd88b11a521 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_common.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_common.c
+@@ -6,6 +6,7 @@
+  *
+  * Copyright (C) 2020 Daniel W. S. Almeida
+  */
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
+ 
+ #include <linux/printk.h>
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_pes.c b/drivers/media/test-drivers/vidtv/vidtv_pes.c
+index 8237434f3fc2..1ebea195dade 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_pes.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_pes.c
+@@ -11,6 +11,7 @@
+  * Copyright (C) 2020 Daniel W. S. Almeida
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
+ 
+ #include <linux/types.h>
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+index 761034d10d9d..2e6370c51178 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+@@ -13,6 +13,7 @@
+  * Copyright (C) 2020 Daniel W. S. Almeida
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
+ 
+ #include <linux/kernel.h>
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+index 3b20a26d8721..58e342c04c93 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+@@ -15,6 +15,7 @@
+  * Copyright (C) 2020 Daniel W. S. Almeida
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
+ 
+ #include <linux/types.h>
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_ts.c b/drivers/media/test-drivers/vidtv/vidtv_ts.c
+index 190b9e4438dc..3e76f229d3a6 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_ts.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_ts.c
+@@ -7,6 +7,7 @@
+  * Copyright (C) 2020 Daniel W. S. Almeida
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
+ 
+ #include <linux/printk.h>
 diff --git a/drivers/media/tuners/r820t.c b/drivers/media/tuners/r820t.c
 index aed2f130ec74..2b556606d815 100644
 --- a/drivers/media/tuners/r820t.c
@@ -969,7 +1029,7 @@ index 01a668b1b00c..bb73afa7ee6c 100644
  
  #include <linux/bitops.h>
 diff --git a/drivers/media/usb/go7007/go7007-usb.c b/drivers/media/usb/go7007/go7007-usb.c
-index ff2aa057c1fb..2d582609c5a5 100644
+index dbf0455d5d50..11ee85062119 100644
 --- a/drivers/media/usb/go7007/go7007-usb.c
 +++ b/drivers/media/usb/go7007/go7007-usb.c
 @@ -3,6 +3,7 @@
@@ -1065,7 +1125,7 @@ index 2c05ea2598e7..745fcc3af105 100644
  
  #include "gspca.h"
 diff --git a/drivers/media/usb/gspca/gspca.c b/drivers/media/usb/gspca/gspca.c
-index 4add2b12d330..31a4585a83b6 100644
+index c295f642d352..904d86b668c8 100644
 --- a/drivers/media/usb/gspca/gspca.c
 +++ b/drivers/media/usb/gspca/gspca.c
 @@ -8,6 +8,7 @@
@@ -1101,7 +1161,7 @@ index 57ea65863591..7c16f29af6fc 100644
  
  #define MODULE_NAME "kinect"
 diff --git a/drivers/media/usb/gspca/konica.c b/drivers/media/usb/gspca/konica.c
-index d8e40137a204..9876d356d234 100644
+index 53db9a2895ea..e919d15a92fb 100644
 --- a/drivers/media/usb/gspca/konica.c
 +++ b/drivers/media/usb/gspca/konica.c
 @@ -15,6 +15,7 @@
@@ -1209,7 +1269,7 @@ index eb9342ee32af..3e1d9763aab1 100644
  
  #define MODULE_NAME "mars"
 diff --git a/drivers/media/usb/gspca/mr97310a.c b/drivers/media/usb/gspca/mr97310a.c
-index 502fc2eaffe0..51424180dd68 100644
+index 3553788e8542..a508d4f66f1a 100644
 --- a/drivers/media/usb/gspca/mr97310a.c
 +++ b/drivers/media/usb/gspca/mr97310a.c
 @@ -27,6 +27,7 @@
@@ -1221,7 +1281,7 @@ index 502fc2eaffe0..51424180dd68 100644
  
  #define MODULE_NAME "mr97310a"
 diff --git a/drivers/media/usb/gspca/nw80x.c b/drivers/media/usb/gspca/nw80x.c
-index 59649704beba..a8c6c86c269d 100644
+index 0f5f2464ac7a..d97b6735bc83 100644
 --- a/drivers/media/usb/gspca/nw80x.c
 +++ b/drivers/media/usb/gspca/nw80x.c
 @@ -7,6 +7,7 @@
@@ -1233,7 +1293,7 @@ index 59649704beba..a8c6c86c269d 100644
  
  #define MODULE_NAME "nw80x"
 diff --git a/drivers/media/usb/gspca/ov519.c b/drivers/media/usb/gspca/ov519.c
-index cfb1f53bc17e..914080d2035f 100644
+index cd6776c3163b..a55b4e88a107 100644
 --- a/drivers/media/usb/gspca/ov519.c
 +++ b/drivers/media/usb/gspca/ov519.c
 @@ -23,6 +23,7 @@
@@ -1245,11 +1305,11 @@ index cfb1f53bc17e..914080d2035f 100644
  
  #define MODULE_NAME "ov519"
 diff --git a/drivers/media/usb/gspca/ov534.c b/drivers/media/usb/gspca/ov534.c
-index 56521c991db4..36c2af032aa7 100644
+index 9a11158f38da..ec25a5541d45 100644
 --- a/drivers/media/usb/gspca/ov534.c
 +++ b/drivers/media/usb/gspca/ov534.c
 @@ -17,6 +17,7 @@
-  *                  <josephhowse@nummist.com> http://nummist.com
+  *                  <josephhowse@nummist.com> https://nummist.com
   */
  
 +#undef pr_fmt
@@ -1257,7 +1317,7 @@ index 56521c991db4..36c2af032aa7 100644
  
  #define MODULE_NAME "ov534"
 diff --git a/drivers/media/usb/gspca/ov534_9.c b/drivers/media/usb/gspca/ov534_9.c
-index 867f860a9650..7444bd122ae1 100644
+index 91efc650cf76..b39c577506d5 100644
 --- a/drivers/media/usb/gspca/ov534_9.c
 +++ b/drivers/media/usb/gspca/ov534_9.c
 @@ -11,6 +11,7 @@
@@ -1305,7 +1365,7 @@ index f6addb29f8f0..3e36fc7cc89f 100644
  
  #define MODULE_NAME "pac7311"
 diff --git a/drivers/media/usb/gspca/se401.c b/drivers/media/usb/gspca/se401.c
-index 061deee138c3..b6216fcd5aa4 100644
+index e087cfb5980b..6ecbcd457a20 100644
 --- a/drivers/media/usb/gspca/se401.c
 +++ b/drivers/media/usb/gspca/se401.c
 @@ -9,6 +9,7 @@
@@ -1317,7 +1377,7 @@ index 061deee138c3..b6216fcd5aa4 100644
  
  #define MODULE_NAME "se401"
 diff --git a/drivers/media/usb/gspca/sn9c2028.c b/drivers/media/usb/gspca/sn9c2028.c
-index aff01b753853..9e367bc7a442 100644
+index dbd1d6da37f1..c41ae79ee1ad 100644
 --- a/drivers/media/usb/gspca/sn9c2028.c
 +++ b/drivers/media/usb/gspca/sn9c2028.c
 @@ -5,6 +5,7 @@
@@ -1329,7 +1389,7 @@ index aff01b753853..9e367bc7a442 100644
  
  #define MODULE_NAME "sn9c2028"
 diff --git a/drivers/media/usb/gspca/sn9c20x.c b/drivers/media/usb/gspca/sn9c20x.c
-index b43f89fee6c1..44403c925ff3 100644
+index bfd194c61819..2152e9674969 100644
 --- a/drivers/media/usb/gspca/sn9c20x.c
 +++ b/drivers/media/usb/gspca/sn9c20x.c
 @@ -7,6 +7,7 @@
@@ -1341,7 +1401,7 @@ index b43f89fee6c1..44403c925ff3 100644
  
  #include <linux/input.h>
 diff --git a/drivers/media/usb/gspca/sonixj.c b/drivers/media/usb/gspca/sonixj.c
-index 50a6c8425827..424feaf82678 100644
+index 2e1bd2df8304..508b3560b53d 100644
 --- a/drivers/media/usb/gspca/sonixj.c
 +++ b/drivers/media/usb/gspca/sonixj.c
 @@ -6,6 +6,7 @@
@@ -1353,7 +1413,7 @@ index 50a6c8425827..424feaf82678 100644
  
  #define MODULE_NAME "sonixj"
 diff --git a/drivers/media/usb/gspca/spca1528.c b/drivers/media/usb/gspca/spca1528.c
-index 2ae03b60163f..2fabbb7ca058 100644
+index ccc477944ef8..7343dc344fc1 100644
 --- a/drivers/media/usb/gspca/spca1528.c
 +++ b/drivers/media/usb/gspca/spca1528.c
 @@ -5,6 +5,7 @@
@@ -1425,7 +1485,7 @@ index d608a518c141..5a0660fe7df1 100644
  
  #define MODULE_NAME "spca561"
 diff --git a/drivers/media/usb/gspca/sq905.c b/drivers/media/usb/gspca/sq905.c
-index 863c485f4275..12a7660641d3 100644
+index 97799cfb832e..26742012be2d 100644
 --- a/drivers/media/usb/gspca/sq905.c
 +++ b/drivers/media/usb/gspca/sq905.c
 @@ -20,6 +20,7 @@
@@ -1437,7 +1497,7 @@ index 863c485f4275..12a7660641d3 100644
  
  #define MODULE_NAME "sq905"
 diff --git a/drivers/media/usb/gspca/sq905c.c b/drivers/media/usb/gspca/sq905c.c
-index 3d7f6dcdd7a8..1ce2645f4c9c 100644
+index 6ca947aef298..7da92ff5c365 100644
 --- a/drivers/media/usb/gspca/sq905c.c
 +++ b/drivers/media/usb/gspca/sq905c.c
 @@ -14,6 +14,7 @@
@@ -1449,7 +1509,7 @@ index 3d7f6dcdd7a8..1ce2645f4c9c 100644
  
  #define MODULE_NAME "sq905c"
 diff --git a/drivers/media/usb/gspca/sq930x.c b/drivers/media/usb/gspca/sq930x.c
-index d1ba0888d798..3b2508fd504e 100644
+index c3610247a90e..3e2a37a5d8d8 100644
 --- a/drivers/media/usb/gspca/sq930x.c
 +++ b/drivers/media/usb/gspca/sq930x.c
 @@ -7,6 +7,7 @@
@@ -1485,7 +1545,7 @@ index 1a602af7310f..0716beaf0c07 100644
  
  #define MODULE_NAME "stk1135"
 diff --git a/drivers/media/usb/gspca/stv0680.c b/drivers/media/usb/gspca/stv0680.c
-index f869eb6065ce..3a35ddedb31a 100644
+index b23988d8c7bc..0cdbd6cbcaa1 100644
 --- a/drivers/media/usb/gspca/stv0680.c
 +++ b/drivers/media/usb/gspca/stv0680.c
 @@ -13,6 +13,7 @@
@@ -1497,7 +1557,7 @@ index f869eb6065ce..3a35ddedb31a 100644
  
  #define MODULE_NAME "stv0680"
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx.c b/drivers/media/usb/gspca/stv06xx/stv06xx.c
-index 79653d409951..59842d53cfa8 100644
+index 95673fc0a99c..8285d47debbc 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx.c
 @@ -14,6 +14,7 @@
@@ -1521,7 +1581,7 @@ index 5a47dcbf1c8e..200fe74fc967 100644
  
  #include "stv06xx_hdcs.h"
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx_pb0100.c b/drivers/media/usb/gspca/stv06xx/stv06xx_pb0100.c
-index 6d1007715ff7..66c16f54f406 100644
+index ae382b3b5f7f..2e06261f1278 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx_pb0100.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx_pb0100.c
 @@ -31,6 +31,7 @@
@@ -1533,7 +1593,7 @@ index 6d1007715ff7..66c16f54f406 100644
  
  #include "stv06xx_pb0100.h"
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c b/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
-index 7104a88b1e43..b390eb5835d8 100644
+index aac19d449be2..546898f9b2bc 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
 @@ -12,6 +12,7 @@
@@ -1557,7 +1617,7 @@ index dde1950bdc68..9161cb9fb49c 100644
  
  #include "stv06xx_vv6410.h"
 diff --git a/drivers/media/usb/gspca/sunplus.c b/drivers/media/usb/gspca/sunplus.c
-index d0ddfa957ca9..b35e20821b9c 100644
+index ace3da40006e..5814c322de88 100644
 --- a/drivers/media/usb/gspca/sunplus.c
 +++ b/drivers/media/usb/gspca/sunplus.c
 @@ -6,6 +6,7 @@
@@ -1593,7 +1653,7 @@ index aee444042f60..05b0293fd0f0 100644
  
  #include "gspca.h"
 diff --git a/drivers/media/usb/gspca/vc032x.c b/drivers/media/usb/gspca/vc032x.c
-index 588a847ea483..30c1d5a5e434 100644
+index 4cb7c92ea132..e6bde265bd63 100644
 --- a/drivers/media/usb/gspca/vc032x.c
 +++ b/drivers/media/usb/gspca/vc032x.c
 @@ -7,6 +7,7 @@
@@ -1605,7 +1665,7 @@ index 588a847ea483..30c1d5a5e434 100644
  
  #define MODULE_NAME "vc032x"
 diff --git a/drivers/media/usb/gspca/vicam.c b/drivers/media/usb/gspca/vicam.c
-index 179b2ec3df57..56c478522ab4 100644
+index d98343fd33fe..e5b39f8ebbd5 100644
 --- a/drivers/media/usb/gspca/vicam.c
 +++ b/drivers/media/usb/gspca/vicam.c
 @@ -13,6 +13,7 @@
@@ -1617,7 +1677,7 @@ index 179b2ec3df57..56c478522ab4 100644
  
  #define MODULE_NAME "vicam"
 diff --git a/drivers/media/usb/gspca/w996Xcf.c b/drivers/media/usb/gspca/w996Xcf.c
-index 16b679c2de21..751d72395046 100644
+index a8350ee9712f..8c37a52b79e1 100644
 --- a/drivers/media/usb/gspca/w996Xcf.c
 +++ b/drivers/media/usb/gspca/w996Xcf.c
 @@ -17,6 +17,7 @@
@@ -1629,7 +1689,7 @@ index 16b679c2de21..751d72395046 100644
  
  #define W9968CF_I2C_BUS_DELAY    4 /* delay in us for I2C bit r/w operations */
 diff --git a/drivers/media/usb/gspca/xirlink_cit.c b/drivers/media/usb/gspca/xirlink_cit.c
-index 934a90bd78c2..98c6440c4da7 100644
+index cc87c24dd24c..62ae941dcaf5 100644
 --- a/drivers/media/usb/gspca/xirlink_cit.c
 +++ b/drivers/media/usb/gspca/xirlink_cit.c
 @@ -13,6 +13,7 @@
@@ -1641,7 +1701,7 @@ index 934a90bd78c2..98c6440c4da7 100644
  
  #define MODULE_NAME "xirlink-cit"
 diff --git a/drivers/media/usb/gspca/zc3xx.c b/drivers/media/usb/gspca/zc3xx.c
-index 15a2449d536f..0305eb0c83b2 100644
+index aa285d5d6c0d..5ecc127b9309 100644
 --- a/drivers/media/usb/gspca/zc3xx.c
 +++ b/drivers/media/usb/gspca/zc3xx.c
 @@ -6,6 +6,7 @@
@@ -1665,7 +1725,7 @@ index 94aa6a27f934..33f08a47a41d 100644
  
  #include "stk-webcam.h"
 diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
-index cfca3c70599b..9c6cb4b9658c 100644
+index a45d464427c4..1583630da076 100644
 --- a/drivers/media/usb/stkwebcam/stk-webcam.c
 +++ b/drivers/media/usb/stkwebcam/stk-webcam.c
 @@ -9,6 +9,7 @@
@@ -1676,8 +1736,20 @@ index cfca3c70599b..9c6cb4b9658c 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include <linux/module.h>
+diff --git a/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c b/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c
+index 9e016b71aa91..3f0c291b9a67 100644
+--- a/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c
++++ b/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c
+@@ -6,6 +6,7 @@
+  * Copyright (c) 2003 Felix Domke <tmbinc@elitedvb.net>
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/init.h>
 diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 76fa2db0e8fb..3cd6b6a0cbb5 100644
+index 73f3d65957ff..1b432a2a75b0 100644
 --- a/drivers/media/v4l2-core/v4l2-ctrls.c
 +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
 @@ -6,6 +6,7 @@
@@ -1689,7 +1761,7 @@ index 76fa2db0e8fb..3cd6b6a0cbb5 100644
  
  #include <linux/ctype.h>
 diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index a1c61d6f3b9b..ef2488f65cbf 100644
+index a593ea0598b5..73ed9632e942 100644
 --- a/drivers/media/v4l2-core/v4l2-dev.c
 +++ b/drivers/media/v4l2-core/v4l2-dev.c
 @@ -12,6 +12,7 @@

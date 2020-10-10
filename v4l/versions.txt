@@ -28,6 +28,10 @@ VIDEO_OV9650
 # Needs gpiod_set_consumer_name
 VIDEO_MAX9286
 
+[4.18.0]
+# Needs proc_create_single
+VIDEO_ZORAN
+
 [4.17.0]
 # Needs devm_nvmem_register
 VIDEO_I2C

@@ -763,6 +763,7 @@ sub check_other_dependencies()
 	check_files_for_func("fwnode_graph_is_endpoint", "NEED_FWNODE_GRAPH_IS_ENDPOINT", "include/linux/property.h");
 	check_files_for_func("fallthrough", "NEED_FALLTHROUGH", "include/linux/compiler_attributes.h");
 	check_files_for_func("sched_set_fifo", "NEED_SCHED_SET_FIFO", "include/linux/sched.h");
+	check_files_for_func("dma_map_sgtable", "NEED_DMA_MAP_SGTABLE", "include/linux/dma-mapping.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");
