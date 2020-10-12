@@ -1,0 +1,62 @@
+szap-s2 -- simple zapping tool for the Linux DVB S2 API
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+szap-s2 requires Linux DVB driver API version 5.0.
+
+If compiler not found DVB headers in ../s2/linux/include/linux/dvb,
+then it looks at usual location /usr/include/linux/dvb.
+
+Install as follows:
+
+(Option)  make
+          make install
+Uninstall
+          make uninstall
+
+location of channel list file is ~/.szap/channels.conf
+
+one line of the szap channel file has the following format:
+name:frequency_MHz:polarization[coderate][delivery][modulation][rolloff]:sat_no:symbolrate:vpid:apid:service_id
+one line of the VDR channel file has the following format:
+name:frequency_MHz:polarization[coderate][delivery][modulation][rolloff]:sat_no:symbolrate:vpid:apid:?:?:service_id:?:?:?
+
+usage:
+szap -q
+         list known channels
+szap [options] {-n channel-number|channel_name}
+         zap to channel via number or full name (case insensitive)
+     -a number : use given adapter (default 0)
+     -f number : use given frontend (default 0)
+     -d number : use given demux (default 0)
+     -c file   : read channels list from 'file'
+     -V        : use vdr channels list file format (default zap)
+     -b        : enable Audio Bypass (default no)
+     -x        : exit after tuning
+     -H        : human readable output
+     -D        : params debug
+     -r        : set up /dev/dvb/adapterX/dvr0 for TS recording
+     -l lnb-type (DVB-S Only) (use -l help to print types) or 
+     -l low[,high[,switch]] in Mhz
+     -i        : run interactively, allowing you to type in channel names
+     -p        : add pat and pmt to TS recording (implies -r)
+                 or -n numbers for zapping
+     -S        : delivery system type DVB-S=0, DVB-S2=1
+     -M        : modulation 1=BPSK 2=QPSK 5=8PSK
+     -C        : fec 0=NONE 12=1/2 23=2/3 34=3/4 35=3/5 45=4/5 56=5/6 67=6/7 89=8/9 910=9/10 999=AUTO
+     -O        : rolloff 35=0.35 25=0.25 20=0.20 0=UNKNOWN
+     -m        : input stream 0-255
+
+
+Igor M. Liplianin (liplianin@me.by)
