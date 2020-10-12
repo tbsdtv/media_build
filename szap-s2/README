@@ -56,7 +56,8 @@ szap [options] {-n channel-number|channel_name}
      -M        : modulation 1=BPSK 2=QPSK 5=8PSK
      -C        : fec 0=NONE 12=1/2 23=2/3 34=3/4 35=3/5 45=4/5 56=5/6 67=6/7 89=8/9 910=9/10 999=AUTO
      -O        : rolloff 35=0.35 25=0.25 20=0.20 0=UNKNOWN
-     -m        : input stream 0-255
+     -m        : modcode mask
+     -s        : input stream 0-255
 
 
 Igor M. Liplianin (liplianin@me.by)
