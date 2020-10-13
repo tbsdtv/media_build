@@ -230,8 +230,8 @@ static char *usage_str =
     "     -M        : modulation 1=BPSK 2=QPSK 5=8PSK\n"
     "     -C        : fec 0=NONE 12=1/2 23=2/3 34=3/4 35=3/5 45=4/5 56=5/6 67=6/7 89=8/9 910=9/10 999=AUTO\n"
     "     -O        : rolloff 35=0.35 25=0.25 20=0.20 0=UNKNOWN\n"
-    "     -m        : modcode mask\n"    
-    "     -s        : input stream 0-255\n";
+    "     -m        : DVB-S2 modcode mask 0 - 1fffffff\n"    
+    "     -s        : DVB-S2 input stream 0-255\n";
 
 static int set_demux(int dmxfd, int pid, int pes_type, int dvr)
 {
@@ -419,6 +419,7 @@ int check_frontend (int fe_fd, int dvr, int human_readable, int params_debug,
 	fe_status_t status;
 	uint16_t snr, signal;
 	uint32_t ber, uncorrected_blocks;
+    int16_t temp;
 	int timeout = 0;
 	char *field;
 	struct dtv_property p[] = {
@@ -448,13 +449,15 @@ int check_frontend (int fe_fd, int dvr, int human_readable, int params_debug,
 			ber = -2;
 		if (ioctl(fe_fd, FE_READ_UNCORRECTED_BLOCKS, &uncorrected_blocks) == -1)
 			uncorrected_blocks = -2;
+		if (ioctl(fe_fd, FE_READ_TEMP, &temp) == -1)
+			temp = -2;
 
 		if (human_readable) {
-			printf ("status %02x | signal %3u%% | snr %3u%% | ber %d | unc %d | ",
-				status, (signal * 100) / 0xffff, (snr * 100) / 0xffff, ber, uncorrected_blocks);
+			printf ("status %02x | signal %3u%% | snr %3u%% | ber %d | unc %d | temp %d | ",
+				status, (signal * 100) / 0xffff, (snr * 100) / 0xffff, ber, uncorrected_blocks, temp);
 		} else {
-			printf ("status %02x | signal %04x | snr %04x | ber %08x | unc %08x | ",
-				status, signal, snr, ber, uncorrected_blocks);
+			printf ("status %02x | signal %04x | snr %04x | ber %08x | unc %08x | temp %d | ",
+				status, signal, snr, ber, uncorrected_blocks, temp);
 		}
 		if (status & FE_HAS_LOCK)
 			printf("FE_HAS_LOCK");
@@ -778,7 +781,7 @@ again:
 				stream_id = strtol(++field, &field, 10);
 				break;
 			case 'W':
-				modcode = strtoul(++field, &field, 10);
+				modcode = strtoul(++field, &field, 16);
 				break;
 			case 'R':
 				pol = 1; 
@@ -811,9 +814,11 @@ again:
 		if (rolloff == -1)
 			rolloff = ROLLOFF_35;
 
-#if 0
+#if 1
 		if (stream_id<0 || stream_id>255)
 			stream_id = NO_STREAM_ID_FILTER;
+        if (modcode > 0x1fffffff)
+            modcode = MODCODE_ALL;
 #endif
 
 		if (!(field = strsep(&tmp, ":")))
@@ -900,12 +905,12 @@ again:
 		}
 
 		if (params_debug){
-			printf("rolloff 0x%x stream_id %d modcode %u\n"
+			printf("rolloff 0x%x stream_id %d modcode 0x%x\n"
 				"vpid 0x%04x, apid 0x%04x, sid 0x%04x\n", rolloff, stream_id, modcode, vpid, apid, sid);
 		} else {
 			field = NULL;
 			map_to_user(rolloff, rolloff_values, &field);
-			printf("rolloff %s stream_id %d stream_id %d\n"
+			printf("rolloff %s stream_id %d modcode 0x%x\n"
 				"vpid 0x%04x, apid 0x%04x, sid 0x%04x\n", field, stream_id, modcode, vpid, apid, sid);
 		}
 
@@ -1020,7 +1025,7 @@ int main(int argc, char *argv[])
 			stream_id = strtol(optarg, NULL, 0);
 			break;
 		case 'm':
-			modcode = strtoul(optarg, NULL, 0);
+			modcode = strtoul(optarg, NULL, 16);
 			break;
 		case 'S':
 			parse_parameter(--optarg, &delsys, system_values);
