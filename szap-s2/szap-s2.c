@@ -204,6 +204,7 @@ static struct lnb_types_st lnb_type;
 
 static int exit_after_tuning;
 static int interactive;
+static int quiet;
 
 static char *usage_str =
     "\nusage: szap-s2 -q\n"
@@ -223,6 +224,7 @@ static char *usage_str =
     "     -l lnb-type (DVB-S Only) (use -l help to print types) or \n"
     "     -l low[,high[,switch]] in Mhz\n"
     "     -i        : run interactively, allowing you to type in channel names\n"
+    "     -Q        : query signal statistic once\n"
     "     -p        : add pat and pmt to TS recording (implies -r)\n"
     "                 or -n numbers for zapping\n"
     "     -t        : add teletext to TS recording (needs -V)\n"
@@ -420,7 +422,7 @@ int check_frontend (int fe_fd, int dvr, int human_readable, int params_debug,
 	uint16_t snr, signal;
 	uint32_t ber, uncorrected_blocks;
     int16_t temp;
-	int timeout = 0;
+	int timeout = 0, signal_once = 0;
 	char *field;
 	struct dtv_property p[] = {
 		{ .cmd = DTV_DELIVERY_SYSTEM },
@@ -436,6 +438,7 @@ int check_frontend (int fe_fd, int dvr, int human_readable, int params_debug,
 	};
 
 	do {
+		if (signal_once) continue;;
 		if (ioctl(fe_fd, FE_READ_STATUS, &status) == -1)
 			perror("FE_READ_STATUS failed");
 		/* some frontends might not support all these ioctls, thus we
@@ -467,6 +470,7 @@ int check_frontend (int fe_fd, int dvr, int human_readable, int params_debug,
 			break;
 
 		usleep(1000000);
+		if(quiet) signal_once=1;
 	} while (1);
 
 	if ((status & FE_HAS_LOCK) == 0)
@@ -1004,7 +1008,7 @@ int main(int argc, char *argv[])
     unsigned int modcode = MODCODE_ALL;
 	
 	lnb_type = *lnb_enum(0);
-	while ((opt = getopt(argc, argv, "M:m:s:C:O:HDVhqrpn:a:f:d:S:c:l:xib")) != -1) {
+	while ((opt = getopt(argc, argv, "M:m:s:C:O:HDVhqrpn:a:f:d:S:c:l:xibQ")) != -1) {
 		switch (opt) {
 		case '?':
 		case 'h':
@@ -1082,6 +1086,9 @@ int main(int argc, char *argv[])
 		case 'i':
 			interactive = 1;
 			exit_after_tuning = 1;
+			break;
+		case 'Q':
+			quiet = 1;
 		}
 	}
 	lnb_type.low_val *= 1000;	/* convert to kiloherz */
