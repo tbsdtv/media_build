@@ -438,7 +438,8 @@ int check_frontend (int fe_fd, int dvr, int human_readable, int params_debug,
 	};
 
 	do {
-		if (signal_once) continue;;
+		usleep(1000000);
+		if (signal_once)	continue;;
 		if (ioctl(fe_fd, FE_READ_STATUS, &status) == -1)
 			perror("FE_READ_STATUS failed");
 		/* some frontends might not support all these ioctls, thus we
@@ -469,8 +470,8 @@ int check_frontend (int fe_fd, int dvr, int human_readable, int params_debug,
 		if (exit_after_tuning && ((status & FE_HAS_LOCK) || (++timeout >= 10)))
 			break;
 
-		usleep(1000000);
-		if(quiet) signal_once=1;
+		if(quiet && (status & FE_HAS_LOCK))
+			signal_once=1;
 	} while (1);
 
 	if ((status & FE_HAS_LOCK) == 0)
