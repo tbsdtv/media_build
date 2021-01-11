@@ -561,20 +561,6 @@ static inline int list_is_singular(const struct list_head *head)
 }
 #endif
 
-#ifdef NEED_CLAMP
-#define clamp( x, l, h )        max_t( __typeof__( x ),		\
-				      ( l ),			\
-				      min_t( __typeof__( x ),	\
-					     ( h ),        	\
-					     ( x ) ) )
-#define clamp_val(val, min, max) ({		\
-	typeof(val) __val = (val);		\
-	typeof(val) __min = (min);		\
-	typeof(val) __max = (max);		\
-	__val = __val < __min ? __min : __val;	\
-	__val > __max ? __max : __val; })
-#endif
-
 #ifdef NEED_ALGO_CONTROL
 static inline int dummy_algo_control(struct i2c_adapter *adapter,
 			     unsigned int cmd, unsigned long arg)
@@ -2473,7 +2459,11 @@ static inline void *memdup_user_nul(const void __user *src, size_t len)
 #define STACK_FRAME_NON_STANDARD(func)
 #else
 /* be sure STACK_FRAME_NON_STANDARD is defined */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 #include <linux/frame.h>
+#else
+#include <linux/objtool.h>
+#endif
 #endif
 
 #ifdef NEED_PCI_FREE_IRQ_VECTORS
@@ -2942,6 +2932,34 @@ static inline void dma_sync_sgtable_for_device(struct device *dev,
 	dma_sync_sg_for_device(dev, sgt->sgl, sgt->orig_nents, dir);
 }
 #endif
+#endif
+
+#ifdef NEED_IN_COMPAT_SYSCALL
+#include <linux/compat.h>
+
+static inline bool in_compat_syscall(void) { return is_compat_task(); }
+
+#endif
+
+#ifdef NEED_DEV_ERR_PROBE
+static inline int dev_err_probe(const struct device *dev, int err, const char *fmt, ...)
+{
+        struct va_format vaf;
+        va_list args;
+
+        va_start(args, fmt);
+        vaf.fmt = fmt;
+        vaf.va = &args;
+
+        if (err != -EPROBE_DEFER)
+                dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+        else
+                dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+
+        va_end(args);
+
+        return err;
+}
 #endif
 
 #endif /*  _COMPAT_H */

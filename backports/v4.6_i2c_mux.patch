@@ -1,5 +1,5 @@
 diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
-index 6c4adec58174..f73ba3bbe199 100644
+index 722576f1732a..b8ce4f6cfe64 100644
 --- a/drivers/media/dvb-frontends/lgdt3306a.c
 +++ b/drivers/media/dvb-frontends/lgdt3306a.c
 @@ -69,8 +69,6 @@ struct lgdt3306a_state {
@@ -11,7 +11,7 @@ index 6c4adec58174..f73ba3bbe199 100644
  };
  
  /*
-@@ -2175,20 +2173,142 @@ static const struct dvb_frontend_ops lgdt3306a_ops = {
+@@ -2189,20 +2187,142 @@ static const struct dvb_frontend_ops lgdt3306a_ops = {
  	.search               = lgdt3306a_search,
  };
  
@@ -162,7 +162,7 @@ index 6c4adec58174..f73ba3bbe199 100644
  }
  
  static int lgdt3306a_probe(struct i2c_client *client,
-@@ -2218,21 +2338,16 @@ static int lgdt3306a_probe(struct i2c_client *client,
+@@ -2232,21 +2352,16 @@ static int lgdt3306a_probe(struct i2c_client *client,
  	state->frontend.ops.release = NULL;
  
  	/* create mux i2c adapter for tuner */
@@ -189,7 +189,7 @@ index 6c4adec58174..f73ba3bbe199 100644
  	*config->fe = fe;
  
  	dev_info(&client->dev, "LG Electronics LGDT3306A successfully identified\n");
-@@ -2252,7 +2367,7 @@ static int lgdt3306a_remove(struct i2c_client *client)
+@@ -2266,7 +2381,7 @@ static int lgdt3306a_remove(struct i2c_client *client)
  {
  	struct lgdt3306a_state *state = i2c_get_clientdata(client);
  
@@ -212,10 +212,10 @@ index 407e74b5d195..4bbcd485613e 100644
  enum lgdt3306a_mpeg_mode {
  	LGDT3306A_MPEG_PARALLEL = 0,
 diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-frontends/m88ds3103.c
-index 3a367a585084..0510a7605d3a 100644
+index cfa4cdde99d8..423fa4dcccf9 100644
 --- a/drivers/media/dvb-frontends/m88ds3103.c
 +++ b/drivers/media/dvb-frontends/m88ds3103.c
-@@ -1222,9 +1222,9 @@ static void m88ds3103_release(struct dvb_frontend *fe)
+@@ -1637,9 +1637,9 @@ static void m88ds3103_release(struct dvb_frontend *fe)
  	i2c_unregister_device(client);
  }
  
@@ -227,7 +227,7 @@ index 3a367a585084..0510a7605d3a 100644
  	struct i2c_client *client = dev->client;
  	int ret;
  	struct i2c_msg msg = {
-@@ -1346,7 +1346,7 @@ static struct i2c_adapter *m88ds3103_get_i2c_adapter(struct i2c_client *client)
+@@ -1761,7 +1761,7 @@ static struct i2c_adapter *m88ds3103_get_i2c_adapter(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -236,7 +236,7 @@ index 3a367a585084..0510a7605d3a 100644
  }
  
  static int m88ds3103_probe(struct i2c_client *client,
-@@ -1446,16 +1446,13 @@ static int m88ds3103_probe(struct i2c_client *client,
+@@ -1863,16 +1863,13 @@ static int m88ds3103_probe(struct i2c_client *client,
  		goto err_kfree;
  
  	/* create mux i2c adapter for tuner */
@@ -257,9 +257,9 @@ index 3a367a585084..0510a7605d3a 100644
  
  	/* create dvb_frontend */
  	memcpy(&dev->fe.ops, &m88ds3103_ops, sizeof(struct dvb_frontend_ops));
-@@ -1484,7 +1481,7 @@ static int m88ds3103_remove(struct i2c_client *client)
- 
- 	dev_dbg(&client->dev, "\n");
+@@ -1927,7 +1924,7 @@ static int m88ds3103_remove(struct i2c_client *client)
+ 	if (dev->dt_client)
+ 		i2c_unregister_device(dev->dt_client);
  
 -	i2c_mux_del_adapters(dev->muxc);
 +	i2c_del_mux_adapter(dev->i2c_adapter);
@@ -267,10 +267,10 @@ index 3a367a585084..0510a7605d3a 100644
  	kfree(dev);
  	return 0;
 diff --git a/drivers/media/dvb-frontends/m88ds3103_priv.h b/drivers/media/dvb-frontends/m88ds3103_priv.h
-index c825032f07ab..697741673ef1 100644
+index aa5306f40201..60f252b9acb4 100644
 --- a/drivers/media/dvb-frontends/m88ds3103_priv.h
 +++ b/drivers/media/dvb-frontends/m88ds3103_priv.h
-@@ -32,7 +32,7 @@ struct m88ds3103_dev {
+@@ -39,7 +39,7 @@ struct m88ds3103_dev {
  	enum fe_status fe_status;
  	u32 dvbv3_ber; /* for old DVBv3 API read_ber */
  	bool warm; /* FW running */
@@ -278,7 +278,7 @@ index c825032f07ab..697741673ef1 100644
 +	struct i2c_adapter *i2c_adapter;
  	/* auto detect chip id to do different config */
  	u8 chip_id;
- 	/* main mclk is calculated for M88RS6000 dynamically */
+ 	/* chip type to differentiate m88rs6000 from m88ds3103b */
 diff --git a/drivers/media/dvb-frontends/rtl2830.c b/drivers/media/dvb-frontends/rtl2830.c
 index e6b8367c8cce..21d0d0f542e7 100644
 --- a/drivers/media/dvb-frontends/rtl2830.c
@@ -348,7 +348,7 @@ index fae78ed78522..d26981675263 100644
  	bool sleeping;
  	unsigned long filters;
 diff --git a/drivers/media/dvb-frontends/rtl2832.c b/drivers/media/dvb-frontends/rtl2832.c
-index 6ec277421390..f11667899c5e 100644
+index 01dcc7f1b9b2..caba25d868d5 100644
 --- a/drivers/media/dvb-frontends/rtl2832.c
 +++ b/drivers/media/dvb-frontends/rtl2832.c
 @@ -140,6 +140,43 @@ static const struct rtl2832_reg_entry registers[] = {
@@ -756,16 +756,16 @@ index 6ec277421390..f11667899c5e 100644
  	INIT_DELAYED_WORK(&dev->i2c_gate_work, rtl2832_i2c_gate_work);
  	/* create regmap */
 +	mutex_init(&dev->regmap_mutex);
- 	dev->regmap_config.reg_bits =  8,
- 	dev->regmap_config.val_bits =  8,
+ 	dev->regmap_config.reg_bits =  8;
+ 	dev->regmap_config.val_bits =  8;
 +	dev->regmap_config.lock = rtl2832_regmap_lock,
 +	dev->regmap_config.unlock = rtl2832_regmap_unlock,
 +	dev->regmap_config.lock_arg = dev,
- 	dev->regmap_config.volatile_reg = rtl2832_volatile_reg,
- 	dev->regmap_config.max_register = 5 * 0x100,
- 	dev->regmap_config.ranges = regmap_range_cfg,
- 	dev->regmap_config.num_ranges = ARRAY_SIZE(regmap_range_cfg),
- 	dev->regmap_config.cache_type = REGCACHE_NONE,
+ 	dev->regmap_config.volatile_reg = rtl2832_volatile_reg;
+ 	dev->regmap_config.max_register = 5 * 0x100;
+ 	dev->regmap_config.ranges = regmap_range_cfg;
+ 	dev->regmap_config.num_ranges = ARRAY_SIZE(regmap_range_cfg);
+ 	dev->regmap_config.cache_type = REGCACHE_NONE;
 -	dev->regmap = regmap_init_i2c(client, &dev->regmap_config);
 +	dev->regmap = regmap_init(&client->dev, &regmap_bus, client,
 +				  &dev->regmap_config);
@@ -850,7 +850,7 @@ index 5f79f95b9475..826bba723361 100644
  	enum fe_status fe_status;
  	u64 post_bit_error_prev; /* for old DVBv3 read_ber() calculation */
 diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
-index 60d1e59d2292..827e7baee82e 100644
+index ef6feb299d46..db8884f948fb 100644
 --- a/drivers/media/dvb-frontends/rtl2832_sdr.c
 +++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
 @@ -21,7 +21,6 @@
@@ -1515,7 +1515,7 @@ index 14b93a7d3358..b1d0941a009d 100644
  	dev->fe.ops.release = NULL;
  	dev->fe.demodulator_priv = NULL;
 diff --git a/drivers/media/dvb-frontends/si2168_priv.h b/drivers/media/dvb-frontends/si2168_priv.h
-index 804d5b30c697..d9e051d2e055 100644
+index 18bea5222082..c8b2c4b1a745 100644
 --- a/drivers/media/dvb-frontends/si2168_priv.h
 +++ b/drivers/media/dvb-frontends/si2168_priv.h
 @@ -22,8 +22,7 @@
@@ -1529,10 +1529,10 @@ index 804d5b30c697..d9e051d2e055 100644
  	enum fe_delivery_system delivery_system;
  	enum fe_status fe_status;
 diff --git a/drivers/media/usb/cx231xx/cx231xx-core.c b/drivers/media/usb/cx231xx/cx231xx-core.c
-index 982cb56e97e9..ba984066179c 100644
+index 727e6268567f..203d847ebb47 100644
 --- a/drivers/media/usb/cx231xx/cx231xx-core.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-core.c
-@@ -1330,12 +1330,6 @@ int cx231xx_dev_init(struct cx231xx *dev)
+@@ -1324,12 +1324,6 @@ int cx231xx_dev_init(struct cx231xx *dev)
  	if (errCode < 0)
  		return errCode;
  
@@ -1545,7 +1545,7 @@ index 982cb56e97e9..ba984066179c 100644
  	errCode = cx231xx_i2c_mux_register(dev, 0);
  	if (errCode < 0)
  		return errCode;
-@@ -1463,7 +1457,8 @@ EXPORT_SYMBOL_GPL(cx231xx_dev_init);
+@@ -1457,7 +1451,8 @@ EXPORT_SYMBOL_GPL(cx231xx_dev_init);
  void cx231xx_dev_uninit(struct cx231xx *dev)
  {
  	/* Un Initialize I2C bus */
@@ -1556,10 +1556,10 @@ index 982cb56e97e9..ba984066179c 100644
  	cx231xx_i2c_unregister(&dev->i2c_bus[1]);
  	cx231xx_i2c_unregister(&dev->i2c_bus[0]);
 diff --git a/drivers/media/usb/cx231xx/cx231xx-i2c.c b/drivers/media/usb/cx231xx/cx231xx-i2c.c
-index f33b6a077d57..0a0f9c159afd 100644
+index c6659253c6fb..85c81f1f30ee 100644
 --- a/drivers/media/usb/cx231xx/cx231xx-i2c.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-i2c.c
-@@ -547,34 +547,35 @@ void cx231xx_i2c_unregister(struct cx231xx_i2c *bus)
+@@ -548,34 +548,35 @@ void cx231xx_i2c_unregister(struct cx231xx_i2c *bus)
   * cx231xx_i2c_mux_select()
   * switch i2c master number 1 between port1 and port3
   */
@@ -1613,7 +1613,7 @@ index f33b6a077d57..0a0f9c159afd 100644
  }
  
  struct i2c_adapter *cx231xx_get_i2c_adap(struct cx231xx *dev, int i2c_port)
-@@ -587,9 +588,9 @@ struct i2c_adapter *cx231xx_get_i2c_adap(struct cx231xx *dev, int i2c_port)
+@@ -588,9 +589,9 @@ struct i2c_adapter *cx231xx_get_i2c_adap(struct cx231xx *dev, int i2c_port)
  	case I2C_2:
  		return &dev->i2c_bus[2].i2c_adap;
  	case I2C_1_MUX_1:
@@ -1626,10 +1626,10 @@ index f33b6a077d57..0a0f9c159afd 100644
  		BUG();
  	}
 diff --git a/drivers/media/usb/cx231xx/cx231xx.h b/drivers/media/usb/cx231xx/cx231xx.h
-index b007611abc37..6ac806a9b203 100644
+index b32eab641793..9fb46e8084fc 100644
 --- a/drivers/media/usb/cx231xx/cx231xx.h
 +++ b/drivers/media/usb/cx231xx/cx231xx.h
-@@ -614,7 +614,6 @@ struct cx231xx {
+@@ -597,7 +597,6 @@ struct cx231xx {
  
  	/* I2C adapters: Master 1 & 2 (External) & Master 3 (Internal only) */
  	struct cx231xx_i2c i2c_bus[3];
@@ -1637,7 +1637,7 @@ index b007611abc37..6ac806a9b203 100644
  	struct i2c_adapter *i2c_mux_adap[2];
  
  	unsigned int xc_fw_load_done:1;
-@@ -751,9 +750,8 @@ int cx231xx_reset_analog_tuner(struct cx231xx *dev);
+@@ -739,9 +738,8 @@ int cx231xx_reset_analog_tuner(struct cx231xx *dev);
  void cx231xx_do_i2c_scan(struct cx231xx *dev, int i2c_port);
  int cx231xx_i2c_register(struct cx231xx_i2c *bus);
  void cx231xx_i2c_unregister(struct cx231xx_i2c *bus);
@@ -1649,10 +1649,10 @@ index b007611abc37..6ac806a9b203 100644
  
  /* Internal block control functions */
 diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-index 1a36bda28542..8321fa186561 100644
+index 3952cc534b4a..11d5bf231608 100644
 --- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
 +++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-@@ -1356,7 +1356,10 @@ static int rtl2832u_tuner_attach(struct dvb_usb_adapter *adap)
+@@ -1361,7 +1361,10 @@ static int rtl2832u_tuner_attach(struct dvb_usb_adapter *adap)
  	case TUNER_RTL2832_R828D:
  		pdata.clk = dev->rtl2832_platform_data.clk;
  		pdata.tuner = dev->tuner;

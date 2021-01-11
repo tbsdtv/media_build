@@ -1,0 +1,39 @@
+diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
+index b97d7ff50ea5..1aa03c99ca6c 100644
+--- a/drivers/media/i2c/ccs-pll.h
++++ b/drivers/media/i2c/ccs-pll.h
+@@ -12,8 +12,6 @@
+ #ifndef CCS_PLL_H
+ #define CCS_PLL_H
+ 
+-#include <linux/bits.h>
+-
+ /* CSI-2 or CCP-2 */
+ #define CCS_PLL_BUS_TYPE_CSI2_DPHY				0x00
+ #define CCS_PLL_BUS_TYPE_CSI2_CPHY				0x01
+diff --git a/drivers/media/i2c/ccs/ccs-limits.h b/drivers/media/i2c/ccs/ccs-limits.h
+index 1efa43c23a2e..46c1464e9bf1 100644
+--- a/drivers/media/i2c/ccs/ccs-limits.h
++++ b/drivers/media/i2c/ccs/ccs-limits.h
+@@ -4,7 +4,7 @@
+ #ifndef __CCS_LIMITS_H__
+ #define __CCS_LIMITS_H__
+ 
+-#include <linux/bits.h>
++#include <linux/bitops.h>
+ #include <linux/types.h>
+ 
+ struct ccs_limit {
+diff --git a/drivers/media/i2c/ccs/ccs-regs.h b/drivers/media/i2c/ccs/ccs-regs.h
+index 4b3e5df2121f..4323c23f16fe 100644
+--- a/drivers/media/i2c/ccs/ccs-regs.h
++++ b/drivers/media/i2c/ccs/ccs-regs.h
+@@ -4,7 +4,7 @@
+ #ifndef __CCS_REGS_H__
+ #define __CCS_REGS_H__
+ 
+-#include <linux/bits.h>
++#include <linux/bitops.h>
+ 
+ #define CCS_FL_BASE		16
+ #define CCS_FL_16BIT		BIT(CCS_FL_BASE)

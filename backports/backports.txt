@@ -25,14 +25,20 @@ add api_version.patch
 add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
+add ccs.patch
+
+[5.10.255]
+add v5.10_vb2_dma_buf_map.patch
 
 [5.9.255]
 add v5.9_tasklet.patch
+add v5.9_netup_unidvb_devm_revert.patch
 
 [5.7.255]
 add v5.7_mmap_read_lock.patch
 add v5.7_vm_map_ram.patch
 add v5.7_pin_user_pages.patch
+add v5.7_define_seq_attribute.patch
 
 [5.6.255]
 add v5.6_pin_user_pages.patch
@@ -43,10 +49,10 @@ add v5.6_pm_runtime_get_if_active.patch
 add v5.5_alsa_pcm_api_updates.patch
 add v5.5_memtype_h.patch
 add v5.5_dev_printk_h.patch
+add v5.5_vb2_kmap.patch
 
 [5.4.255]
 add v5.4_revert_spi_transfer.patch
-add v5.4_dma_buf.patch
 
 [5.1.255]
 add v5.1_vm_map_pages.patch
@@ -61,7 +67,8 @@ add v4.20_access_ok.patch
 
 [4.18.255]
 add v4.18_fwnode_args_args.patch
-add v4.18_smiapp_bitops.patch
+add v4.18_ccs_bitops.patch
+add v4.18_vb2_map_atomic.patch
 
 [4.17.255]
 add v4.17_i2c_check_num_msgs.patch
@@ -85,6 +92,7 @@ add v4.12_revert_solo6x10_copykerneluser.patch
 
 [4.11.255]
 add v4.11_drop_drm_file.patch
+add v4.11_vb2_kmap.patch
 
 [4.10.255]
 add v4.10_sched_signal.patch
@@ -116,6 +124,7 @@ add v4.5_gpiochip_data_pointer.patch
 add v4.5_get_user_pages.patch
 add v4.5_uvc_super_plus.patch
 add v4.5_copy_to_user_warning.patch
+add v4.5_vb2_cpu_access.patch
 
 [4.4.255]
 add v4.4_gpio_chip_parent.patch
@@ -155,6 +164,7 @@ add v3.16_netdev.patch
 add v3.16_wait_on_bit.patch
 add v3.16_void_gpiochip_remove.patch
 add v3.16_drop_pointing_stick.patch
+add v3.16_dma_buf_export.patch
 
 [3.13.255]
 add v3.13_ddbridge_pcimsi.patch
@@ -172,77 +182,3 @@ add v3.10_ir_hix5hd2.patch
 add v3.10_const_snd_pcm_ops.patch
 
 [3.9.255]
-add v3.9_drxj_warnings.patch
-
-[3.8.255]
-add v3.8_config_of.patch
-
-[3.6.255]
-add v3.6_pci_error_handlers.patch
-add v3.6_i2c_add_mux_adapter.patch
-
-[3.4.255]
-add v3.4_i2c_add_mux_adapter.patch
-add v3.4_stk_webcam.patch
-
-[3.3.255]
-add v3.3_eprobe_defer.patch
-
-[3.2.255]
-add v3.2_devnode_uses_mode_t.patch
-add v3.2_alloc_ordered_workqueue.patch
-
-[3.1.255]
-add v3.1_no_export_h.patch
-add v3.1_no_dma_buf_h.patch
-add v3.1_no_pm_qos.patch
-
-[3.0.255]
-add no_atomic_include.patch
-add v3.0_ida2bit.patch
-add v3.0_remove_ida_lird_dev.patch
-
-[2.6.39]
-add v2.6_rc_main_bsearch_h.patch
-add v2.6.39_const_rc_main.patch
-
-[2.6.38]
-add v2.6.38_use_getkeycode_new_setkeycode_new.patch
-add v2.6.38_config_of_for_of_node.patch
-
-[2.6.37]
-add v2.6.37_dont_use_alloc_ordered_workqueue.patch
-
-[2.6.36]
-delete v2.6.38_use_getkeycode_new_setkeycode_new.patch
-add v2.6.36_input_getkeycode.patch
-add v2.6.36_dvb_usb_input_getkeycode.patch
-add tda18271_debug_fix.patch
-add v2.6.36_kmap_atomic.patch
-add v2.6.36_fence.patch
-
-[2.6.35]
-add v2.6.35_firedtv_handle_fcp.patch
-add v2.6.35_i2c_new_probed_device.patch
-add v2.6.35_work_handler.patch
-add v2.6.35_kfifo.patch
-
-[2.6.34]
-add v2.6.34_dvb_net.patch
-add v2.6.34_fix_define_warnings.patch
-add v2.6.34_usb_ss_ep_comp.patch
-
-[2.6.33]
-add v2.6.33_input_handlers_are_int.patch
-add v2.6.33_pvrusb2_sysfs.patch
-add v2.6.33_no_gpio_request_one.patch
-
-[2.6.32]
-add v2.6.32_dvb_net.patch
-add v2.6.32_kfifo.patch
-add v2.6.32_request_firmware_nowait.patch
-
-[2.6.31]
-add v2.6.31_nodename.patch
-add v2.6.31_vm_ops.patch
-add v2.6.31_rc.patch

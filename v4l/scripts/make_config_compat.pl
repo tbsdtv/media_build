@@ -140,25 +140,6 @@ sub check_is_singular()
 	close INNET;
 }
 
-sub check_clamp()
-{
-	my $file = "$kdir/include/linux/kernel.h";
-	my $need_compat = 1;
-
-	open INNET, "<$file" or die "File not found: $file";
-	while (<INNET>) {
-		if (m/define\s+clamp/) {
-			$need_compat = 0;
-			last;
-		}
-	}
-
-	if ($need_compat) {
-		$out.= "\n#define NEED_CLAMP 1\n";
-	}
-	close INNET;
-}
-
 sub check_proc_create()
 {
 	my $file = "$kdir/include/linux/proc_fs.h";
@@ -587,7 +568,6 @@ sub check_other_dependencies()
 	check_snd_pcm_stop_xrun();
 	check_bool();
 	check_is_singular();
-	check_clamp();
 	check_proc_create();
 	check_pcm_lock();
 	check_algo_control();
@@ -723,7 +703,7 @@ sub check_other_dependencies()
 	check_files_for_func("__pfn_to_phys", "NEED_PFN_TO_PHYS", "include/asm-generic/memory_model.h");
 	check_files_for_func("next_pseudo_random32", "NEED_NEXT_PSEUDO_RANDOM32", "include/linux/random.h", "include/linux/prandom.h");
 	check_files_for_func("memdup_user_nul", "NEED_MEMDUP_USER_NUL", "include/linux/string.h");
-	check_files_for_func("STACK_FRAME_NON_STANDARD", "NEED_STACK_FRAME_NON_STANDARD", "include/linux/frame.h");
+	check_files_for_func("STACK_FRAME_NON_STANDARD", "NEED_STACK_FRAME_NON_STANDARD", "include/linux/frame.h", "include/linux/objtool.h");
 	check_files_for_func("pci_free_irq_vectors", "NEED_PCI_FREE_IRQ_VECTORS", "include/linux/pci.h");
 	check_files_for_func(" pci_irq_vector", "NEED_PCI_IRQ_VECTOR", "include/linux/pci.h");
 	check_files_for_func("U8_MAX", "NEED_U8_MAX", "include/linux/kernel.h");
@@ -764,6 +744,8 @@ sub check_other_dependencies()
 	check_files_for_func("fallthrough", "NEED_FALLTHROUGH", "include/linux/compiler_attributes.h");
 	check_files_for_func("sched_set_fifo", "NEED_SCHED_SET_FIFO", "include/linux/sched.h");
 	check_files_for_func("dma_map_sgtable", "NEED_DMA_MAP_SGTABLE", "include/linux/dma-mapping.h");
+	check_files_for_func("in_compat_syscall", "NEED_IN_COMPAT_SYSCALL", "include/linux/compat.h");
+	check_files_for_func("dev_err_probe", "NEED_DEV_ERR_PROBE", "include/linux/device.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");

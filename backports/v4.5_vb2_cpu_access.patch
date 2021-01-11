@@ -1,0 +1,54 @@
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index 29d3707b8f27..5656d80be384 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -346,16 +346,17 @@ static void vb2_dc_dmabuf_ops_release(struct dma_buf *dbuf)
+ 
+ static int
+ vb2_dc_dmabuf_ops_begin_cpu_access(struct dma_buf *dbuf,
++				   size_t start, size_t length,
+ 				   enum dma_data_direction direction)
+ {
+ 	return 0;
+ }
+ 
+-static int
++static void
+ vb2_dc_dmabuf_ops_end_cpu_access(struct dma_buf *dbuf,
++				 size_t start, size_t length,
+ 				 enum dma_data_direction direction)
+ {
+-	return 0;
+ }
+ 
+ static void *vb2_dc_dmabuf_ops_kmap(struct dma_buf *dbuf, unsigned long pgnum)
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+index 5ba5c87a5fe5..7349375bf197 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+@@ -489,6 +489,7 @@ static void vb2_dma_sg_dmabuf_ops_release(struct dma_buf *dbuf)
+ 
+ static int
+ vb2_dma_sg_dmabuf_ops_begin_cpu_access(struct dma_buf *dbuf,
++				       size_t start, size_t length,
+ 				       enum dma_data_direction direction)
+ {
+ 	struct vb2_dma_sg_buf *buf = dbuf->priv;
+@@ -498,15 +499,15 @@ vb2_dma_sg_dmabuf_ops_begin_cpu_access(struct dma_buf *dbuf,
+ 	return 0;
+ }
+ 
+-static int
++static void
+ vb2_dma_sg_dmabuf_ops_end_cpu_access(struct dma_buf *dbuf,
++				     size_t start, size_t length,
+ 				     enum dma_data_direction direction)
+ {
+ 	struct vb2_dma_sg_buf *buf = dbuf->priv;
+ 	struct sg_table *sgt = buf->dma_sgt;
+ 
+ 	dma_sync_sg_for_device(buf->dev, sgt->sgl, sgt->nents, buf->dma_dir);
+-	return 0;
+ }
+ 
+ static void *vb2_dma_sg_dmabuf_ops_kmap(struct dma_buf *dbuf, unsigned long pgnum)

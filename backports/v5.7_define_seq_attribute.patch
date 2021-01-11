@@ -1,0 +1,40 @@
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index f3a4e575a782..6c08b77bfd47 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -1139,21 +1139,32 @@ static int saa7164_seq_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ 
+-static const struct seq_operations saa7164_sops = {
++static const struct seq_operations saa7164_seq_ops = {
+ 	.start = saa7164_seq_start,
+ 	.next = saa7164_seq_next,
+ 	.stop = saa7164_seq_stop,
+ 	.show = saa7164_seq_show,
+ };
+ 
+-DEFINE_SEQ_ATTRIBUTE(saa7164);
++static int saa7164_open(struct inode *inode, struct file *file)
++{
++	return seq_open(file, &saa7164_seq_ops);
++}
++
++static const struct file_operations saa7164_operations = {
++	.owner          = THIS_MODULE,
++	.open           = saa7164_open,
++	.read           = seq_read,
++	.llseek         = seq_lseek,
++	.release        = seq_release,
++};
+ 
+ static struct dentry *saa7614_dentry;
+ 
+ static void __init saa7164_debugfs_create(void)
+ {
+ 	saa7614_dentry = debugfs_create_file("saa7164", 0444, NULL, NULL,
+-					     &saa7164_fops);
++					     &saa7164_operations);
+ }
+ 
+ static void __exit saa7164_debugfs_remove(void)
