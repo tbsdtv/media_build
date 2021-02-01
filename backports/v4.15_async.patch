@@ -1,0 +1,25 @@
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 64643b169783..27469c10fc06 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -837,6 +837,7 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
+ }
+ EXPORT_SYMBOL(v4l2_async_unregister_subdev);
+ 
++#if 0
+ static void print_waiting_subdev(struct seq_file *s,
+ 				 struct v4l2_async_subdev *asd)
+ {
+@@ -894,9 +895,12 @@ static int pending_subdevs_show(struct seq_file *s, void *data)
+ 	return 0;
+ }
+ DEFINE_SHOW_ATTRIBUTE(pending_subdevs);
++#endif
+ 
+ void v4l2_async_debug_init(struct dentry *debugfs_dir)
+ {
++#if 0
+ 	debugfs_create_file("pending_async_subdevices", 0444, debugfs_dir, NULL,
+ 			    &pending_subdevs_fops);
++#endif
+ }

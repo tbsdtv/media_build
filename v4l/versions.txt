@@ -67,6 +67,8 @@ VIDEO_OV5670
 VIDEO_OV9734
 VIDEO_OV5675
 VIDEO_OV8856
+VIDEO_OV8865
+VIDEO_OV5648
 VIDEO_OV7251
 VIDEO_IMX258
 VIDEO_DW9807
@@ -109,106 +111,3 @@ DVB_AF9013
 VIDEO_OV13858
 # needs gpiochip_get_data
 VIDEO_SOLO6X10
-
-[4.3.0]
-# needs regmap_write_bits
-DVB_CXD2820R
-MEDIA_TUNER_TDA18250
-# needs struct reg_sequence
-VIDEO_OV7740
-
-[4.2.0]
-# needs clkdev_create
-VIDEO_CAFE_CCIC
-
-[4.1.0]
-# needs has_acpi_companion
-CEC_SECO
-
-[4.2.0]
-# needs led_trigger_remove
-V4L2_FLASH_LED_CLASS
-
-[3.19.0]
-# needs of_property_read_u64_array
-VIDEO_MT9V032
-# needs debugfs_create_devm_seqfile
-CEC_CORE
-MEDIA_CEC_SUPPORT
-# needs fwnode_property_read_u32
-SDR_MAX2175
-# needs fwnode_property_present
-VIDEO_OV7670
-VIDEO_OV5640
-
-[3.18.0]
-# needs LED brightness support
-V4L2_FLASH_LED_CLASS
-# includes property.h
-VIDEO_MT9M111
-
-[3.17.0]
-# needs GPIOD_OUT_LOW/HIGH
-VIDEO_ADV7604
-VIDEO_MT9P031
-SOC_CAMERA_OV2640
-I2C_SI4713
-VIDEO_TC358743
-VIDEO_ADP1653
-VIDEO_TVP5150
-VIDEO_ADV7180
-VIDEO_ET8EK8
-VIDEO_OV2640
-VIDEO_OV5645
-IR_GPIO_TX
-IR_GPIO_CIR
-VIDEO_OV5695
-VIDEO_OV9640
-VIDEO_OV2685
-VIDEO_OV2659
-VIDEO_TW9910
-VIDEO_MT9T112
-VIDEO_MT9M001
-VIDEO_RJ54N1
-SOC_CAMERA_RJ54N1
-RADIO_SI470X
-VIDEO_AD5820
-# needs component_match_add
-VIDEO_VIMC
-# needs bpf.h
-BPF_LIRC_MODE2
-# needs ktime_to_timespec64
-DVB_VIDTV
-
-[3.15.0]
-# needs reset_control_get_optional
-RC_ST
-
-[3.14.0]
-# needs pci_enable_msi_range
-VIDEO_COBALT
-# requires m2m_ctx in struct v4l2_fh
-VIDEO_VIM2M
-VIDEO_VICODEC
-# requires devm_phy_optional_get
-VIDEO_CADENCE_CSI2RX
-
-[3.13.0]
-# needs gpio/consumer.h
-RADIO_SI4713
-
-[3.12.0]
-# BIN_ATTR_RW was changed
-IR_NUVOTON
-# needs devm_regulator_get_optional
-CXD2880_SPI_DRV
-
-[3.11.0]
-# needs freezable_schedule_hrtimeout_range
-DVB_PT3
-# needs arch_phys_wc_add
-VIDEO_FB_IVTV
-
-[3.10.0]
-# needs include/linux/mfd/syscon.h
-IR_HIX5HD2

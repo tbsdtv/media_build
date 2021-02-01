@@ -1,0 +1,24 @@
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index 609aa67b54ce..e8eaca154dac 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -12,6 +12,7 @@
+ #include <linux/of_graph.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/videodev2.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+index fda5a55979aa..5fcdbd03a74f 100644
+--- a/drivers/media/i2c/ov8865.c
++++ b/drivers/media/i2c/ov8865.c
+@@ -13,6 +13,7 @@
+ #include <linux/of_graph.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/videodev2.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>

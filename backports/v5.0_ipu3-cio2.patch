@@ -1,7 +1,7 @@
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
 index 4e598e937dfe..035cd2449d24 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
 @@ -836,7 +836,7 @@ static int cio2_vb2_buf_init(struct vb2_buffer *vb)
  	unsigned int pages = PFN_UP(vb->planes[0].length);
  	unsigned int lops = DIV_ROUND_UP(pages + 1, CIO2_LOP_ENTRIES);

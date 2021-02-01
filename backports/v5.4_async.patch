@@ -1,0 +1,13 @@
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 64643b169783..0b44b0d1e7b4 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -856,7 +856,7 @@ static void print_waiting_subdev(struct seq_file *s,
+ 			  fwnode_handle_get(fwnode);
+ 
+ 		seq_printf(s, " [fwnode] dev=%s, node=%pfw\n",
+-			   devnode->dev ? dev_name(devnode->dev) : "nil",
++			   "nil",
+ 			   fwnode);
+ 
+ 		fwnode_handle_put(devnode);
