@@ -3,7 +3,7 @@
 #
 menuconfig MISC_DEVICES
 	bool "Misc devices"
-	---help---
+	help
 	  Say Y here to get to see options for device drivers from various
 	  different categories. This option alone does not add any kernel code.
 

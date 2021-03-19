@@ -269,7 +269,7 @@ sub checkdeps()
 
 # Text to be added to disabled options
 my $disabled_msg = <<'EOF';
-	---help---
+	help
 	  WARNING! This driver needs at least kernel %s!  It may not
 	  compile or work correctly on your kernel, which is too old.
 
@@ -600,7 +600,7 @@ source "Kconfig.kern"
 config VIDEO_KERNEL_VERSION
 	bool "Enable drivers not supported by this kernel"
 	default n
-	---help---
+	help
 	  Normally drivers that require a kernel newer $version.$level.$sublevel,
 	  the kernel you are compiling for now, will be disabled.
 
