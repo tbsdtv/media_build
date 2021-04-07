@@ -1,0 +1,22 @@
+#
+# Will be executed by the DKMS system, with 
+#   KERNELRELEASE and MEDIA_INST_DIR
+# set.
+#
+
+ifneq ($(MAKECMDGOALS),clean)
+  ifeq ($(KERNELRELEASE),)
+    $(error KERNELRELEASE not set)
+  endif
+endif
+ifeq ($(MEDIA_INST_DIR),)
+  $(error MEDIA_INST_DIR not set)
+endif
+
+build:
+	VER=$(KERNELRELEASE) ./build_all.sh $(MEDIA_INST_DIR) -db
+
+clean:
+	VER=$(KERNELRELEASE) ./build_all.sh $(MEDIA_INST_DIR) -dc
+
+.PHONY: build clean
