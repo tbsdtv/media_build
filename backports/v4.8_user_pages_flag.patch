@@ -1,24 +1,3 @@
-diff --git a/drivers/media/common/videobuf2/videobuf2-memops.c b/drivers/media/common/videobuf2/videobuf2-memops.c
-index 6e9e05153f4e..6c029616977f 100644
---- a/drivers/media/common/videobuf2/videobuf2-memops.c
-+++ b/drivers/media/common/videobuf2/videobuf2-memops.c
-@@ -40,7 +40,6 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
- 	unsigned long first, last;
- 	unsigned long nr;
- 	struct frame_vector *vec;
--	unsigned int flags = FOLL_FORCE | FOLL_WRITE;
- 
- 	first = start >> PAGE_SHIFT;
- 	last = (start + length - 1) >> PAGE_SHIFT;
-@@ -48,7 +47,7 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
- 	vec = frame_vector_create(nr);
- 	if (!vec)
- 		return ERR_PTR(-ENOMEM);
--	ret = get_vaddr_frames(start & PAGE_MASK, nr, flags, vec);
-+	ret = get_vaddr_frames(start & PAGE_MASK, nr, true, true, vec);
- 	if (ret < 0)
- 		goto out_destroy;
- 	/* We accept only complete set of PFNs */
 diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
 index 5f8883031c9c..8cd24ffe9484 100644
 --- a/drivers/media/pci/ivtv/ivtv-udma.c

@@ -1,3 +1,34 @@
+diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+index 381158320a90..b7986c7f58ea 100644
+--- a/drivers/media/common/videobuf2/frame_vector.c
++++ b/drivers/media/common/videobuf2/frame_vector.c
+@@ -48,7 +48,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 
+ 	start = untagged_addr(start);
+ 
+-	ret = pin_user_pages_fast(start, nr_frames,
++	ret = get_user_pages_fast(start, nr_frames,
+ 				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+ 				  (struct page **)(vec->ptrs));
+ 	if (ret > 0) {
+@@ -105,6 +105,7 @@ EXPORT_SYMBOL(get_vaddr_frames);
+ void put_vaddr_frames(struct frame_vector *vec)
+ {
+ 	struct page **pages;
++	int i;
+ 
+ 	if (!vec->got_ref)
+ 		goto out;
+@@ -117,7 +118,8 @@ void put_vaddr_frames(struct frame_vector *vec)
+ 	if (WARN_ON(IS_ERR(pages)))
+ 		goto out;
+ 
+-	unpin_user_pages(pages, vec->nr_frames);
++	for (i = 0; i < vec->nr_frames; i++)
++		put_page(pages[i]);
+ 	vec->got_ref = false;
+ out:
+ 	vec->nr_frames = 0;
 diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
 index 0d8372cc364a..5f8883031c9c 100644
 --- a/drivers/media/pci/ivtv/ivtv-udma.c

@@ -1,5 +1,27 @@
+diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+index 381158320a90..98f86fb44690 100644
+--- a/drivers/media/common/videobuf2/frame_vector.c
++++ b/drivers/media/common/videobuf2/frame_vector.c
+@@ -57,7 +57,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 		goto out_unlocked;
+ 	}
+ 
+-	mmap_read_lock(mm);
++	down_read(&mm->mmap_sem);
+ 	vec->got_ref = false;
+ 	vec->is_pfns = true;
+ 	ret = 0;
+@@ -83,7 +83,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 			break;
+ 	} while (ret < nr_frames);
+ out:
+-	mmap_read_unlock(mm);
++	up_read(&mm->mmap_sem);
+ out_unlocked:
+ 	if (!ret)
+ 		ret = -EFAULT;
 diff --git a/drivers/media/pci/bt8xx/bt878.c b/drivers/media/pci/bt8xx/bt878.c
-index 79ba15a9385a..53af26ad1dfb 100644
+index 78dd35c9b65d..6dc9af18ff2e 100644
 --- a/drivers/media/pci/bt8xx/bt878.c
 +++ b/drivers/media/pci/bt8xx/bt878.c
 @@ -13,9 +13,9 @@
@@ -14,7 +36,7 @@ index 79ba15a9385a..53af26ad1dfb 100644
  #include <linux/types.h>
  #include <linux/interrupt.h>
 diff --git a/drivers/media/pci/bt8xx/btcx-risc.c b/drivers/media/pci/bt8xx/btcx-risc.c
-index 51257980f539..1139a5ad2418 100644
+index b3179038b900..b20b1ba71cb0 100644
 --- a/drivers/media/pci/bt8xx/btcx-risc.c
 +++ b/drivers/media/pci/bt8xx/btcx-risc.c
 @@ -17,8 +17,8 @@
@@ -28,7 +50,7 @@ index 51257980f539..1139a5ad2418 100644
  #include "btcx-risc.h"
  
 diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
-index 4af72826b006..fc8708047be8 100644
+index 32fa4a7fe76f..f7650cb8361e 100644
 --- a/drivers/media/pci/bt8xx/bttv-risc.c
 +++ b/drivers/media/pci/bt8xx/bttv-risc.c
 @@ -20,8 +20,8 @@
@@ -42,7 +64,7 @@ index 4af72826b006..fc8708047be8 100644
  
  #include "bttvp.h"
 diff --git a/drivers/media/v4l2-core/videobuf-core.c b/drivers/media/v4l2-core/videobuf-core.c
-index 5c91fc3e65b5..2686f03b322e 100644
+index 606a271bdd2d..8a64019170ea 100644
 --- a/drivers/media/v4l2-core/videobuf-core.c
 +++ b/drivers/media/v4l2-core/videobuf-core.c
 @@ -535,7 +535,7 @@ int videobuf_qbuf(struct videobuf_queue *q, struct v4l2_buffer *b)
@@ -86,7 +108,7 @@ index 52312ce2ba05..aeb2f497c683 100644
  	return ret;
  }
 diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index 46ff19df9f53..13b65ed9e74c 100644
+index 8dd0562de287..1160b42fcf9c 100644
 --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
 +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
 @@ -21,13 +21,13 @@
@@ -116,7 +138,7 @@ index 46ff19df9f53..13b65ed9e74c 100644
  
  	return ret;
  }
-@@ -533,7 +533,7 @@ static int __videobuf_iolock(struct videobuf_queue *q,
+@@ -535,7 +535,7 @@ static int __videobuf_iolock(struct videobuf_queue *q,
  		} else {
  			/* NOTE: HACK: videobuf_iolock on V4L2_MEMORY_MMAP
  			buffers can only be called from videobuf_qbuf
@@ -144,7 +166,7 @@ index 9b2443720ab0..f8bd5a369560 100644
  #include <media/videobuf-vmalloc.h>
  
 diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c b/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
-index 4fb9bfdd2f4c..76d6e52b7af9 100644
+index f13af2329f48..525df72e313a 100644
 --- a/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
 +++ b/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
 @@ -896,9 +896,9 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,

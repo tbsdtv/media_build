@@ -291,7 +291,7 @@ sub sync_kernel_version()
 		$c=$1 if (m/^\s*SUBLEVEL\s*=\s*(\d+)/);
 	}
 	close IN;
-	$source_v4l_version = ((($a) << 16) + (($b) << 8) + ($c));
+	$source_v4l_version = ((($a) << 16) + (($b) << 8) + ($c > 255 ? 255 : $c));
 
 	if (open IN, "kernel_version.h") {
 		while (<IN>) {

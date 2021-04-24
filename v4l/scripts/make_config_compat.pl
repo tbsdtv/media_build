@@ -652,7 +652,7 @@ sub check_other_dependencies()
 	check_files_for_func("of_property_read_u64_array", "NEED_PROP_READ_U64_ARRAY", "include/linux/of.h");
 	check_files_for_func("module_pnp_driver", "NEED_MODULE_PNP_DRIVER", "include/linux/pnp.h");
 	check_files_for_func("eth_zero_addr", "NEED_ETH_ZERO_ADDR", "include/linux/etherdevice.h");
-	check_files_for_func("frame_vector_create", "NEED_FRAME_VECTOR", "include/linux/mm.h");
+	check_files_for_func("frame_vector_create", "NEED_FRAME_VECTOR", "include/media/frame_vector.h");
 	check_files_for_func("kvfree", "NEED_KVFREE", "include/linux/mm.h");
 	check_files_for_func("kvzalloc", "NEED_KVZALLOC", "include/linux/mm.h");
 	check_files_for_func("ktime_before", "NEED_KTIME_BEFORE", "include/linux/ktime.h");

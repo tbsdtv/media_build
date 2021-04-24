@@ -1,5 +1,17 @@
+diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+index 07e31bc2ef18..6de124d50207 100644
+--- a/drivers/media/i2c/imx334.c
++++ b/drivers/media/i2c/imx334.c
+@@ -11,6 +11,7 @@
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
++#include <linux/gpio/consumer.h>
+ 
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-fwnode.h>
 diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index 609aa67b54ce..e8eaca154dac 100644
+index dfe38ab8224d..bdfb5693ed36 100644
 --- a/drivers/media/i2c/ov5648.c
 +++ b/drivers/media/i2c/ov5648.c
 @@ -12,6 +12,7 @@
@@ -11,7 +23,7 @@ index 609aa67b54ce..e8eaca154dac 100644
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-device.h>
 diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
-index fda5a55979aa..5fcdbd03a74f 100644
+index 36a60fbc211d..db0bdd9ba2a4 100644
 --- a/drivers/media/i2c/ov8865.c
 +++ b/drivers/media/i2c/ov8865.c
 @@ -13,6 +13,7 @@

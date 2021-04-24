@@ -22,6 +22,7 @@ sub kernel_version($) {
 		$sublevel = 0;
 	}
 	$sublevel = 0 if ($sublevel == "");
+	$sublevel = 255 if ($sublevel > 255);
 	return ($version * 65536 + $patchlevel * 256 + $sublevel);
 }
 

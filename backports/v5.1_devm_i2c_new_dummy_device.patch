@@ -1,5 +1,5 @@
 diff --git a/drivers/media/i2c/tda1997x.c b/drivers/media/i2c/tda1997x.c
-index 5e68182001ec..31af163c9d5f 100644
+index 89bb7e6dc7a4..8060437ba2df 100644
 --- a/drivers/media/i2c/tda1997x.c
 +++ b/drivers/media/i2c/tda1997x.c
 @@ -2691,8 +2691,7 @@ static int tda1997x_probe(struct i2c_client *client,
@@ -17,6 +17,6 @@ index 5e68182001ec..31af163c9d5f 100644
  	v4l2_ctrl_handler_free(&state->hdl);
  	regulator_bulk_disable(TDA1997X_NUM_SUPPLIES, state->supplies);
 +	i2c_unregister_device(state->client_cec);
- 	cancel_delayed_work(&state->delayed_work_enable_hpd);
+ 	cancel_delayed_work_sync(&state->delayed_work_enable_hpd);
  	mutex_destroy(&state->page_lock);
  	mutex_destroy(&state->lock);

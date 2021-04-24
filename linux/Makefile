@@ -79,7 +79,7 @@ todaytar:
 	-rm -f $(PWD)/$(TODAY_TAR).bz2
 	tar cf $(PWD)/$(TODAY_TAR) -C $(DIR) $(TARFILES)
 	git --git-dir $(DIR)/.git log --pretty=oneline -n3 |sed -r 's,([\x22]),,g; s,([\x25\x5c]),\1\1,g' >git_log
-	perl -e 'while (<>) { $$a=$$1 if (m/^\s*VERSION\s*=\s*(\d+)/); $$b=$$1 if (m/^\s*PATCHLEVEL\s*=\s*(\d+)/); $$c=$$1 if (m/^\s*SUBLEVEL\s*=\s*(\d+)/); } printf "#define V4L2_VERSION %d\n", ((($$a) << 16) + (($$b) << 8) + ($$c))' $(DIR)/Makefile > kernel_version.h
+	perl -e 'while (<>) { $$a=$$1 if (m/^\s*VERSION\s*=\s*(\d+)/); $$b=$$1 if (m/^\s*PATCHLEVEL\s*=\s*(\d+)/); $$c=$$1 if (m/^\s*SUBLEVEL\s*=\s*(\d+)/); } printf "#define V4L2_VERSION %d\n", ((($$a) << 16) + (($$b) << 8) + ($$c > 255 ? 255 : $$c))' $(DIR)/Makefile > kernel_version.h
 	tar rvf $(PWD)/$(TODAY_TAR) git_log kernel_version.h
 
 	for i in $(TARDIR); do \
@@ -98,7 +98,7 @@ tar:
 	-rm -f $(PWD)/linux-media.tar.bz2
 	tar cf $(PWD)/linux-media.tar -C $(DIR) $(TARFILES)
 	git --git-dir $(DIR)/.git log --pretty=oneline -n3 |sed -r 's,([\x22]),,g; s,([\x25\x5c]),\1\1,g' >git_log
-	perl -e 'while (<>) { $$a=$$1 if (m/^\s*VERSION\s*=\s*(\d+)/); $$b=$$1 if (m/^\s*PATCHLEVEL\s*=\s*(\d+)/); $$c=$$1 if (m/^\s*SUBLEVEL\s*=\s*(\d+)/); } printf "#define V4L2_VERSION %d\n", ((($$a) << 16) + (($$b) << 8) + ($$c))' $(DIR)/Makefile > kernel_version.h
+	perl -e 'while (<>) { $$a=$$1 if (m/^\s*VERSION\s*=\s*(\d+)/); $$b=$$1 if (m/^\s*PATCHLEVEL\s*=\s*(\d+)/); $$c=$$1 if (m/^\s*SUBLEVEL\s*=\s*(\d+)/); } printf "#define V4L2_VERSION %d\n", ((($$a) << 16) + (($$b) << 8) + ($$c > 255 ? 255 : $$c))' $(DIR)/Makefile > kernel_version.h
 	tar rvf $(PWD)/linux-media.tar git_log kernel_version.h
 	for i in $(TARDIR); do \
 		if [ "`echo $$i|grep Documentation`" = "" ]; then \

@@ -1,0 +1,49 @@
+diff --git a/drivers/media/radio/radio-isa.c b/drivers/media/radio/radio-isa.c
+index c591c0851fa2..527f4c3b0ca4 100644
+--- a/drivers/media/radio/radio-isa.c
++++ b/drivers/media/radio/radio-isa.c
+@@ -337,11 +337,13 @@ int radio_isa_probe(struct device *pdev, unsigned int dev)
+ }
+ EXPORT_SYMBOL_GPL(radio_isa_probe);
+ 
+-void radio_isa_remove(struct device *pdev, unsigned int dev)
++int radio_isa_remove(struct device *pdev, unsigned int dev)
+ {
+ 	struct radio_isa_card *isa = dev_get_drvdata(pdev);
+ 
+ 	radio_isa_common_remove(isa, isa->drv->region_size);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(radio_isa_remove);
+ 
+diff --git a/drivers/media/radio/radio-isa.h b/drivers/media/radio/radio-isa.h
+index c9159958203e..2f0736edfda8 100644
+--- a/drivers/media/radio/radio-isa.h
++++ b/drivers/media/radio/radio-isa.h
+@@ -91,7 +91,7 @@ struct radio_isa_driver {
+ 
+ int radio_isa_match(struct device *pdev, unsigned int dev);
+ int radio_isa_probe(struct device *pdev, unsigned int dev);
+-void radio_isa_remove(struct device *pdev, unsigned int dev);
++int radio_isa_remove(struct device *pdev, unsigned int dev);
+ #ifdef CONFIG_PNP
+ int radio_isa_pnp_probe(struct pnp_dev *dev,
+ 			const struct pnp_device_id *dev_id);
+diff --git a/drivers/media/radio/radio-sf16fmr2.c b/drivers/media/radio/radio-sf16fmr2.c
+index d0dde55b7930..0388894cfe41 100644
+--- a/drivers/media/radio/radio-sf16fmr2.c
++++ b/drivers/media/radio/radio-sf16fmr2.c
+@@ -293,9 +293,11 @@ static void fmr2_remove(struct fmr2 *fmr2)
+ 	kfree(fmr2);
+ }
+ 
+-static void fmr2_isa_remove(struct device *pdev, unsigned int ndev)
++static int fmr2_isa_remove(struct device *pdev, unsigned int ndev)
+ {
+ 	fmr2_remove(dev_get_drvdata(pdev));
++
++	return 0;
+ }
+ 
+ static void fmr2_pnp_remove(struct pnp_dev *pdev)
