@@ -26,6 +26,10 @@ add pr_fmt.patch
 add debug.patch
 add drx39xxj.patch
 add ccs.patch
+add rc-cec.patch
+
+[5.12.1023]
+add v5.12_uvc.patch
 
 [5.11.1023]
 add v5.11_isa.patch
