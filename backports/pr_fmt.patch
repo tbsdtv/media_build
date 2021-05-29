@@ -1,5 +1,5 @@
 diff --git a/drivers/media/common/saa7146/saa7146_core.c b/drivers/media/common/saa7146/saa7146_core.c
-index 6b06ea590074..f72786720746 100644
+index e50fa0ff7c5d..f53a309ef136 100644
 --- a/drivers/media/common/saa7146/saa7146_core.c
 +++ b/drivers/media/common/saa7146/saa7146_core.c
 @@ -6,6 +6,7 @@
@@ -11,7 +11,7 @@ index 6b06ea590074..f72786720746 100644
  
  #include <media/drv-intf/saa7146.h>
 diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index d6531874faa6..823c8a391832 100644
+index baf5772c52a9..3cb5bb5f19b0 100644
 --- a/drivers/media/common/saa7146/saa7146_fops.c
 +++ b/drivers/media/common/saa7146/saa7146_fops.c
 @@ -1,3 +1,4 @@
@@ -39,7 +39,7 @@ index df9ebe2a168c..b69690aaf89e 100644
  
  #include <media/drv-intf/saa7146_vv.h>
 diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
-index ccd15b4d4920..39b8e53c45d3 100644
+index 66215d9106a4..73c4c595e8d4 100644
 --- a/drivers/media/common/saa7146/saa7146_video.c
 +++ b/drivers/media/common/saa7146/saa7146_video.c
 @@ -1,3 +1,4 @@
@@ -48,7 +48,7 @@ index ccd15b4d4920..39b8e53c45d3 100644
  
  #include <media/drv-intf/saa7146_vv.h>
 diff --git a/drivers/media/common/siano/smscoreapi.h b/drivers/media/common/siano/smscoreapi.h
-index b3b793b5caf3..3905d6a4b3ab 100644
+index 4a6b9f4c44ac..e9c5f40f919e 100644
 --- a/drivers/media/common/siano/smscoreapi.h
 +++ b/drivers/media/common/siano/smscoreapi.h
 @@ -11,6 +11,7 @@ Copyright (C) 2006-2008, Uri Shkolnik, Anatoly Greenblat
@@ -72,7 +72,7 @@ index b5b9d6de6d9e..19bb646140bf 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index f544d3393e9d..616af9255072 100644
+index 02281d13505f..832b5093db54 100644
 --- a/drivers/media/common/videobuf2/videobuf2-core.c
 +++ b/drivers/media/common/videobuf2/videobuf2-core.c
 @@ -14,6 +14,7 @@
@@ -96,7 +96,7 @@ index f14a872d1268..72d00e5c6616 100644
  
  #include <linux/sched.h>
 diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index cfc27629444f..558a35119908 100644
+index b7e4a3371176..4b9ed111a5f9 100644
 --- a/drivers/media/dvb-core/dvb_ca_en50221.c
 +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
 @@ -14,6 +14,7 @@
@@ -120,7 +120,7 @@ index 5fde1d38b3e3..b7792796a5c5 100644
  
  #include <linux/sched/signal.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index 06ea30a689d7..bfbeb45035cd 100644
+index a6915582d1a6..b52cfb82b2e8 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
 @@ -13,6 +13,7 @@
@@ -144,7 +144,7 @@ index 89620da983ba..08021c2161b0 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index 959fa2820259..2b0af338942e 100644
+index 3862ddc86ec4..0680b7e5d30d 100644
 --- a/drivers/media/dvb-core/dvbdev.c
 +++ b/drivers/media/dvb-core/dvbdev.c
 @@ -17,6 +17,7 @@
@@ -180,7 +180,7 @@ index cafb41dba861..f0118188ac3b 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/dvb-frontends/dib0090.c b/drivers/media/dvb-frontends/dib0090.c
-index 08a85831e917..6c45d91b1423 100644
+index 903da33642df..8142c90fd71e 100644
 --- a/drivers/media/dvb-frontends/dib0090.c
 +++ b/drivers/media/dvb-frontends/dib0090.c
 @@ -8,6 +8,7 @@
@@ -273,7 +273,7 @@ index 63a4c6a4afb5..1fbdac917dc2 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
 diff --git a/drivers/media/dvb-frontends/drx39xyj/drxj.c b/drivers/media/dvb-frontends/drx39xyj/drxj.c
-index 237b9d04c076..263314c91e14 100644
+index bf9e4ef35684..47e4a0c07f6f 100644
 --- a/drivers/media/dvb-frontends/drx39xyj/drxj.c
 +++ b/drivers/media/dvb-frontends/drx39xyj/drxj.c
 @@ -53,6 +53,7 @@
@@ -285,7 +285,7 @@ index 237b9d04c076..263314c91e14 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index 32f9346deb3e..aab46b2313c9 100644
+index d7fc2595f15b..c84c409cb7e4 100644
 --- a/drivers/media/dvb-frontends/drxk_hard.c
 +++ b/drivers/media/dvb-frontends/drxk_hard.c
 @@ -5,6 +5,7 @@
@@ -321,7 +321,7 @@ index ed671e951a17..97b9b3f690f8 100644
  
  #include "gp8psk-fe.h"
 diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
-index 722576f1732a..9464b5a72040 100644
+index 136b76cb4807..3250264d54b5 100644
 --- a/drivers/media/dvb-frontends/lgdt3306a.c
 +++ b/drivers/media/dvb-frontends/lgdt3306a.c
 @@ -7,6 +7,7 @@
@@ -333,7 +333,7 @@ index 722576f1732a..9464b5a72040 100644
  
  #include <asm/div64.h>
 diff --git a/drivers/media/dvb-frontends/nxt200x.c b/drivers/media/dvb-frontends/nxt200x.c
-index 35b83b1dd82c..b0f4f4e0f489 100644
+index 200b6dbc75f8..c7842eb2f5c0 100644
 --- a/drivers/media/dvb-frontends/nxt200x.c
 +++ b/drivers/media/dvb-frontends/nxt200x.c
 @@ -23,6 +23,7 @@
@@ -381,7 +381,7 @@ index f11382afe23b..e1a3095736fa 100644
  
  #include <linux/errno.h>
 diff --git a/drivers/media/pci/bt8xx/btcx-risc.c b/drivers/media/pci/bt8xx/btcx-risc.c
-index 51257980f539..54f5241ad115 100644
+index b3179038b900..8049e2934fe3 100644
 --- a/drivers/media/pci/bt8xx/btcx-risc.c
 +++ b/drivers/media/pci/bt8xx/btcx-risc.c
 @@ -10,6 +10,7 @@
@@ -393,7 +393,7 @@ index 51257980f539..54f5241ad115 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-cards.c b/drivers/media/pci/bt8xx/bttv-cards.c
-index 16148802dabb..4c394a0d37e0 100644
+index c2b5ab287dd7..5c5d9009d9b6 100644
 --- a/drivers/media/pci/bt8xx/bttv-cards.c
 +++ b/drivers/media/pci/bt8xx/bttv-cards.c
 @@ -13,6 +13,7 @@
@@ -405,7 +405,7 @@ index 16148802dabb..4c394a0d37e0 100644
  
  #include <linux/delay.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 8c61d292dec1..28128c4364b2 100644
+index 1f62a9d8ea1d..094bc654ae1f 100644
 --- a/drivers/media/pci/bt8xx/bttv-driver.c
 +++ b/drivers/media/pci/bt8xx/bttv-driver.c
 @@ -22,6 +22,7 @@
@@ -453,7 +453,7 @@ index 41226f1d0e5b..1bf8fe4194b5 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
-index 4af72826b006..102fa9cb18d0 100644
+index 32fa4a7fe76f..ec2efb078c74 100644
 --- a/drivers/media/pci/bt8xx/bttv-risc.c
 +++ b/drivers/media/pci/bt8xx/bttv-risc.c
 @@ -12,6 +12,7 @@
@@ -525,7 +525,7 @@ index 349462ee2c48..c4c30446d9b1 100644
  
  #include <linux/pci.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-alsa.c b/drivers/media/pci/cx25821/cx25821-alsa.c
-index 49892a88f528..0e9e435f5aaf 100644
+index 438fdcec6eac..7cab0ef42760 100644
 --- a/drivers/media/pci/cx25821/cx25821-alsa.c
 +++ b/drivers/media/pci/cx25821/cx25821-alsa.c
 @@ -7,6 +7,7 @@
@@ -549,7 +549,7 @@ index 5aa67fa51ca5..e40cb52c208c 100644
  
  #include <linux/init.h>
 diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 55018d9e439f..8931bd306928 100644
+index 40c10ca94def..02560c687333 100644
 --- a/drivers/media/pci/cx25821/cx25821-core.c
 +++ b/drivers/media/pci/cx25821/cx25821-core.c
 @@ -7,6 +7,7 @@
@@ -633,7 +633,7 @@ index e5efe525ad7b..a70175ec4fec 100644
  
  /* Internal header for ivtv project:
 diff --git a/drivers/media/pci/ngene/ngene-cards.c b/drivers/media/pci/ngene/ngene-cards.c
-index 8bfb3d8ea610..317aa1328d94 100644
+index 7dbc21e1a2ca..1c59449bea2a 100644
 --- a/drivers/media/pci/ngene/ngene-cards.c
 +++ b/drivers/media/pci/ngene/ngene-cards.c
 @@ -10,6 +10,7 @@
@@ -681,7 +681,7 @@ index 39d14c179d22..010e89d2df82 100644
  
  #define DEBUG_VARIABLE debug
 diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
-index 129a1f8ebe1a..3bf4b7ab7655 100644
+index 73fc901ecf3d..bcf2cedf11cb 100644
 --- a/drivers/media/pci/saa7146/mxb.c
 +++ b/drivers/media/pci/saa7146/mxb.c
 @@ -9,6 +9,7 @@
@@ -729,7 +729,7 @@ index 9c816ae3b3e5..c318a6bd5f55 100644
  
  #include <linux/bitops.h>
 diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
-index 019bb47df915..5491022bab1b 100644
+index 1b24f5bfc4af..ed3abf9da448 100644
 --- a/drivers/media/platform/exynos4-is/fimc-is.c
 +++ b/drivers/media/platform/exynos4-is/fimc-is.c
 @@ -7,6 +7,7 @@
@@ -741,7 +741,7 @@ index 019bb47df915..5491022bab1b 100644
  
  #include <linux/device.h>
 diff --git a/drivers/media/platform/exynos4-is/fimc-isp.c b/drivers/media/platform/exynos4-is/fimc-isp.c
-index cde0d254ec1c..afee9240b1bf 100644
+index 74b49d30901e..b9e91624ce2d 100644
 --- a/drivers/media/platform/exynos4-is/fimc-isp.c
 +++ b/drivers/media/platform/exynos4-is/fimc-isp.c
 @@ -7,6 +7,7 @@
@@ -753,7 +753,7 @@ index cde0d254ec1c..afee9240b1bf 100644
  
  #include <linux/device.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
-index 9ca49af29542..c8cac8f078f7 100644
+index 62241ec3b978..0343ed25f586 100644
 --- a/drivers/media/platform/s3c-camif/camif-capture.c
 +++ b/drivers/media/platform/s3c-camif/camif-capture.c
 @@ -8,6 +8,7 @@
@@ -765,7 +765,7 @@ index 9ca49af29542..c8cac8f078f7 100644
  
  #include <linux/bug.h>
 diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index 92f43c0cbc0c..2ed56fb3c402 100644
+index e1d51fd3e700..75cff3983e49 100644
 --- a/drivers/media/platform/s3c-camif/camif-core.c
 +++ b/drivers/media/platform/s3c-camif/camif-core.c
 @@ -5,6 +5,7 @@
@@ -837,7 +837,7 @@ index 41dbbef27fa6..c42a078072ac 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index 220363b9a868..1cab15f11b2e 100644
+index 116daf90c858..4d97614b7969 100644
 --- a/drivers/media/rc/lirc_dev.c
 +++ b/drivers/media/rc/lirc_dev.c
 @@ -5,6 +5,7 @@
@@ -861,7 +861,7 @@ index 8a37f083fe3d..400b9f10e641 100644
  
  #include <linux/kernel.h>
 diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 1d811e5ffb55..70bd38178a0d 100644
+index 8e88dc8ea6c5..eea261d1be5e 100644
 --- a/drivers/media/rc/rc-main.c
 +++ b/drivers/media/rc/rc-main.c
 @@ -3,6 +3,7 @@
@@ -873,7 +873,7 @@ index 1d811e5ffb55..70bd38178a0d 100644
  
  #include <media/rc-core.h>
 diff --git a/drivers/media/rc/serial_ir.c b/drivers/media/rc/serial_ir.c
-index 8cc28c92d05d..66fab3c4fcc7 100644
+index 96ae0294ac10..d977ce29dc46 100644
 --- a/drivers/media/rc/serial_ir.c
 +++ b/drivers/media/rc/serial_ir.c
 @@ -13,6 +13,7 @@
@@ -909,7 +909,7 @@ index aed23ca0fa6c..22b3a1422863 100644
  
  #include <linux/module.h>
 diff --git a/drivers/media/spi/cxd2880-spi.c b/drivers/media/spi/cxd2880-spi.c
-index 4077217777f9..1c5157e2423f 100644
+index 931ec0727cd3..b5cbbb5f20a4 100644
 --- a/drivers/media/spi/cxd2880-spi.c
 +++ b/drivers/media/spi/cxd2880-spi.c
 @@ -7,6 +7,7 @@
@@ -921,7 +921,7 @@ index 4077217777f9..1c5157e2423f 100644
  
  #include <linux/spi/spi.h>
 diff --git a/drivers/media/test-drivers/vidtv/vidtv_common.c b/drivers/media/test-drivers/vidtv/vidtv_common.c
-index 9093df32e0ab..dfd88b11a521 100644
+index 63b3055bd715..8ae730f7876a 100644
 --- a/drivers/media/test-drivers/vidtv/vidtv_common.c
 +++ b/drivers/media/test-drivers/vidtv/vidtv_common.c
 @@ -6,6 +6,7 @@
@@ -933,7 +933,7 @@ index 9093df32e0ab..dfd88b11a521 100644
  
  #include <linux/printk.h>
 diff --git a/drivers/media/test-drivers/vidtv/vidtv_pes.c b/drivers/media/test-drivers/vidtv/vidtv_pes.c
-index 8237434f3fc2..1ebea195dade 100644
+index 782e5e7fbb02..4e4d672ffd1f 100644
 --- a/drivers/media/test-drivers/vidtv/vidtv_pes.c
 +++ b/drivers/media/test-drivers/vidtv/vidtv_pes.c
 @@ -11,6 +11,7 @@
@@ -945,19 +945,19 @@ index 8237434f3fc2..1ebea195dade 100644
  
  #include <linux/types.h>
 diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-index 761034d10d9d..2e6370c51178 100644
+index c11ac8dca73d..7aa5402b4ff8 100644
 --- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
 +++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-@@ -13,6 +13,7 @@
+@@ -9,6 +9,7 @@
   * Copyright (C) 2020 Daniel W. S. Almeida
   */
  
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
  
- #include <linux/kernel.h>
+ #include <linux/bcd.h>
 diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-index 3b20a26d8721..58e342c04c93 100644
+index d79b65854627..d2a8f206d3d5 100644
 --- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
 +++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
 @@ -15,6 +15,7 @@
@@ -967,9 +967,9 @@ index 3b20a26d8721..58e342c04c93 100644
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
  
- #include <linux/types.h>
+ #include <linux/bug.h>
 diff --git a/drivers/media/test-drivers/vidtv/vidtv_ts.c b/drivers/media/test-drivers/vidtv/vidtv_ts.c
-index 190b9e4438dc..3e76f229d3a6 100644
+index ca4bb9c40b78..e3093a69b912 100644
 --- a/drivers/media/test-drivers/vidtv/vidtv_ts.c
 +++ b/drivers/media/test-drivers/vidtv/vidtv_ts.c
 @@ -7,6 +7,7 @@
@@ -979,7 +979,7 @@ index 190b9e4438dc..3e76f229d3a6 100644
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
  
- #include <linux/printk.h>
+ #include <linux/math64.h>
 diff --git a/drivers/media/tuners/r820t.c b/drivers/media/tuners/r820t.c
 index aed2f130ec74..2b556606d815 100644
 --- a/drivers/media/tuners/r820t.c
@@ -1125,7 +1125,7 @@ index 2c05ea2598e7..745fcc3af105 100644
  
  #include "gspca.h"
 diff --git a/drivers/media/usb/gspca/gspca.c b/drivers/media/usb/gspca/gspca.c
-index c295f642d352..904d86b668c8 100644
+index 47d8f28bfdfc..78077e2676d9 100644
 --- a/drivers/media/usb/gspca/gspca.c
 +++ b/drivers/media/usb/gspca/gspca.c
 @@ -8,6 +8,7 @@
@@ -1305,7 +1305,7 @@ index cd6776c3163b..a55b4e88a107 100644
  
  #define MODULE_NAME "ov519"
 diff --git a/drivers/media/usb/gspca/ov534.c b/drivers/media/usb/gspca/ov534.c
-index 9a11158f38da..ec25a5541d45 100644
+index 8b6a57f170d0..1933b57d4323 100644
 --- a/drivers/media/usb/gspca/ov534.c
 +++ b/drivers/media/usb/gspca/ov534.c
 @@ -17,6 +17,7 @@
@@ -1485,7 +1485,7 @@ index d608a518c141..5a0660fe7df1 100644
  
  #define MODULE_NAME "spca561"
 diff --git a/drivers/media/usb/gspca/sq905.c b/drivers/media/usb/gspca/sq905.c
-index 97799cfb832e..26742012be2d 100644
+index 949111070971..e198b0594eb8 100644
 --- a/drivers/media/usb/gspca/sq905.c
 +++ b/drivers/media/usb/gspca/sq905.c
 @@ -20,6 +20,7 @@
@@ -1557,7 +1557,7 @@ index b23988d8c7bc..0cdbd6cbcaa1 100644
  
  #define MODULE_NAME "stv0680"
 diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx.c b/drivers/media/usb/gspca/stv06xx/stv06xx.c
-index 95673fc0a99c..8285d47debbc 100644
+index d9bc2aacc885..970e416bdf71 100644
 --- a/drivers/media/usb/gspca/stv06xx/stv06xx.c
 +++ b/drivers/media/usb/gspca/stv06xx/stv06xx.c
 @@ -14,6 +14,7 @@
@@ -1677,10 +1677,10 @@ index d98343fd33fe..e5b39f8ebbd5 100644
  
  #define MODULE_NAME "vicam"
 diff --git a/drivers/media/usb/gspca/w996Xcf.c b/drivers/media/usb/gspca/w996Xcf.c
-index a8350ee9712f..8c37a52b79e1 100644
+index 79baa0c1a031..29bf7d5ff11b 100644
 --- a/drivers/media/usb/gspca/w996Xcf.c
 +++ b/drivers/media/usb/gspca/w996Xcf.c
-@@ -17,6 +17,7 @@
+@@ -16,6 +16,7 @@
     the sensor drivers to v4l2 sub drivers, and properly split of this
     driver from ov519.c */
  
@@ -1748,20 +1748,32 @@ index 9e016b71aa91..3f0c291b9a67 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include <linux/init.h>
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 73f3d65957ff..1b432a2a75b0 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -6,6 +6,7 @@
- 
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-api.c b/drivers/media/v4l2-core/v4l2-ctrls-api.c
+index db9baa0bd05f..f4ec7493082a 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-api.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-api.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2010-2021  Hans Verkuil <hverkuil-cisco@xs4all.nl>
   */
  
 +#undef pr_fmt
  #define pr_fmt(fmt) "v4l2-ctrls: " fmt
  
- #include <linux/ctype.h>
+ #include <linux/export.h>
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-request.c b/drivers/media/v4l2-core/v4l2-ctrls-request.c
+index 7d098f287fd9..7897419e891b 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-request.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-request.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2018-2021  Hans Verkuil <hverkuil-cisco@xs4all.nl>
+  */
+ 
++#undef pr_fmt
+ #define pr_fmt(fmt) "v4l2-ctrls: " fmt
+ 
+ #include <linux/export.h>
 diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index a593ea0598b5..73ed9632e942 100644
+index 7d0edf3530be..c175765a7db1 100644
 --- a/drivers/media/v4l2-core/v4l2-dev.c
 +++ b/drivers/media/v4l2-core/v4l2-dev.c
 @@ -12,6 +12,7 @@
@@ -1771,4 +1783,4 @@ index a593ea0598b5..73ed9632e942 100644
 +#undef pr_fmt
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- #include <linux/module.h>
+ #include <linux/debugfs.h>
