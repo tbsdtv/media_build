@@ -1,5 +1,5 @@
 diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-index 0ca75f6784c5..1ecefa4a229b 100644
+index 47aff3b19742..7f59a687ef2a 100644
 --- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
 +++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
 @@ -304,7 +304,7 @@ struct v4l2_buffer32 {
@@ -130,10 +130,10 @@ index 0ca75f6784c5..1ecefa4a229b 100644
  	case VIDIOC_QBUF32_TIME32:
  	case VIDIOC_DQBUF32_TIME32:
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 3198abdd538c..06f30c18eb4a 100644
+index 05d5db3d85e5..cf495970d02b 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -827,7 +827,7 @@ static void v4l_print_event(const void *arg, bool write_only)
+@@ -788,7 +788,7 @@ static void v4l_print_event(const void *arg, bool write_only)
  	const struct v4l2_event *p = arg;
  	const struct v4l2_event_ctrl *c;
  
@@ -142,53 +142,33 @@ index 3198abdd538c..06f30c18eb4a 100644
  			p->type, p->pending, p->sequence, p->id,
  			p->timestamp.tv_sec, p->timestamp.tv_nsec);
  	switch (p->type) {
-@@ -3115,7 +3115,7 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
+@@ -3072,7 +3072,7 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
+ 
  static unsigned int video_translate_cmd(unsigned int cmd)
  {
- 	switch (cmd) {
--#ifdef CONFIG_COMPAT_32BIT_TIME
+-#if !defined(CONFIG_64BIT) && defined(CONFIG_COMPAT_32BIT_TIME)
 +#if 0
+ 	switch (cmd) {
  	case VIDIOC_DQEVENT_TIME32:
  		return VIDIOC_DQEVENT;
- 	case VIDIOC_QUERYBUF_TIME32:
-@@ -3169,7 +3169,7 @@ static int video_get_user(void __user *arg, void *parg,
+@@ -3128,7 +3128,7 @@ static int video_get_user(void __user *arg, void *parg,
  		err = v4l2_compat_get_user(arg, parg, cmd);
  	} else {
- 		switch (cmd) {
--#ifdef CONFIG_COMPAT_32BIT_TIME
+ 		memset(parg, 0, n);
+-#if !defined(CONFIG_64BIT) && defined(CONFIG_COMPAT_32BIT_TIME)
 +#if 0
+ 		switch (cmd) {
  		case VIDIOC_QUERYBUF_TIME32:
  		case VIDIOC_QBUF_TIME32:
- 		case VIDIOC_DQBUF_TIME32:
-@@ -3224,7 +3224,7 @@ static int video_put_user(void __user *arg, void *parg,
+@@ -3183,7 +3183,7 @@ static int video_put_user(void __user *arg, void *parg,
+ 	if (in_compat_syscall())
  		return v4l2_compat_put_user(arg, parg, cmd);
  
- 	switch (cmd) {
--#ifdef CONFIG_COMPAT_32BIT_TIME
+-#if !defined(CONFIG_64BIT) && defined(CONFIG_COMPAT_32BIT_TIME)
 +#if 0
+ 	switch (cmd) {
  	case VIDIOC_DQEVENT_TIME32: {
  		struct v4l2_event *ev = parg;
- 		struct v4l2_event_time32 ev32;
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 956dafab43d4..a77c855ea57b 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -428,6 +428,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 
- 		return v4l2_event_dequeue(vfh, arg, file->f_flags & O_NONBLOCK);
- 
-+#if 0
- 	case VIDIOC_DQEVENT_TIME32: {
- 		struct v4l2_event_time32 *ev32 = arg;
- 		struct v4l2_event ev = { };
-@@ -451,6 +452,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 
- 		return rval;
- 	}
-+#endif
- 
- 	case VIDIOC_SUBSCRIBE_EVENT:
- 		return v4l2_subdev_call(sd, core, subscribe_event, vfh, arg);
 diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
 index edb733f21604..62d0acf2bb06 100644
 --- a/include/media/v4l2-ioctl.h
@@ -209,10 +189,10 @@ index edb733f21604..62d0acf2bb06 100644
  
  #endif /* _V4L2_IOCTL_H */
 diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 761ac9da3ffd..16b776513c88 100644
+index 9260791b8438..2670349d2060 100644
 --- a/include/uapi/linux/videodev2.h
 +++ b/include/uapi/linux/videodev2.h
-@@ -931,7 +931,7 @@ struct v4l2_jpegcompression {
+@@ -930,7 +930,7 @@ struct v4l2_jpegcompression {
   *	M E M O R Y - M A P P I N G   B U F F E R S
   */
  
@@ -221,7 +201,7 @@ index 761ac9da3ffd..16b776513c88 100644
  /*
   * This corresponds to the user space version of timeval
   * for 64-bit time_t. sparc64 is different from everyone
-@@ -1035,7 +1035,7 @@ struct v4l2_buffer {
+@@ -1040,7 +1040,7 @@ struct v4l2_buffer {
  	__u32			bytesused;
  	__u32			flags;
  	__u32			field;
@@ -230,7 +210,7 @@ index 761ac9da3ffd..16b776513c88 100644
  	struct __kernel_v4l2_timeval timestamp;
  #else
  	struct timeval		timestamp;
-@@ -2387,7 +2387,7 @@ struct v4l2_event {
+@@ -2428,7 +2428,7 @@ struct v4l2_event {
  	} u;
  	__u32				pending;
  	__u32				sequence;

@@ -1,5 +1,5 @@
 diff --git a/drivers/media/cec/core/cec-pin-error-inj.c b/drivers/media/cec/core/cec-pin-error-inj.c
-index 7132a27..93ccdc7 100644
+index fc0968b9d40e..4e119fe6f8c5 100644
 --- a/drivers/media/cec/core/cec-pin-error-inj.c
 +++ b/drivers/media/cec/core/cec-pin-error-inj.c
 @@ -5,7 +5,6 @@
@@ -11,7 +11,7 @@ index 7132a27..93ccdc7 100644
  #include <media/cec-pin.h>
  #include "cec-pin-priv.h"
 diff --git a/drivers/media/cec/core/cec-pin.c b/drivers/media/cec/core/cec-pin.c
-index 6e31142..0f31537 100644
+index f006bd8eec63..6005b27cee3c 100644
 --- a/drivers/media/cec/core/cec-pin.c
 +++ b/drivers/media/cec/core/cec-pin.c
 @@ -5,7 +5,6 @@
@@ -23,10 +23,10 @@ index 6e31142..0f31537 100644
  #include <media/cec-pin.h>
  #include "cec-pin-priv.h"
 diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index b2bc855..ca29bb7 100644
+index b7e4a3371176..e130bc1557d3 100644
 --- a/drivers/media/dvb-core/dvb_ca_en50221.c
 +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
-@@ -36,7 +36,7 @@
+@@ -24,7 +24,7 @@
  #include <linux/vmalloc.h>
  #include <linux/delay.h>
  #include <linux/spinlock.h>
@@ -36,11 +36,11 @@ index b2bc855..ca29bb7 100644
  
  #include <media/dvb_ca_en50221.h>
 diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-index 9c4e466..f5eb4ee 100644
+index 5fde1d38b3e3..60904fb89bf4 100644
 --- a/drivers/media/dvb-core/dvb_demux.c
 +++ b/drivers/media/dvb-core/dvb_demux.c
-@@ -20,7 +20,7 @@
- #undef pr_fmt
+@@ -19,7 +19,7 @@
+ 
  #define pr_fmt(fmt) "dvb_demux: " fmt
  
 -#include <linux/sched/signal.h>
@@ -49,10 +49,10 @@ index 9c4e466..f5eb4ee 100644
  #include <linux/slab.h>
  #include <linux/vmalloc.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index 3a4abdb..32ff061 100644
+index a6915582d1a6..787fc64a2c1a 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
-@@ -30,7 +30,7 @@
+@@ -17,7 +17,7 @@
  
  #include <linux/string.h>
  #include <linux/kernel.h>
@@ -62,10 +62,10 @@ index 3a4abdb..32ff061 100644
  #include <linux/slab.h>
  #include <linux/poll.h>
 diff --git a/drivers/media/pci/cx18/cx18-driver.h b/drivers/media/pci/cx18/cx18-driver.h
-index 0b707fa..dfdf65d 100644
+index ef545b96121d..47a1bd431b90 100644
 --- a/drivers/media/pci/cx18/cx18-driver.h
 +++ b/drivers/media/pci/cx18/cx18-driver.h
-@@ -24,7 +24,7 @@
+@@ -15,7 +15,7 @@
  #include <linux/moduleparam.h>
  #include <linux/init.h>
  #include <linux/delay.h>
@@ -75,10 +75,10 @@ index 0b707fa..dfdf65d 100644
  #include <linux/pci.h>
  #include <linux/interrupt.h>
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
-index 6b2ffdc..01c2292 100644
+index 8ebc97ebf1a2..c7cdc968eb4b 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.c
 +++ b/drivers/media/pci/ivtv/ivtv-driver.c
-@@ -59,7 +59,6 @@
+@@ -58,7 +58,6 @@
  #include <media/tveeprom.h>
  #include <media/i2c/saa7115.h>
  #include "tuner-xc2028.h"
@@ -87,10 +87,10 @@ index 6b2ffdc..01c2292 100644
  /* If you have already X v4l cards, then set this to X. This way
     the device numbers stay matched. Example: you have a WinTV card
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
-index 6b099da..81f3c19 100644
+index 4cf92dee6527..5c7d8caf372c 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.h
 +++ b/drivers/media/pci/ivtv/ivtv-driver.h
-@@ -39,38 +39,37 @@
+@@ -37,36 +37,37 @@
   *                using information provided by Jiun-Kuei Jung @ AVerMedia.
   */
  
@@ -127,8 +127,6 @@ index 6b099da..81f3c19 100644
 -#include <asm/byteorder.h>
 +#include <linux/unistd.h>
  
--#include <linux/dvb/video.h>
--#include <linux/dvb/audio.h>
 +#include <media/drv-intf/cx2341x.h>
 +#include <media/i2c/ir-kbd-i2c.h>
 +#include <media/tuner.h>
@@ -147,10 +145,10 @@ index 6b099da..81f3c19 100644
  /* Memory layout */
  #define IVTV_ENCODER_OFFSET	0x00000000
 diff --git a/drivers/media/pci/pt1/pt1.c b/drivers/media/pci/pt1/pt1.c
-index 5708f69..e306544 100644
+index f2aa36814fba..26eebfe03f0a 100644
 --- a/drivers/media/pci/pt1/pt1.c
 +++ b/drivers/media/pci/pt1/pt1.c
-@@ -19,7 +19,6 @@
+@@ -10,7 +10,6 @@
  
  #include <linux/kernel.h>
  #include <linux/sched.h>
@@ -159,7 +157,7 @@ index 5708f69..e306544 100644
  #include <linux/delay.h>
  #include <linux/module.h>
 diff --git a/drivers/media/pci/pt3/pt3.c b/drivers/media/pci/pt3/pt3.c
-index 90273b4..e1cdc71 100644
+index c0bc86793355..4ee546bf483a 100644
 --- a/drivers/media/pci/pt3/pt3.c
 +++ b/drivers/media/pci/pt3/pt3.c
 @@ -12,7 +12,6 @@
@@ -171,10 +169,10 @@ index 90273b4..e1cdc71 100644
  #include <media/dmxdev.h>
  #include <media/dvbdev.h>
 diff --git a/drivers/media/pci/solo6x10/solo6x10-i2c.c b/drivers/media/pci/solo6x10/solo6x10-i2c.c
-index 89f2f2a..0456f2d 100644
+index 7db785e9c997..b3b506d232a6 100644
 --- a/drivers/media/pci/solo6x10/solo6x10-i2c.c
 +++ b/drivers/media/pci/solo6x10/solo6x10-i2c.c
-@@ -27,7 +27,6 @@
+@@ -18,7 +18,6 @@
   * thread context, ACK the interrupt, and move on. -- BenC */
  
  #include <linux/kernel.h>
@@ -183,7 +181,7 @@ index 89f2f2a..0456f2d 100644
  #include "solo6x10.h"
  
 diff --git a/drivers/media/test-drivers/vivid/vivid-radio-rx.c b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
-index 1f86d7d..854325d 100644
+index 232cab508f48..c51b6e5057ee 100644
 --- a/drivers/media/test-drivers/vivid/vivid-radio-rx.c
 +++ b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
 @@ -10,8 +10,6 @@
@@ -196,7 +194,7 @@ index 1f86d7d..854325d 100644
  #include <media/v4l2-event.h>
  #include <media/v4l2-dv-timings.h>
 diff --git a/drivers/media/test-drivers/vivid/vivid-radio-tx.c b/drivers/media/test-drivers/vivid/vivid-radio-tx.c
-index 1a3749b..89a1ee6 100644
+index 049d40b948bb..549c47d59642 100644
 --- a/drivers/media/test-drivers/vivid/vivid-radio-tx.c
 +++ b/drivers/media/test-drivers/vivid/vivid-radio-tx.c
 @@ -7,7 +7,6 @@
@@ -208,10 +206,10 @@ index 1a3749b..89a1ee6 100644
  #include <linux/videodev2.h>
  #include <linux/v4l2-dv-timings.h>
 diff --git a/drivers/media/usb/cpia2/cpia2_core.c b/drivers/media/usb/cpia2/cpia2_core.c
-index 3dfbb54..30784fa 100644
+index b5a2d06fb356..39e0e301594b 100644
 --- a/drivers/media/usb/cpia2/cpia2_core.c
 +++ b/drivers/media/usb/cpia2/cpia2_core.c
-@@ -32,7 +32,6 @@
+@@ -23,7 +23,6 @@
  #include <linux/mm.h>
  #include <linux/vmalloc.h>
  #include <linux/firmware.h>
@@ -220,10 +218,10 @@ index 3dfbb54..30784fa 100644
  #define FIRMWARE "cpia2/stv0672_vp4.bin"
  MODULE_FIRMWARE(FIRMWARE);
 diff --git a/drivers/media/usb/gspca/cpia1.c b/drivers/media/usb/gspca/cpia1.c
-index 67afabf..272a8bc 100644
+index 46ed95483e22..b90be6e31611 100644
 --- a/drivers/media/usb/gspca/cpia1.c
 +++ b/drivers/media/usb/gspca/cpia1.c
-@@ -28,8 +28,6 @@
+@@ -17,8 +17,6 @@
  #define MODULE_NAME "cpia1"
  
  #include <linux/input.h>
@@ -233,10 +231,10 @@ index 67afabf..272a8bc 100644
  
  MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com>");
 diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index 2e5c346..09e86b3 100644
+index f75e5eedeee0..d8846dddc484 100644
 --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
 +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
-@@ -21,7 +21,7 @@
+@@ -18,7 +18,7 @@
  #include <linux/init.h>
  #include <linux/module.h>
  #include <linux/moduleparam.h>
@@ -244,9 +242,9 @@ index 2e5c346..09e86b3 100644
 +#include <linux/sched.h>
  #include <linux/slab.h>
  #include <linux/interrupt.h>
- 
+ #include <linux/pgtable.h>
 diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
-index a7b3f7c..a63034b 100644
+index edb733f21604..e8b4e0bf1776 100644
 --- a/include/media/v4l2-ioctl.h
 +++ b/include/media/v4l2-ioctl.h
 @@ -13,7 +13,6 @@

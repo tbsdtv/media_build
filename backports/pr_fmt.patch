@@ -692,10 +692,10 @@ index 73fc901ecf3d..bcf2cedf11cb 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #define DEBUG_VARIABLE debug
-diff --git a/drivers/media/pci/ttpci/av7110_v4l.c b/drivers/media/pci/ttpci/av7110_v4l.c
+diff --git a/drivers/staging/media/av7110/av7110_v4l.c b/drivers/staging/media/av7110/av7110_v4l.c
 index c89f536f699c..ea769ca04cec 100644
---- a/drivers/media/pci/ttpci/av7110_v4l.c
-+++ b/drivers/media/pci/ttpci/av7110_v4l.c
+--- a/drivers/staging/media/av7110/av7110_v4l.c
++++ b/drivers/staging/media/av7110/av7110_v4l.c
 @@ -11,6 +11,7 @@
   * the project's page is at https://linuxtv.org
   */

@@ -1,3 +1,16 @@
+diff --git a/drivers/media/pci/bt8xx/bt878.c b/drivers/media/pci/bt8xx/bt878.c
+index 90972d6952f1..1f548f0339fe 100644
+--- a/drivers/media/pci/bt8xx/bt878.c
++++ b/drivers/media/pci/bt8xx/bt878.c
+@@ -300,7 +300,7 @@ static irqreturn_t bt878_irq(int irq, void *dev_id)
+ 		}
+ 		if (astat & BT878_ARISCI) {
+ 			bt->finished_block = (stat & BT878_ARISCS) >> 28;
+-			if (bt->tasklet.callback)
++			if (bt->tasklet.func)
+ 				tasklet_schedule(&bt->tasklet);
+ 			break;
+ 		}
 diff --git a/drivers/media/pci/bt8xx/dvb-bt8xx.c b/drivers/media/pci/bt8xx/dvb-bt8xx.c
 index 4cb890b949c3..02ebd43e672e 100644
 --- a/drivers/media/pci/bt8xx/dvb-bt8xx.c
@@ -25,7 +38,7 @@ index 4cb890b949c3..02ebd43e672e 100644
  	frontend_init(card, type);
  
 diff --git a/drivers/media/pci/mantis/mantis_dma.c b/drivers/media/pci/mantis/mantis_dma.c
-index 4df571ff272b..affc5977387f 100644
+index 80c843936493..36f555312c58 100644
 --- a/drivers/media/pci/mantis/mantis_dma.c
 +++ b/drivers/media/pci/mantis/mantis_dma.c
 @@ -200,9 +200,9 @@ void mantis_dma_stop(struct mantis_pci *mantis)
@@ -66,7 +79,7 @@ index c7ba4a76e608..2da94be5b373 100644
  	if (mantis->hwconfig) {
  		result = config->frontend_init(mantis, mantis->fe);
 diff --git a/drivers/media/pci/ngene/ngene-core.c b/drivers/media/pci/ngene/ngene-core.c
-index f9f94f47d76b..af15ca1c501b 100644
+index 07f342db6701..1c61d962a69c 100644
 --- a/drivers/media/pci/ngene/ngene-core.c
 +++ b/drivers/media/pci/ngene/ngene-core.c
 @@ -50,9 +50,9 @@ DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
@@ -112,7 +125,7 @@ index f9f94f47d76b..af15ca1c501b 100644
  	chan->type = io;
  	chan->mode = chan->type;	/* for now only one mode */
 diff --git a/drivers/media/pci/smipcie/smipcie-main.c b/drivers/media/pci/smipcie/smipcie-main.c
-index e7604b7ecc8d..9ca0fc3e6f80 100644
+index 0c300d019d9c..7691f93cc3c9 100644
 --- a/drivers/media/pci/smipcie/smipcie-main.c
 +++ b/drivers/media/pci/smipcie/smipcie-main.c
 @@ -280,9 +280,9 @@ static void smi_port_clearInterrupt(struct smi_port *port)
@@ -127,7 +140,7 @@ index e7604b7ecc8d..9ca0fc3e6f80 100644
  	struct smi_dev *dev = port->dev;
  	u32 intr_status, finishedData, dmaManagement;
  	u8 dmaChan0State, dmaChan1State;
-@@ -422,7 +422,7 @@ static int smi_port_init(struct smi_port *port, int dmaChanUsed)
+@@ -426,7 +426,7 @@ static int smi_port_init(struct smi_port *port, int dmaChanUsed)
  	}
  
  	smi_port_disableInterrupt(port);
@@ -136,75 +149,6 @@ index e7604b7ecc8d..9ca0fc3e6f80 100644
  	tasklet_disable(&port->tasklet);
  	port->enable = 1;
  	return 0;
-diff --git a/drivers/media/pci/ttpci/av7110.c b/drivers/media/pci/ttpci/av7110.c
-index 885e6bc40c19..bf36b1e22b63 100644
---- a/drivers/media/pci/ttpci/av7110.c
-+++ b/drivers/media/pci/ttpci/av7110.c
-@@ -357,9 +357,9 @@ static inline void start_debi_dma(struct av7110 *av7110, int dir,
- 		irdebi(av7110, DEBISWAB, addr, 0, len);
- }
- 
--static void debiirq(struct tasklet_struct *t)
-+static void debiirq(unsigned long cookie)
- {
--	struct av7110 *av7110 = from_tasklet(av7110, t, debi_tasklet);
-+	struct av7110 *av7110 = (struct av7110 *)cookie;
- 	int type = av7110->debitype;
- 	int handle = (type >> 8) & 0x1f;
- 	unsigned int xfer = 0;
-@@ -458,9 +458,9 @@ static void debiirq(struct tasklet_struct *t)
- }
- 
- /* irq from av7110 firmware writing the mailbox register in the DPRAM */
--static void gpioirq(struct tasklet_struct *t)
-+static void gpioirq(unsigned long cookie)
- {
--	struct av7110 *av7110 = from_tasklet(av7110, t, gpio_tasklet);
-+	struct av7110 *av7110 = (struct av7110 *)cookie;
- 	u32 rxbuf, txbuf;
- 	int len;
- 
-@@ -1230,9 +1230,9 @@ static int budget_stop_feed(struct dvb_demux_feed *feed)
- 	return status;
- }
- 
--static void vpeirq(struct tasklet_struct *t)
-+static void vpeirq(unsigned long cookie)
- {
--	struct av7110 *budget = from_tasklet(budget, t, vpe_tasklet);
-+	struct av7110 *budget = (struct av7110 *)cookie;
- 	u8 *mem = (u8 *) (budget->grabbing);
- 	u32 olddma = budget->ttbp;
- 	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
-@@ -2518,7 +2518,7 @@ static int av7110_attach(struct saa7146_dev* dev,
- 		saa7146_write(dev, NUM_LINE_BYTE3, (TS_HEIGHT << 16) | TS_WIDTH);
- 		saa7146_write(dev, MC2, MASK_04 | MASK_20);
- 
--		tasklet_setup(&av7110->vpe_tasklet, vpeirq);
-+		tasklet_init(&av7110->vpe_tasklet, vpeirq, (unsigned long) av7110);
- 
- 	} else if (budgetpatch) {
- 		spin_lock_init(&av7110->feedlock1);
-@@ -2599,7 +2599,7 @@ static int av7110_attach(struct saa7146_dev* dev,
- 		saa7146_write(dev, MC1, (MASK_13 | MASK_29));
- 
- 		/* end of budgetpatch register initialization */
--		tasklet_setup(&av7110->vpe_tasklet,  vpeirq);
-+		tasklet_init (&av7110->vpe_tasklet,  vpeirq,  (unsigned long) av7110);
- 	} else {
- 		saa7146_write(dev, PCI_BT_V1, 0x1c00101f);
- 		saa7146_write(dev, BCS_CTRL, 0x80400040);
-@@ -2614,8 +2614,8 @@ static int av7110_attach(struct saa7146_dev* dev,
- 		saa7146_write(dev, GPIO_CTRL, 0x000000);
- 	}
- 
--	tasklet_setup(&av7110->debi_tasklet, debiirq);
--	tasklet_setup(&av7110->gpio_tasklet, gpioirq);
-+	tasklet_init (&av7110->debi_tasklet, debiirq, (unsigned long) av7110);
-+	tasklet_init (&av7110->gpio_tasklet, gpioirq, (unsigned long) av7110);
- 
- 	mutex_init(&av7110->pid_mutex);
- 
 diff --git a/drivers/media/pci/ttpci/budget-ci.c b/drivers/media/pci/ttpci/budget-ci.c
 index d59d18647371..77b102b8a013 100644
 --- a/drivers/media/pci/ttpci/budget-ci.c
@@ -255,7 +199,7 @@ index d59d18647371..77b102b8a013 100644
  			saa7146_setgpio(saa, 0, SAA7146_GPIO_IRQLO);
  		} else {
 diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttpci/budget-core.c
-index d405eea5c37f..293867b9e796 100644
+index 5d5796f24469..c0caffcb773d 100644
 --- a/drivers/media/pci/ttpci/budget-core.c
 +++ b/drivers/media/pci/ttpci/budget-core.c
 @@ -171,9 +171,9 @@ static int budget_read_fe_status(struct dvb_frontend *fe,
@@ -270,7 +214,7 @@ index d405eea5c37f..293867b9e796 100644
  	u8 *mem = (u8 *) (budget->grabbing);
  	u32 olddma = budget->ttbp;
  	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
-@@ -519,7 +519,7 @@ int ttpci_budget_init(struct budget *budget, struct saa7146_dev *dev,
+@@ -520,7 +520,7 @@ int ttpci_budget_init(struct budget *budget, struct saa7146_dev *dev,
  	/* upload all */
  	saa7146_write(dev, GPIO_CTRL, 0x000000);
  
@@ -315,7 +259,7 @@ index 9131265c2b87..84a58292a089 100644
  	int batch_size = H264_BUF_CNT;
  
 diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
-index c012fd2e1d29..cd297d14d2b1 100644
+index ea87110d9073..a3bdc262cd5a 100644
 --- a/drivers/media/platform/marvell-ccic/mcam-core.c
 +++ b/drivers/media/platform/marvell-ccic/mcam-core.c
 @@ -439,9 +439,9 @@ static void mcam_ctlr_dma_vmalloc(struct mcam_camera *cam)
@@ -330,7 +274,7 @@ index c012fd2e1d29..cd297d14d2b1 100644
  	int i;
  	unsigned long flags;
  	struct mcam_vb_buffer *buf;
-@@ -1300,7 +1300,8 @@ static int mcam_setup_vb2(struct mcam_camera *cam)
+@@ -1305,7 +1305,8 @@ static int mcam_setup_vb2(struct mcam_camera *cam)
  		break;
  	case B_vmalloc:
  #ifdef MCAM_MODE_VMALLOC
@@ -341,10 +285,10 @@ index c012fd2e1d29..cd297d14d2b1 100644
  		vq->mem_ops = &vb2_vmalloc_memops;
  		cam->dma_setup = mcam_ctlr_dma_vmalloc;
 diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
-index e47520fcb93c..0366c4a813ce 100644
+index dd510ee9b58a..f1ad229a9d3b 100644
 --- a/drivers/media/platform/pxa_camera.c
 +++ b/drivers/media/platform/pxa_camera.c
-@@ -1150,9 +1150,9 @@ static void pxa_camera_deactivate(struct pxa_camera_dev *pcdev)
+@@ -1146,9 +1146,9 @@ static void pxa_camera_deactivate(struct pxa_camera_dev *pcdev)
  	clk_disable_unprepare(pcdev->clk);
  }
  
@@ -356,7 +300,7 @@ index e47520fcb93c..0366c4a813ce 100644
  	unsigned long cifr;
  	struct pxa_buffer *buf;
  
-@@ -2391,7 +2391,7 @@ static int pxa_camera_probe(struct platform_device *pdev)
+@@ -2385,7 +2385,7 @@ static int pxa_camera_probe(struct platform_device *pdev)
  		goto exit_free_dma;
  	}
  
@@ -366,7 +310,7 @@ index e47520fcb93c..0366c4a813ce 100644
  	pxa_camera_activate(pcdev);
  
 diff --git a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
-index dbe7788083a4..5baada4f65e5 100644
+index 338b205ae3a7..febcbc5e225c 100644
 --- a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
 +++ b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
 @@ -77,9 +77,9 @@ static void c8sectpfe_timer_interrupt(struct timer_list *t)
@@ -402,10 +346,10 @@ index dbe7788083a4..5baada4f65e5 100644
  	return 0;
  
 diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
-index 5c395da74e17..cce97c9d5409 100644
+index 6142484d5cb4..c25a2ea138ba 100644
 --- a/drivers/media/radio/wl128x/fmdrv_common.c
 +++ b/drivers/media/radio/wl128x/fmdrv_common.c
-@@ -244,7 +244,7 @@ void fmc_update_region_info(struct fmdev *fmdev, u8 region_to_set)
+@@ -246,7 +246,7 @@ void fmc_update_region_info(struct fmdev *fmdev, u8 region_to_set)
   * FM common sub-module will schedule this tasklet whenever it receives
   * FM packet from ST driver.
   */
@@ -414,7 +358,7 @@ index 5c395da74e17..cce97c9d5409 100644
  {
  	struct fmdev *fmdev;
  	struct fm_irq *irq_info;
-@@ -253,7 +253,7 @@ static void recv_tasklet(struct tasklet_struct *t)
+@@ -255,7 +255,7 @@ static void recv_tasklet(struct tasklet_struct *t)
  	u8 num_fm_hci_cmds;
  	unsigned long flags;
  
@@ -423,7 +367,7 @@ index 5c395da74e17..cce97c9d5409 100644
  	irq_info = &fmdev->irq_info;
  	/* Process all packets in the RX queue */
  	while ((skb = skb_dequeue(&fmdev->rx_q))) {
-@@ -328,13 +328,13 @@ static void recv_tasklet(struct tasklet_struct *t)
+@@ -330,13 +330,13 @@ static void recv_tasklet(struct tasklet_struct *t)
  }
  
  /* FM send tasklet: is scheduled when FM packet has to be sent to chip */
@@ -439,7 +383,7 @@ index 5c395da74e17..cce97c9d5409 100644
  
  	if (!atomic_read(&fmdev->tx_cnt))
  		return;
-@@ -1535,11 +1535,11 @@ int fmc_prepare(struct fmdev *fmdev)
+@@ -1539,11 +1539,11 @@ int fmc_prepare(struct fmdev *fmdev)
  
  	/* Initialize TX queue and TX tasklet */
  	skb_queue_head_init(&fmdev->tx_q);
@@ -454,7 +398,7 @@ index 5c395da74e17..cce97c9d5409 100644
  	fmdev->irq_info.stage = 0;
  	atomic_set(&fmdev->tx_cnt, 1);
 diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-index df6c5e4a0f05..b8d39b2f777f 100644
+index a852ee5f7ac9..ef4c06e88a23 100644
 --- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
 +++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
 @@ -769,9 +769,9 @@ static void ttusb_dec_process_urb_frame(struct ttusb_dec *dec, u8 *b,
@@ -469,7 +413,7 @@ index df6c5e4a0f05..b8d39b2f777f 100644
  	struct list_head *item;
  	struct urb_frame *frame;
  	unsigned long flags;
-@@ -1209,7 +1209,8 @@ static void ttusb_dec_init_tasklet(struct ttusb_dec *dec)
+@@ -1205,7 +1205,8 @@ static void ttusb_dec_init_tasklet(struct ttusb_dec *dec)
  {
  	spin_lock_init(&dec->urb_frame_list_lock);
  	INIT_LIST_HEAD(&dec->urb_frame_list);
@@ -479,3 +423,72 @@ index df6c5e4a0f05..b8d39b2f777f 100644
  }
  
  static int ttusb_init_rc( struct ttusb_dec *dec)
+diff --git a/drivers/staging/media/av7110/av7110.c b/drivers/staging/media/av7110/av7110.c
+index d74ee0ecfb36..919397d23416 100644
+--- a/drivers/staging/media/av7110/av7110.c
++++ b/drivers/staging/media/av7110/av7110.c
+@@ -357,9 +357,9 @@ static inline void start_debi_dma(struct av7110 *av7110, int dir,
+ 		irdebi(av7110, DEBISWAB, addr, 0, len);
+ }
+ 
+-static void debiirq(struct tasklet_struct *t)
++static void debiirq(unsigned long cookie)
+ {
+-	struct av7110 *av7110 = from_tasklet(av7110, t, debi_tasklet);
++	struct av7110 *av7110 = (struct av7110 *)cookie;
+ 	int type = av7110->debitype;
+ 	int handle = (type >> 8) & 0x1f;
+ 	unsigned int xfer = 0;
+@@ -458,9 +458,9 @@ static void debiirq(struct tasklet_struct *t)
+ }
+ 
+ /* irq from av7110 firmware writing the mailbox register in the DPRAM */
+-static void gpioirq(struct tasklet_struct *t)
++static void gpioirq(unsigned long cookie)
+ {
+-	struct av7110 *av7110 = from_tasklet(av7110, t, gpio_tasklet);
++	struct av7110 *av7110 = (struct av7110 *)cookie;
+ 	u32 rxbuf, txbuf;
+ 	int len;
+ 
+@@ -1230,9 +1230,9 @@ static int budget_stop_feed(struct dvb_demux_feed *feed)
+ 	return status;
+ }
+ 
+-static void vpeirq(struct tasklet_struct *t)
++static void vpeirq(unsigned long cookie)
+ {
+-	struct av7110 *budget = from_tasklet(budget, t, vpe_tasklet);
++	struct av7110 *budget = (struct av7110 *)cookie;
+ 	u8 *mem = (u8 *) (budget->grabbing);
+ 	u32 olddma = budget->ttbp;
+ 	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
+@@ -2519,7 +2519,7 @@ static int av7110_attach(struct saa7146_dev* dev,
+ 		saa7146_write(dev, NUM_LINE_BYTE3, (TS_HEIGHT << 16) | TS_WIDTH);
+ 		saa7146_write(dev, MC2, MASK_04 | MASK_20);
+ 
+-		tasklet_setup(&av7110->vpe_tasklet, vpeirq);
++		tasklet_init(&av7110->vpe_tasklet, vpeirq, (unsigned long) av7110);
+ 
+ 	} else if (budgetpatch) {
+ 		spin_lock_init(&av7110->feedlock1);
+@@ -2600,7 +2600,7 @@ static int av7110_attach(struct saa7146_dev* dev,
+ 		saa7146_write(dev, MC1, (MASK_13 | MASK_29));
+ 
+ 		/* end of budgetpatch register initialization */
+-		tasklet_setup(&av7110->vpe_tasklet,  vpeirq);
++		tasklet_init (&av7110->vpe_tasklet,  vpeirq,  (unsigned long) av7110);
+ 	} else {
+ 		saa7146_write(dev, PCI_BT_V1, 0x1c00101f);
+ 		saa7146_write(dev, BCS_CTRL, 0x80400040);
+@@ -2615,8 +2615,8 @@ static int av7110_attach(struct saa7146_dev* dev,
+ 		saa7146_write(dev, GPIO_CTRL, 0x000000);
+ 	}
+ 
+-	tasklet_setup(&av7110->debi_tasklet, debiirq);
+-	tasklet_setup(&av7110->gpio_tasklet, gpioirq);
++	tasklet_init (&av7110->debi_tasklet, debiirq, (unsigned long) av7110);
++	tasklet_init (&av7110->gpio_tasklet, gpioirq, (unsigned long) av7110);
+ 
+ 	mutex_init(&av7110->pid_mutex);
+ 

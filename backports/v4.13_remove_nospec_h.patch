@@ -1,5 +1,5 @@
 diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index cfc27629444f..039e3ac2e297 100644
+index 15a08d8c69ef..b5fc088868c8 100644
 --- a/drivers/media/dvb-core/dvb_ca_en50221.c
 +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
 @@ -20,7 +20,6 @@
@@ -10,6 +10,30 @@ index cfc27629444f..039e3ac2e297 100644
  #include <linux/vmalloc.h>
  #include <linux/delay.h>
  #include <linux/spinlock.h>
+diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+index 258637d762d6..bdcc646a2da7 100644
+--- a/drivers/media/dvb-core/dvb_frontend.c
++++ b/drivers/media/dvb-core/dvb_frontend.c
+@@ -23,7 +23,6 @@
+ #include <linux/poll.h>
+ #include <linux/semaphore.h>
+ #include <linux/module.h>
+-#include <linux/nospec.h>
+ #include <linux/list.h>
+ #include <linux/freezer.h>
+ #include <linux/jiffies.h>
+diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
+index dddebea644bb..b71ac1f09914 100644
+--- a/drivers/media/dvb-core/dvb_net.c
++++ b/drivers/media/dvb-core/dvb_net.c
+@@ -45,7 +45,6 @@
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/netdevice.h>
+-#include <linux/nospec.h>
+ #include <linux/etherdevice.h>
+ #include <linux/dvb/net.h>
+ #include <linux/uio.h>
 diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
 index 6142484d5cb4..492f34d728d5 100644
 --- a/drivers/media/radio/wl128x/fmdrv_common.c
