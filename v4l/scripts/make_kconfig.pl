@@ -636,6 +636,8 @@ $config{'COMPILE_TEST'} = 0;
 $intopt { "DVB_MAX_ADAPTERS" } = 64;
 disable_config('DVB_DEMUX_SECTION_LOSS_LOG');
 disable_config('DVB_SAA716X_FF');
+disable_config('CEC_CORE');
+disable_config('MEDIA_CEC_SUPPORT');
 
 # Check dependencies
 my %newconfig = checkdeps();
