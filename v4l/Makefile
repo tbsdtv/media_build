@@ -156,7 +156,7 @@ endif
 
 PWD		:= $(shell pwd)
 DEST		:= /lib/modules/$(KERNELRELEASE)/v4l2
-KDIR26		:= /lib/modules/$(KERNELRELEASE)/kernel/drivers/media
+KDIR26		:= /lib/modules/$(KERNELRELEASE)/extra/media
 
 #################################################
 # Compiler fixup rules
