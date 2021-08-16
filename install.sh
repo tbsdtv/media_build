@@ -7,6 +7,7 @@
 # Enable some staging drivers
 make stagingconfig
 sed -i -r 's/(^CONFIG.*_RC.*=)./\1n/g' v4l/.config
+sed -i -r 's/(^CONFIG.*_IR.*=)./\1n/g' v4l/.config
 
 echo "V4L drivers building..."
 make -j5
