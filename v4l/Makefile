@@ -156,7 +156,7 @@ endif
 
 PWD		:= $(shell pwd)
 DEST		:= /lib/modules/$(KERNELRELEASE)/v4l2
-KDIR26		:= /lib/modules/$(KERNELRELEASE)/extra/media
+KDIR26		:= /lib/modules/$(KERNELRELEASE)/updates/extra/media
 
 #################################################
 # Compiler fixup rules
@@ -287,7 +287,7 @@ card cardlist cardlists::
 clean::
 	@find . -name '*.c' -type l -exec rm '{}' \;
 	@find . -name '*.h' -type l -exec rm '{}' \;
-	-rm -f *~ *.o *.ko .*.o.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
+	-rm -f *~ *.o *.ko *.mod *.dwo .*.o.cmd .*.mod.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
 		config-compat.h Module.symvers Module.markers modules.order \
 		*.unsigned .*.ko.unsigned.cmd
 	$(MAKE) -C firmware $@
