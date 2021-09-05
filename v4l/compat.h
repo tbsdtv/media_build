@@ -1236,4 +1236,18 @@ static inline int pm_runtime_resume_and_get(struct device *dev)
 }
 #endif
 
+#ifdef NEED_VMA_LOOKUP
+#include <linux/mm.h>
+static inline
+struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long addr)
+{
+	struct vm_area_struct *vma = find_vma(mm, addr);
+
+	if (vma && addr < vma->vm_start)
+		vma = NULL;
+
+	return vma;
+}
+#endif
+
 #endif /*  _COMPAT_H */

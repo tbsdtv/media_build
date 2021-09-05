@@ -144,6 +144,7 @@ sub check_other_dependencies()
 	check_files_for_func("in_compat_syscall", "NEED_IN_COMPAT_SYSCALL", "include/linux/compat.h");
 	check_files_for_func("dev_err_probe", "NEED_DEV_ERR_PROBE", "include/linux/device.h");
 	check_files_for_func("pm_runtime_resume_and_get", "NEED_PM_RUNTIME_RESUME_AND_GET", "include/linux/pm_runtime.h");
+	check_files_for_func("vma_lookup", "NEED_VMA_LOOKUP", "include/linux/mm.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp_mult", "NEED_USB_ENDPOINT_MAXP_MULT", "usb/ch9.h");

@@ -1,5 +1,5 @@
 diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index 07e31bc2ef18..6de124d50207 100644
+index 062125501788..00d4f434c882 100644
 --- a/drivers/media/i2c/imx334.c
 +++ b/drivers/media/i2c/imx334.c
 @@ -11,6 +11,7 @@
@@ -10,8 +10,32 @@ index 07e31bc2ef18..6de124d50207 100644
  
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-fwnode.h>
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index 410d6b86feb5..4b7dcdcb4167 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -7,6 +7,7 @@
+ #include <asm/unaligned.h>
+ 
+ #include <linux/clk.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+diff --git a/drivers/media/i2c/imx412.c b/drivers/media/i2c/imx412.c
+index be3f6ea55559..6a8f37c4b319 100644
+--- a/drivers/media/i2c/imx412.c
++++ b/drivers/media/i2c/imx412.c
+@@ -7,6 +7,7 @@
+ #include <asm/unaligned.h>
+ 
+ #include <linux/clk.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
 diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index dfe38ab8224d..bdfb5693ed36 100644
+index 947d437ed0ef..639db970722b 100644
 --- a/drivers/media/i2c/ov5648.c
 +++ b/drivers/media/i2c/ov5648.c
 @@ -12,6 +12,7 @@
@@ -23,7 +47,7 @@ index dfe38ab8224d..bdfb5693ed36 100644
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-device.h>
 diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
-index 36a60fbc211d..db0bdd9ba2a4 100644
+index ce50f3ea87b8..d91412b52b1b 100644
 --- a/drivers/media/i2c/ov8865.c
 +++ b/drivers/media/i2c/ov8865.c
 @@ -13,6 +13,7 @@
@@ -34,3 +58,15 @@ index 36a60fbc211d..db0bdd9ba2a4 100644
  #include <linux/videodev2.h>
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-device.h>
+diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
+index 2e0b315801e5..5ce93e70abcf 100644
+--- a/drivers/media/i2c/ov9282.c
++++ b/drivers/media/i2c/ov9282.c
+@@ -7,6 +7,7 @@
+ #include <asm/unaligned.h>
+ 
+ #include <linux/clk.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
