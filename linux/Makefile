@@ -31,6 +31,7 @@ TARFILES += include/trace/events/v4l2.h
 TARFILES += include/trace/events/vb2.h
 TARFILES += include/trace/events/pwc.h
 TARFILES += include/linux/pci_ids.h
+TARFILES += include/linux/atmel-isc-media.h
 
 TARFILES += include/misc/altera.h
 

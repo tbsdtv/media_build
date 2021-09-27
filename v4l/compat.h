@@ -1250,4 +1250,35 @@ struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long addr)
 }
 #endif
 
+#ifdef NEED_HZ_PER_MHZ
+#define HZ_PER_MHZ 1000000UL
+#endif
+
+#ifdef NEED_DMA_VMAP_NONCONTIGUOUS
+#include <linux/dma-mapping.h>
+static inline struct sg_table *dma_alloc_noncontiguous(struct device *dev,
+		size_t size, enum dma_data_direction dir, gfp_t gfp,
+		unsigned long attrs)
+{
+	return NULL;
+}
+static inline void dma_free_noncontiguous(struct device *dev, size_t size,
+		struct sg_table *sgt, enum dma_data_direction dir)
+{
+}
+static inline void *dma_vmap_noncontiguous(struct device *dev, size_t size,
+		struct sg_table *sgt)
+{
+	return NULL;
+}
+static inline void dma_vunmap_noncontiguous(struct device *dev, void *vaddr)
+{
+}
+static inline int dma_mmap_noncontiguous(struct device *dev,
+		struct vm_area_struct *vma, size_t size, struct sg_table *sgt)
+{
+	return -EINVAL;
+}
+#endif
+
 #endif /*  _COMPAT_H */
