@@ -1,8 +1,8 @@
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index 82389aead6ed..aff0ab7bf83d 100644
+index a570d78d00a4..b6f44571102c 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -439,14 +439,42 @@ static void vb2_dc_put_userptr(void *buf_priv)
+@@ -569,14 +569,42 @@ static void vb2_dc_put_userptr(void *buf_priv)
  				set_page_dirty_lock(pages[i]);
  		sg_free_table(sgt);
  		kfree(sgt);
@@ -45,10 +45,10 @@ index 82389aead6ed..aff0ab7bf83d 100644
 +}
 +#endif
 +
- static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
- 	unsigned long size, enum dma_data_direction dma_dir)
+ static void *vb2_dc_get_userptr(struct vb2_buffer *vb, struct device *dev,
+ 				unsigned long vaddr, unsigned long size)
  {
-@@ -500,12 +528,7 @@ static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
+@@ -629,12 +657,7 @@ static void *vb2_dc_get_userptr(struct vb2_buffer *vb, struct device *dev,
  		for (i = 1; i < n_pages; i++)
  			if (nums[i-1] + 1 != nums[i])
  				goto fail_pfnvec;

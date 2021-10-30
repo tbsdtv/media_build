@@ -1,8 +1,8 @@
 diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 3cf25abf5807..7ebd58a1c431 100644
+index 2266bbd239ab..8b34af369f0b 100644
 --- a/drivers/media/common/videobuf2/videobuf2-core.c
 +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -2201,13 +2201,6 @@ int vb2_mmap(struct vb2_queue *q, struct vm_area_struct *vma)
+@@ -2319,13 +2319,6 @@ int vb2_mmap(struct vb2_queue *q, struct vm_area_struct *vma)
  		goto unlock;
  	}
  
@@ -17,10 +17,10 @@ index 3cf25abf5807..7ebd58a1c431 100644
  
  unlock:
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index ecbef266130b..82389aead6ed 100644
+index 765541840a35..89b5f5cc8a00 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -186,6 +186,12 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_area_struct *vma)
+@@ -277,6 +277,12 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_area_struct *vma)
  		return -EINVAL;
  	}
  
@@ -30,14 +30,14 @@ index ecbef266130b..82389aead6ed 100644
 +	 */
 +	vma->vm_pgoff = 0;
 +
- 	ret = dma_mmap_attrs(buf->dev, vma, buf->cookie,
- 		buf->dma_addr, buf->size, buf->attrs);
- 
+ 	if (buf->non_coherent_mem)
+ 		ret = dma_mmap_noncontiguous(buf->dev, vma, buf->size,
+ 					     buf->dma_sgt);
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-index 4a4c49d6085c..270c3162fdcb 100644
+index b28475af5702..9865736dd7d7 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-@@ -328,18 +328,28 @@ static unsigned int vb2_dma_sg_num_users(void *buf_priv)
+@@ -327,18 +327,28 @@ static unsigned int vb2_dma_sg_num_users(void *buf_priv)
  static int vb2_dma_sg_mmap(void *buf_priv, struct vm_area_struct *vma)
  {
  	struct vb2_dma_sg_buf *buf = buf_priv;

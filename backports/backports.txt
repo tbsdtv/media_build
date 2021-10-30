@@ -120,6 +120,7 @@ add v4.10_refcount.patch
 add v4.9_mm_address.patch
 add v4.9_dvb_net_max_mtu.patch
 add v4.9_probe_new.patch
+add v4.9_vivid_ktime.patch
 
 [4.8.1023]
 add v4.8_user_pages_flag.patch
