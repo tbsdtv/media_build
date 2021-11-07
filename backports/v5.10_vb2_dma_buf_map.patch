@@ -1,40 +1,44 @@
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index a7f61ba85440..2f3a5996d3fc 100644
+index b052a4e36961..5b1866622a37 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -76,13 +76,9 @@ static void *vb2_dc_cookie(void *buf_priv)
- static void *vb2_dc_vaddr(void *buf_priv)
- {
- 	struct vb2_dc_buf *buf = buf_priv;
--	struct dma_buf_map map;
--	int ret;
+@@ -99,11 +99,7 @@ static void *vb2_dc_vaddr(struct vb2_buffer *vb, void *buf_priv)
+ 		return buf->vaddr;
  
--	if (!buf->vaddr && buf->db_attach) {
--		ret = dma_buf_vmap(buf->db_attach->dmabuf, &map);
--		buf->vaddr = ret ? NULL : map.vaddr;
--	}
-+	if (!buf->vaddr && buf->db_attach)
+ 	if (buf->db_attach) {
+-		struct dma_buf_map map;
+-
+-		if (!dma_buf_vmap(buf->db_attach->dmabuf, &map))
+-			buf->vaddr = map.vaddr;
+-
 +		buf->vaddr = dma_buf_vmap(buf->db_attach->dmabuf);
+ 		return buf->vaddr;
+ 	}
  
- 	return buf->vaddr;
- }
-@@ -348,13 +344,11 @@ vb2_dc_dmabuf_ops_end_cpu_access(struct dma_buf *dbuf,
+@@ -446,7 +442,7 @@ vb2_dc_dmabuf_ops_end_cpu_access(struct dma_buf *dbuf,
  	return 0;
  }
  
 -static int vb2_dc_dmabuf_ops_vmap(struct dma_buf *dbuf, struct dma_buf_map *map)
 +static void *vb2_dc_dmabuf_ops_vmap(struct dma_buf *dbuf)
  {
- 	struct vb2_dc_buf *buf = dbuf->priv;
- 
--	dma_buf_map_set_vaddr(map, buf->vaddr);
+ 	struct vb2_dc_buf *buf;
+ 	void *vaddr;
+@@ -454,11 +450,9 @@ static int vb2_dc_dmabuf_ops_vmap(struct dma_buf *dbuf, struct dma_buf_map *map)
+ 	buf = dbuf->priv;
+ 	vaddr = vb2_dc_vaddr(buf->vb, buf);
+ 	if (!vaddr)
+-		return -EINVAL;
 -
+-	dma_buf_map_set_vaddr(map, vaddr);
++		return NULL;
+ 
 -	return 0;
 +	return buf->vaddr;
  }
  
  static int vb2_dc_dmabuf_ops_mmap(struct dma_buf *dbuf,
-@@ -625,7 +619,6 @@ static void vb2_dc_unmap_dmabuf(void *mem_priv)
+@@ -736,7 +730,6 @@ static void vb2_dc_unmap_dmabuf(void *mem_priv)
  {
  	struct vb2_dc_buf *buf = mem_priv;
  	struct sg_table *sgt = buf->dma_sgt;
@@ -42,7 +46,7 @@ index a7f61ba85440..2f3a5996d3fc 100644
  
  	if (WARN_ON(!buf->db_attach)) {
  		pr_err("trying to unpin a not attached buffer\n");
-@@ -638,7 +631,7 @@ static void vb2_dc_unmap_dmabuf(void *mem_priv)
+@@ -749,7 +742,7 @@ static void vb2_dc_unmap_dmabuf(void *mem_priv)
  	}
  
  	if (buf->vaddr) {
@@ -52,11 +56,11 @@ index a7f61ba85440..2f3a5996d3fc 100644
  	}
  	dma_buf_unmap_attachment(buf->db_attach, sgt, buf->dma_dir);
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-index 030e48218687..748131151c49 100644
+index 33ee63a99139..bea961475125 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-@@ -295,18 +295,14 @@ static void vb2_dma_sg_put_userptr(void *buf_priv)
- static void *vb2_dma_sg_vaddr(void *buf_priv)
+@@ -302,18 +302,14 @@ static void vb2_dma_sg_put_userptr(void *buf_priv)
+ static void *vb2_dma_sg_vaddr(struct vb2_buffer *vb, void *buf_priv)
  {
  	struct vb2_dma_sg_buf *buf = buf_priv;
 -	struct dma_buf_map map;
@@ -77,7 +81,7 @@ index 030e48218687..748131151c49 100644
  	}
  
  	/* add offset in case userptr is not page-aligned */
-@@ -484,13 +480,11 @@ vb2_dma_sg_dmabuf_ops_end_cpu_access(struct dma_buf *dbuf,
+@@ -491,13 +487,11 @@ vb2_dma_sg_dmabuf_ops_end_cpu_access(struct dma_buf *dbuf,
  	return 0;
  }
  
@@ -89,11 +93,11 @@ index 030e48218687..748131151c49 100644
 -	dma_buf_map_set_vaddr(map, buf->vaddr);
 -
 -	return 0;
-+	return vb2_dma_sg_vaddr(buf);
++	return vb2_dma_sg_vaddr(NULL, buf);
  }
  
  static int vb2_dma_sg_dmabuf_ops_mmap(struct dma_buf *dbuf,
-@@ -571,7 +565,6 @@ static void vb2_dma_sg_unmap_dmabuf(void *mem_priv)
+@@ -580,7 +574,6 @@ static void vb2_dma_sg_unmap_dmabuf(void *mem_priv)
  {
  	struct vb2_dma_sg_buf *buf = mem_priv;
  	struct sg_table *sgt = buf->dma_sgt;
@@ -101,7 +105,7 @@ index 030e48218687..748131151c49 100644
  
  	if (WARN_ON(!buf->db_attach)) {
  		pr_err("trying to unpin a not attached buffer\n");
-@@ -584,7 +577,7 @@ static void vb2_dma_sg_unmap_dmabuf(void *mem_priv)
+@@ -593,7 +586,7 @@ static void vb2_dma_sg_unmap_dmabuf(void *mem_priv)
  	}
  
  	if (buf->vaddr) {
@@ -111,10 +115,10 @@ index 030e48218687..748131151c49 100644
  	}
  	dma_buf_unmap_attachment(buf->db_attach, sgt, buf->dma_dir);
 diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-index 83f95258ec8c..bf5ac63a5742 100644
+index ef36abd912dc..f8726caa5aa6 100644
 --- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 +++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-@@ -314,13 +314,11 @@ static void vb2_vmalloc_dmabuf_ops_release(struct dma_buf *dbuf)
+@@ -312,13 +312,11 @@ static void vb2_vmalloc_dmabuf_ops_release(struct dma_buf *dbuf)
  	vb2_vmalloc_put(dbuf->priv);
  }
  
@@ -130,7 +134,7 @@ index 83f95258ec8c..bf5ac63a5742 100644
  }
  
  static int vb2_vmalloc_dmabuf_ops_mmap(struct dma_buf *dbuf,
-@@ -372,33 +370,26 @@ static struct dma_buf *vb2_vmalloc_get_dmabuf(void *buf_priv, unsigned long flag
+@@ -372,33 +370,26 @@ static struct dma_buf *vb2_vmalloc_get_dmabuf(struct vb2_buffer *vb,
  static int vb2_vmalloc_map_dmabuf(void *mem_priv)
  {
  	struct vb2_vmalloc_buf *buf = mem_priv;
