@@ -1281,4 +1281,31 @@ static inline int dma_mmap_noncontiguous(struct device *dev,
 }
 #endif
 
+#ifdef NEED_SYSFS_EMIT
+#define sysfs_emit(buf, args...) snprintf(buf, PAGE_SIZE, ##args)
+#endif
+
+#ifdef NEED_ETH_HW_ADDR_SET
+#define eth_hw_addr_set(dev, addr) memcpy((dev)->dev_addr, addr, ETH_ALEN)
+#endif
+
+#ifdef NEED_MODULE_IMPORT_NS
+#define MODULE_IMPORT_NS(s)
+#endif
+
+#ifdef NEED_ALIGN_DOWN
+#define __V4L_COMPAT_ALIGN_KERNEL(x, a)		__V4L_COMPAT_ALIGN_KERNEL_MASK(x, (typeof(x))(a) - 1)
+#define __V4L_COMPAT_ALIGN_KERNEL_MASK(x, mask)	(((x) + (mask)) & ~(mask))
+#define ALIGN_DOWN(x, a)			__V4L_COMPAT_ALIGN_KERNEL((x) - ((a) - 1), (a))
+#endif
+
+#ifdef NEED_BITMAP_ZALLOC
+#define bitmap_zalloc(n, f) kcalloc((n) / BITS_PER_LONG, sizeof(long), (f))
+#define bitmap_free(b) kfree(b)
+#endif
+
+#ifdef NEED_FIRMWARE_REQUEST_NOWARN
+#define firmware_request_nowarn request_firmware
+#endif
+
 #endif /*  _COMPAT_H */

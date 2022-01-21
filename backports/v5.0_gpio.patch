@@ -46,11 +46,23 @@ index 947d437ed0ef..639db970722b 100644
  #include <linux/videodev2.h>
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-device.h>
+diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
+index 2784fcf67f3b..fa1271d0c621 100644
+--- a/drivers/media/i2c/ov5693.c
++++ b/drivers/media/i2c/ov5693.c
+@@ -17,6 +17,7 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
 diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
-index ce50f3ea87b8..d91412b52b1b 100644
+index ebdb20d3fe9d..1db165a4e075 100644
 --- a/drivers/media/i2c/ov8865.c
 +++ b/drivers/media/i2c/ov8865.c
-@@ -13,6 +13,7 @@
+@@ -14,6 +14,7 @@
  #include <linux/of_graph.h>
  #include <linux/pm_runtime.h>
  #include <linux/regulator/consumer.h>
@@ -70,3 +82,15 @@ index 2e0b315801e5..5ce93e70abcf 100644
  #include <linux/delay.h>
  #include <linux/i2c.h>
  #include <linux/module.h>
+diff --git a/drivers/staging/media/max96712/max96712.c b/drivers/staging/media/max96712/max96712.c
+index 847e2ffd4f53..65561bdd4cfb 100644
+--- a/drivers/staging/media/max96712/max96712.c
++++ b/drivers/staging/media/max96712/max96712.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/of_graph.h>

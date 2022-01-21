@@ -63,7 +63,7 @@ sub check_files_for_func_uapi($$@)
 sub check_other_dependencies()
 {
 	check_files_for_func("frame_vector_create", "NEED_FRAME_VECTOR", "include/media/frame_vector.h");
-	check_files_for_func("kvzalloc", "NEED_KVZALLOC", "include/linux/mm.h");
+	check_files_for_func("kvzalloc", "NEED_KVZALLOC", "include/linux/mm.h", "include/linux/slab.h");
 	check_files_for_func("ktime_get_ns", "NEED_KTIME_GET_NS", "include/linux/timekeeping.h");
 	check_files_for_func("led_set_brightness_sync", "NEED_LED_SET_BRIGHTNESS", "include/linux/leds.h");
 	check_files_for_func("BUS_CEC", "NEED_BUS_CEC", "include/uapi/linux/input.h");
@@ -147,6 +147,12 @@ sub check_other_dependencies()
 	check_files_for_func("vma_lookup", "NEED_VMA_LOOKUP", "include/linux/mm.h");
 	check_files_for_func("HZ_PER_MHZ", "NEED_HZ_PER_MHZ", "include/linux/units.h");
 	check_files_for_func("dma_vmap_noncontiguous", "NEED_DMA_VMAP_NONCONTIGUOUS", "include/linux/dma-mapping.h");
+	check_files_for_func("sysfs_emit", "NEED_SYSFS_EMIT", "include/linux/sysfs.h");
+	check_files_for_func("eth_hw_addr_set", "NEED_ETH_HW_ADDR_SET", "include/linux/etherdevice.h");
+	check_files_for_func("MODULE_IMPORT_NS", "NEED_MODULE_IMPORT_NS", "include/linux/module.h");
+	check_files_for_func("ALIGN_DOWN", "NEED_ALIGN_DOWN", "include/linux/align.h", "include/linux/kernel.h");
+	check_files_for_func("bitmap_zalloc", "NEED_BITMAP_ZALLOC", "include/linux/bitmap.h");
+	check_files_for_func("firmware_request_nowarn", "NEED_FIRMWARE_REQUEST_NOWARN", "include/linux/firmware.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp_mult", "NEED_USB_ENDPOINT_MAXP_MULT", "usb/ch9.h");

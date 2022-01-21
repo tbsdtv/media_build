@@ -37,3 +37,16 @@ index 4b3e5df2121f..4323c23f16fe 100644
  
  #define CCS_FL_BASE		16
  #define CCS_FL_16BIT		BIT(CCS_FL_BASE)
+diff --git a/drivers/media/dvb-frontends/cxd2880/cxd2880_common.h b/drivers/media/dvb-frontends/cxd2880/cxd2880_common.h
+index 9dc15a5a9683..b2b6ff5d5e88 100644
+--- a/drivers/media/dvb-frontends/cxd2880/cxd2880_common.h
++++ b/drivers/media/dvb-frontends/cxd2880/cxd2880_common.h
+@@ -12,7 +12,7 @@
+ #include <linux/types.h>
+ #include <linux/errno.h>
+ #include <linux/delay.h>
+-#include <linux/bits.h>
++#include <linux/bitops.h>
+ #include <linux/string.h>
+ 
+ int cxd2880_convert2s_complement(u32 value, u32 bitlen);
