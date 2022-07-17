@@ -6,6 +6,10 @@ INTEL_ATOMISP
 VIDEO_OV772X
 VIDEO_OV9650
 
+# Adding an entry under kernel [major.minor] means that that
+# driver will be enabled from that kernel onwards, and disabled
+# for older kernels.
+
 [5.16]
 # Needs i2c_driver flags field
 VIDEO_IMX319
@@ -15,6 +19,10 @@ VIDEO_OV2740
 VIDEO_OV5670
 VIDEO_OV5675
 VIDEO_OV8856
+
+[5.7]
+# needs read_poll_timeout
+VIDEO_ISL7998X
 
 [5.5]
 # lots of kAPI changes in 5.6, so disable for older kernels
@@ -40,6 +48,7 @@ VIDEO_OMAP3
 # Needs devm_clk_get_optional
 VIDEO_IMX274
 VIDEO_IMX258
+VIDEO_OV7251
 
 [5.0]
 # DMA mask warnings
@@ -49,6 +58,9 @@ VIDEO_MEM2MEM_DEINTERLACE
 # Needs gpiod_set_consumer_name
 VIDEO_MAX9286
 VIDEO_MAX96712
+VIDEO_ADV7183
+VIDEO_NOON010PC30
+VIDEO_M5MOLS
 
 [4.18.0]
 # Needs proc_create_single
@@ -65,6 +77,8 @@ VIDEO_I2C
 CEC_CH7322
 # Needs device_get_match_data
 VIDEO_CCS
+# Needs DEFINE_SHOW_ATTRIBUTE
+VIDEO_IMX_MIPI_CSIS
 
 [4.15.0]
 # Needs idle_bias_on and other flags in struct snd_soc_component_driver
@@ -78,6 +92,14 @@ RADIO_WL128X
 # Needs clk_bulk_data
 VIDEO_XILINX_CSI2RXSS
 
+[4.12.0]
+# needs usb_bus sysdev field
+VIDEO_STK1160
+
+[4.11.0]
+# needs refcount
+IR_IMON
+
 [4.10.0]
 # needs dma_request_chan
 VIDEO_XILINX
@@ -87,8 +109,8 @@ VIDEO_OV9282
 VIDEO_OV8865
 VIDEO_OV5648
 VIDEO_OV5693
-VIDEO_OV7251
 VIDEO_OV13B10
+VIDEO_OV08D10
 VIDEO_DW9807
 VIDEO_AK7375
 VIDEO_DW9807_VCM
@@ -104,10 +126,13 @@ VIDEO_IMX412
 VIDEO_ST_MIPID02
 I2C_BCM2048
 VIDEO_HI846
+VIDEO_HI847
 VIDEO_DW9714
 VIDEO_DW9768
 VIDEO_RDACM20
 VIDEO_RDACM21
+VIDEO_OG01A1B
+LIRC
 
 [4.9.0]
 # needs linux/bitfield.h

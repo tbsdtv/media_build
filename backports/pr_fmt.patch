@@ -704,10 +704,10 @@ index 3cb83005cf09..64e61883a79d 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include "budget.h"
-diff --git a/drivers/media/platform/exynos4-is/fimc-is-param.c b/drivers/media/platform/exynos4-is/fimc-is-param.c
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is-param.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-param.c
 index 9c816ae3b3e5..c318a6bd5f55 100644
---- a/drivers/media/platform/exynos4-is/fimc-is-param.c
-+++ b/drivers/media/platform/exynos4-is/fimc-is-param.c
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is-param.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is-param.c
 @@ -7,6 +7,7 @@
   * Authors: Younghwan Joo <yhwan.joo@samsung.com>
   *          Sylwester Nawrocki <s.nawrocki@samsung.com>
@@ -716,10 +716,10 @@ index 9c816ae3b3e5..c318a6bd5f55 100644
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
  
  #include <linux/bitops.h>
-diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is.c b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
 index e55e411038f4..c19d2ca8d07c 100644
---- a/drivers/media/platform/exynos4-is/fimc-is.c
-+++ b/drivers/media/platform/exynos4-is/fimc-is.c
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
 @@ -7,6 +7,7 @@
   * Authors: Sylwester Nawrocki <s.nawrocki@samsung.com>
   *          Younghwan Joo <yhwan.joo@samsung.com>
@@ -728,10 +728,10 @@ index e55e411038f4..c19d2ca8d07c 100644
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
  
  #include <linux/device.h>
-diff --git a/drivers/media/platform/exynos4-is/fimc-isp.c b/drivers/media/platform/exynos4-is/fimc-isp.c
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-isp.c b/drivers/media/platform/samsung/exynos4-is/fimc-isp.c
 index 855235bea46d..3039e7326c6c 100644
---- a/drivers/media/platform/exynos4-is/fimc-isp.c
-+++ b/drivers/media/platform/exynos4-is/fimc-isp.c
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-isp.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-isp.c
 @@ -7,6 +7,7 @@
   * Authors: Sylwester Nawrocki <s.nawrocki@samsung.com>
   *          Younghwan Joo <yhwan.joo@samsung.com>
@@ -740,10 +740,10 @@ index 855235bea46d..3039e7326c6c 100644
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
  
  #include <linux/device.h>
-diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
+diff --git a/drivers/media/platform/samsung/s3c-camif/camif-capture.c b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
 index 140854ab4dd8..b8ba2dc65297 100644
---- a/drivers/media/platform/s3c-camif/camif-capture.c
-+++ b/drivers/media/platform/s3c-camif/camif-capture.c
+--- a/drivers/media/platform/samsung/s3c-camif/camif-capture.c
++++ b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
 @@ -8,6 +8,7 @@
   * Based on drivers/media/platform/s5p-fimc,
   * Copyright (C) 2010 - 2012 Samsung Electronics Co., Ltd.
@@ -752,10 +752,10 @@ index 140854ab4dd8..b8ba2dc65297 100644
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
  
  #include <linux/bug.h>
-diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
+diff --git a/drivers/media/platform/samsung/s3c-camif/camif-core.c b/drivers/media/platform/samsung/s3c-camif/camif-core.c
 index 32892ab359ee..56c9c7fe7a99 100644
---- a/drivers/media/platform/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/s3c-camif/camif-core.c
+--- a/drivers/media/platform/samsung/s3c-camif/camif-core.c
++++ b/drivers/media/platform/samsung/s3c-camif/camif-core.c
 @@ -5,6 +5,7 @@
   * Copyright (C) 2012 Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
   * Copyright (C) 2012 Tomasz Figa <tomasz.figa@gmail.com>
@@ -764,10 +764,10 @@ index 32892ab359ee..56c9c7fe7a99 100644
  #define pr_fmt(fmt) "%s:%d " fmt, __func__, __LINE__
  
  #include <linux/bug.h>
-diff --git a/drivers/media/platform/s3c-camif/camif-regs.c b/drivers/media/platform/s3c-camif/camif-regs.c
+diff --git a/drivers/media/platform/samsung/s3c-camif/camif-regs.c b/drivers/media/platform/samsung/s3c-camif/camif-regs.c
 index e80204f5720c..235a40337893 100644
---- a/drivers/media/platform/s3c-camif/camif-regs.c
-+++ b/drivers/media/platform/s3c-camif/camif-regs.c
+--- a/drivers/media/platform/samsung/s3c-camif/camif-regs.c
++++ b/drivers/media/platform/samsung/s3c-camif/camif-regs.c
 @@ -5,6 +5,7 @@
   * Copyright (C) 2012 Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
   * Copyright (C) 2012 Tomasz Figa <tomasz.figa@gmail.com>

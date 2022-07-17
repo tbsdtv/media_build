@@ -121,6 +121,14 @@ static inline void *kvmalloc_array(size_t n, size_t size, gfp_t flags)
 }
 #endif
 
+#ifdef NEED_KVCALLOC
+#include <linux/mm.h>
+static inline void *kvcalloc(size_t n, size_t size, gfp_t flags)
+{
+	return kvmalloc_array(n, size, flags | __GFP_ZERO);
+}
+#endif
+
 #ifdef NEED_USB_ENDPOINT_MAXP_MULT
 #define USB_EP_MAXP_MULT_SHIFT  11
 #define USB_EP_MAXP_MULT_MASK   (3 << USB_EP_MAXP_MULT_SHIFT)
@@ -1306,6 +1314,14 @@ static inline int dma_mmap_noncontiguous(struct device *dev,
 
 #ifdef NEED_FIRMWARE_REQUEST_NOWARN
 #define firmware_request_nowarn request_firmware
+#endif
+
+#ifdef NEED_LOCKDEP_ASSERT_NOT_HELD
+#define lockdep_assert_not_held(l)
+#endif
+
+#ifdef NEED_DEV_IS_PLATFORM
+#define dev_is_platform(dev) ((dev)->bus == &platform_bus_type)
 #endif
 
 #endif /*  _COMPAT_H */

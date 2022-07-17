@@ -1,5 +1,5 @@
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index 2d7e3df4b21c..e904f1b26a27 100644
+index abf1279858d0..d2066b77ddc3 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 @@ -28,7 +28,7 @@ struct vb2_dc_buf {
@@ -24,25 +24,25 @@ index 2d7e3df4b21c..e904f1b26a27 100644
  		size += sg_dma_len(s);
  	}
  	return size;
-@@ -128,7 +128,8 @@ static void vb2_dc_prepare(void *buf_priv)
- 		return;
+@@ -132,7 +132,8 @@ static void vb2_dc_prepare(void *buf_priv)
+ 		flush_kernel_vmap_range(buf->vaddr, buf->size);
  
  	/* For both USERPTR and non-coherent MMAP */
 -	dma_sync_sgtable_for_device(buf->dev, sgt, buf->dma_dir);
 +	dma_sync_sg_for_device(buf->dev, sgt->sgl, sgt->orig_nents,
 +			       buf->dma_dir);
+ }
  
- 	/* Non-coherent MMAP only */
- 	if (buf->vaddr)
-@@ -148,7 +149,7 @@ static void vb2_dc_finish(void *buf_priv)
- 		return;
+ static void vb2_dc_finish(void *buf_priv)
+@@ -152,7 +153,7 @@ static void vb2_dc_finish(void *buf_priv)
+ 		invalidate_kernel_vmap_range(buf->vaddr, buf->size);
  
  	/* For both USERPTR and non-coherent MMAP */
 -	dma_sync_sgtable_for_cpu(buf->dev, sgt, buf->dma_dir);
 +	dma_sync_sg_for_cpu(buf->dev, sgt->sgl, sgt->orig_nents, buf->dma_dir);
+ }
  
- 	/* Non-coherent MMAP only */
- 	if (buf->vaddr)
+ /*********************************************/
 @@ -177,7 +178,7 @@ static void vb2_dc_put(void *buf_priv)
  			kfree(buf->sgt_base);
  		}
@@ -186,7 +186,7 @@ index 2d7e3df4b21c..e904f1b26a27 100644
  
  	/* Only cache aligned DMA transfers are reliable */
  	if (!IS_ALIGNED(vaddr | size, dma_align)) {
-@@ -678,8 +693,9 @@ static void *vb2_dc_get_userptr(struct vb2_buffer *vb, struct device *dev,
+@@ -679,8 +694,9 @@ static void *vb2_dc_get_userptr(struct vb2_buffer *vb, struct device *dev,
  	 * No need to sync to the device, this will happen later when the
  	 * prepare() memop is called.
  	 */
@@ -198,7 +198,7 @@ index 2d7e3df4b21c..e904f1b26a27 100644
  		pr_err("failed to map scatterlist\n");
  		ret = -EIO;
  		goto fail_sgt_init;
-@@ -703,7 +719,8 @@ static void *vb2_dc_get_userptr(struct vb2_buffer *vb, struct device *dev,
+@@ -704,7 +720,8 @@ static void *vb2_dc_get_userptr(struct vb2_buffer *vb, struct device *dev,
  	return buf;
  
  fail_map_sg:
@@ -209,7 +209,7 @@ index 2d7e3df4b21c..e904f1b26a27 100644
  fail_sgt_init:
  	sg_free_table(sgt);
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-index 15f3283ed19f..ae52c9e4e5ba 100644
+index e8728f26d92a..1a82e5a3dc88 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
 @@ -104,6 +104,9 @@ static void *vb2_dma_sg_alloc(struct vb2_buffer *vb, struct device *dev,
@@ -283,7 +283,7 @@ index 15f3283ed19f..ae52c9e4e5ba 100644
  	buf = kzalloc(sizeof *buf, GFP_KERNEL);
  	if (!buf)
  		return ERR_PTR(-ENOMEM);
-@@ -259,8 +269,9 @@ static void *vb2_dma_sg_get_userptr(struct vb2_buffer *vb, struct device *dev,
+@@ -260,8 +270,9 @@ static void *vb2_dma_sg_get_userptr(struct vb2_buffer *vb, struct device *dev,
  	 * No need to sync to the device, this will happen later when the
  	 * prepare() memop is called.
  	 */
@@ -295,7 +295,7 @@ index 15f3283ed19f..ae52c9e4e5ba 100644
  		goto userptr_fail_map;
  
  	return buf;
-@@ -283,10 +294,14 @@ static void vb2_dma_sg_put_userptr(void *buf_priv)
+@@ -284,10 +295,14 @@ static void vb2_dma_sg_put_userptr(void *buf_priv)
  	struct vb2_dma_sg_buf *buf = buf_priv;
  	struct sg_table *sgt = &buf->sg_table;
  	int i = buf->num_pages;
@@ -311,7 +311,7 @@ index 15f3283ed19f..ae52c9e4e5ba 100644
  	if (buf->vaddr)
  		vm_unmap_ram(buf->vaddr, buf->num_pages);
  	sg_free_table(buf->dma_sgt);
-@@ -420,7 +435,8 @@ static void vb2_dma_sg_dmabuf_ops_detach(struct dma_buf *dbuf,
+@@ -421,7 +436,8 @@ static void vb2_dma_sg_dmabuf_ops_detach(struct dma_buf *dbuf,
  
  	/* release the scatterlist cache */
  	if (attach->dma_dir != DMA_NONE)
@@ -321,7 +321,7 @@ index 15f3283ed19f..ae52c9e4e5ba 100644
  	sg_free_table(sgt);
  	kfree(attach);
  	db_attach->priv = NULL;
-@@ -445,12 +461,15 @@ static struct sg_table *vb2_dma_sg_dmabuf_ops_map(
+@@ -446,12 +462,15 @@ static struct sg_table *vb2_dma_sg_dmabuf_ops_map(
  
  	/* release any previous cache */
  	if (attach->dma_dir != DMA_NONE) {
@@ -340,7 +340,7 @@ index 15f3283ed19f..ae52c9e4e5ba 100644
  		mutex_unlock(lock);
  		return ERR_PTR(-EIO);
 diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-index 06245582f41e..f075ee362800 100644
+index b35b169c022a..4e669d43ac13 100644
 --- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 +++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
 @@ -227,7 +227,7 @@ static int vb2_vmalloc_dmabuf_ops_attach(struct dma_buf *dbuf, struct device *de
@@ -380,10 +380,10 @@ index 06245582f41e..f075ee362800 100644
  		pr_err("failed to map scatterlist\n");
  		mutex_unlock(lock);
  		return ERR_PTR(-EIO);
-diff --git a/drivers/media/platform/sti/bdisp/bdisp-hw.c b/drivers/media/platform/sti/bdisp/bdisp-hw.c
+diff --git a/drivers/media/platform/st/sti/bdisp/bdisp-hw.c b/drivers/media/platform/st/sti/bdisp/bdisp-hw.c
 index a74e9fd65238..eafc63307ef7 100644
---- a/drivers/media/platform/sti/bdisp/bdisp-hw.c
-+++ b/drivers/media/platform/sti/bdisp/bdisp-hw.c
+--- a/drivers/media/platform/st/sti/bdisp/bdisp-hw.c
++++ b/drivers/media/platform/st/sti/bdisp/bdisp-hw.c
 @@ -430,11 +430,14 @@ int bdisp_hw_get_and_clear_irq(struct bdisp_dev *bdisp)
   */
  void bdisp_hw_free_nodes(struct bdisp_ctx *ctx)
@@ -448,7 +448,7 @@ index a74e9fd65238..eafc63307ef7 100644
  		return -ENOMEM;
  
 diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index 2467284e5f26..28e6ff6c230b 100644
+index 5468b633b9d2..a12fa6e6f9ab 100644
 --- a/include/media/videobuf2-core.h
 +++ b/include/media/videobuf2-core.h
 @@ -475,7 +475,7 @@ struct vb2_buf_ops {
