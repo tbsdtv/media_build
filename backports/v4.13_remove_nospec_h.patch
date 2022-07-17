@@ -11,7 +11,7 @@ index 15a08d8c69ef..b5fc088868c8 100644
  #include <linux/delay.h>
  #include <linux/spinlock.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index 258637d762d6..bdcc646a2da7 100644
+index 48e735cdbe6b..347d00ef357d 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
 @@ -23,7 +23,6 @@
@@ -23,7 +23,7 @@ index 258637d762d6..bdcc646a2da7 100644
  #include <linux/freezer.h>
  #include <linux/jiffies.h>
 diff --git a/drivers/media/dvb-core/dvb_net.c b/drivers/media/dvb-core/dvb_net.c
-index dddebea644bb..b71ac1f09914 100644
+index 8a2febf33ce2..09393b8ed3b1 100644
 --- a/drivers/media/dvb-core/dvb_net.c
 +++ b/drivers/media/dvb-core/dvb_net.c
 @@ -45,7 +45,6 @@
@@ -35,7 +35,7 @@ index dddebea644bb..b71ac1f09914 100644
  #include <linux/dvb/net.h>
  #include <linux/uio.h>
 diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
-index 6142484d5cb4..492f34d728d5 100644
+index 8a316de70e6c..b3aa653d6899 100644
 --- a/drivers/media/radio/wl128x/fmdrv_common.c
 +++ b/drivers/media/radio/wl128x/fmdrv_common.c
 @@ -22,7 +22,6 @@
@@ -43,6 +43,6 @@ index 6142484d5cb4..492f34d728d5 100644
  #include <linux/firmware.h>
  #include <linux/module.h>
 -#include <linux/nospec.h>
+ #include <linux/jiffies.h>
  
  #include "fmdrv.h"
- #include "fmdrv_v4l2.h"

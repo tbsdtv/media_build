@@ -11,7 +11,7 @@ index fc0968b9d40e..4e119fe6f8c5 100644
  #include <media/cec-pin.h>
  #include "cec-pin-priv.h"
 diff --git a/drivers/media/cec/core/cec-pin.c b/drivers/media/cec/core/cec-pin.c
-index f006bd8eec63..6005b27cee3c 100644
+index 21f0f749713e..22c09272d813 100644
 --- a/drivers/media/cec/core/cec-pin.c
 +++ b/drivers/media/cec/core/cec-pin.c
 @@ -5,7 +5,6 @@
@@ -23,7 +23,7 @@ index f006bd8eec63..6005b27cee3c 100644
  #include <media/cec-pin.h>
  #include "cec-pin-priv.h"
 diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/dvb-core/dvb_ca_en50221.c
-index b7e4a3371176..e130bc1557d3 100644
+index 15a08d8c69ef..10d23c4f2909 100644
 --- a/drivers/media/dvb-core/dvb_ca_en50221.c
 +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
 @@ -24,7 +24,7 @@
@@ -36,10 +36,10 @@ index b7e4a3371176..e130bc1557d3 100644
  
  #include <media/dvb_ca_en50221.h>
 diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-index 5fde1d38b3e3..60904fb89bf4 100644
+index 83cc32ad7e12..ba6e10ce90b3 100644
 --- a/drivers/media/dvb-core/dvb_demux.c
 +++ b/drivers/media/dvb-core/dvb_demux.c
-@@ -19,7 +19,7 @@
+@@ -9,7 +9,7 @@
  
  #define pr_fmt(fmt) "dvb_demux: " fmt
  
@@ -49,7 +49,7 @@ index 5fde1d38b3e3..60904fb89bf4 100644
  #include <linux/slab.h>
  #include <linux/vmalloc.h>
 diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index a6915582d1a6..787fc64a2c1a 100644
+index 48e735cdbe6b..0a10c14ebc11 100644
 --- a/drivers/media/dvb-core/dvb_frontend.c
 +++ b/drivers/media/dvb-core/dvb_frontend.c
 @@ -17,7 +17,7 @@
@@ -75,19 +75,19 @@ index ef545b96121d..47a1bd431b90 100644
  #include <linux/pci.h>
  #include <linux/interrupt.h>
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
-index 8ebc97ebf1a2..c7cdc968eb4b 100644
+index f5846c22c799..f064d9d41852 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.c
 +++ b/drivers/media/pci/ivtv/ivtv-driver.c
 @@ -58,7 +58,6 @@
  #include <media/tveeprom.h>
  #include <media/i2c/saa7115.h>
- #include "tuner-xc2028.h"
+ #include "xc2028.h"
 -#include <uapi/linux/sched/types.h>
  
  /* If you have already X v4l cards, then set this to X. This way
     the device numbers stay matched. Example: you have a WinTV card
 diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
-index 4cf92dee6527..5c7d8caf372c 100644
+index ce3a7ca51736..03e301642931 100644
 --- a/drivers/media/pci/ivtv/ivtv-driver.h
 +++ b/drivers/media/pci/ivtv/ivtv-driver.h
 @@ -37,36 +37,37 @@
@@ -145,7 +145,7 @@ index 4cf92dee6527..5c7d8caf372c 100644
  /* Memory layout */
  #define IVTV_ENCODER_OFFSET	0x00000000
 diff --git a/drivers/media/pci/pt1/pt1.c b/drivers/media/pci/pt1/pt1.c
-index f2aa36814fba..26eebfe03f0a 100644
+index 121a4a92ea10..5d6a8513d2c1 100644
 --- a/drivers/media/pci/pt1/pt1.c
 +++ b/drivers/media/pci/pt1/pt1.c
 @@ -10,7 +10,6 @@
@@ -157,7 +157,7 @@ index f2aa36814fba..26eebfe03f0a 100644
  #include <linux/delay.h>
  #include <linux/module.h>
 diff --git a/drivers/media/pci/pt3/pt3.c b/drivers/media/pci/pt3/pt3.c
-index c0bc86793355..4ee546bf483a 100644
+index 0d51bdf01f43..42fb884b3953 100644
 --- a/drivers/media/pci/pt3/pt3.c
 +++ b/drivers/media/pci/pt3/pt3.c
 @@ -12,7 +12,6 @@

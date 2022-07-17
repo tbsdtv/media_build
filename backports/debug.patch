@@ -1,7 +1,7 @@
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_debug.h b/drivers/media/platform/s5p-mfc/s5p_mfc_debug.h
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_debug.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_debug.h
 index 5936923..a6d487c 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_debug.h
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_debug.h
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_debug.h
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_debug.h
 @@ -15,6 +15,7 @@
  #ifndef S5P_MFC_DEBUG_H_
  #define S5P_MFC_DEBUG_H_

@@ -1,0 +1,12 @@
+diff --git a/drivers/media/usb/stk1160/stk1160-video.c b/drivers/media/usb/stk1160/stk1160-video.c
+index 4e966f6bf608..be074d9cdd65 100644
+--- a/drivers/media/usb/stk1160/stk1160-video.c
++++ b/drivers/media/usb/stk1160/stk1160-video.c
+@@ -11,6 +11,7 @@
+  */
+ 
+ #include <linux/module.h>
++#include <linux/highmem.h>
+ #include <linux/usb.h>
+ #include <linux/slab.h>
+ #include <linux/ratelimit.h>

@@ -258,10 +258,10 @@ index 9131265c2b87..84a58292a089 100644
  	unsigned long flags;
  	int batch_size = H264_BUF_CNT;
  
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+diff --git a/drivers/media/platform/marvell/mcam-core.c b/drivers/media/platform/marvell/mcam-core.c
 index ea87110d9073..a3bdc262cd5a 100644
---- a/drivers/media/platform/marvell-ccic/mcam-core.c
-+++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+--- a/drivers/media/platform/marvell/mcam-core.c
++++ b/drivers/media/platform/marvell/mcam-core.c
 @@ -439,9 +439,9 @@ static void mcam_ctlr_dma_vmalloc(struct mcam_camera *cam)
  /*
   * Copy data out to user space in the vmalloc case
@@ -284,10 +284,10 @@ index ea87110d9073..a3bdc262cd5a 100644
  		vq->ops = &mcam_vb2_ops;
  		vq->mem_ops = &vb2_vmalloc_memops;
  		cam->dma_setup = mcam_ctlr_dma_vmalloc;
-diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
+diff --git a/drivers/media/platform/intel/pxa_camera.c b/drivers/media/platform/intel/pxa_camera.c
 index dd510ee9b58a..f1ad229a9d3b 100644
---- a/drivers/media/platform/pxa_camera.c
-+++ b/drivers/media/platform/pxa_camera.c
+--- a/drivers/media/platform/intel/pxa_camera.c
++++ b/drivers/media/platform/intel/pxa_camera.c
 @@ -1146,9 +1146,9 @@ static void pxa_camera_deactivate(struct pxa_camera_dev *pcdev)
  	clk_disable_unprepare(pcdev->clk);
  }
@@ -309,10 +309,10 @@ index dd510ee9b58a..f1ad229a9d3b 100644
  
  	pxa_camera_activate(pcdev);
  
-diff --git a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
+diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
 index 338b205ae3a7..febcbc5e225c 100644
---- a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
-+++ b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
+--- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
++++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
 @@ -77,9 +77,9 @@ static void c8sectpfe_timer_interrupt(struct timer_list *t)
  	add_timer(&fei->timer);
  }
