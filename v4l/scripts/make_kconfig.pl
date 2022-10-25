@@ -652,7 +652,11 @@ while (my ($key, $deps) = each %depend) {
 	print OUT "# Needed by ", join(', ', keys %$deps), "\n";
 	print OUT "config $key\n\ttristate\n";
 	print OUT "\tdefault ", qw(n m y)[$kernopts{$key}], "\n\n";
-	print OUT "\toption modules\n" if ($key eq "MODULES");
+	if (cmp_ver($kernver, '5.13.0') < 0) {
+		print OUT "\toption modules\n" if ($key eq "MODULES");
+	} else {
+		print OUT "\tmodules\n" if ($key eq "MODULES");
+	}
 }
 close OUT;
 
