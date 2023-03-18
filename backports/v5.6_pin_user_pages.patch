@@ -1,14 +1,14 @@
 diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index 8dd0562de287..111b311fea4d 100644
+index 234e9f647c96..91f5d9c3a7b7 100644
 --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
 +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
-@@ -183,12 +183,12 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+@@ -179,12 +179,12 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
  	dprintk(1, "init user [0x%lx+0x%lx => %lu pages]\n",
  		data, size, dma->nr_pages);
  
--	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages,
-+	err = get_user_pages(data & PAGE_MASK, dma->nr_pages,
- 			     flags | FOLL_LONGTERM, dma->pages, NULL);
+-	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages, gup_flags,
++	err = get_user_pages(data & PAGE_MASK, dma->nr_pages, gup_flags,
+ 			     dma->pages, NULL);
  
  	if (err != dma->nr_pages) {
  		dma->nr_pages = (err >= 0) ? err : 0;
@@ -17,7 +17,7 @@ index 8dd0562de287..111b311fea4d 100644
  			dma->nr_pages);
  		return err < 0 ? err : -EINVAL;
  	}
-@@ -349,8 +349,11 @@ int videobuf_dma_free(struct videobuf_dmabuf *dma)
+@@ -345,8 +345,11 @@ int videobuf_dma_free(struct videobuf_dmabuf *dma)
  	BUG_ON(dma->sglen);
  
  	if (dma->pages) {

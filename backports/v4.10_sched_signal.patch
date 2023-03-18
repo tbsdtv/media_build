@@ -205,18 +205,6 @@ index 049d40b948bb..549c47d59642 100644
  #include <linux/delay.h>
  #include <linux/videodev2.h>
  #include <linux/v4l2-dv-timings.h>
-diff --git a/drivers/media/usb/cpia2/cpia2_core.c b/drivers/media/usb/cpia2/cpia2_core.c
-index b5a2d06fb356..39e0e301594b 100644
---- a/drivers/media/usb/cpia2/cpia2_core.c
-+++ b/drivers/media/usb/cpia2/cpia2_core.c
-@@ -23,7 +23,6 @@
- #include <linux/mm.h>
- #include <linux/vmalloc.h>
- #include <linux/firmware.h>
--#include <linux/sched/signal.h>
- 
- #define FIRMWARE "cpia2/stv0672_vp4.bin"
- MODULE_FIRMWARE(FIRMWARE);
 diff --git a/drivers/media/usb/gspca/cpia1.c b/drivers/media/usb/gspca/cpia1.c
 index 46ed95483e22..b90be6e31611 100644
 --- a/drivers/media/usb/gspca/cpia1.c

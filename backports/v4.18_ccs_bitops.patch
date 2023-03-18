@@ -50,3 +50,29 @@ index 9dc15a5a9683..b2b6ff5d5e88 100644
  #include <linux/string.h>
  
  int cxd2880_convert2s_complement(u32 value, u32 bitlen);
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 11f3d71..1409af2 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -7,7 +7,7 @@
+  */
+ 
+ #include <linux/atomic.h>
+-#include <linux/bits.h>
++#include <linux/bitops.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 35453f8..d6eefb1 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -6,7 +6,7 @@
+  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
+  */
+ 
+-#include <linux/bits.h>
++#include <linux/bitops.h>
+ #include <linux/compat.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>

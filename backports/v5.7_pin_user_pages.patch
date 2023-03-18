@@ -1,17 +1,17 @@
 diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
-index 381158320a90..b7986c7f58ea 100644
+index 0f430ddc1f67..9ebeff9b094e 100644
 --- a/drivers/media/common/videobuf2/frame_vector.c
 +++ b/drivers/media/common/videobuf2/frame_vector.c
-@@ -48,7 +48,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+@@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames, bool write,
+ 	if (write)
+ 		gup_flags |= FOLL_WRITE;
  
- 	start = untagged_addr(start);
- 
--	ret = pin_user_pages_fast(start, nr_frames,
-+	ret = get_user_pages_fast(start, nr_frames,
- 				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+-	ret = pin_user_pages_fast(start, nr_frames, gup_flags,
++	ret = get_user_pages_fast(start, nr_frames, gup_flags,
  				  (struct page **)(vec->ptrs));
- 	if (ret > 0) {
-@@ -105,6 +105,7 @@ EXPORT_SYMBOL(get_vaddr_frames);
+ 	vec->got_ref = true;
+ 	vec->is_pfns = false;
+@@ -78,6 +78,7 @@ EXPORT_SYMBOL(get_vaddr_frames);
  void put_vaddr_frames(struct frame_vector *vec)
  {
  	struct page **pages;
@@ -19,7 +19,7 @@ index 381158320a90..b7986c7f58ea 100644
  
  	if (!vec->got_ref)
  		goto out;
-@@ -117,7 +118,8 @@ void put_vaddr_frames(struct frame_vector *vec)
+@@ -90,7 +91,8 @@ void put_vaddr_frames(struct frame_vector *vec)
  	if (WARN_ON(IS_ERR(pages)))
  		goto out;
  
@@ -30,10 +30,10 @@ index 381158320a90..b7986c7f58ea 100644
  out:
  	vec->nr_frames = 0;
 diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
-index 0d8372cc364a..5f8883031c9c 100644
+index 99b9f55ca829..81ad6bd035d9 100644
 --- a/drivers/media/pci/ivtv/ivtv-udma.c
 +++ b/drivers/media/pci/ivtv/ivtv-udma.c
-@@ -92,7 +92,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+@@ -94,7 +94,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
  {
  	struct ivtv_dma_page_info user_dma;
  	struct ivtv_user_dma *dma = &itv->udma;
@@ -42,7 +42,7 @@ index 0d8372cc364a..5f8883031c9c 100644
  
  	IVTV_DEBUG_DMA("ivtv_udma_setup, dst: 0x%08x\n", (unsigned int)ivtv_dest_addr);
  
-@@ -111,15 +111,16 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+@@ -113,15 +113,16 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
  		return -EINVAL;
  	}
  
@@ -50,7 +50,7 @@ index 0d8372cc364a..5f8883031c9c 100644
 -	err = pin_user_pages_unlocked(user_dma.uaddr, user_dma.page_count,
 +	/* Get user pages for DMA Xfer */
 +	err = get_user_pages_unlocked(user_dma.uaddr, user_dma.page_count,
- 			dma->map, FOLL_FORCE);
+ 			dma->map, 0);
  
  	if (user_dma.page_count != err) {
  		IVTV_DEBUG_WARN("failed to map user pages, returned %d instead of %d\n",
@@ -62,7 +62,7 @@ index 0d8372cc364a..5f8883031c9c 100644
  			return -EINVAL;
  		}
  		return err;
-@@ -129,7 +130,9 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+@@ -131,7 +132,9 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
  
  	/* Fill SG List with new values */
  	if (ivtv_udma_fill_sg_list(dma, &user_dma, 0) < 0) {
@@ -73,7 +73,7 @@ index 0d8372cc364a..5f8883031c9c 100644
  		dma->page_count = 0;
  		return -ENOMEM;
  	}
-@@ -150,6 +153,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+@@ -153,6 +156,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
  void ivtv_udma_unmap(struct ivtv *itv)
  {
  	struct ivtv_user_dma *dma = &itv->udma;
@@ -81,7 +81,7 @@ index 0d8372cc364a..5f8883031c9c 100644
  
  	IVTV_DEBUG_INFO("ivtv_unmap_user_dma\n");
  
-@@ -165,7 +169,10 @@ void ivtv_udma_unmap(struct ivtv *itv)
+@@ -169,7 +173,10 @@ void ivtv_udma_unmap(struct ivtv *itv)
  	/* sync DMA */
  	ivtv_udma_sync_for_cpu(itv);
  
@@ -94,7 +94,7 @@ index 0d8372cc364a..5f8883031c9c 100644
  }
  
 diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
-index 5f7dc9771f8d..cd2fe2d444c0 100644
+index 582146f8d70d..2907ebdd1a98 100644
 --- a/drivers/media/pci/ivtv/ivtv-yuv.c
 +++ b/drivers/media/pci/ivtv/ivtv-yuv.c
 @@ -30,6 +30,7 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
@@ -113,15 +113,15 @@ index 5f7dc9771f8d..cd2fe2d444c0 100644
 -	y_pages = pin_user_pages_unlocked(y_dma.uaddr,
 +	/* Get user pages for DMA Xfer */
 +	y_pages = get_user_pages_unlocked(y_dma.uaddr,
- 			y_dma.page_count, &dma->map[0], FOLL_FORCE);
+ 			y_dma.page_count, &dma->map[0], 0);
  	uv_pages = 0; /* silence gcc. value is set and consumed only if: */
  	if (y_pages == y_dma.page_count) {
 -		uv_pages = pin_user_pages_unlocked(uv_dma.uaddr,
 +		uv_pages = get_user_pages_unlocked(uv_dma.uaddr,
- 				uv_dma.page_count, &dma->map[y_pages],
- 				FOLL_FORCE);
+ 				uv_dma.page_count, &dma->map[y_pages], 0);
  	}
-@@ -80,7 +81,8 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+ 
+@@ -79,7 +80,8 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
  				 uv_pages, uv_dma.page_count);
  
  			if (uv_pages >= 0) {
@@ -131,7 +131,7 @@ index 5f7dc9771f8d..cd2fe2d444c0 100644
  				rc = -EFAULT;
  			} else {
  				rc = uv_pages;
-@@ -91,7 +93,8 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+@@ -90,7 +92,8 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
  				 y_pages, y_dma.page_count);
  		}
  		if (y_pages >= 0) {
@@ -141,7 +141,7 @@ index 5f7dc9771f8d..cd2fe2d444c0 100644
  			/*
  			 * Inherit the -EFAULT from rc's
  			 * initialization, but allow it to be
-@@ -109,7 +112,9 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+@@ -108,7 +111,9 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
  	/* Fill & map SG List */
  	if (ivtv_udma_fill_sg_list (dma, &uv_dma, ivtv_udma_fill_sg_list (dma, &y_dma, 0)) < 0) {
  		IVTV_DEBUG_WARN("could not allocate bounce buffers for highmem userspace buffers\n");
@@ -153,7 +153,7 @@ index 5f7dc9771f8d..cd2fe2d444c0 100644
  		return -ENOMEM;
  	}
 diff --git a/drivers/media/pci/ivtv/ivtvfb.c b/drivers/media/pci/ivtv/ivtvfb.c
-index e2d56dca5be4..0c2859844081 100644
+index 00ac94d4ab19..4e3962c3f1da 100644
 --- a/drivers/media/pci/ivtv/ivtvfb.c
 +++ b/drivers/media/pci/ivtv/ivtvfb.c
 @@ -281,10 +281,10 @@ static int ivtvfb_prep_dec_dma_to_device(struct ivtv *itv,

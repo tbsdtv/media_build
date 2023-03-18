@@ -5,12 +5,23 @@ INTEL_ATOMISP
 # Needs devm_regmap_init_sccb (select REGMAP_SCCB)
 VIDEO_OV772X
 VIDEO_OV9650
+VIDEO_TC358746
 
 # Adding an entry under kernel [major.minor] means that that
 # driver will be enabled from that kernel onwards, and disabled
 # for older kernels.
 
-[5.16]
+[5.19.0]
+VIDEO_DW9768
+VIDEO_OV4689
+VIDEO_OV5693
+VIDEO_OV8858
+VIDEO_S5K5BAF
+VIDEO_S5C73M3
+VIDEO_AR0521
+VIDEO_VISL
+
+[5.16.0]
 # Needs i2c_driver flags field
 VIDEO_IMX319
 VIDEO_IMX208
@@ -19,38 +30,38 @@ VIDEO_OV2740
 VIDEO_OV5670
 VIDEO_OV5675
 VIDEO_OV8856
+VIDEO_IPU3_CIO2
 
-[5.7]
+[5.7.0]
 # needs read_poll_timeout
 VIDEO_ISL7998X
 
-[5.5]
+[5.5.0]
 # lots of kAPI changes in 5.6, so disable for older kernels
 SND_BT87X
 # needs linux/units.h
 VIDEO_OV02A10
 
-[5.4]
+[5.4.0]
 CEC_CROS_EC
 
-[5.3]
+[5.3.0]
 # sort_r appeared in 5.4
 VIDEO_HANTRO
 VIDEO_ROCKCHIP_VDEC
 V4L2_H264
 
-[5.2]
+[5.2.0]
 # Needs fwnode_graph_get_endpoint_by_id
-VIDEO_IPU3_CIO2
 VIDEO_OMAP3
 
-[5.1]
+[5.1.0]
 # Needs devm_clk_get_optional
 VIDEO_IMX274
 VIDEO_IMX258
 VIDEO_OV7251
 
-[5.0]
+[5.0.0]
 # DMA mask warnings
 VIDEO_MEM2MEM_DEINTERLACE
 
@@ -108,7 +119,6 @@ VIDEO_OV9734
 VIDEO_OV9282
 VIDEO_OV8865
 VIDEO_OV5648
-VIDEO_OV5693
 VIDEO_OV13B10
 VIDEO_OV08D10
 VIDEO_DW9807
@@ -128,7 +138,6 @@ I2C_BCM2048
 VIDEO_HI846
 VIDEO_HI847
 VIDEO_DW9714
-VIDEO_DW9768
 VIDEO_RDACM20
 VIDEO_RDACM21
 VIDEO_OG01A1B

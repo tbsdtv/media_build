@@ -1,8 +1,8 @@
 diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index fea489f03d57..09737b47881f 100644
+index 741f9c629c6f..666596b94137 100644
 --- a/include/media/media-entity.h
 +++ b/include/media/media-entity.h
-@@ -13,11 +13,10 @@
+@@ -13,12 +13,10 @@
  
  #include <linux/bitmap.h>
  #include <linux/bug.h>
@@ -11,6 +11,7 @@ index fea489f03d57..09737b47881f 100644
 +#include <linux/kernel.h>
  #include <linux/list.h>
  #include <linux/media.h>
+-#include <linux/minmax.h>
 -#include <linux/types.h>
  
  /* Enums used internally at the media controller to represent graphs */

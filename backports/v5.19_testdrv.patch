@@ -1,0 +1,142 @@
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.c b/drivers/media/test-drivers/vidtv/vidtv_demod.c
+index b878db798686..ddd690420ce0 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_demod.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_demod.c
+@@ -188,11 +188,11 @@ static void vidtv_demod_update_stats(struct dvb_frontend *fe)
+ 	 * Also, usually, signal strength is a negative number in dBm.
+ 	 */
+ 	c->strength.stat[0].svalue = state->tuner_cnr;
+-	c->strength.stat[0].svalue -= get_random_u32_below(state->tuner_cnr / 50);
++	c->strength.stat[0].svalue -= prandom_u32_max(state->tuner_cnr / 50);
+ 	c->strength.stat[0].svalue -= 68000; /* Adjust to a better range */
+ 
+ 	c->cnr.stat[0].svalue = state->tuner_cnr;
+-	c->cnr.stat[0].svalue -= get_random_u32_below(state->tuner_cnr / 50);
++	c->cnr.stat[0].svalue -= prandom_u32_max(state->tuner_cnr / 50);
+ }
+ 
+ static int vidtv_demod_read_status(struct dvb_frontend *fe,
+@@ -213,11 +213,11 @@ static int vidtv_demod_read_status(struct dvb_frontend *fe,
+ 
+ 		if (snr < cnr2qual->cnr_ok) {
+ 			/* eventually lose the TS lock */
+-			if (get_random_u32_below(100) < config->drop_tslock_prob_on_low_snr)
++			if (prandom_u32_max(100) < config->drop_tslock_prob_on_low_snr)
+ 				state->status = 0;
+ 		} else {
+ 			/* recover if the signal improves */
+-			if (get_random_u32_below(100) <
++			if (prandom_u32_max(100) <
+ 			    config->recover_tslock_prob_on_good_snr)
+ 				state->status = FE_HAS_SIGNAL  |
+ 						FE_HAS_CARRIER |
+@@ -437,11 +437,12 @@ static int vidtv_demod_i2c_probe(struct i2c_client *client)
+ 	return 0;
+ }
+ 
+-static void vidtv_demod_i2c_remove(struct i2c_client *client)
++static int vidtv_demod_i2c_remove(struct i2c_client *client)
+ {
+ 	struct vidtv_demod_state *state = i2c_get_clientdata(client);
+ 
+ 	kfree(state);
++	return 0;
+ }
+ 
+ static struct i2c_driver vidtv_demod_i2c_driver = {
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_tuner.c b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
+index 55a4387f3854..3be74d01e182 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_tuner.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
+@@ -413,11 +413,12 @@ static int vidtv_tuner_i2c_probe(struct i2c_client *client)
+ 	return 0;
+ }
+ 
+-static void vidtv_tuner_i2c_remove(struct i2c_client *client)
++static int vidtv_tuner_i2c_remove(struct i2c_client *client)
+ {
+ 	struct vidtv_tuner_dev *tuner_dev = i2c_get_clientdata(client);
+ 
+ 	kfree(tuner_dev);
++	return 0;
+ }
+ 
+ static struct i2c_driver vidtv_tuner_i2c_driver = {
+diff --git a/drivers/media/test-drivers/vivid/vivid-kthread-cap.c b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
+index ee65d20314d3..690daada7db4 100644
+--- a/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
+@@ -693,7 +693,7 @@ static noinline_for_stack void vivid_thread_vid_cap_tick(struct vivid_dev *dev,
+ 
+ 	/* Drop a certain percentage of buffers. */
+ 	if (dev->perc_dropped_buffers &&
+-	    get_random_u32_below(100) < dev->perc_dropped_buffers)
++	    prandom_u32_max(100) < dev->perc_dropped_buffers)
+ 		goto update_mv;
+ 
+ 	spin_lock(&dev->slock);
+diff --git a/drivers/media/test-drivers/vivid/vivid-kthread-out.c b/drivers/media/test-drivers/vivid/vivid-kthread-out.c
+index fac6208b51da..0833e021bb11 100644
+--- a/drivers/media/test-drivers/vivid/vivid-kthread-out.c
++++ b/drivers/media/test-drivers/vivid/vivid-kthread-out.c
+@@ -51,7 +51,7 @@ static void vivid_thread_vid_out_tick(struct vivid_dev *dev)
+ 
+ 	/* Drop a certain percentage of buffers. */
+ 	if (dev->perc_dropped_buffers &&
+-	    get_random_u32_below(100) < dev->perc_dropped_buffers)
++	    prandom_u32_max(100) < dev->perc_dropped_buffers)
+ 		return;
+ 
+ 	spin_lock(&dev->slock);
+diff --git a/drivers/media/test-drivers/vivid/vivid-radio-rx.c b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
+index 79c1723bd84c..232cab508f48 100644
+--- a/drivers/media/test-drivers/vivid/vivid-radio-rx.c
++++ b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
+@@ -94,8 +94,8 @@ ssize_t vivid_radio_rx_read(struct file *file, char __user *buf,
+ 
+ 		if (data_blk == 0 && dev->radio_rds_loop)
+ 			vivid_radio_rds_init(dev);
+-		if (perc && get_random_u32_below(100) < perc) {
+-			switch (get_random_u32_below(4)) {
++		if (perc && prandom_u32_max(100) < perc) {
++			switch (prandom_u32_max(4)) {
+ 			case 0:
+ 				rds.block |= V4L2_RDS_BLOCK_CORRECTED;
+ 				break;
+@@ -104,8 +104,8 @@ ssize_t vivid_radio_rx_read(struct file *file, char __user *buf,
+ 				break;
+ 			case 2:
+ 				rds.block |= V4L2_RDS_BLOCK_ERROR;
+-				rds.lsb = get_random_u8();
+-				rds.msb = get_random_u8();
++				rds.lsb = prandom_u32_max(256);
++				rds.msb = prandom_u32_max(256);
+ 				break;
+ 			case 3: /* Skip block altogether */
+ 				if (i)
+diff --git a/drivers/media/test-drivers/vivid/vivid-sdr-cap.c b/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
+index a81f26b76988..0ae5628b86c9 100644
+--- a/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
+@@ -90,7 +90,7 @@ static void vivid_thread_sdr_cap_tick(struct vivid_dev *dev)
+ 
+ 	/* Drop a certain percentage of buffers. */
+ 	if (dev->perc_dropped_buffers &&
+-	    get_random_u32_below(100) < dev->perc_dropped_buffers)
++	    prandom_u32_max(100) < dev->perc_dropped_buffers)
+ 		return;
+ 
+ 	spin_lock(&dev->slock);
+diff --git a/drivers/media/test-drivers/vivid/vivid-touch-cap.c b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+index c7f6e23df51e..6cc32eb54f9d 100644
+--- a/drivers/media/test-drivers/vivid/vivid-touch-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+@@ -221,7 +221,7 @@ static void vivid_fill_buff_noise(__s16 *tch_buf, int size)
+ 
+ static inline int get_random_pressure(void)
+ {
+-	return get_random_u32_below(VIVID_PRESSURE_LIMIT);
++	return prandom_u32_max(VIVID_PRESSURE_LIMIT);
+ }
+ 
+ static void vivid_tch_buf_set(struct v4l2_pix_format *f,
