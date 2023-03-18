@@ -1,0 +1,26 @@
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index dff1d9b..98463739 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -991,7 +991,7 @@ int v4l2_subdev_get_fwnode_pad_1_to_1(struct media_entity *entity,
+ 	fwnode = fwnode_graph_get_port_parent(endpoint->local_fwnode);
+ 	fwnode_handle_put(fwnode);
+ 
+-	if (device_match_fwnode(sd->dev, fwnode))
++	if (dev_fwnode(sd->dev) == fwnode)
+ 		return endpoint->port;
+ 
+ 	return -ENXIO;
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 11dd142..9d46a36 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -1811,7 +1811,7 @@ static int tegra_vi_graph_parse_one(struct tegra_vi_channel *chan,
+ 		}
+ 
+ 		/* skip entities that are already processed */
+-		if (device_match_fwnode(vi->dev, remote) ||
++		if (remote == dev_fwnode(vi->dev) ||
+ 		    tegra_vi_graph_find_entity(chan, remote)) {
+ 			fwnode_handle_put(remote);
+ 			continue;

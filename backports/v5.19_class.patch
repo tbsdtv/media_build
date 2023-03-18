@@ -1,0 +1,48 @@
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index 0ed087caf7f3..886c54d5c8e0 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -1028,7 +1028,7 @@ void dvb_module_release(struct i2c_client *client)
+ EXPORT_SYMBOL_GPL(dvb_module_release);
+ #endif
+ 
+-static int dvb_uevent(const struct device *dev, struct kobj_uevent_env *env)
++static int dvb_uevent(struct device *dev, struct kobj_uevent_env *env)
+ {
+ 	const struct dvb_device *dvbdev = dev_get_drvdata(dev);
+ 
+@@ -1038,7 +1038,7 @@ static int dvb_uevent(const struct device *dev, struct kobj_uevent_env *env)
+ 	return 0;
+ }
+ 
+-static char *dvb_devnode(const struct device *dev, umode_t *mode)
++static char *dvb_devnode(struct device *dev, umode_t *mode)
+ {
+ 	const struct dvb_device *dvbdev = dev_get_drvdata(dev);
+ 
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index 527d9324742b..eba0cd30e314 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -1017,7 +1017,7 @@ static void ir_close(struct input_dev *idev)
+ }
+ 
+ /* class for /sys/class/rc */
+-static char *rc_devnode(const struct device *dev, umode_t *mode)
++static char *rc_devnode(struct device *dev, umode_t *mode)
+ {
+ 	return kasprintf(GFP_KERNEL, "rc/%s", dev_name(dev));
+ }
+diff --git a/drivers/media/pci/ddbridge/ddbridge-core.c b/drivers/media/pci/ddbridge/ddbridge-core.c
+index ee8087f29b2c..e40ce41ae885 100644
+--- a/drivers/media/pci/ddbridge/ddbridge-core.c
++++ b/drivers/media/pci/ddbridge/ddbridge-core.c
+@@ -2716,7 +2716,7 @@ static const struct file_operations ddb_fops = {
+ 	.release        = ddb_release,
+ };
+ 
+-static char *ddb_devnode(const struct device *device, umode_t *mode)
++static char *ddb_devnode(struct device *device, umode_t *mode)
+ {
+ 	const struct ddb *dev = dev_get_drvdata(device);
+ 

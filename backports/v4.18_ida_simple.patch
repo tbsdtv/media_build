@@ -1,0 +1,62 @@
+diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
+index 25ab61d..765375b 100644
+--- a/drivers/media/rc/lirc_dev.c
++++ b/drivers/media/rc/lirc_dev.c
+@@ -715,7 +715,7 @@ int lirc_register(struct rc_dev *dev)
+ 	const char *rx_type, *tx_type;
+ 	int err, minor;
+ 
+-	minor = ida_alloc_max(&lirc_ida, RC_DEV_MAX - 1, GFP_KERNEL);
++	minor = ida_simple_get(&lirc_ida, 0, RC_DEV_MAX, GFP_KERNEL);
+ 	if (minor < 0)
+ 		return minor;
+ 
+@@ -760,7 +760,7 @@ int lirc_register(struct rc_dev *dev)
+ 	return 0;
+ 
+ out_ida:
+-	ida_free(&lirc_ida, minor);
++	ida_simple_remove(&lirc_ida, minor);
+ 	return err;
+ }
+ 
+@@ -778,7 +778,7 @@ void lirc_unregister(struct rc_dev *dev)
+ 	spin_unlock_irqrestore(&dev->lirc_fh_lock, flags);
+ 
+ 	cdev_device_del(&dev->lirc_cdev, &dev->lirc_dev);
+-	ida_free(&lirc_ida, MINOR(dev->lirc_dev.devt));
++	ida_simple_remove(&lirc_ida, MINOR(dev->lirc_dev.devt));
+ }
+ 
+ int __init lirc_dev_init(void)
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index 527d932..c4d36b0 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -1898,7 +1898,7 @@ int rc_register_device(struct rc_dev *dev)
+ 	if (!dev)
+ 		return -EINVAL;
+ 
+-	minor = ida_alloc_max(&rc_ida, RC_DEV_MAX - 1, GFP_KERNEL);
++	minor = ida_simple_get(&rc_ida, 0, RC_DEV_MAX, GFP_KERNEL);
+ 	if (minor < 0)
+ 		return minor;
+ 
+@@ -1981,7 +1981,7 @@ int rc_register_device(struct rc_dev *dev)
+ out_raw:
+ 	ir_raw_event_free(dev);
+ out_minor:
+-	ida_free(&rc_ida, minor);
++	ida_simple_remove(&rc_ida, minor);
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(rc_register_device);
+@@ -2041,7 +2041,7 @@ void rc_unregister_device(struct rc_dev *dev)
+ 
+ 	device_del(&dev->dev);
+ 
+-	ida_free(&rc_ida, dev->minor);
++	ida_simple_remove(&rc_ida, dev->minor);
+ 
+ 	if (!dev->managed_alloc)
+ 		rc_free_device(dev);

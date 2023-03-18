@@ -1,0 +1,165 @@
+diff --git a/drivers/media/rc/ati_remote.c b/drivers/media/rc/ati_remote.c
+index fff4dd48eaca..6932817c1697 100644
+--- a/drivers/media/rc/ati_remote.c
++++ b/drivers/media/rc/ati_remote.c
+@@ -771,7 +771,7 @@ static int ati_remote_initialize(struct ati_remote *ati_remote)
+ 
+ 	/* Set up irq_urb */
+ 	pipe = usb_rcvintpipe(udev, ati_remote->endpoint_in->bEndpointAddress);
+-	maxp = usb_maxpacket(udev, pipe);
++	maxp = usb_maxpacket(udev, pipe, usb_pipeout(pipe));
+ 	maxp = (maxp > DATA_BUFSIZE) ? DATA_BUFSIZE : maxp;
+ 
+ 	usb_fill_int_urb(ati_remote->irq_urb, udev, pipe, ati_remote->inbuf,
+@@ -782,7 +782,7 @@ static int ati_remote_initialize(struct ati_remote *ati_remote)
+ 
+ 	/* Set up out_urb */
+ 	pipe = usb_sndintpipe(udev, ati_remote->endpoint_out->bEndpointAddress);
+-	maxp = usb_maxpacket(udev, pipe);
++	maxp = usb_maxpacket(udev, pipe, usb_pipeout(pipe));
+ 	maxp = (maxp > DATA_BUFSIZE) ? DATA_BUFSIZE : maxp;
+ 
+ 	usb_fill_int_urb(ati_remote->out_urb, udev, pipe, ati_remote->outbuf,
+diff --git a/drivers/media/rc/igorplugusb.c b/drivers/media/rc/igorplugusb.c
+index 1464ef9c55bc..a1c4dd28bf60 100644
+--- a/drivers/media/rc/igorplugusb.c
++++ b/drivers/media/rc/igorplugusb.c
+@@ -38,7 +38,7 @@ struct igorplugusb {
+ 
+ 	struct timer_list timer;
+ 
+-	u8 *buf_in;
++	uint8_t buf_in[MAX_PACKET];
+ 
+ 	char phys[64];
+ };
+@@ -176,9 +176,6 @@ static int igorplugusb_probe(struct usb_interface *intf,
+ 	if (!ir->urb)
+ 		goto fail;
+ 
+-	ir->buf_in = kmalloc(MAX_PACKET, GFP_KERNEL);
+-	if (!ir->buf_in)
+-		goto fail;
+ 	usb_fill_control_urb(ir->urb, udev,
+ 		usb_rcvctrlpipe(udev, 0), (uint8_t *)&ir->request,
+ 		ir->buf_in, MAX_PACKET, igorplugusb_callback, ir);
+@@ -227,7 +224,6 @@ static int igorplugusb_probe(struct usb_interface *intf,
+ 	usb_unpoison_urb(ir->urb);
+ 	usb_free_urb(ir->urb);
+ 	rc_free_device(ir->rc);
+-	kfree(ir->buf_in);
+ 
+ 	return ret;
+ }
+@@ -242,7 +238,6 @@ static void igorplugusb_disconnect(struct usb_interface *intf)
+ 	usb_set_intfdata(intf, NULL);
+ 	usb_unpoison_urb(ir->urb);
+ 	usb_free_urb(ir->urb);
+-	kfree(ir->buf_in);
+ }
+ 
+ static const struct usb_device_id igorplugusb_table[] = {
+diff --git a/drivers/media/rc/imon_raw.c b/drivers/media/rc/imon_raw.c
+index b02ded52f19e..d41580f6e4c7 100644
+--- a/drivers/media/rc/imon_raw.c
++++ b/drivers/media/rc/imon_raw.c
+@@ -14,7 +14,7 @@ struct imon {
+ 	struct device *dev;
+ 	struct urb *ir_urb;
+ 	struct rc_dev *rcdev;
+-	__be64 *ir_buf;
++	__be64 ir_buf;
+ 	char phys[64];
+ };
+ 
+@@ -29,7 +29,7 @@ struct imon {
+ static void imon_ir_data(struct imon *imon)
+ {
+ 	struct ir_raw_event rawir = {};
+-	u64 data = be64_to_cpup(imon->ir_buf);
++	u64 data = be64_to_cpu(imon->ir_buf);
+ 	u8 packet_no = data & 0xff;
+ 	int offset = 40;
+ 	int bit;
+@@ -37,7 +37,7 @@ static void imon_ir_data(struct imon *imon)
+ 	if (packet_no == 0xff)
+ 		return;
+ 
+-	dev_dbg(imon->dev, "data: %*ph", 8, imon->ir_buf);
++	dev_dbg(imon->dev, "data: %*ph", 8, &imon->ir_buf);
+ 
+ 	/*
+ 	 * Only the first 5 bytes contain IR data. Right shift so we move
+@@ -137,16 +137,10 @@ static int imon_probe(struct usb_interface *intf,
+ 	if (!imon->ir_urb)
+ 		return -ENOMEM;
+ 
+-	imon->ir_buf = kmalloc(sizeof(__be64), GFP_KERNEL);
+-	if (!imon->ir_buf) {
+-		ret = -ENOMEM;
+-		goto free_urb;
+-	}
+-
+ 	imon->dev = &intf->dev;
+ 	usb_fill_int_urb(imon->ir_urb, udev,
+ 			 usb_rcvintpipe(udev, ir_ep->bEndpointAddress),
+-			 imon->ir_buf, sizeof(__be64),
++			 &imon->ir_buf, sizeof(imon->ir_buf),
+ 			 imon_ir_rx, imon, ir_ep->bInterval);
+ 
+ 	rcdev = devm_rc_allocate_device(&intf->dev, RC_DRIVER_IR_RAW);
+@@ -183,7 +177,6 @@ static int imon_probe(struct usb_interface *intf,
+ 
+ free_urb:
+ 	usb_free_urb(imon->ir_urb);
+-	kfree(imon->ir_buf);
+ 	return ret;
+ }
+ 
+@@ -193,7 +186,6 @@ static void imon_disconnect(struct usb_interface *intf)
+ 
+ 	usb_kill_urb(imon->ir_urb);
+ 	usb_free_urb(imon->ir_urb);
+-	kfree(imon->ir_buf);
+ }
+ 
+ static const struct usb_device_id imon_table[] = {
+diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+index c76ba24c1f55..8b9fbbb6e39d 100644
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -1721,7 +1721,7 @@ static int mceusb_dev_probe(struct usb_interface *intf,
+ 		pipe = usb_rcvintpipe(dev, ep_in->bEndpointAddress);
+ 	else
+ 		pipe = usb_rcvbulkpipe(dev, ep_in->bEndpointAddress);
+-	maxp = usb_maxpacket(dev, pipe);
++	maxp = usb_maxpacket(dev, pipe, usb_pipeout(pipe));
+ 
+ 	ir = kzalloc(sizeof(struct mceusb_dev), GFP_KERNEL);
+ 	if (!ir)
+diff --git a/drivers/media/rc/streamzap.c b/drivers/media/rc/streamzap.c
+index 9b209e687f25..2418bbff3d9e 100644
+--- a/drivers/media/rc/streamzap.c
++++ b/drivers/media/rc/streamzap.c
+@@ -307,7 +307,7 @@ static int streamzap_probe(struct usb_interface *intf,
+ 	}
+ 
+ 	pipe = usb_rcvintpipe(usbdev, endpoint->bEndpointAddress);
+-	maxp = usb_maxpacket(usbdev, pipe);
++	maxp = usb_maxpacket(usbdev, pipe, usb_pipeout(pipe));
+ 
+ 	if (maxp == 0) {
+ 		dev_err(&intf->dev, "%s: endpoint Max Packet Size is 0!?!\n",
+diff --git a/drivers/media/rc/xbox_remote.c b/drivers/media/rc/xbox_remote.c
+index a1572381d097..50b3ee47a920 100644
+--- a/drivers/media/rc/xbox_remote.c
++++ b/drivers/media/rc/xbox_remote.c
+@@ -171,7 +171,7 @@ static void xbox_remote_initialize(struct xbox_remote *xbox_remote,
+ 
+ 	/* Set up irq_urb */
+ 	pipe = usb_rcvintpipe(udev, endpoint_in->bEndpointAddress);
+-	maxp = usb_maxpacket(udev, pipe);
++	maxp = usb_maxpacket(udev, pipe, usb_pipeout(pipe));
+ 	maxp = (maxp > DATA_BUFSIZE) ? DATA_BUFSIZE : maxp;
+ 
+ 	usb_fill_int_urb(xbox_remote->irq_urb, udev, pipe, xbox_remote->inbuf,

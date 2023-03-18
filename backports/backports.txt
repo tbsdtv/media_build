@@ -28,6 +28,20 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
+[5.19.1023]
+add v5.19_class.patch
+add v5.19_i2client.patch
+add v5.19_pt3.patch
+add v5.19_testdrv.patch
+add v5.19_timer.patch
+add v5.19_v4l2-tpg.patch
+add v5.19_videobuf2.patch
+
+[5.18.1023]
+add v5.18_rc.patch
+add v5.18_rc2.patch
+add v5.18_v4l2.patch
+
 [5.17.1023]
 add v5.17_spi.patch
 add v5.17_iosys.patch
@@ -40,7 +54,6 @@ add v5.15_container_of.patch
 add v5.14_bus_void_return.patch
 
 [5.13.1023]
-add v5.13_atmel.patch
 add v5.13_stk1160.patch
 
 [5.12.1023]
@@ -78,6 +91,9 @@ add v5.5_go7007.patch
 add v5.4_revert_spi_transfer.patch
 add v5.4_async.patch
 
+[5.3.1023]
+add v5.3_dma_resv.patch
+
 [5.1.1023]
 add v5.1_vm_map_pages.patch
 add v5.1_devm_i2c_new_dummy_device.patch
@@ -94,6 +110,8 @@ add v4.20_access_ok.patch
 add v4.18_fwnode_args_args.patch
 add v4.18_ccs_bitops.patch
 add v4.18_vb2_map_atomic.patch
+add v4.18_device_match_fwnode.patch
+add v4.18_ida_simple.patch
 
 [4.17.1023]
 add v4.17_i2c_check_num_msgs.patch
@@ -136,31 +154,6 @@ add v4.9_probe_new.patch
 add v4.9_vivid_ktime.patch
 
 [4.8.1023]
-add v4.8_user_pages_flag.patch
 add v4.8_em28xx_bitfield.patch
 add v4.8_dma_map_resource.patch
 add v4.8_drm_crtc.patch
-
-[4.7.1023]
-add v4.7_dma_attrs.patch
-add v4.7_pci_alloc_irq_vectors.patch
-add v4.7_copy_to_user_warning.patch
-add v4.7_objtool_warning.patch
-
-[4.6.1023]
-add v4.6_i2c_mux.patch
-
-[4.5.1023]
-add v4.5_gpiochip_data_pointer.patch
-add v4.5_get_user_pages.patch
-add v4.5_uvc_super_plus.patch
-add v4.5_copy_to_user_warning.patch
-add v4.5_vb2_cpu_access.patch
-
-[4.4.1023]
-add v4.4_gpio_chip_parent.patch
-add v4.4_user_pages_flag.patch
-
-[4.3.1023]
-delete v4.4_user_pages_flag.patch
-add v4.3_bt87x_const_fix.patch

@@ -1,0 +1,69 @@
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
+index ba503d820e48..f5846c22c799 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.c
++++ b/drivers/media/pci/ivtv/ivtv-driver.c
+@@ -1425,7 +1425,7 @@ static void ivtv_remove(struct pci_dev *pdev)
+ 
+ 	/* Interrupts */
+ 	ivtv_set_irq_mask(itv, 0xffffffff);
+-	timer_shutdown_sync(&itv->dma_timer);
++	del_timer_sync(&itv->dma_timer);
+ 
+ 	/* Kill irq worker */
+ 	kthread_flush_worker(&itv->irq_worker);
+diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
+index 3c2627712fe9..acf18e2251a5 100644
+--- a/drivers/media/usb/s2255/s2255drv.c
++++ b/drivers/media/usb/s2255/s2255drv.c
+@@ -1487,7 +1487,7 @@ static void s2255_destroy(struct s2255_dev *dev)
+ 	/* board shutdown stops the read pipe if it is running */
+ 	s2255_board_shutdown(dev);
+ 	/* make sure firmware still not trying to load */
+-	timer_shutdown_sync(&dev->timer);  /* only started in .probe and .open */
++	del_timer_sync(&dev->timer);  /* only started in .probe and .open */
+ 	if (dev->fw_data->fw_urb) {
+ 		usb_kill_urb(dev->fw_data->fw_urb);
+ 		usb_free_urb(dev->fw_data->fw_urb);
+@@ -2322,7 +2322,7 @@ static int s2255_probe(struct usb_interface *interface,
+ errorFWDATA2:
+ 	usb_free_urb(dev->fw_data->fw_urb);
+ errorFWURB:
+-	timer_shutdown_sync(&dev->timer);
++	del_timer_sync(&dev->timer);
+ errorEP:
+ 	usb_put_dev(dev->udev);
+ errorUDEV:
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+index 75c89b07e86a..62ff1fa1c753 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -2605,10 +2605,10 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+ 	return hdw;
+  fail:
+ 	if (hdw) {
+-		timer_shutdown_sync(&hdw->quiescent_timer);
+-		timer_shutdown_sync(&hdw->decoder_stabilization_timer);
+-		timer_shutdown_sync(&hdw->encoder_run_timer);
+-		timer_shutdown_sync(&hdw->encoder_wait_timer);
++		del_timer_sync(&hdw->quiescent_timer);
++		del_timer_sync(&hdw->decoder_stabilization_timer);
++		del_timer_sync(&hdw->encoder_run_timer);
++		del_timer_sync(&hdw->encoder_wait_timer);
+ 		flush_work(&hdw->workpoll);
+ 		v4l2_device_unregister(&hdw->v4l2_dev);
+ 		usb_free_urb(hdw->ctl_read_urb);
+@@ -2668,10 +2668,10 @@ void pvr2_hdw_destroy(struct pvr2_hdw *hdw)
+ 	if (!hdw) return;
+ 	pvr2_trace(PVR2_TRACE_INIT,"pvr2_hdw_destroy: hdw=%p",hdw);
+ 	flush_work(&hdw->workpoll);
+-	timer_shutdown_sync(&hdw->quiescent_timer);
+-	timer_shutdown_sync(&hdw->decoder_stabilization_timer);
+-	timer_shutdown_sync(&hdw->encoder_run_timer);
+-	timer_shutdown_sync(&hdw->encoder_wait_timer);
++	del_timer_sync(&hdw->quiescent_timer);
++	del_timer_sync(&hdw->decoder_stabilization_timer);
++	del_timer_sync(&hdw->encoder_run_timer);
++	del_timer_sync(&hdw->encoder_wait_timer);
+ 	if (hdw->fw_buffer) {
+ 		kfree(hdw->fw_buffer);
+ 		hdw->fw_buffer = NULL;

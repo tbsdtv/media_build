@@ -1,0 +1,110 @@
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index 5f1175f8b349..44d8d7b861b1 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -102,7 +102,7 @@ static void *vb2_dc_vaddr(struct vb2_buffer *vb, void *buf_priv)
+ 	if (buf->db_attach) {
+ 		struct iosys_map map;
+ 
+-		if (!dma_buf_vmap_unlocked(buf->db_attach->dmabuf, &map))
++		if (!dma_buf_vmap(buf->db_attach->dmabuf, &map))
+ 			buf->vaddr = map.vaddr;
+ 
+ 		return buf->vaddr;
+@@ -706,7 +706,7 @@ static int vb2_dc_map_dmabuf(void *mem_priv)
+ 	}
+ 
+ 	/* get the associated scatterlist for this buffer */
+-	sgt = dma_buf_map_attachment_unlocked(buf->db_attach, buf->dma_dir);
++	sgt = dma_buf_map_attachment(buf->db_attach, buf->dma_dir);
+ 	if (IS_ERR(sgt)) {
+ 		pr_err("Error getting dmabuf scatterlist\n");
+ 		return -EINVAL;
+@@ -717,7 +717,7 @@ static int vb2_dc_map_dmabuf(void *mem_priv)
+ 	if (contig_size < buf->size) {
+ 		pr_err("contiguous chunk is too small %lu/%lu\n",
+ 		       contig_size, buf->size);
+-		dma_buf_unmap_attachment_unlocked(buf->db_attach, sgt,
++		dma_buf_unmap_attachment(buf->db_attach, sgt,
+ 						  buf->dma_dir);
+ 		return -EFAULT;
+ 	}
+@@ -746,10 +746,10 @@ static void vb2_dc_unmap_dmabuf(void *mem_priv)
+ 	}
+ 
+ 	if (buf->vaddr) {
+-		dma_buf_vunmap_unlocked(buf->db_attach->dmabuf, &map);
++		dma_buf_vunmap(buf->db_attach->dmabuf, &map);
+ 		buf->vaddr = NULL;
+ 	}
+-	dma_buf_unmap_attachment_unlocked(buf->db_attach, sgt, buf->dma_dir);
++	dma_buf_unmap_attachment(buf->db_attach, sgt, buf->dma_dir);
+ 
+ 	buf->dma_addr = 0;
+ 	buf->dma_sgt = NULL;
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+index 183037fb1273..3cf39dc77dfb 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+@@ -312,7 +312,7 @@ static void *vb2_dma_sg_vaddr(struct vb2_buffer *vb, void *buf_priv)
+ 
+ 	if (!buf->vaddr) {
+ 		if (buf->db_attach) {
+-			ret = dma_buf_vmap_unlocked(buf->db_attach->dmabuf, &map);
++			ret = dma_buf_vmap(buf->db_attach->dmabuf, &map);
+ 			buf->vaddr = ret ? NULL : map.vaddr;
+ 		} else {
+ 			buf->vaddr = vm_map_ram(buf->pages, buf->num_pages, -1);
+@@ -561,7 +561,7 @@ static int vb2_dma_sg_map_dmabuf(void *mem_priv)
+ 	}
+ 
+ 	/* get the associated scatterlist for this buffer */
+-	sgt = dma_buf_map_attachment_unlocked(buf->db_attach, buf->dma_dir);
++	sgt = dma_buf_map_attachment(buf->db_attach, buf->dma_dir);
+ 	if (IS_ERR(sgt)) {
+ 		pr_err("Error getting dmabuf scatterlist\n");
+ 		return -EINVAL;
+@@ -590,10 +590,10 @@ static void vb2_dma_sg_unmap_dmabuf(void *mem_priv)
+ 	}
+ 
+ 	if (buf->vaddr) {
+-		dma_buf_vunmap_unlocked(buf->db_attach->dmabuf, &map);
++		dma_buf_vunmap(buf->db_attach->dmabuf, &map);
+ 		buf->vaddr = NULL;
+ 	}
+-	dma_buf_unmap_attachment_unlocked(buf->db_attach, sgt, buf->dma_dir);
++	dma_buf_unmap_attachment(buf->db_attach, sgt, buf->dma_dir);
+ 
+ 	buf->dma_sgt = NULL;
+ }
+diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+index 959b45beb1f3..f1322f92ca1f 100644
+--- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
++++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+@@ -372,7 +372,7 @@ static int vb2_vmalloc_map_dmabuf(void *mem_priv)
+ 	struct iosys_map map;
+ 	int ret;
+ 
+-	ret = dma_buf_vmap_unlocked(buf->dbuf, &map);
++	ret = dma_buf_vmap(buf->dbuf, &map);
+ 	if (ret)
+ 		return -EFAULT;
+ 	buf->vaddr = map.vaddr;
+@@ -385,7 +385,7 @@ static void vb2_vmalloc_unmap_dmabuf(void *mem_priv)
+ 	struct vb2_vmalloc_buf *buf = mem_priv;
+ 	struct iosys_map map = IOSYS_MAP_INIT_VADDR(buf->vaddr);
+ 
+-	dma_buf_vunmap_unlocked(buf->dbuf, &map);
++	dma_buf_vunmap(buf->dbuf, &map);
+ 	buf->vaddr = NULL;
+ }
+ 
+@@ -395,7 +395,7 @@ static void vb2_vmalloc_detach_dmabuf(void *mem_priv)
+ 	struct iosys_map map = IOSYS_MAP_INIT_VADDR(buf->vaddr);
+ 
+ 	if (buf->vaddr)
+-		dma_buf_vunmap_unlocked(buf->dbuf, &map);
++		dma_buf_vunmap(buf->dbuf, &map);
+ 
+ 	kfree(buf);
+ }

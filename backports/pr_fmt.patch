@@ -1688,30 +1688,6 @@ index 5bcbf0d40147..c99d6b059797 100644
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
  #include <linux/input.h>
-diff --git a/drivers/media/usb/stkwebcam/stk-sensor.c b/drivers/media/usb/stkwebcam/stk-sensor.c
-index 94aa6a27f934..33f08a47a41d 100644
---- a/drivers/media/usb/stkwebcam/stk-sensor.c
-+++ b/drivers/media/usb/stkwebcam/stk-sensor.c
-@@ -33,6 +33,7 @@
- 
- /* It seems the i2c bus is controlled with these registers */
- 
-+#undef pr_fmt
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include "stk-webcam.h"
-diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
-index 9f445e6ab5fa..871be52e3649 100644
---- a/drivers/media/usb/stkwebcam/stk-webcam.c
-+++ b/drivers/media/usb/stkwebcam/stk-webcam.c
-@@ -9,6 +9,7 @@
-  * Copyright 2006-2007 Jonathan Corbet
-  */
- 
-+#undef pr_fmt
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/module.h>
 diff --git a/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c b/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c
 index 9e016b71aa91..3f0c291b9a67 100644
 --- a/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c
