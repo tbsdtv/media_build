@@ -39,7 +39,6 @@ TARFILES += include/misc/altera.h
 TARDIR += include/uapi/linux/dvb/
 TARFILES += include/uapi/linux/lirc.h
 TARFILES += include/uapi/linux/videodev2.h
-TARFILES += include/uapi/linux/meye.h
 TARFILES += include/uapi/linux/ivtv.h
 TARFILES += include/uapi/linux/ivtvfb.h
 TARFILES += include/uapi/linux/max2175.h
