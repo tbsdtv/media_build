@@ -37,9 +37,10 @@ VIDEO_IPU3_CIO2
 # needs read_poll_timeout
 VIDEO_ISL7998X
 
-[5.5.0]
-# lots of kAPI changes in 5.6, so disable for older kernels
+[5.11.0]
 SND_BT87X
+
+[5.5.0]
 # needs linux/units.h
 VIDEO_OV02A10
 
