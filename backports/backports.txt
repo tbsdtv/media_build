@@ -93,6 +93,7 @@ add v5.4_async.patch
 
 [5.3.1023]
 add v5.3_dma_resv.patch
+add v5.3_device_match_fwnode.patch
 
 [5.1.1023]
 add v5.1_vm_map_pages.patch
@@ -110,7 +111,6 @@ add v4.20_access_ok.patch
 add v4.18_fwnode_args_args.patch
 add v4.18_ccs_bitops.patch
 add v4.18_vb2_map_atomic.patch
-add v4.18_device_match_fwnode.patch
 add v4.18_ida_simple.patch
 
 [4.17.1023]
@@ -133,27 +133,3 @@ delete v4.13_fwnode_graph_get_port_parent.patch
 add v4.13_remove_nospec_h.patch
 add v4.13_drmP.patch
 add v4.13_fwnode_graph_get_port_parent.patch
-
-[4.12.1023]
-add v4.12_revert_solo6x10_copykerneluser.patch
-
-[4.11.1023]
-add v4.11_drop_drm_file.patch
-add v4.11_vb2_kmap.patch
-add v4.11_pwc.patch
-
-[4.10.1023]
-add v4.10_sched_signal.patch
-add v4.10_fault_page.patch
-add v4.10_refcount.patch
-
-[4.9.1023]
-add v4.9_mm_address.patch
-add v4.9_dvb_net_max_mtu.patch
-add v4.9_probe_new.patch
-add v4.9_vivid_ktime.patch
-
-[4.8.1023]
-add v4.8_em28xx_bitfield.patch
-add v4.8_dma_map_resource.patch
-add v4.8_drm_crtc.patch
