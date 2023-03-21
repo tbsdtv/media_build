@@ -33,12 +33,14 @@ add v6.1_class.patch
 add v6.1_i2c_probe.patch
 add v6.1_videobuf2.patch
 add v6.1_timer.patch
+#add v6.1_i2c_probe_tbs.patch
 
 [6.0.1023]
 add v6.0_i2c_remove.patch
 add v6.0_v4l2-tpg.patch
 add v6.0_pt3.patch
 add v6.0_testdrv.patch
+add v6.0_i2c_remove_tbs.patch
 
 [5.18.1023]
 add v5.18_rc.patch
