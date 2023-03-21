@@ -28,14 +28,17 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
-[5.19.1023]
-add v5.19_class.patch
-add v5.19_i2client.patch
-add v5.19_pt3.patch
-add v5.19_testdrv.patch
-add v5.19_timer.patch
-add v5.19_v4l2-tpg.patch
-add v5.19_videobuf2.patch
+[6.1.1023]
+add v6.1_class.patch
+add v6.1_i2c_probe.patch
+add v6.1_videobuf2.patch
+add v6.1_timer.patch
+
+[6.0.1023]
+add v6.0_i2c_remove.patch
+add v6.0_v4l2-tpg.patch
+add v6.0_pt3.patch
+add v6.0_testdrv.patch
 
 [5.18.1023]
 add v5.18_rc.patch
