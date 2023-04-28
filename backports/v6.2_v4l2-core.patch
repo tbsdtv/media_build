@@ -1,0 +1,203 @@
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 2ec179cd1264..fd90861b47c9 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -10,7 +10,6 @@
+ 
+ #include <linux/export.h>
+ #include <linux/ioctl.h>
+-#include <linux/leds.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/overflow.h>
+@@ -44,8 +43,6 @@ static bool v4l2_subdev_enable_streams_api;
+  */
+ #define V4L2_SUBDEV_MAX_STREAM_ID 63
+ 
+-#include "v4l2-subdev-priv.h"
+-
+ #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
+ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+ {
+@@ -374,15 +371,6 @@ static int call_s_stream(struct v4l2_subdev *sd, int enable)
+ {
+ 	int ret;
+ 
+-#if IS_REACHABLE(CONFIG_LEDS_CLASS)
+-	if (!IS_ERR_OR_NULL(sd->privacy_led)) {
+-		if (enable)
+-			led_set_brightness(sd->privacy_led,
+-					   sd->privacy_led->max_brightness);
+-		else
+-			led_set_brightness(sd->privacy_led, 0);
+-	}
+-#endif
+ 	ret = sd->ops->video->s_stream(sd, enable);
+ 
+ 	if (!enable && ret < 0) {
+@@ -2181,7 +2169,6 @@ void v4l2_subdev_init(struct v4l2_subdev *sd, const struct v4l2_subdev_ops *ops)
+ 	sd->grp_id = 0;
+ 	sd->dev_priv = NULL;
+ 	sd->host_priv = NULL;
+-	sd->privacy_led = NULL;
+ #if defined(CONFIG_MEDIA_CONTROLLER)
+ 	sd->entity.name = sd->name;
+ 	sd->entity.obj_type = MEDIA_ENTITY_TYPE_V4L2_SUBDEV;
+@@ -2197,36 +2184,3 @@ void v4l2_subdev_notify_event(struct v4l2_subdev *sd,
+ 	v4l2_subdev_notify(sd, V4L2_DEVICE_NOTIFY_EVENT, (void *)ev);
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_notify_event);
+-
+-int v4l2_subdev_get_privacy_led(struct v4l2_subdev *sd)
+-{
+-#if IS_REACHABLE(CONFIG_LEDS_CLASS)
+-	sd->privacy_led = led_get(sd->dev, "privacy-led");
+-	if (IS_ERR(sd->privacy_led) && PTR_ERR(sd->privacy_led) != -ENOENT)
+-		return dev_err_probe(sd->dev, PTR_ERR(sd->privacy_led),
+-				     "getting privacy LED\n");
+-
+-	if (!IS_ERR_OR_NULL(sd->privacy_led)) {
+-		mutex_lock(&sd->privacy_led->led_access);
+-		led_sysfs_disable(sd->privacy_led);
+-		led_trigger_remove(sd->privacy_led);
+-		led_set_brightness(sd->privacy_led, 0);
+-		mutex_unlock(&sd->privacy_led->led_access);
+-	}
+-#endif
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(v4l2_subdev_get_privacy_led);
+-
+-void v4l2_subdev_put_privacy_led(struct v4l2_subdev *sd)
+-{
+-#if IS_REACHABLE(CONFIG_LEDS_CLASS)
+-	if (!IS_ERR_OR_NULL(sd->privacy_led)) {
+-		mutex_lock(&sd->privacy_led->led_access);
+-		led_sysfs_enable(sd->privacy_led);
+-		mutex_unlock(&sd->privacy_led->led_access);
+-		led_put(sd->privacy_led);
+-	}
+-#endif
+-}
+-EXPORT_SYMBOL_GPL(v4l2_subdev_put_privacy_led);
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index b16b5f4cb91e..008a2a3e312e 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -24,8 +24,6 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-subdev.h>
+ 
+-#include "v4l2-subdev-priv.h"
+-
+ static int v4l2_async_nf_call_bound(struct v4l2_async_notifier *n,
+ 				    struct v4l2_subdev *subdev,
+ 				    struct v4l2_async_subdev *asd)
+@@ -827,8 +825,6 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
+ 	if (!sd->async_list.next)
+ 		return;
+ 
+-	v4l2_subdev_put_privacy_led(sd);
+-
+ 	mutex_lock(&list_lock);
+ 
+ 	__v4l2_async_nf_unregister(sd->subdev_notifier);
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 049c2f2001ea..3d9533c1b202 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -28,8 +28,6 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-subdev.h>
+ 
+-#include "v4l2-subdev-priv.h"
+-
+ static const struct v4l2_fwnode_bus_conv {
+ 	enum v4l2_fwnode_bus_type fwnode_bus_type;
+ 	enum v4l2_mbus_type mbus_type;
+@@ -1304,10 +1302,6 @@ int v4l2_async_register_subdev_sensor(struct v4l2_subdev *sd)
+ 
+ 	v4l2_async_nf_init(notifier);
+ 
+-	ret = v4l2_subdev_get_privacy_led(sd);
+-	if (ret < 0)
+-		goto out_cleanup;
+-
+ 	ret = v4l2_async_nf_parse_fwnode_sensor(sd->dev, notifier);
+ 	if (ret < 0)
+ 		goto out_cleanup;
+@@ -1328,7 +1322,6 @@ int v4l2_async_register_subdev_sensor(struct v4l2_subdev *sd)
+ 	v4l2_async_nf_unregister(notifier);
+ 
+ out_cleanup:
+-	v4l2_subdev_put_privacy_led(sd);
+ 	v4l2_async_nf_cleanup(notifier);
+ 	kfree(notifier);
+ 
+diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
+index 4c2ec7a0d804..f2c439359557 100644
+--- a/drivers/media/v4l2-core/videobuf-dma-contig.c
++++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
+@@ -314,7 +314,7 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
+ 	}
+ 
+ 	vma->vm_ops = &videobuf_vm_ops;
+-	vm_flags_set(vma, VM_DONTEXPAND);
++	vma->vm_flags |= VM_DONTEXPAND;
+ 	vma->vm_private_data = map;
+ 
+ 	dev_dbg(q->dev, "mmap %p: q=%p %08lx-%08lx (%lx) pgoff %08lx buf %d\n",
+diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
+index 53001532e8e3..234e9f647c96 100644
+--- a/drivers/media/v4l2-core/videobuf-dma-sg.c
++++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+@@ -630,8 +630,8 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
+ 	map->count    = 1;
+ 	map->q        = q;
+ 	vma->vm_ops   = &videobuf_vm_ops;
+-	/* using shared anonymous pages */
+-	vm_flags_mod(vma, VM_DONTEXPAND | VM_DONTDUMP, VM_IO);
++	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
++	vma->vm_flags &= ~VM_IO; /* using shared anonymous pages */
+ 	vma->vm_private_data = map;
+ 	dprintk(1, "mmap %p: q=%p %08lx-%08lx pgoff %08lx bufs %d-%d\n",
+ 		map, q, vma->vm_start, vma->vm_end, vma->vm_pgoff, first, last);
+diff --git a/drivers/media/v4l2-core/videobuf-vmalloc.c b/drivers/media/v4l2-core/videobuf-vmalloc.c
+index 85c7090606d6..9b2443720ab0 100644
+--- a/drivers/media/v4l2-core/videobuf-vmalloc.c
++++ b/drivers/media/v4l2-core/videobuf-vmalloc.c
+@@ -247,7 +247,7 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
+ 	}
+ 
+ 	vma->vm_ops          = &videobuf_vm_ops;
+-	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
++	vma->vm_flags       |= VM_DONTEXPAND | VM_DONTDUMP;
+ 	vma->vm_private_data = map;
+ 
+ 	dprintk(1, "mmap %p: q=%p %08lx-%08lx (%lx) pgoff %08lx buf %d\n",
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index 205d3cac425c..d14e13385385 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -293,7 +293,7 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_area_struct *vma)
+ 		return ret;
+ 	}
+ 
+-	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
++	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
+ 	vma->vm_private_data	= &buf->handler;
+ 	vma->vm_ops		= &vb2_common_vm_ops;
+ 
+diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+index a6c6d2fcaaa4..ff9496582900 100644
+--- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
++++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+@@ -185,7 +185,7 @@ static int vb2_vmalloc_mmap(void *buf_priv, struct vm_area_struct *vma)
+ 	/*
+ 	 * Make sure that vm_areas for 2 buffers won't be merged together
+ 	 */
+-	vm_flags_set(vma, VM_DONTEXPAND);
++	vma->vm_flags |= VM_DONTEXPAND;
+ 
+ 	/*
+ 	 * Use common vm_area operations to track buffer refcount.

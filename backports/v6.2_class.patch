@@ -1,0 +1,13 @@
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index 6bdad6341844..527d9324742b 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -1614,7 +1614,7 @@ static void rc_dev_release(struct device *device)
+ 	kfree(dev);
+ }
+ 
+-static int rc_dev_uevent(const struct device *device, struct kobj_uevent_env *env)
++static int rc_dev_uevent(struct device *device, struct kobj_uevent_env *env)
+ {
+ 	struct rc_dev *dev = to_rc_dev(device);
+ 	int ret = 0;

@@ -28,6 +28,11 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
+[6.2.1023]
+add v6.2_class.patch
+add v6.2_remove.patch
+add v6.2_v4l2-core.patch
+
 [6.1.1023]
 add v6.1_class.patch
 add v6.1_i2c_probe.patch
