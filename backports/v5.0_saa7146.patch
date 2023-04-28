@@ -1,0 +1,44 @@
+diff --git a/drivers/media/common/saa7146/saa7146_core.c b/drivers/media/common/saa7146/saa7146_core.c
+index bcb957883044..793c5b5f3b24 100644
+--- a/drivers/media/common/saa7146/saa7146_core.c
++++ b/drivers/media/common/saa7146/saa7146_core.c
+@@ -237,7 +237,7 @@ int saa7146_pgtable_alloc(struct pci_dev *pci, struct saa7146_pgtable *pt)
+ int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt,
+ 				 struct scatterlist *list, int sglen)
+ {
+-	struct sg_dma_page_iter dma_iter;
++	struct sg_page_iter dma_iter;
+ 	__le32 *ptr, fill;
+ 	int nr_pages = 0;
+ 	int i;
+@@ -251,7 +251,7 @@ int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt
+ 	pt->offset = list->offset;
+ 
+ 	ptr = pt->cpu;
+-	for_each_sg_dma_page(list, &dma_iter, sglen, 0) {
++	for_each_sg_page(list, &dma_iter, sglen, 0) {
+ 		*ptr++ = cpu_to_le32(sg_page_iter_dma_address(&dma_iter));
+ 		nr_pages++;
+ 	}
+diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
+index 040489e15ea0..b409e1a0cae1 100644
+--- a/drivers/media/common/saa7146/saa7146_video.c
++++ b/drivers/media/common/saa7146/saa7146_video.c
+@@ -99,7 +99,7 @@ static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *bu
+ 		struct saa7146_pgtable *pt1 = &buf->pt[0];
+ 		struct saa7146_pgtable *pt2 = &buf->pt[1];
+ 		struct saa7146_pgtable *pt3 = &buf->pt[2];
+-		struct sg_dma_page_iter dma_iter;
++		struct sg_page_iter dma_iter;
+ 		__le32  *ptr1, *ptr2, *ptr3;
+ 		__le32 fill;
+ 
+@@ -138,7 +138,7 @@ static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *bu
+ 		ptr2 = pt2->cpu;
+ 		ptr3 = pt3->cpu;
+ 
+-		for_each_sg_dma_page(list, &dma_iter, length, 0)
++		for_each_sg_page(list, &dma_iter, length, 0)
+ 			*ptr1++ = cpu_to_le32(sg_page_iter_dma_address(&dma_iter) - list->offset);
+ 
+ 		/* if we have a user buffer, the first page may not be
