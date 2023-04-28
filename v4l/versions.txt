@@ -22,6 +22,8 @@ VIDEO_S5C73M3
 VIDEO_AR0521
 VIDEO_VISL
 VIDEO_OV2740
+VIDEO_IPU3_CIO2
+SND_BT87X
 
 [5.16.0]
 # Needs i2c_driver flags field
@@ -31,14 +33,10 @@ VIDEO_HI556
 VIDEO_OV5670
 VIDEO_OV5675
 VIDEO_OV8856
-VIDEO_IPU3_CIO2
 
 [5.7.0]
 # needs read_poll_timeout
 VIDEO_ISL7998X
-
-[5.11.0]
-SND_BT87X
 
 [5.5.0]
 # needs linux/units.h
