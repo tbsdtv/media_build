@@ -1,8 +1,8 @@
 diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-index 0f3d6b5667b0..008c7a7215d9 100644
+index f3bed37859a2..6245a850f961 100644
 --- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
 +++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-@@ -311,7 +311,7 @@ struct v4l2_buffer32 {
+@@ -298,7 +298,7 @@ struct v4l2_buffer32 {
  	__s32			request_fd;
  };
  
@@ -11,7 +11,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  struct v4l2_buffer32_time32 {
  	__u32			index;
  	__u32			type;	/* enum v4l2_buf_type */
-@@ -447,7 +447,7 @@ static int get_v4l2_buffer32(struct v4l2_buffer *vb,
+@@ -434,7 +434,7 @@ static int get_v4l2_buffer32(struct v4l2_buffer *vb,
  	return 0;
  }
  
@@ -20,7 +20,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  static int get_v4l2_buffer32_time32(struct v4l2_buffer *vb,
  				    struct v4l2_buffer32_time32 __user *arg)
  {
-@@ -536,7 +536,7 @@ static int put_v4l2_buffer32(struct v4l2_buffer *vb,
+@@ -523,7 +523,7 @@ static int put_v4l2_buffer32(struct v4l2_buffer *vb,
  	return 0;
  }
  
@@ -29,7 +29,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  static int put_v4l2_buffer32_time32(struct v4l2_buffer *vb,
  				    struct v4l2_buffer32_time32 __user *arg)
  {
-@@ -785,7 +785,7 @@ static int put_v4l2_event32(struct v4l2_event *p64,
+@@ -769,7 +769,7 @@ static int put_v4l2_event32(struct v4l2_event *p64,
  
  #endif
  
@@ -38,7 +38,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  struct v4l2_event32_time32 {
  	__u32				type;
  	union {
-@@ -871,7 +871,7 @@ static int put_v4l2_edid32(struct v4l2_edid *p64,
+@@ -855,7 +855,7 @@ static int put_v4l2_edid32(struct v4l2_edid *p64,
  #define VIDIOC_CREATE_BUFS32	_IOWR('V', 92, struct v4l2_create_buffers32)
  #define VIDIOC_PREPARE_BUF32	_IOWR('V', 93, struct v4l2_buffer32)
  
@@ -47,7 +47,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  #define VIDIOC_QUERYBUF32_TIME32	_IOWR('V',  9, struct v4l2_buffer32_time32)
  #define VIDIOC_QBUF32_TIME32		_IOWR('V', 15, struct v4l2_buffer32_time32)
  #define VIDIOC_DQBUF32_TIME32		_IOWR('V', 17, struct v4l2_buffer32_time32)
-@@ -892,7 +892,7 @@ unsigned int v4l2_compat_translate_cmd(unsigned int cmd)
+@@ -876,7 +876,7 @@ unsigned int v4l2_compat_translate_cmd(unsigned int cmd)
  		return VIDIOC_G_FBUF;
  	case VIDIOC_S_FBUF32:
  		return VIDIOC_S_FBUF;
@@ -56,7 +56,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  	case VIDIOC_QUERYBUF32_TIME32:
  		return VIDIOC_QUERYBUF;
  	case VIDIOC_QBUF32_TIME32:
-@@ -930,7 +930,7 @@ unsigned int v4l2_compat_translate_cmd(unsigned int cmd)
+@@ -914,7 +914,7 @@ unsigned int v4l2_compat_translate_cmd(unsigned int cmd)
  	case VIDIOC_DQEVENT32:
  		return VIDIOC_DQEVENT;
  #endif
@@ -65,7 +65,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  	case VIDIOC_DQEVENT32_TIME32:
  		return VIDIOC_DQEVENT;
  #endif
-@@ -948,7 +948,7 @@ int v4l2_compat_get_user(void __user *arg, void *parg, unsigned int cmd)
+@@ -932,7 +932,7 @@ int v4l2_compat_get_user(void __user *arg, void *parg, unsigned int cmd)
  
  	case VIDIOC_S_FBUF32:
  		return get_v4l2_framebuffer32(parg, arg);
@@ -74,7 +74,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  	case VIDIOC_QUERYBUF32_TIME32:
  	case VIDIOC_QBUF32_TIME32:
  	case VIDIOC_DQBUF32_TIME32:
-@@ -992,7 +992,7 @@ int v4l2_compat_put_user(void __user *arg, void *parg, unsigned int cmd)
+@@ -976,7 +976,7 @@ int v4l2_compat_put_user(void __user *arg, void *parg, unsigned int cmd)
  
  	case VIDIOC_G_FBUF32:
  		return put_v4l2_framebuffer32(parg, arg);
@@ -83,7 +83,7 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  	case VIDIOC_QUERYBUF32_TIME32:
  	case VIDIOC_QBUF32_TIME32:
  	case VIDIOC_DQBUF32_TIME32:
-@@ -1026,7 +1026,7 @@ int v4l2_compat_put_user(void __user *arg, void *parg, unsigned int cmd)
+@@ -1010,7 +1010,7 @@ int v4l2_compat_put_user(void __user *arg, void *parg, unsigned int cmd)
  	case VIDIOC_DQEVENT32:
  		return put_v4l2_event32(parg, arg);
  #endif
@@ -92,29 +92,29 @@ index 0f3d6b5667b0..008c7a7215d9 100644
  	case VIDIOC_DQEVENT32_TIME32:
  		return put_v4l2_event32_time32(parg, arg);
  #endif
-@@ -1064,7 +1064,7 @@ int v4l2_compat_get_array_args(struct file *file, void *mbuf,
- 		}
- 		break;
- 	}
+@@ -1027,7 +1027,7 @@ int v4l2_compat_get_array_args(struct file *file, void *mbuf,
+ 	memset(mbuf, 0, array_size);
+ 
+ 	switch (cmd) {
 -#ifdef CONFIG_COMPAT_32BIT_TIME
 +#if 0
  	case VIDIOC_QUERYBUF32_TIME32:
  	case VIDIOC_QBUF32_TIME32:
  	case VIDIOC_DQBUF32_TIME32:
-@@ -1156,7 +1156,7 @@ int v4l2_compat_put_array_args(struct file *file, void __user *user_ptr,
- 		}
- 		break;
- 	}
+@@ -1097,7 +1097,7 @@ int v4l2_compat_put_array_args(struct file *file, void __user *user_ptr,
+ 	int err = 0;
+ 
+ 	switch (cmd) {
 -#ifdef CONFIG_COMPAT_32BIT_TIME
 +#if 0
  	case VIDIOC_QUERYBUF32_TIME32:
  	case VIDIOC_QBUF32_TIME32:
  	case VIDIOC_DQBUF32_TIME32:
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 9ac557b8e146..51f67ed9e12f 100644
+index a858acea6547..0d6022eb1f57 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -788,7 +788,7 @@ static void v4l_print_event(const void *arg, bool write_only)
+@@ -782,7 +782,7 @@ static void v4l_print_event(const void *arg, bool write_only)
  	const struct v4l2_event *p = arg;
  	const struct v4l2_event_ctrl *c;
  
@@ -123,7 +123,7 @@ index 9ac557b8e146..51f67ed9e12f 100644
  			p->type, p->pending, p->sequence, p->id,
  			p->timestamp.tv_sec, p->timestamp.tv_nsec);
  	switch (p->type) {
-@@ -3098,7 +3098,7 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
+@@ -3159,7 +3159,7 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
  
  static unsigned int video_translate_cmd(unsigned int cmd)
  {
@@ -132,7 +132,7 @@ index 9ac557b8e146..51f67ed9e12f 100644
  	switch (cmd) {
  	case VIDIOC_DQEVENT_TIME32:
  		return VIDIOC_DQEVENT;
-@@ -3154,7 +3154,7 @@ static int video_get_user(void __user *arg, void *parg,
+@@ -3215,7 +3215,7 @@ static int video_get_user(void __user *arg, void *parg,
  		err = v4l2_compat_get_user(arg, parg, cmd);
  	} else {
  		memset(parg, 0, n);
@@ -141,7 +141,7 @@ index 9ac557b8e146..51f67ed9e12f 100644
  		switch (cmd) {
  		case VIDIOC_QUERYBUF_TIME32:
  		case VIDIOC_QBUF_TIME32:
-@@ -3209,7 +3209,7 @@ static int video_put_user(void __user *arg, void *parg,
+@@ -3270,7 +3270,7 @@ static int video_put_user(void __user *arg, void *parg,
  	if (in_compat_syscall())
  		return v4l2_compat_put_user(arg, parg, cmd);
  
@@ -170,10 +170,10 @@ index edb733f21604..62d0acf2bb06 100644
  
  #endif /* _V4L2_IOCTL_H */
 diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index df8b9c486ba1..3b3b8d6b7937 100644
+index aee75eb9e686..1990c65be334 100644
 --- a/include/uapi/linux/videodev2.h
 +++ b/include/uapi/linux/videodev2.h
-@@ -937,7 +937,7 @@ struct v4l2_jpegcompression {
+@@ -993,7 +993,7 @@ struct v4l2_jpegcompression {
   *	M E M O R Y - M A P P I N G   B U F F E R S
   */
  
@@ -182,7 +182,7 @@ index df8b9c486ba1..3b3b8d6b7937 100644
  /*
   * This corresponds to the user space version of timeval
   * for 64-bit time_t. sparc64 is different from everyone
-@@ -1050,7 +1050,7 @@ struct v4l2_buffer {
+@@ -1106,7 +1106,7 @@ struct v4l2_buffer {
  	__u32			bytesused;
  	__u32			flags;
  	__u32			field;
@@ -191,7 +191,7 @@ index df8b9c486ba1..3b3b8d6b7937 100644
  	struct __kernel_v4l2_timeval timestamp;
  #else
  	struct timeval		timestamp;
-@@ -2443,7 +2443,7 @@ struct v4l2_event {
+@@ -2517,7 +2517,7 @@ struct v4l2_event {
  	} u;
  	__u32				pending;
  	__u32				sequence;

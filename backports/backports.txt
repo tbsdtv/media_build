@@ -109,6 +109,7 @@ add v5.1_vm_map_pages.patch
 add v5.1_devm_i2c_new_dummy_device.patch
 
 [5.0.1023]
+add v5.0_saa7146.patch
 add v5.0_ipu3-cio2.patch
 add v5.0_time32.patch
 add v5.0_gpio.patch
