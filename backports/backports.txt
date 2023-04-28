@@ -49,6 +49,7 @@ add v6.0_testdrv.patch
 add v5.18_rc.patch
 add v5.18_rc2.patch
 add v5.18_v4l2.patch
+add v5.18_misc.patch
 
 [5.17.1023]
 add v5.17_spi.patch
