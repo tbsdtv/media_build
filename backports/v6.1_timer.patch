@@ -67,3 +67,16 @@ index 75c89b07e86a..62ff1fa1c753 100644
  	if (hdw->fw_buffer) {
  		kfree(hdw->fw_buffer);
  		hdw->fw_buffer = NULL;
+diff --git a/drivers/media/pci/cx18/cx18-streams.c b/drivers/media/pci/cx18/cx18-streams.c
+index 597472754c4c..89b267f766d3 100644
+--- a/drivers/media/pci/cx18/cx18-streams.c
++++ b/drivers/media/pci/cx18/cx18-streams.c
+@@ -216,7 +216,7 @@ static void cx18_stop_streaming(struct vb2_queue *vq)
+ 	unsigned long flags;
+ 
+ 	cx18_stop_capture(s, 0);
+-	timer_delete_sync(&s->vb_timeout);
++	del_timer_sync(&s->vb_timeout);
+ 	spin_lock_irqsave(&s->vb_lock, flags);
+ 	cx18_clear_queue(s, VB2_BUF_STATE_ERROR);
+ 	spin_unlock_irqrestore(&s->vb_lock, flags);

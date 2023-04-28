@@ -504,27 +504,6 @@ index 44c26af49071..16ba18f85d2d 100644
  }
  
  static const struct i2c_device_id ad5820_id_table[] = {
-diff --git a/drivers/media/i2c/ad9389b.c b/drivers/media/i2c/ad9389b.c
-index ad17097a2d25..d6ece0613f8c 100644
---- a/drivers/media/i2c/ad9389b.c
-+++ b/drivers/media/i2c/ad9389b.c
-@@ -1174,7 +1174,7 @@ static int ad9389b_probe(struct i2c_client *client)
- 
- /* ----------------------------------------------------------------------- */
- 
--static void ad9389b_remove(struct i2c_client *client)
-+static int ad9389b_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct ad9389b_state *state = get_ad9389b_state(sd);
-@@ -1192,6 +1192,7 @@ static void ad9389b_remove(struct i2c_client *client)
- 	v4l2_device_unregister_subdev(sd);
- 	media_entity_cleanup(&sd->entity);
- 	v4l2_ctrl_handler_free(sd->ctrl_handler);
-+	return 0;
- }
- 
- /* ----------------------------------------------------------------------- */
 diff --git a/drivers/media/i2c/adp1653.c b/drivers/media/i2c/adp1653.c
 index a61a77de6eee..22b351b22c24 100644
 --- a/drivers/media/i2c/adp1653.c
@@ -1441,26 +1420,6 @@ index 0e6507ab7e08..93deef68041f 100644
  }
  
  /* ----------------------------------------------------------------------- */
-diff --git a/drivers/media/i2c/m5mols/m5mols_core.c b/drivers/media/i2c/m5mols/m5mols_core.c
-index 2b01873ba0db..495e910e3b45 100644
---- a/drivers/media/i2c/m5mols/m5mols_core.c
-+++ b/drivers/media/i2c/m5mols/m5mols_core.c
-@@ -1019,13 +1019,14 @@ static int m5mols_probe(struct i2c_client *client)
- 	return ret;
- }
- 
--static void m5mols_remove(struct i2c_client *client)
-+static int m5mols_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 
- 	v4l2_device_unregister_subdev(sd);
- 	v4l2_ctrl_handler_free(sd->ctrl_handler);
- 	media_entity_cleanup(&sd->entity);
-+	return 0;
- }
- 
- static const struct i2c_device_id m5mols_id[] = {
 diff --git a/drivers/media/i2c/max2175.c b/drivers/media/i2c/max2175.c
 index 1019020f3a37..21990744b5fe 100644
 --- a/drivers/media/i2c/max2175.c
@@ -1543,27 +1502,6 @@ index ebf9cf1e1bce..049bf9d49b78 100644
  }
  
  static const struct i2c_device_id mt9m001_id[] = {
-diff --git a/drivers/media/i2c/mt9m032.c b/drivers/media/i2c/mt9m032.c
-index 958cfdd73d57..8aca18bf69ed 100644
---- a/drivers/media/i2c/mt9m032.c
-+++ b/drivers/media/i2c/mt9m032.c
-@@ -857,7 +857,7 @@ static int mt9m032_probe(struct i2c_client *client)
- 	return ret;
- }
- 
--static void mt9m032_remove(struct i2c_client *client)
-+static int mt9m032_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *subdev = i2c_get_clientdata(client);
- 	struct mt9m032 *sensor = to_mt9m032(subdev);
-@@ -866,6 +866,7 @@ static void mt9m032_remove(struct i2c_client *client)
- 	v4l2_ctrl_handler_free(&sensor->ctrls);
- 	media_entity_cleanup(&subdev->entity);
- 	mutex_destroy(&sensor->lock);
-+	return 0;
- }
- 
- static const struct i2c_device_id mt9m032_id_table[] = {
 diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
 index f5fe272d1205..f9c7c5050ce5 100644
 --- a/drivers/media/i2c/mt9m111.c
@@ -1605,27 +1543,6 @@ index 9e023a4b9bd1..6b8ec44e6679 100644
  }
  
  static const struct i2c_device_id mt9p031_id[] = {
-diff --git a/drivers/media/i2c/mt9t001.c b/drivers/media/i2c/mt9t001.c
-index c635ed11388a..ea75347223bc 100644
---- a/drivers/media/i2c/mt9t001.c
-+++ b/drivers/media/i2c/mt9t001.c
-@@ -960,7 +960,7 @@ static int mt9t001_probe(struct i2c_client *client)
- 	return ret;
- }
- 
--static void mt9t001_remove(struct i2c_client *client)
-+static int mt9t001_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *subdev = i2c_get_clientdata(client);
- 	struct mt9t001 *mt9t001 = to_mt9t001(subdev);
-@@ -968,6 +968,7 @@ static void mt9t001_remove(struct i2c_client *client)
- 	v4l2_ctrl_handler_free(&mt9t001->ctrls);
- 	v4l2_device_unregister_subdev(subdev);
- 	media_entity_cleanup(&subdev->entity);
-+	return 0;
- }
- 
- static const struct i2c_device_id mt9t001_id[] = {
 diff --git a/drivers/media/i2c/mt9t112.c b/drivers/media/i2c/mt9t112.c
 index a82f056787b8..1d280c062903 100644
 --- a/drivers/media/i2c/mt9t112.c
@@ -1708,27 +1625,6 @@ index 46d91cd0870c..d9b4b126734f 100644
  }
  
  static const struct of_device_id mt9v111_of_match[] = {
-diff --git a/drivers/media/i2c/noon010pc30.c b/drivers/media/i2c/noon010pc30.c
-index 144bef2835f7..801b88959ac5 100644
---- a/drivers/media/i2c/noon010pc30.c
-+++ b/drivers/media/i2c/noon010pc30.c
-@@ -788,7 +788,7 @@ static int noon010_probe(struct i2c_client *client)
- 	return ret;
- }
- 
--static void noon010_remove(struct i2c_client *client)
-+static int noon010_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct noon010_info *info = to_noon010(sd);
-@@ -796,6 +796,7 @@ static void noon010_remove(struct i2c_client *client)
- 	v4l2_device_unregister_subdev(sd);
- 	v4l2_ctrl_handler_free(&info->hdl);
- 	media_entity_cleanup(&sd->entity);
-+	return 0;
- }
- 
- static const struct i2c_device_id noon010_id[] = {
 diff --git a/drivers/media/i2c/og01a1b.c b/drivers/media/i2c/og01a1b.c
 index 35663c10fcd9..927669cd2c16 100644
 --- a/drivers/media/i2c/og01a1b.c
@@ -2066,10 +1962,10 @@ index 17465fcf28e3..3a18c7fe1913 100644
  
  static const struct dev_pm_ops ov5648_pm_ops = {
 diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index f79d908f4531..3cef2f4e1f41 100644
+index 24c06319ce2e..b4fed15133e8 100644
 --- a/drivers/media/i2c/ov5670.c
 +++ b/drivers/media/i2c/ov5670.c
-@@ -2770,7 +2770,7 @@ static int ov5670_probe(struct i2c_client *client)
+@@ -2810,7 +2810,7 @@ static int ov5670_probe(struct i2c_client *client)
  	return ret;
  }
  
@@ -2078,10 +1974,10 @@ index f79d908f4531..3cef2f4e1f41 100644
  {
  	struct v4l2_subdev *sd = i2c_get_clientdata(client);
  	struct ov5670 *ov5670 = to_ov5670(sd);
-@@ -2782,6 +2782,7 @@ static void ov5670_remove(struct i2c_client *client)
- 
- 	pm_runtime_disable(&client->dev);
+@@ -2824,6 +2824,7 @@ static void ov5670_remove(struct i2c_client *client)
  	ov5670_runtime_suspend(&client->dev);
+ 
+ 	v4l2_fwnode_endpoint_free(&ov5670->endpoint);
 +	return 0;
  }
  
@@ -2520,26 +2416,6 @@ index ef6673b10580..8a55768c159c 100644
  }
  
  static const struct i2c_device_id s5k6a3_ids[] = {
-diff --git a/drivers/media/i2c/s5k6aa.c b/drivers/media/i2c/s5k6aa.c
-index 5996153371fc..fbfc1d26d13a 100644
---- a/drivers/media/i2c/s5k6aa.c
-+++ b/drivers/media/i2c/s5k6aa.c
-@@ -1620,13 +1620,14 @@ static int s5k6aa_probe(struct i2c_client *client)
- 	return ret;
- }
- 
--static void s5k6aa_remove(struct i2c_client *client)
-+static int s5k6aa_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 
- 	v4l2_device_unregister_subdev(sd);
- 	v4l2_ctrl_handler_free(sd->ctrl_handler);
- 	media_entity_cleanup(&sd->entity);
-+	return 0;
- }
- 
- static const struct i2c_device_id s5k6aa_id[] = {
 diff --git a/drivers/media/i2c/saa6588.c b/drivers/media/i2c/saa6588.c
 index 8752f7cff611..7556cb200931 100644
 --- a/drivers/media/i2c/saa6588.c
@@ -2697,25 +2573,6 @@ index eef6c8a7c9c9..5c40abe804a6 100644
  }
  
  /* ----------------------------------------------------------------------- */
-diff --git a/drivers/media/i2c/sr030pc30.c b/drivers/media/i2c/sr030pc30.c
-index a83c8bf1c5dd..2cc2a80c34b4 100644
---- a/drivers/media/i2c/sr030pc30.c
-+++ b/drivers/media/i2c/sr030pc30.c
-@@ -731,12 +731,13 @@ static int sr030pc30_probe(struct i2c_client *client)
- 	return 0;
- }
- 
--static void sr030pc30_remove(struct i2c_client *client)
-+static int sr030pc30_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 
- 	v4l2_device_unregister_subdev(sd);
- 	v4l2_ctrl_handler_free(sd->ctrl_handler);
-+	return 0;
- }
- 
- static const struct i2c_device_id sr030pc30_id[] = {
 diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
 index 31b89aff0e86..a205083c6330 100644
 --- a/drivers/media/i2c/st-mipid02.c
@@ -3231,25 +3088,6 @@ index aa73d5dcc3e7..8a6779b044f3 100644
  }
  
  static const struct i2c_device_id vpx3220_id[] = {
-diff --git a/drivers/media/i2c/vs6624.c b/drivers/media/i2c/vs6624.c
-index d35c5ec148f4..8d90e7b09eed 100644
---- a/drivers/media/i2c/vs6624.c
-+++ b/drivers/media/i2c/vs6624.c
-@@ -823,12 +823,13 @@ static int vs6624_probe(struct i2c_client *client)
- 	return ret;
- }
- 
--static void vs6624_remove(struct i2c_client *client)
-+static int vs6624_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 
- 	v4l2_device_unregister_subdev(sd);
- 	v4l2_ctrl_handler_free(sd->ctrl_handler);
-+	return 0;
- }
- 
- static const struct i2c_device_id vs6624_id[] = {
 diff --git a/drivers/media/i2c/wm8739.c b/drivers/media/i2c/wm8739.c
 index 8b34a673ffd3..c427fcadc605 100644
 --- a/drivers/media/i2c/wm8739.c

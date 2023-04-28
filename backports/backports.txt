@@ -28,6 +28,11 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
+[6.2.1023]
+add v6.2_class.patch
+add v6.2_remove.patch
+add v6.2_v4l2-core.patch
+
 [6.1.1023]
 add v6.1_class.patch
 add v6.1_i2c_probe.patch
@@ -46,6 +51,7 @@ add v6.0_i2c_remove_tbs.patch
 add v5.18_rc.patch
 add v5.18_rc2.patch
 add v5.18_v4l2.patch
+add v5.18_misc.patch
 
 [5.17.1023]
 add v5.17_spi.patch
@@ -105,6 +111,7 @@ add v5.1_vm_map_pages.patch
 add v5.1_devm_i2c_new_dummy_device.patch
 
 [5.0.1023]
+add v5.0_saa7146.patch
 add v5.0_ipu3-cio2.patch
 add v5.0_time32.patch
 add v5.0_gpio.patch
