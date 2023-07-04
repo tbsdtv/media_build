@@ -1646,6 +1646,27 @@ index 35663c10fcd9..927669cd2c16 100644
  }
  
  static int og01a1b_probe(struct i2c_client *client)
+diff --git a/drivers/media/i2c/ov01a10.c b/drivers/media/i2c/ov01a10.c
+index de5bc19e715b..91da0c3b73d3 100644
+--- a/drivers/media/i2c/ov01a10.c
++++ b/drivers/media/i2c/ov01a10.c
+@@ -898,7 +898,7 @@ static int ov01a10_identify_module(struct ov01a10 *ov01a10)
+ 	return 0;
+ }
+ 
+-static void ov01a10_remove(struct i2c_client *client)
++static int ov01a10_remove(struct i2c_client *client)
+ {
+ 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+ 
+@@ -907,6 +907,7 @@ static void ov01a10_remove(struct i2c_client *client)
+ 	v4l2_ctrl_handler_free(sd->ctrl_handler);
+ 
+ 	pm_runtime_disable(&client->dev);
++	return 0;
+ }
+ 
+ static int ov01a10_probe(struct i2c_client *client)
 diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
 index 2c1eb724d8e5..2de7e5e86325 100644
 --- a/drivers/media/i2c/ov02a10.c

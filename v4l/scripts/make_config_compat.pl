@@ -131,7 +131,7 @@ sub check_other_dependencies()
 	check_files_for_func("i2c_new_scanned_device", "NEED_I2C_NEW_SCANNED_DEVICE", "include/linux/i2c.h");
 	check_files_for_func("i2c_new_client_device", "NEED_I2C_NEW_CLIENT_DEVICE", "include/linux/i2c.h");
 	check_files_for_func("i2c_client_has_driver", "NEED_I2C_CLIENT_HAS_DRIVER", "include/linux/i2c.h");
-	check_files_for_func("untagged_addr", "NEED_UNTAGGED_ADDR", "include/linux/mm.h");
+	check_files_for_func("untagged_addr", "NEED_UNTAGGED_ADDR", "include/linux/uaccess.h");
 	check_files_for_func("compat_ptr_ioctl", "NEED_COMPAT_PTR_IOCTL", "include/linux/fs.h");
 	check_files_for_func("ns_to_timespec64", "NEED_TIMESPEC64", "include/linux/time64.h");
 	check_files_for_func("sizeof_field", "NEED_SIZEOF_FIELD", "include/linux/stddef.h");
