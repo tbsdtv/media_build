@@ -24,3 +24,16 @@ index 043d23aaa3cb..25ab61dae126 100644
  	if (IS_ERR(lirc_class)) {
  		pr_err("class_create failed\n");
  		return PTR_ERR(lirc_class);
+diff --git a/drivers/media/pci/tbsmod/tbsmod.c b/drivers/media/pci/tbsmod/tbsmod.c
+index d8f91267023e..045c0836280e 100644
+--- a/drivers/media/pci/tbsmod/tbsmod.c
++++ b/drivers/media/pci/tbsmod/tbsmod.c
+@@ -3609,7 +3609,7 @@ static __init int module_init_tbsmod(void)
+ 	mod_cdev.owner = THIS_MODULE;
+ 	cdev_add(&mod_cdev, dev, 256);
+ 
+-	mod_cdev_class = class_create("tbsmod");
++	mod_cdev_class = class_create(THIS_MODULE, "tbsmod");
+ 	stat = pci_register_driver(&tbsmod_pci_driver);
+ 	return stat;
+ }
