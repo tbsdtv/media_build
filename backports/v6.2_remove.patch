@@ -283,6 +283,123 @@ index 450254403fa8..06ac4410f4b0 100644
  };
  
  module_platform_driver(viacam_driver);
+diff --git a/drivers/media/platform/xilinx/xilinx-csi2rxss.c b/drivers/media/platform/xilinx/xilinx-csi2rxss.c
+index 5b53745fe44e..a18a6301e23c 100644
+--- a/drivers/media/platform/xilinx/xilinx-csi2rxss.c
++++ b/drivers/media/platform/xilinx/xilinx-csi2rxss.c
+@@ -1059,7 +1059,7 @@ static int xcsi2rxss_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void xcsi2rxss_remove(struct platform_device *pdev)
++static int xcsi2rxss_remove(struct platform_device *pdev)
+ {
+ 	struct xcsi2rxss_state *xcsi2rxss = platform_get_drvdata(pdev);
+ 	struct v4l2_subdev *subdev = &xcsi2rxss->subdev;
+@@ -1070,6 +1070,7 @@ static void xcsi2rxss_remove(struct platform_device *pdev)
+ 	mutex_destroy(&xcsi2rxss->lock);
+ 	clk_bulk_disable_unprepare(num_clks, xcsi2rxss->clks);
+ 	clk_bulk_put(num_clks, xcsi2rxss->clks);
++	return 0;
+ }
+ 
+ static const struct of_device_id xcsi2rxss_of_id_table[] = {
+@@ -1084,7 +1085,7 @@ static struct platform_driver xcsi2rxss_driver = {
+ 		.of_match_table	= xcsi2rxss_of_id_table,
+ 	},
+ 	.probe			= xcsi2rxss_probe,
+-	.remove_new		= xcsi2rxss_remove,
++	.remove		= xcsi2rxss_remove,
+ };
+ 
+ module_platform_driver(xcsi2rxss_driver);
+diff --git a/drivers/media/platform/xilinx/xilinx-tpg.c b/drivers/media/platform/xilinx/xilinx-tpg.c
+index 80353ca44402..e0412e135e70 100644
+--- a/drivers/media/platform/xilinx/xilinx-tpg.c
++++ b/drivers/media/platform/xilinx/xilinx-tpg.c
+@@ -894,7 +894,7 @@ static int xtpg_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void xtpg_remove(struct platform_device *pdev)
++static int xtpg_remove(struct platform_device *pdev)
+ {
+ 	struct xtpg_device *xtpg = platform_get_drvdata(pdev);
+ 	struct v4l2_subdev *subdev = &xtpg->xvip.subdev;
+@@ -904,6 +904,7 @@ static void xtpg_remove(struct platform_device *pdev)
+ 	media_entity_cleanup(&subdev->entity);
+ 
+ 	xvip_cleanup_resources(&xtpg->xvip);
++	return 0;
+ }
+ 
+ static SIMPLE_DEV_PM_OPS(xtpg_pm_ops, xtpg_pm_suspend, xtpg_pm_resume);
+@@ -921,7 +922,7 @@ static struct platform_driver xtpg_driver = {
+ 		.of_match_table	= xtpg_of_id_table,
+ 	},
+ 	.probe			= xtpg_probe,
+-	.remove_new		= xtpg_remove,
++	.remove			= xtpg_remove,
+ };
+ 
+ module_platform_driver(xtpg_driver);
+diff --git a/drivers/media/platform/xilinx/xilinx-vipp.c b/drivers/media/platform/xilinx/xilinx-vipp.c
+index 3123216b3f70..126f4a9936f1 100644
+--- a/drivers/media/platform/xilinx/xilinx-vipp.c
++++ b/drivers/media/platform/xilinx/xilinx-vipp.c
+@@ -617,12 +617,13 @@ static int xvip_composite_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void xvip_composite_remove(struct platform_device *pdev)
++static int xvip_composite_remove(struct platform_device *pdev)
+ {
+ 	struct xvip_composite_device *xdev = platform_get_drvdata(pdev);
+ 
+ 	xvip_graph_cleanup(xdev);
+ 	xvip_composite_v4l2_cleanup(xdev);
++	return 0;
+ }
+ 
+ static const struct of_device_id xvip_composite_of_id_table[] = {
+@@ -637,7 +638,7 @@ static struct platform_driver xvip_composite_driver = {
+ 		.of_match_table = xvip_composite_of_id_table,
+ 	},
+ 	.probe = xvip_composite_probe,
+-	.remove_new = xvip_composite_remove,
++	.remove = xvip_composite_remove,
+ };
+ 
+ module_platform_driver(xvip_composite_driver);
+diff --git a/drivers/media/platform/xilinx/xilinx-vtc.c b/drivers/media/platform/xilinx/xilinx-vtc.c
+index dda70719f004..b1550f16e998 100644
+--- a/drivers/media/platform/xilinx/xilinx-vtc.c
++++ b/drivers/media/platform/xilinx/xilinx-vtc.c
+@@ -344,13 +344,14 @@ static int xvtc_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static void xvtc_remove(struct platform_device *pdev)
++static int xvtc_remove(struct platform_device *pdev)
+ {
+ 	struct xvtc_device *xvtc = platform_get_drvdata(pdev);
+ 
+ 	xvtc_unregister_device(xvtc);
+ 
+ 	xvip_cleanup_resources(&xvtc->xvip);
++	return 0;
+ }
+ 
+ static const struct of_device_id xvtc_of_id_table[] = {
+@@ -365,7 +366,7 @@ static struct platform_driver xvtc_driver = {
+ 		.of_match_table = xvtc_of_id_table,
+ 	},
+ 	.probe = xvtc_probe,
+-	.remove_new = xvtc_remove,
++	.remove = xvtc_remove,
+ };
+ 
+ module_platform_driver(xvtc_driver);
 diff --git a/drivers/media/radio/radio-si476x.c b/drivers/media/radio/radio-si476x.c
 index 6061506159f1..1d51c2e8cb45 100644
 --- a/drivers/media/radio/radio-si476x.c
