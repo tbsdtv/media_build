@@ -908,6 +908,19 @@ index b37a2aaf8ac0..51921068931d 100644
  	.remove         = ir_remove,
  	.id_table       = ir_kbd_id,
  };
+diff --git a/drivers/media/i2c/isl7998x.c b/drivers/media/i2c/isl7998x.c
+index 92e49d95363d..ae7af2cc94f5 100644
+--- a/drivers/media/i2c/isl7998x.c
++++ b/drivers/media/i2c/isl7998x.c
+@@ -1614,7 +1614,7 @@ static struct i2c_driver isl7998x_i2c_driver = {
+ 		.of_match_table = of_match_ptr(isl7998x_of_match),
+ 		.pm = &isl7998x_pm_ops,
+ 	},
+-	.probe		= isl7998x_probe,
++	.probe_new	= isl7998x_probe,
+ 	.remove		= isl7998x_remove,
+ 	.id_table	= isl7998x_id,
+ };
 diff --git a/drivers/media/i2c/ks0127.c b/drivers/media/i2c/ks0127.c
 index 5c583f57e3f3..0d86f2db7ad2 100644
 --- a/drivers/media/i2c/ks0127.c
