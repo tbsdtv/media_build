@@ -28,6 +28,9 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
+[6.4.1023]
+add v6.4_pin_user_pages.patch
+
 [6.3.1023]
 add v6.3_class_create.patch
 add v6.3_check_endpoint.patch
