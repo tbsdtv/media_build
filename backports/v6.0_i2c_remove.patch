@@ -1440,6 +1440,28 @@ index 1019020f3a37..21990744b5fe 100644
  }
  
  static const struct i2c_device_id max2175_id[] = {
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index 88c58e0c49aa..2c01de00fa68 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -1690,7 +1690,7 @@ static int max9286_probe(struct i2c_client *client)
+ 	return ret;
+ }
+ 
+-static void max9286_remove(struct i2c_client *client)
++static int max9286_remove(struct i2c_client *client)
+ {
+ 	struct max9286_priv *priv = sd_to_max9286(i2c_get_clientdata(client));
+ 
+@@ -1703,6 +1703,8 @@ static void max9286_remove(struct i2c_client *client)
+ 	gpiod_set_value_cansleep(priv->gpiod_pwdn, 0);
+ 
+ 	max9286_cleanup_dt(priv);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id max9286_dt_ids[] = {
 diff --git a/drivers/media/i2c/ml86v7667.c b/drivers/media/i2c/ml86v7667.c
 index dbd2f0bd3651..c09cc86bc48f 100644
 --- a/drivers/media/i2c/ml86v7667.c
