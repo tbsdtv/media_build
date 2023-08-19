@@ -173,6 +173,241 @@ index 5d4c5a2cae09..0586e59ba90f 100644
  };
  
  module_platform_driver(secocec_driver);
+diff --git a/drivers/media/platform/m2m-deinterlace.c b/drivers/media/platform/m2m-deinterlace.c
+index 96b35a5d6174..c865f678e90f 100644
+--- a/drivers/media/platform/m2m-deinterlace.c
++++ b/drivers/media/platform/m2m-deinterlace.c
+@@ -984,7 +984,7 @@ static int deinterlace_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void deinterlace_remove(struct platform_device *pdev)
++static int deinterlace_remove(struct platform_device *pdev)
+ {
+ 	struct deinterlace_dev *pcdev = platform_get_drvdata(pdev);
+ 
+@@ -993,11 +993,12 @@ static void deinterlace_remove(struct platform_device *pdev)
+ 	video_unregister_device(&pcdev->vfd);
+ 	v4l2_device_unregister(&pcdev->v4l2_dev);
+ 	dma_release_channel(pcdev->dma_chan);
++	return 0;
+ }
+ 
+ static struct platform_driver deinterlace_pdrv = {
+ 	.probe		= deinterlace_probe,
+-	.remove_new	= deinterlace_remove,
++	.remove	= deinterlace_remove,
+ 	.driver		= {
+ 		.name	= MEM2MEM_NAME,
+ 	},
+diff --git a/drivers/media/platform/video-mux.c b/drivers/media/platform/video-mux.c
+index 6d273abfe16c..d9edaea291fa 100644
+--- a/drivers/media/platform/video-mux.c
++++ b/drivers/media/platform/video-mux.c
+@@ -462,7 +462,7 @@ static int video_mux_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void video_mux_remove(struct platform_device *pdev)
++static int video_mux_remove(struct platform_device *pdev)
+ {
+ 	struct video_mux *vmux = platform_get_drvdata(pdev);
+ 	struct v4l2_subdev *sd = &vmux->subdev;
+@@ -472,6 +472,8 @@ static void video_mux_remove(struct platform_device *pdev)
+ 	v4l2_async_unregister_subdev(sd);
+ 	v4l2_subdev_cleanup(sd);
+ 	media_entity_cleanup(&sd->entity);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id video_mux_dt_ids[] = {
+@@ -482,7 +484,7 @@ MODULE_DEVICE_TABLE(of, video_mux_dt_ids);
+ 
+ static struct platform_driver video_mux_driver = {
+ 	.probe		= video_mux_probe,
+-	.remove_new	= video_mux_remove,
++	.remove		= video_mux_remove,
+ 	.driver		= {
+ 		.of_match_table = video_mux_dt_ids,
+ 		.name = "video-mux",
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
+index ec03e17727d7..2423714afcb9 100644
+--- a/drivers/media/platform/allegro-dvt/allegro-core.c
++++ b/drivers/media/platform/allegro-dvt/allegro-core.c
+@@ -3919,7 +3919,7 @@ static int allegro_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static void allegro_remove(struct platform_device *pdev)
++static int allegro_remove(struct platform_device *pdev)
+ {
+ 	struct allegro_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -3935,6 +3935,8 @@ static void allegro_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&dev->plat_dev->dev);
+ 
+ 	v4l2_device_unregister(&dev->v4l2_dev);
++
++	return 0;
+ }
+ 
+ static int allegro_runtime_resume(struct device *device)
+@@ -4004,7 +4006,7 @@ static const struct dev_pm_ops allegro_pm_ops = {
+ 
+ static struct platform_driver allegro_driver = {
+ 	.probe = allegro_probe,
+-	.remove_new = allegro_remove,
++	.remove = allegro_remove,
+ 	.driver = {
+ 		.name = "allegro",
+ 		.of_match_table = of_match_ptr(allegro_dt_ids),
+diff --git a/drivers/media/platform/amlogic/meson-ge2d/ge2d.c b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
+index 09409908ba5d..142d421a8d76 100644
+--- a/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
++++ b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
+@@ -1024,7 +1024,7 @@ static int ge2d_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void ge2d_remove(struct platform_device *pdev)
++static int ge2d_remove(struct platform_device *pdev)
+ {
+ 	struct meson_ge2d *ge2d = platform_get_drvdata(pdev);
+ 
+@@ -1032,6 +1032,8 @@ static void ge2d_remove(struct platform_device *pdev)
+ 	v4l2_m2m_release(ge2d->m2m_dev);
+ 	v4l2_device_unregister(&ge2d->v4l2_dev);
+ 	clk_disable_unprepare(ge2d->clk);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id meson_ge2d_match[] = {
+@@ -1045,7 +1047,7 @@ MODULE_DEVICE_TABLE(of, meson_ge2d_match);
+ 
+ static struct platform_driver ge2d_drv = {
+ 	.probe = ge2d_probe,
+-	.remove_new = ge2d_remove,
++	.remove = ge2d_remove,
+ 	.driver = {
+ 		.name = "meson-ge2d",
+ 		.of_match_table = meson_ge2d_match,
+diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/amphion/vpu_core.c
+index 43d85a54268b..57d56c680c07 100644
+--- a/drivers/media/platform/amphion/vpu_core.c
++++ b/drivers/media/platform/amphion/vpu_core.c
+@@ -709,7 +709,7 @@ static int vpu_core_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void vpu_core_remove(struct platform_device *pdev)
++static int vpu_core_remove(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct vpu_core *core = platform_get_drvdata(pdev);
+@@ -728,6 +728,8 @@ static void vpu_core_remove(struct platform_device *pdev)
+ 	memunmap(core->rpc.virt);
+ 	mutex_destroy(&core->lock);
+ 	mutex_destroy(&core->cmd_lock);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused vpu_core_runtime_resume(struct device *dev)
+@@ -862,7 +864,7 @@ MODULE_DEVICE_TABLE(of, vpu_core_dt_match);
+ 
+ static struct platform_driver amphion_vpu_core_driver = {
+ 	.probe = vpu_core_probe,
+-	.remove_new = vpu_core_remove,
++	.remove = vpu_core_remove,
+ 	.driver = {
+ 		.name = "amphion-vpu-core",
+ 		.of_match_table = vpu_core_dt_match,
+diff --git a/drivers/media/platform/amphion/vpu_drv.c b/drivers/media/platform/amphion/vpu_drv.c
+index 4187b2b5562f..f01ce49d27e8 100644
+--- a/drivers/media/platform/amphion/vpu_drv.c
++++ b/drivers/media/platform/amphion/vpu_drv.c
+@@ -157,7 +157,7 @@ static int vpu_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void vpu_remove(struct platform_device *pdev)
++static int vpu_remove(struct platform_device *pdev)
+ {
+ 	struct vpu_dev *vpu = platform_get_drvdata(pdev);
+ 	struct device *dev = &pdev->dev;
+@@ -173,6 +173,8 @@ static void vpu_remove(struct platform_device *pdev)
+ 	media_device_cleanup(&vpu->mdev);
+ 	v4l2_device_unregister(&vpu->v4l2_dev);
+ 	mutex_destroy(&vpu->lock);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused vpu_runtime_resume(struct device *dev)
+@@ -227,7 +229,7 @@ MODULE_DEVICE_TABLE(of, vpu_dt_match);
+ 
+ static struct platform_driver amphion_vpu_driver = {
+ 	.probe = vpu_probe,
+-	.remove_new = vpu_remove,
++	.remove = vpu_remove,
+ 	.driver = {
+ 		.name = "amphion-vpu",
+ 		.of_match_table = vpu_dt_match,
+diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+index 374eb7781936..bf4fd738be2a 100644
+--- a/drivers/media/platform/aspeed/aspeed-video.c
++++ b/drivers/media/platform/aspeed/aspeed-video.c
+@@ -2228,6 +2228,8 @@ static void aspeed_video_remove(struct platform_device *pdev)
+ 	aspeed_video_free_buf(video, &video->jpeg);
+ 
+ 	of_reserved_mem_device_release(dev);
++
++	return 0;
+ }
+ 
+ static struct platform_driver aspeed_video_driver = {
+@@ -2236,7 +2238,7 @@ static struct platform_driver aspeed_video_driver = {
+ 		.of_match_table = aspeed_video_of_match,
+ 	},
+ 	.probe = aspeed_video_probe,
+-	.remove_new = aspeed_video_remove,
++	.remove = aspeed_video_remove,
+ };
+ 
+ module_platform_driver(aspeed_video_driver);
+diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
+index c29e04864445..fbfec3b81713 100644
+--- a/drivers/media/platform/atmel/atmel-isi.c
++++ b/drivers/media/platform/atmel/atmel-isi.c
+@@ -1317,7 +1317,7 @@ static int atmel_isi_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void atmel_isi_remove(struct platform_device *pdev)
++static int atmel_isi_remove(struct platform_device *pdev)
+ {
+ 	struct atmel_isi *isi = platform_get_drvdata(pdev);
+ 
+@@ -1329,6 +1329,8 @@ static void atmel_isi_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_unregister(&isi->notifier);
+ 	v4l2_async_nf_cleanup(&isi->notifier);
+ 	v4l2_device_unregister(&isi->v4l2_dev);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -1366,7 +1368,7 @@ static struct platform_driver atmel_isi_driver = {
+ 		.pm	= &atmel_isi_dev_pm_ops,
+ 	},
+ 	.probe		= atmel_isi_probe,
+-	.remove_new	= atmel_isi_remove,
++	.remove		= atmel_isi_remove,
+ };
+ 
+ module_platform_driver(atmel_isi_driver);
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
 index 9755d1c8ceb9..69cbcf64eb56 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
@@ -226,33 +461,2121 @@ index 1e0400b7803e..459f4ac9423b 100644
  
  	.driver	= {
  		.name		= "cdns-csi2tx",
-diff --git a/drivers/media/platform/m2m-deinterlace.c b/drivers/media/platform/m2m-deinterlace.c
-index 96b35a5d6174..c865f678e90f 100644
---- a/drivers/media/platform/m2m-deinterlace.c
-+++ b/drivers/media/platform/m2m-deinterlace.c
-@@ -984,7 +984,7 @@ static int deinterlace_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index ac9a642ae76f..8f61bd78d732 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -3300,7 +3300,7 @@ static int coda_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void coda_remove(struct platform_device *pdev)
++static int coda_remove(struct platform_device *pdev)
+ {
+ 	struct coda_dev *dev = platform_get_drvdata(pdev);
+ 	int i;
+@@ -3322,6 +3322,8 @@ static void coda_remove(struct platform_device *pdev)
+ 	coda_free_aux_buf(dev, &dev->workbuf);
+ 	debugfs_remove_recursive(dev->debugfs_root);
+ 	ida_destroy(&dev->ida);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -3346,7 +3348,7 @@ static const struct dev_pm_ops coda_pm_ops = {
+ 
+ static struct platform_driver coda_driver = {
+ 	.probe	= coda_probe,
+-	.remove_new = coda_remove,
++	.remove	= coda_remove,
+ 	.driver	= {
+ 		.name	= CODA_NAME,
+ 		.of_match_table = coda_dt_ids,
+diff --git a/drivers/media/platform/intel/pxa_camera.c b/drivers/media/platform/intel/pxa_camera.c
+index 9ed3c2e063de..56b363c93f8c 100644
+--- a/drivers/media/platform/intel/pxa_camera.c
++++ b/drivers/media/platform/intel/pxa_camera.c
+@@ -2421,7 +2421,7 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	return err;
+ }
+ 
+-static void pxa_camera_remove(struct platform_device *pdev)
++static int pxa_camera_remove(struct platform_device *pdev)
+ {
+ 	struct pxa_camera_dev *pcdev = platform_get_drvdata(pdev);
+ 
+@@ -2437,6 +2437,8 @@ static void pxa_camera_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&pcdev->v4l2_dev);
+ 
+ 	dev_info(&pdev->dev, "PXA Camera driver unloaded\n");
++
++	return 0;
+ }
+ 
+ static const struct dev_pm_ops pxa_camera_pm = {
+@@ -2457,7 +2459,7 @@ static struct platform_driver pxa_camera_driver = {
+ 		.of_match_table = of_match_ptr(pxa_camera_of_match),
+ 	},
+ 	.probe		= pxa_camera_probe,
+-	.remove_new	= pxa_camera_remove,
++	.remove		= pxa_camera_remove,
+ };
+ 
+ module_platform_driver(pxa_camera_driver);
+diff --git a/drivers/media/platform/marvell/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
+index e93feefb447b..ec0f25862628 100644
+--- a/drivers/media/platform/marvell/mmp-driver.c
++++ b/drivers/media/platform/marvell/mmp-driver.c
+@@ -287,13 +287,15 @@ static int mmpcam_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void mmpcam_remove(struct platform_device *pdev)
++static int mmpcam_remove(struct platform_device *pdev)
+ {
+ 	struct mmp_camera *cam = platform_get_drvdata(pdev);
+ 	struct mcam_camera *mcam = &cam->mcam;
+ 
+ 	mccic_shutdown(mcam);
+ 	pm_runtime_force_suspend(mcam->dev);
++
++	return 0;
+ }
+ 
+ /*
+@@ -359,7 +361,7 @@ MODULE_DEVICE_TABLE(of, mmpcam_of_match);
+ 
+ static struct platform_driver mmpcam_driver = {
+ 	.probe		= mmpcam_probe,
+-	.remove_new	= mmpcam_remove,
++	.remove		= mmpcam_remove,
+ 	.driver = {
+ 		.name	= "mmp-camera",
+ 		.of_match_table = of_match_ptr(mmpcam_of_match),
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 4768156181c9..679af6b08c08 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1401,7 +1401,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void mtk_jpeg_remove(struct platform_device *pdev)
++static int mtk_jpeg_remove(struct platform_device *pdev)
+ {
+ 	struct mtk_jpeg_dev *jpeg = platform_get_drvdata(pdev);
+ 
+@@ -1409,6 +1409,8 @@ static void mtk_jpeg_remove(struct platform_device *pdev)
+ 	video_unregister_device(jpeg->vdev);
+ 	v4l2_m2m_release(jpeg->m2m_dev);
+ 	v4l2_device_unregister(&jpeg->v4l2_dev);
++
++	return 0;
+ }
+ 
+ static __maybe_unused int mtk_jpeg_pm_suspend(struct device *dev)
+@@ -1955,7 +1957,7 @@ MODULE_DEVICE_TABLE(of, mtk_jpeg_match);
+ 
+ static struct platform_driver mtk_jpeg_driver = {
+ 	.probe = mtk_jpeg_probe,
+-	.remove_new = mtk_jpeg_remove,
++	.remove = mtk_jpeg_remove,
+ 	.driver = {
+ 		.name           = MTK_JPEG_NAME,
+ 		.of_match_table = of_match_ptr(mtk_jpeg_match),
+diff --git a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+index 77e310e588e5..41b2dce07983 100644
+--- a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
++++ b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+@@ -235,7 +235,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void mtk_mdp_remove(struct platform_device *pdev)
++static int mtk_mdp_remove(struct platform_device *pdev)
+ {
+ 	struct mtk_mdp_dev *mdp = platform_get_drvdata(pdev);
+ 	struct mtk_mdp_comp *comp, *comp_temp;
+@@ -255,6 +255,8 @@ static void mtk_mdp_remove(struct platform_device *pdev)
+ 	}
+ 
+ 	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused mtk_mdp_pm_suspend(struct device *dev)
+@@ -298,7 +300,7 @@ static const struct dev_pm_ops mtk_mdp_pm_ops = {
+ 
+ static struct platform_driver mtk_mdp_driver = {
+ 	.probe		= mtk_mdp_probe,
+-	.remove_new	= mtk_mdp_remove,
++	.remove		= mtk_mdp_remove,
+ 	.driver = {
+ 		.name	= MTK_MDP_MODULE_NAME,
+ 		.pm	= &mtk_mdp_pm_ops,
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index aa6c225302f0..c37f327510aa 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -272,13 +272,15 @@ static int mdp_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void mdp_remove(struct platform_device *pdev)
++static int mdp_remove(struct platform_device *pdev)
+ {
+ 	struct mdp_dev *mdp = platform_get_drvdata(pdev);
+ 
+ 	v4l2_device_unregister(&mdp->v4l2_dev);
+ 
+ 	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused mdp_suspend(struct device *dev)
+@@ -318,7 +320,7 @@ static const struct dev_pm_ops mdp_pm_ops = {
+ 
+ static struct platform_driver mdp_driver = {
+ 	.probe		= mdp_probe,
+-	.remove_new	= mdp_remove,
++	.remove		= mdp_remove,
+ 	.driver = {
+ 		.name	= MDP_MODULE_NAME,
+ 		.pm	= &mdp_pm_ops,
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+index d41f2121b94f..4c2578b1f1fe 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+@@ -482,7 +482,7 @@ static const struct of_device_id mtk_vcodec_match[] = {
+ 
+ MODULE_DEVICE_TABLE(of, mtk_vcodec_match);
+ 
+-static void mtk_vcodec_dec_remove(struct platform_device *pdev)
++static int mtk_vcodec_dec_remove(struct platform_device *pdev)
+ {
+ 	struct mtk_vcodec_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -505,11 +505,13 @@ static void mtk_vcodec_dec_remove(struct platform_device *pdev)
+ 	if (!dev->vdec_pdata->is_subdev_supported)
+ 		pm_runtime_disable(dev->pm.dev);
+ 	mtk_vcodec_fw_release(dev->fw_handler);
++
++	return 0;
+ }
+ 
+ static struct platform_driver mtk_vcodec_dec_driver = {
+ 	.probe	= mtk_vcodec_probe,
+-	.remove_new = mtk_vcodec_dec_remove,
++	.remove	= mtk_vcodec_dec_remove,
+ 	.driver	= {
+ 		.name	= MTK_VCODEC_DEC_NAME,
+ 		.of_match_table = mtk_vcodec_match,
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+index 5df0a22ff3b5..ab74fc518775 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+@@ -457,7 +457,7 @@ static const struct of_device_id mtk_vcodec_enc_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, mtk_vcodec_enc_match);
+ 
+-static void mtk_vcodec_enc_remove(struct platform_device *pdev)
++static int mtk_vcodec_enc_remove(struct platform_device *pdev)
+ {
+ 	struct mtk_vcodec_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -473,11 +473,13 @@ static void mtk_vcodec_enc_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 	pm_runtime_disable(dev->pm.dev);
+ 	mtk_vcodec_fw_release(dev->fw_handler);
++
++	return 0;
+ }
+ 
+ static struct platform_driver mtk_vcodec_enc_driver = {
+ 	.probe	= mtk_vcodec_probe,
+-	.remove_new = mtk_vcodec_enc_remove,
++	.remove	= mtk_vcodec_enc_remove,
+ 	.driver	= {
+ 		.name	= MTK_VCODEC_ENC_NAME,
+ 		.of_match_table = mtk_vcodec_enc_match,
+diff --git a/drivers/media/platform/mediatek/vpu/mtk_vpu.c b/drivers/media/platform/mediatek/vpu/mtk_vpu.c
+index 4c8f5296d120..c8a89358c469 100644
+--- a/drivers/media/platform/mediatek/vpu/mtk_vpu.c
++++ b/drivers/media/platform/mediatek/vpu/mtk_vpu.c
+@@ -955,7 +955,7 @@ static const struct of_device_id mtk_vpu_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, mtk_vpu_match);
+ 
+-static void mtk_vpu_remove(struct platform_device *pdev)
++static int mtk_vpu_remove(struct platform_device *pdev)
+ {
+ 	struct mtk_vpu *vpu = platform_get_drvdata(pdev);
+ 
+@@ -968,6 +968,8 @@ static void mtk_vpu_remove(struct platform_device *pdev)
+ 	vpu_free_ext_mem(vpu, D_FW);
+ 	mutex_destroy(&vpu->vpu_mutex);
+ 	clk_unprepare(vpu->clk);
++
++	return 0;
+ }
+ 
+ static int mtk_vpu_suspend(struct device *dev)
+@@ -1041,7 +1043,7 @@ static const struct dev_pm_ops mtk_vpu_pm = {
+ 
+ static struct platform_driver mtk_vpu_driver = {
+ 	.probe	= mtk_vpu_probe,
+-	.remove_new = mtk_vpu_remove,
++	.remove	= mtk_vpu_remove,
+ 	.driver	= {
+ 		.name	= "mtk_vpu",
+ 		.pm = &mtk_vpu_pm,
+diff --git a/drivers/media/platform/microchip/microchip-csi2dc.c b/drivers/media/platform/microchip/microchip-csi2dc.c
+index bfb3edcf018a..e76f7ecb8eb4 100644
+--- a/drivers/media/platform/microchip/microchip-csi2dc.c
++++ b/drivers/media/platform/microchip/microchip-csi2dc.c
+@@ -741,7 +741,7 @@ static int csi2dc_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void csi2dc_remove(struct platform_device *pdev)
++static int csi2dc_remove(struct platform_device *pdev)
+ {
+ 	struct csi2dc_device *csi2dc = platform_get_drvdata(pdev);
+ 
+@@ -751,6 +751,8 @@ static void csi2dc_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_unregister(&csi2dc->notifier);
+ 	v4l2_async_nf_cleanup(&csi2dc->notifier);
+ 	media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused csi2dc_runtime_suspend(struct device *dev)
+@@ -780,7 +782,7 @@ MODULE_DEVICE_TABLE(of, csi2dc_of_match);
+ 
+ static struct platform_driver csi2dc_driver = {
+ 	.probe	= csi2dc_probe,
+-	.remove_new = csi2dc_remove,
++	.remove	= csi2dc_remove,
+ 	.driver = {
+ 		.name =			"microchip-csi2dc",
+ 		.pm =			&csi2dc_dev_pm_ops,
+diff --git a/drivers/media/platform/microchip/microchip-sama5d2-isc.c b/drivers/media/platform/microchip/microchip-sama5d2-isc.c
+index 746f4a2fa9f6..b4fc8e8cb14c 100644
+--- a/drivers/media/platform/microchip/microchip-sama5d2-isc.c
++++ b/drivers/media/platform/microchip/microchip-sama5d2-isc.c
+@@ -608,7 +608,7 @@ static int microchip_isc_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void microchip_isc_remove(struct platform_device *pdev)
++static int microchip_isc_remove(struct platform_device *pdev)
+ {
+ 	struct isc_device *isc = platform_get_drvdata(pdev);
+ 
+@@ -624,6 +624,8 @@ static void microchip_isc_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(isc->hclock);
+ 
+ 	microchip_isc_clk_cleanup(isc);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused isc_runtime_suspend(struct device *dev)
+@@ -666,7 +668,7 @@ MODULE_DEVICE_TABLE(of, microchip_isc_of_match);
+ 
+ static struct platform_driver microchip_isc_driver = {
+ 	.probe	= microchip_isc_probe,
+-	.remove_new = microchip_isc_remove,
++	.remove = microchip_isc_remove,
+ 	.driver	= {
+ 		.name		= "microchip-sama5d2-isc",
+ 		.pm		= &microchip_isc_dev_pm_ops,
+diff --git a/drivers/media/platform/microchip/microchip-sama7g5-isc.c b/drivers/media/platform/microchip/microchip-sama7g5-isc.c
+index 79ae696764d0..d583eafe5cc1 100644
+--- a/drivers/media/platform/microchip/microchip-sama7g5-isc.c
++++ b/drivers/media/platform/microchip/microchip-sama7g5-isc.c
+@@ -577,7 +577,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void microchip_xisc_remove(struct platform_device *pdev)
++static int microchip_xisc_remove(struct platform_device *pdev)
+ {
+ 	struct isc_device *isc = platform_get_drvdata(pdev);
+ 
+@@ -592,6 +592,8 @@ static void microchip_xisc_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(isc->hclock);
+ 
+ 	microchip_isc_clk_cleanup(isc);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused xisc_runtime_suspend(struct device *dev)
+@@ -629,7 +631,7 @@ MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
+ 
+ static struct platform_driver microchip_xisc_driver = {
+ 	.probe	= microchip_xisc_probe,
+-	.remove_new = microchip_xisc_remove,
++	.remove	= microchip_xisc_remove,
+ 	.driver	= {
+ 		.name		= "microchip-sama7g5-xisc",
+ 		.pm		= &microchip_xisc_dev_pm_ops,
+diff --git a/drivers/media/platform/nvidia/tegra-vde/vde.c b/drivers/media/platform/nvidia/tegra-vde/vde.c
+index 7157734a1550..f3e863a94c5a 100644
+--- a/drivers/media/platform/nvidia/tegra-vde/vde.c
++++ b/drivers/media/platform/nvidia/tegra-vde/vde.c
+@@ -378,7 +378,7 @@ static int tegra_vde_probe(struct platform_device *pdev)
+ 	return err;
+ }
+ 
+-static void tegra_vde_remove(struct platform_device *pdev)
++static int tegra_vde_remove(struct platform_device *pdev)
+ {
+ 	struct tegra_vde *vde = platform_get_drvdata(pdev);
+ 	struct device *dev = &pdev->dev;
+@@ -407,6 +407,8 @@ static void tegra_vde_remove(struct platform_device *pdev)
+ 
+ 	gen_pool_free(vde->iram_pool, (unsigned long)vde->iram,
+ 		      gen_pool_size(vde->iram_pool));
++
++	return 0;
+ }
+ 
+ static void tegra_vde_shutdown(struct platform_device *pdev)
+@@ -534,7 +536,7 @@ MODULE_DEVICE_TABLE(of, tegra_vde_of_match);
+ 
+ static struct platform_driver tegra_vde_driver = {
+ 	.probe		= tegra_vde_probe,
+-	.remove_new	= tegra_vde_remove,
++	.remove		= tegra_vde_remove,
+ 	.shutdown	= tegra_vde_shutdown,
+ 	.driver		= {
+ 		.name		= "tegra-vde",
+diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
+index 0024d6175ad9..0771a88122c0 100644
+--- a/drivers/media/platform/nxp/dw100/dw100.c
++++ b/drivers/media/platform/nxp/dw100/dw100.c
+@@ -1631,7 +1631,7 @@ static int dw100_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void dw100_remove(struct platform_device *pdev)
++static int dw100_remove(struct platform_device *pdev)
+ {
+ 	struct dw100_device *dw_dev = platform_get_drvdata(pdev);
+ 
+@@ -1647,6 +1647,8 @@ static void dw100_remove(struct platform_device *pdev)
+ 	mutex_destroy(dw_dev->vfd.lock);
+ 	v4l2_m2m_release(dw_dev->m2m_dev);
+ 	v4l2_device_unregister(&dw_dev->v4l2_dev);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused dw100_runtime_suspend(struct device *dev)
+@@ -1688,7 +1690,7 @@ MODULE_DEVICE_TABLE(of, dw100_dt_ids);
+ 
+ static struct platform_driver dw100_driver = {
+ 	.probe		= dw100_probe,
+-	.remove_new	= dw100_remove,
++	.remove		= dw100_remove,
+ 	.driver		= {
+ 		.name	= DRV_NAME,
+ 		.pm = &dw100_pm,
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index c0e49be42450..5321be48b693 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -2912,7 +2912,7 @@ static const struct dev_pm_ops	mxc_jpeg_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(mxc_jpeg_suspend, mxc_jpeg_resume)
+ };
+ 
+-static void mxc_jpeg_remove(struct platform_device *pdev)
++static int mxc_jpeg_remove(struct platform_device *pdev)
+ {
+ 	unsigned int slot;
+ 	struct mxc_jpeg_dev *jpeg = platform_get_drvdata(pdev);
+@@ -2925,13 +2925,15 @@ static void mxc_jpeg_remove(struct platform_device *pdev)
+ 	v4l2_m2m_release(jpeg->m2m_dev);
+ 	v4l2_device_unregister(&jpeg->v4l2_dev);
+ 	mxc_jpeg_detach_pm_domains(jpeg);
++
++	return 0;
+ }
+ 
+ MODULE_DEVICE_TABLE(of, mxc_jpeg_match);
+ 
+ static struct platform_driver mxc_jpeg_driver = {
+ 	.probe = mxc_jpeg_probe,
+-	.remove_new = mxc_jpeg_remove,
++	.remove = mxc_jpeg_remove,
+ 	.driver = {
+ 		.name = "mxc-jpeg",
+ 		.of_match_table = mxc_jpeg_match,
+diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+index 05d52762e792..be2768a47995 100644
+--- a/drivers/media/platform/nxp/imx-mipi-csis.c
++++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+@@ -1503,7 +1503,7 @@ static int mipi_csis_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void mipi_csis_remove(struct platform_device *pdev)
++static int mipi_csis_remove(struct platform_device *pdev)
+ {
+ 	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
+ 	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
+@@ -1520,6 +1520,8 @@ static void mipi_csis_remove(struct platform_device *pdev)
+ 	media_entity_cleanup(&csis->sd.entity);
+ 	fwnode_handle_put(csis->sd.fwnode);
+ 	pm_runtime_set_suspended(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id mipi_csis_of_match[] = {
+@@ -1542,7 +1544,7 @@ MODULE_DEVICE_TABLE(of, mipi_csis_of_match);
+ 
+ static struct platform_driver mipi_csis_driver = {
+ 	.probe		= mipi_csis_probe,
+-	.remove_new	= mipi_csis_remove,
++	.remove		= mipi_csis_remove,
+ 	.driver		= {
+ 		.of_match_table = mipi_csis_of_match,
+ 		.name		= CSIS_DRIVER_NAME,
+diff --git a/drivers/media/platform/nxp/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
+index 90f319857c23..fde3c36e5e1d 100644
+--- a/drivers/media/platform/nxp/imx-pxp.c
++++ b/drivers/media/platform/nxp/imx-pxp.c
+@@ -1904,7 +1904,7 @@ static int pxp_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void pxp_remove(struct platform_device *pdev)
++static int pxp_remove(struct platform_device *pdev)
+ {
+ 	struct pxp_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -1922,6 +1922,8 @@ static void pxp_remove(struct platform_device *pdev)
+ 	video_unregister_device(&dev->vfd);
+ 	v4l2_m2m_release(dev->m2m_dev);
+ 	v4l2_device_unregister(&dev->v4l2_dev);
++
++	return 0;
+ }
+ 
+ static const struct pxp_pdata pxp_imx6ull_pdata = {
+@@ -1941,7 +1943,7 @@ MODULE_DEVICE_TABLE(of, pxp_dt_ids);
+ 
+ static struct platform_driver pxp_driver = {
+ 	.probe		= pxp_probe,
+-	.remove_new	= pxp_remove,
++	.remove		= pxp_remove,
+ 	.driver		= {
+ 		.name	= MEM2MEM_NAME,
+ 		.of_match_table = pxp_dt_ids,
+diff --git a/drivers/media/platform/nxp/imx7-media-csi.c b/drivers/media/platform/nxp/imx7-media-csi.c
+index 0bd2613b9320..524fea97888c 100644
+--- a/drivers/media/platform/nxp/imx7-media-csi.c
++++ b/drivers/media/platform/nxp/imx7-media-csi.c
+@@ -2239,7 +2239,7 @@ static int imx7_csi_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void imx7_csi_remove(struct platform_device *pdev)
++static int imx7_csi_remove(struct platform_device *pdev)
+ {
+ 	struct imx7_csi *csi = platform_get_drvdata(pdev);
+ 
+@@ -2248,6 +2248,8 @@ static void imx7_csi_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_unregister(&csi->notifier);
+ 	v4l2_async_nf_cleanup(&csi->notifier);
+ 	v4l2_async_unregister_subdev(&csi->sd);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id imx7_csi_of_match[] = {
+@@ -2260,7 +2262,7 @@ MODULE_DEVICE_TABLE(of, imx7_csi_of_match);
+ 
+ static struct platform_driver imx7_csi_driver = {
+ 	.probe = imx7_csi_probe,
+-	.remove_new = imx7_csi_remove,
++	.remove = imx7_csi_remove,
+ 	.driver = {
+ 		.of_match_table = imx7_csi_of_match,
+ 		.name = "imx7-csi",
+diff --git a/drivers/media/platform/nxp/mx2_emmaprp.c b/drivers/media/platform/nxp/mx2_emmaprp.c
+index 023ed40c6b08..3ce84d0f078c 100644
+--- a/drivers/media/platform/nxp/mx2_emmaprp.c
++++ b/drivers/media/platform/nxp/mx2_emmaprp.c
+@@ -888,7 +888,7 @@ static int emmaprp_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void emmaprp_remove(struct platform_device *pdev)
++static int emmaprp_remove(struct platform_device *pdev)
+ {
+ 	struct emmaprp_dev *pcdev = platform_get_drvdata(pdev);
+ 
+@@ -898,11 +898,13 @@ static void emmaprp_remove(struct platform_device *pdev)
+ 	v4l2_m2m_release(pcdev->m2m_dev);
+ 	v4l2_device_unregister(&pcdev->v4l2_dev);
+ 	mutex_destroy(&pcdev->dev_mutex);
++
++	return 0;
+ }
+ 
+ static struct platform_driver emmaprp_pdrv = {
+ 	.probe		= emmaprp_probe,
+-	.remove_new	= emmaprp_remove,
++	.remove		= emmaprp_remove,
+ 	.driver		= {
+ 		.name	= MEM2MEM_NAME,
+ 	},
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 1ef26aea3eae..547099f8ed14 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1725,7 +1725,7 @@ void camss_delete(struct camss *camss)
+  *
+  * Always returns 0.
+  */
+-static void camss_remove(struct platform_device *pdev)
++static int camss_remove(struct platform_device *pdev)
+ {
+ 	struct camss *camss = platform_get_drvdata(pdev);
+ 
+@@ -1735,6 +1735,8 @@ static void camss_remove(struct platform_device *pdev)
+ 
+ 	if (atomic_read(&camss->ref_count) == 0)
+ 		camss_delete(camss);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id camss_dt_match[] = {
+@@ -1796,7 +1798,7 @@ static const struct dev_pm_ops camss_pm_ops = {
+ 
+ static struct platform_driver qcom_camss_driver = {
+ 	.probe = camss_probe,
+-	.remove_new = camss_remove,
++	.remove = camss_remove,
+ 	.driver = {
+ 		.name = "qcom-camss",
+ 		.of_match_table = camss_dt_match,
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 2ae867cb4c48..403ffb92af60 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -416,7 +416,7 @@ static int venus_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void venus_remove(struct platform_device *pdev)
++static int venus_remove(struct platform_device *pdev)
+ {
+ 	struct venus_core *core = platform_get_drvdata(pdev);
+ 	const struct venus_pm_ops *pm_ops = core->pm_ops;
+@@ -447,6 +447,8 @@ static void venus_remove(struct platform_device *pdev)
+ 	mutex_destroy(&core->pm_lock);
+ 	mutex_destroy(&core->lock);
+ 	venus_dbgfs_deinit(core);
++
++	return 0;
+ }
+ 
+ static void venus_core_shutdown(struct platform_device *pdev)
+@@ -889,7 +891,7 @@ MODULE_DEVICE_TABLE(of, venus_dt_match);
+ 
+ static struct platform_driver qcom_venus_driver = {
+ 	.probe = venus_probe,
+-	.remove_new = venus_remove,
++	.remove = venus_remove,
+ 	.driver = {
+ 		.name = "qcom-venus",
+ 		.of_match_table = venus_dt_match,
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index f5676440dd36..dc9e3f5d03ff 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -1825,7 +1825,7 @@ static int vdec_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void vdec_remove(struct platform_device *pdev)
++static int vdec_remove(struct platform_device *pdev)
+ {
+ 	struct venus_core *core = dev_get_drvdata(pdev->dev.parent);
+ 
+@@ -1834,6 +1834,8 @@ static void vdec_remove(struct platform_device *pdev)
+ 
+ 	if (core->pm_ops->vdec_put)
+ 		core->pm_ops->vdec_put(core->dev_dec);
++
++	return 0;
+ }
+ 
+ static __maybe_unused int vdec_runtime_suspend(struct device *dev)
+@@ -1874,7 +1876,7 @@ MODULE_DEVICE_TABLE(of, vdec_dt_match);
+ 
+ static struct platform_driver qcom_venus_dec_driver = {
+ 	.probe = vdec_probe,
+-	.remove_new = vdec_remove,
++	.remove = vdec_remove,
+ 	.driver = {
+ 		.name = "qcom-venus-decoder",
+ 		.of_match_table = vdec_dt_match,
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index 6d773b000e8a..4b40b66babb2 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -1594,7 +1594,7 @@ static int venc_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void venc_remove(struct platform_device *pdev)
++static int venc_remove(struct platform_device *pdev)
+ {
+ 	struct venus_core *core = dev_get_drvdata(pdev->dev.parent);
+ 
+@@ -1603,6 +1603,8 @@ static void venc_remove(struct platform_device *pdev)
+ 
+ 	if (core->pm_ops->venc_put)
+ 		core->pm_ops->venc_put(core->dev_enc);
++
++	return 0;
+ }
+ 
+ static __maybe_unused int venc_runtime_suspend(struct device *dev)
+@@ -1643,7 +1645,7 @@ MODULE_DEVICE_TABLE(of, venc_dt_match);
+ 
+ static struct platform_driver qcom_venus_enc_driver = {
+ 	.probe = venc_probe,
+-	.remove_new = venc_remove,
++	.remove = venc_remove,
+ 	.driver = {
+ 		.name = "qcom-venus-encoder",
+ 		.of_match_table = venc_dt_match,
+diff --git a/drivers/media/platform/renesas/rcar-fcp.c b/drivers/media/platform/renesas/rcar-fcp.c
+index bcef7b87da7c..eb59a3ba6d0f 100644
+--- a/drivers/media/platform/renesas/rcar-fcp.c
++++ b/drivers/media/platform/renesas/rcar-fcp.c
+@@ -144,7 +144,7 @@ static int rcar_fcp_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static void rcar_fcp_remove(struct platform_device *pdev)
++static int rcar_fcp_remove(struct platform_device *pdev)
+ {
+ 	struct rcar_fcp_device *fcp = platform_get_drvdata(pdev);
+ 
+@@ -153,6 +153,8 @@ static void rcar_fcp_remove(struct platform_device *pdev)
+ 	mutex_unlock(&fcp_lock);
+ 
+ 	pm_runtime_disable(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id rcar_fcp_of_match[] = {
+@@ -164,7 +166,7 @@ MODULE_DEVICE_TABLE(of, rcar_fcp_of_match);
+ 
+ static struct platform_driver rcar_fcp_platform_driver = {
+ 	.probe		= rcar_fcp_probe,
+-	.remove_new	= rcar_fcp_remove,
++	.remove		= rcar_fcp_remove,
+ 	.driver		= {
+ 		.name	= "rcar-fcp",
+ 		.of_match_table = rcar_fcp_of_match,
+diff --git a/drivers/media/platform/renesas/rcar-isp.c b/drivers/media/platform/renesas/rcar-isp.c
+index fee1a066f56b..140eb2fa36e2 100644
+--- a/drivers/media/platform/renesas/rcar-isp.c
++++ b/drivers/media/platform/renesas/rcar-isp.c
+@@ -501,7 +501,7 @@ static int risp_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void risp_remove(struct platform_device *pdev)
++static int risp_remove(struct platform_device *pdev)
+ {
+ 	struct rcar_isp *isp = platform_get_drvdata(pdev);
+ 
+@@ -513,6 +513,8 @@ static void risp_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 
+ 	mutex_destroy(&isp->lock);
++
++	return 0;
+ }
+ 
+ static struct platform_driver rcar_isp_driver = {
+@@ -521,7 +523,7 @@ static struct platform_driver rcar_isp_driver = {
+ 		.of_match_table = risp_of_id_table,
+ 	},
+ 	.probe = risp_probe,
+-	.remove_new = risp_remove,
++	.remove = risp_remove,
+ };
+ 
+ module_platform_driver(rcar_isp_driver);
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-core.c b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
+index 3c4f5eb93be1..d01149972a3f 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-core.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
+@@ -1419,7 +1419,7 @@ static int rcar_vin_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static void rcar_vin_remove(struct platform_device *pdev)
++static int rcar_vin_remove(struct platform_device *pdev)
+ {
+ 	struct rvin_dev *vin = platform_get_drvdata(pdev);
+ 
+@@ -1435,6 +1435,8 @@ static void rcar_vin_remove(struct platform_device *pdev)
+ 		rvin_parallel_cleanup(vin);
+ 
+ 	rvin_dma_unregister(vin);
++
++	return 0;
+ }
+ 
+ static SIMPLE_DEV_PM_OPS(rvin_pm_ops, rvin_suspend, rvin_resume);
+@@ -1447,7 +1449,7 @@ static struct platform_driver rcar_vin_driver = {
+ 		.of_match_table = rvin_of_id_table,
+ 	},
+ 	.probe = rcar_vin_probe,
+-	.remove_new = rcar_vin_remove,
++	.remove = rcar_vin_remove,
+ };
+ 
+ module_platform_driver(rcar_vin_driver);
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c b/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
+index 7a134c0eff57..4c10c385809a 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
+@@ -1639,7 +1639,7 @@ static int rcsi2_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void rcsi2_remove(struct platform_device *pdev)
++static int rcsi2_remove(struct platform_device *pdev)
+ {
+ 	struct rcar_csi2 *priv = platform_get_drvdata(pdev);
+ 
+@@ -1650,10 +1650,12 @@ static void rcsi2_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 
+ 	mutex_destroy(&priv->lock);
++
++	return 0;
+ }
+ 
+ static struct platform_driver rcar_csi2_pdrv = {
+-	.remove_new = rcsi2_remove,
++	.remove = rcsi2_remove,
+ 	.probe	= rcsi2_probe,
+ 	.driver	= {
+ 		.name	= "rcar-csi2",
+diff --git a/drivers/media/platform/renesas/rcar_drif.c b/drivers/media/platform/renesas/rcar_drif.c
+index 3a92f4535c18..0507378c3518 100644
+--- a/drivers/media/platform/renesas/rcar_drif.c
++++ b/drivers/media/platform/renesas/rcar_drif.c
+@@ -1433,7 +1433,7 @@ static int rcar_drif_probe(struct platform_device *pdev)
+ }
+ 
+ /* DRIF channel remove */
+-static void rcar_drif_remove(struct platform_device *pdev)
++static int rcar_drif_remove(struct platform_device *pdev)
+ {
+ 	struct rcar_drif *ch = platform_get_drvdata(pdev);
+ 	struct rcar_drif_sdr *sdr = ch->sdr;
+@@ -1444,6 +1444,8 @@ static void rcar_drif_remove(struct platform_device *pdev)
+ 
+ 	/* SDR instance */
+ 	rcar_drif_sdr_remove(sdr);
++
++	return 0;
+ }
+ 
+ /* FIXME: Implement suspend/resume support */
+@@ -1474,7 +1476,7 @@ static struct platform_driver rcar_drif_driver = {
+ 		.pm = &rcar_drif_pm_ops,
+ 		},
+ 	.probe = rcar_drif_probe,
+-	.remove_new = rcar_drif_remove,
++	.remove = rcar_drif_remove,
+ };
+ 
+ module_platform_driver(rcar_drif_driver);
+diff --git a/drivers/media/platform/renesas/rcar_fdp1.c b/drivers/media/platform/renesas/rcar_fdp1.c
+index ab39cd2201c8..854aeaae077e 100644
+--- a/drivers/media/platform/renesas/rcar_fdp1.c
++++ b/drivers/media/platform/renesas/rcar_fdp1.c
+@@ -2401,7 +2401,7 @@ static int fdp1_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void fdp1_remove(struct platform_device *pdev)
++static int fdp1_remove(struct platform_device *pdev)
+ {
+ 	struct fdp1_dev *fdp1 = platform_get_drvdata(pdev);
+ 
+@@ -2410,6 +2410,8 @@ static void fdp1_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&fdp1->v4l2_dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 	rcar_fcp_put(fdp1->fcp);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused fdp1_pm_runtime_suspend(struct device *dev)
+@@ -2445,7 +2447,7 @@ MODULE_DEVICE_TABLE(of, fdp1_dt_ids);
+ 
+ static struct platform_driver fdp1_pdrv = {
+ 	.probe		= fdp1_probe,
+-	.remove_new	= fdp1_remove,
++	.remove		= fdp1_remove,
+ 	.driver		= {
+ 		.name	= DRIVER_NAME,
+ 		.of_match_table = fdp1_dt_ids,
+diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/platform/renesas/rcar_jpu.c
+index 2b8cb50f54de..4f23c86d5ea0 100644
+--- a/drivers/media/platform/renesas/rcar_jpu.c
++++ b/drivers/media/platform/renesas/rcar_jpu.c
+@@ -1697,7 +1697,7 @@ static int jpu_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void jpu_remove(struct platform_device *pdev)
++static int jpu_remove(struct platform_device *pdev)
+ {
+ 	struct jpu *jpu = platform_get_drvdata(pdev);
+ 
+@@ -1705,6 +1705,8 @@ static void jpu_remove(struct platform_device *pdev)
+ 	video_unregister_device(&jpu->vfd_encoder);
+ 	v4l2_m2m_release(jpu->m2m_dev);
+ 	v4l2_device_unregister(&jpu->v4l2_dev);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -1739,7 +1741,7 @@ static const struct dev_pm_ops jpu_pm_ops = {
+ 
+ static struct platform_driver jpu_driver = {
+ 	.probe = jpu_probe,
+-	.remove_new = jpu_remove,
++	.remove = jpu_remove,
+ 	.driver = {
+ 		.of_match_table = jpu_dt_ids,
+ 		.name = DRV_NAME,
+diff --git a/drivers/media/platform/renesas/renesas-ceu.c b/drivers/media/platform/renesas/renesas-ceu.c
+index 5c9e27f8c94b..ba4eeb8560ac 100644
+--- a/drivers/media/platform/renesas/renesas-ceu.c
++++ b/drivers/media/platform/renesas/renesas-ceu.c
+@@ -1700,7 +1700,7 @@ static int ceu_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void ceu_remove(struct platform_device *pdev)
++static int ceu_remove(struct platform_device *pdev)
+ {
+ 	struct ceu_device *ceudev = platform_get_drvdata(pdev);
+ 
+@@ -1713,6 +1713,8 @@ static void ceu_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&ceudev->v4l2_dev);
+ 
+ 	video_unregister_device(&ceudev->vdev);
++
++	return 0;
+ }
+ 
+ static const struct dev_pm_ops ceu_pm_ops = {
+@@ -1728,7 +1730,7 @@ static struct platform_driver ceu_driver = {
+ 		.of_match_table = of_match_ptr(ceu_of_match),
+ 	},
+ 	.probe		= ceu_probe,
+-	.remove_new	= ceu_remove,
++	.remove		= ceu_remove,
+ };
+ 
+ module_platform_driver(ceu_driver);
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
+index 7a71370fcc32..5939f5165a5e 100644
+--- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
+@@ -298,7 +298,7 @@ static int rzg2l_cru_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void rzg2l_cru_remove(struct platform_device *pdev)
++static int rzg2l_cru_remove(struct platform_device *pdev)
+ {
+ 	struct rzg2l_cru_dev *cru = platform_get_drvdata(pdev);
+ 
+@@ -312,6 +312,8 @@ static void rzg2l_cru_remove(struct platform_device *pdev)
+ 	mutex_destroy(&cru->mdev_lock);
+ 
+ 	rzg2l_cru_dma_unregister(cru);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id rzg2l_cru_of_id_table[] = {
+@@ -326,7 +328,7 @@ static struct platform_driver rzg2l_cru_driver = {
+ 		.of_match_table = rzg2l_cru_of_id_table,
+ 	},
+ 	.probe = rzg2l_cru_probe,
+-	.remove_new = rzg2l_cru_remove,
++	.remove = rzg2l_cru_remove,
+ };
+ 
+ module_platform_driver(rzg2l_cru_driver);
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+index d6489c62b081..bccdd1e9ed09 100644
+--- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+@@ -819,7 +819,7 @@ static int rzg2l_csi2_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void rzg2l_csi2_remove(struct platform_device *pdev)
++static int rzg2l_csi2_remove(struct platform_device *pdev)
+ {
+ 	struct rzg2l_csi2 *csi2 = platform_get_drvdata(pdev);
+ 
+@@ -829,6 +829,8 @@ static void rzg2l_csi2_remove(struct platform_device *pdev)
+ 	v4l2_subdev_cleanup(&csi2->subdev);
+ 	media_entity_cleanup(&csi2->subdev.entity);
+ 	pm_runtime_disable(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused rzg2l_csi2_pm_runtime_suspend(struct device *dev)
+@@ -857,7 +859,7 @@ static const struct of_device_id rzg2l_csi2_of_table[] = {
+ };
+ 
+ static struct platform_driver rzg2l_csi2_pdrv = {
+-	.remove_new = rzg2l_csi2_remove,
++	.remove	= rzg2l_csi2_remove,
+ 	.probe	= rzg2l_csi2_probe,
+ 	.driver	= {
+ 		.name = "rzg2l-csi2",
+diff --git a/drivers/media/platform/renesas/sh_vou.c b/drivers/media/platform/renesas/sh_vou.c
+index 8fe3272a541f..9a610700f5ca 100644
+--- a/drivers/media/platform/renesas/sh_vou.c
++++ b/drivers/media/platform/renesas/sh_vou.c
+@@ -1343,7 +1343,7 @@ static int sh_vou_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void sh_vou_remove(struct platform_device *pdev)
++static int sh_vou_remove(struct platform_device *pdev)
+ {
+ 	struct v4l2_device *v4l2_dev = platform_get_drvdata(pdev);
+ 	struct sh_vou_device *vou_dev = container_of(v4l2_dev,
+@@ -1356,10 +1356,12 @@ static void sh_vou_remove(struct platform_device *pdev)
+ 	video_unregister_device(&vou_dev->vdev);
+ 	i2c_put_adapter(client->adapter);
+ 	v4l2_device_unregister(&vou_dev->v4l2_dev);
++
++	return 0;
+ }
+ 
+ static struct platform_driver sh_vou = {
+-	.remove_new = sh_vou_remove,
++	.remove = sh_vou_remove,
+ 	.driver  = {
+ 		.name	= "sh-vou",
+ 	},
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drv.c b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+index a9db84be4822..ab8209e5b07a 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_drv.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+@@ -986,7 +986,7 @@ static int vsp1_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void vsp1_remove(struct platform_device *pdev)
++static int vsp1_remove(struct platform_device *pdev)
+ {
+ 	struct vsp1_device *vsp1 = platform_get_drvdata(pdev);
+ 
+@@ -994,6 +994,8 @@ static void vsp1_remove(struct platform_device *pdev)
+ 	rcar_fcp_put(vsp1->fcp);
+ 
+ 	pm_runtime_disable(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id vsp1_of_match[] = {
+@@ -1006,7 +1008,7 @@ MODULE_DEVICE_TABLE(of, vsp1_of_match);
+ 
+ static struct platform_driver vsp1_platform_driver = {
+ 	.probe		= vsp1_probe,
+-	.remove_new	= vsp1_remove,
++	.remove		= vsp1_remove,
+ 	.driver		= {
+ 		.name	= "vsp1",
+ 		.pm	= &vsp1_pm_ops,
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index f1c532a5802a..f12be4191a03 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -927,7 +927,7 @@ static int rga_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void rga_remove(struct platform_device *pdev)
++static int rga_remove(struct platform_device *pdev)
+ {
+ 	struct rockchip_rga *rga = platform_get_drvdata(pdev);
+ 
+@@ -944,6 +944,8 @@ static void rga_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&rga->v4l2_dev);
+ 
+ 	pm_runtime_disable(rga->dev);
++
++	return 0;
+ }
+ 
+ static int __maybe_unused rga_runtime_suspend(struct device *dev)
+@@ -981,7 +983,7 @@ MODULE_DEVICE_TABLE(of, rockchip_rga_match);
+ 
+ static struct platform_driver rga_pdrv = {
+ 	.probe = rga_probe,
+-	.remove_new = rga_remove,
++	.remove = rga_remove,
+ 	.driver = {
+ 		.name = RGA_NAME,
+ 		.pm = &rga_pm,
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+index 4762cb32353d..f2475c6235ea 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+@@ -622,7 +622,7 @@ static int rkisp1_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void rkisp1_remove(struct platform_device *pdev)
++static int rkisp1_remove(struct platform_device *pdev)
+ {
+ 	struct rkisp1_device *rkisp1 = platform_get_drvdata(pdev);
+ 
+@@ -638,6 +638,8 @@ static void rkisp1_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&rkisp1->v4l2_dev);
+ 
+ 	pm_runtime_disable(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static struct platform_driver rkisp1_drv = {
+@@ -647,7 +649,7 @@ static struct platform_driver rkisp1_drv = {
+ 		.pm = &rkisp1_pm_ops,
+ 	},
+ 	.probe = rkisp1_probe,
+-	.remove_new = rkisp1_remove,
++	.remove = rkisp1_remove,
+ };
+ 
+ module_platform_driver(rkisp1_drv);
+diff --git a/drivers/media/platform/samsung/exynos-gsc/gsc-core.c b/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
+index 1fb34de70649..d33f0a61b904 100644
+--- a/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
++++ b/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
+@@ -1201,7 +1201,7 @@ static int gsc_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void gsc_remove(struct platform_device *pdev)
++static int gsc_remove(struct platform_device *pdev)
+ {
+ 	struct gsc_dev *gsc = platform_get_drvdata(pdev);
+ 	int i;
+@@ -1220,6 +1220,8 @@ static void gsc_remove(struct platform_device *pdev)
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 
+ 	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -1310,7 +1312,7 @@ static const struct dev_pm_ops gsc_pm_ops = {
+ 
+ static struct platform_driver gsc_driver = {
+ 	.probe		= gsc_probe,
+-	.remove_new	= gsc_remove,
++	.remove		= gsc_remove,
+ 	.driver = {
+ 		.name	= GSC_MODULE_NAME,
+ 		.pm	= &gsc_pm_ops,
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-core.c b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
+index 976b4f747ad4..4891f277c7e5 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-core.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
+@@ -1092,7 +1092,7 @@ static int fimc_suspend(struct device *dev)
+ }
+ #endif /* CONFIG_PM_SLEEP */
+ 
+-static void fimc_remove(struct platform_device *pdev)
++static int fimc_remove(struct platform_device *pdev)
+ {
+ 	struct fimc_dev *fimc = platform_get_drvdata(pdev);
+ 
+@@ -1108,6 +1108,8 @@ static void fimc_remove(struct platform_device *pdev)
+ 	fimc_clk_put(fimc);
+ 
+ 	dev_info(&pdev->dev, "driver unloaded\n");
++
++	return 0;
+ }
+ 
+ /* S5PV210, S5PC110 */
+@@ -1159,7 +1161,7 @@ static const struct dev_pm_ops fimc_pm_ops = {
+ 
+ static struct platform_driver fimc_driver = {
+ 	.probe		= fimc_probe,
+-	.remove_new	= fimc_remove,
++	.remove		= fimc_remove,
+ 	.driver = {
+ 		.of_match_table = fimc_of_match,
+ 		.name		= FIMC_DRIVER_NAME,
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c
+index bef6e9b4a25e..83a28ef8e099 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c
+@@ -82,12 +82,14 @@ static int fimc_is_i2c_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void fimc_is_i2c_remove(struct platform_device *pdev)
++static int fimc_is_i2c_remove(struct platform_device *pdev)
+ {
+ 	struct fimc_is_i2c *isp_i2c = platform_get_drvdata(pdev);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	i2c_del_adapter(&isp_i2c->adapter);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -138,7 +140,7 @@ static const struct of_device_id fimc_is_i2c_of_match[] = {
+ 
+ static struct platform_driver fimc_is_i2c_driver = {
+ 	.probe		= fimc_is_i2c_probe,
+-	.remove_new	= fimc_is_i2c_remove,
++	.remove		= fimc_is_i2c_remove,
+ 	.driver = {
+ 		.of_match_table = fimc_is_i2c_of_match,
+ 		.name		= "fimc-isp-i2c",
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is.c b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
+index 530a148fe4d3..a7704ff069d6 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
+@@ -915,7 +915,7 @@ static int fimc_is_suspend(struct device *dev)
+ }
+ #endif /* CONFIG_PM_SLEEP */
+ 
+-static void fimc_is_remove(struct platform_device *pdev)
++static int fimc_is_remove(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct fimc_is *is = dev_get_drvdata(dev);
+@@ -932,6 +932,8 @@ static void fimc_is_remove(struct platform_device *pdev)
+ 	fimc_is_debugfs_remove(is);
+ 	release_firmware(is->fw.f_w);
+ 	fimc_is_free_cpu_memory(is);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id fimc_is_of_match[] = {
+@@ -948,7 +950,7 @@ static const struct dev_pm_ops fimc_is_pm_ops = {
+ 
+ static struct platform_driver fimc_is_driver = {
+ 	.probe		= fimc_is_probe,
+-	.remove_new	= fimc_is_remove,
++	.remove		= fimc_is_remove,
+ 	.driver = {
+ 		.of_match_table	= fimc_is_of_match,
+ 		.name		= FIMC_IS_DRV_NAME,
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+index c3146ae08447..b74fe413f30f 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+@@ -1598,7 +1598,7 @@ static int fimc_lite_suspend(struct device *dev)
+ }
+ #endif /* CONFIG_PM_SLEEP */
+ 
+-static void fimc_lite_remove(struct platform_device *pdev)
++static int fimc_lite_remove(struct platform_device *pdev)
+ {
+ 	struct fimc_lite *fimc = platform_get_drvdata(pdev);
+ 	struct device *dev = &pdev->dev;
+@@ -1613,6 +1613,8 @@ static void fimc_lite_remove(struct platform_device *pdev)
+ 	fimc_lite_clk_put(fimc);
+ 
+ 	dev_info(dev, "Driver unloaded\n");
++
++	return 0;
+ }
+ 
+ static const struct dev_pm_ops fimc_lite_pm_ops = {
+@@ -1658,7 +1660,7 @@ MODULE_DEVICE_TABLE(of, flite_of_match);
+ 
+ static struct platform_driver fimc_lite_driver = {
+ 	.probe		= fimc_lite_probe,
+-	.remove_new	= fimc_lite_remove,
++	.remove		= fimc_lite_remove,
+ 	.driver = {
+ 		.of_match_table = flite_of_match,
+ 		.name		= FIMC_LITE_DRV_NAME,
+diff --git a/drivers/media/platform/samsung/exynos4-is/media-dev.c b/drivers/media/platform/samsung/exynos4-is/media-dev.c
+index c9cb9a216fae..06b54ed0c5c5 100644
+--- a/drivers/media/platform/samsung/exynos4-is/media-dev.c
++++ b/drivers/media/platform/samsung/exynos4-is/media-dev.c
+@@ -1532,7 +1532,7 @@ static int fimc_md_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void fimc_md_remove(struct platform_device *pdev)
++static int fimc_md_remove(struct platform_device *pdev)
+ {
+ 	struct fimc_md *fmd = platform_get_drvdata(pdev);
+ 
+@@ -1550,6 +1550,8 @@ static void fimc_md_remove(struct platform_device *pdev)
+ 	media_device_unregister(&fmd->media_dev);
+ 	media_device_cleanup(&fmd->media_dev);
+ 	fimc_md_put_clocks(fmd);
++
++	return 0;
+ }
+ 
+ static const struct platform_device_id fimc_driver_ids[] __always_unused = {
+@@ -1566,7 +1568,7 @@ MODULE_DEVICE_TABLE(of, fimc_md_of_match);
+ 
+ static struct platform_driver fimc_md_driver = {
+ 	.probe		= fimc_md_probe,
+-	.remove_new	= fimc_md_remove,
++	.remove		= fimc_md_remove,
+ 	.driver = {
+ 		.of_match_table = of_match_ptr(fimc_md_of_match),
+ 		.name		= "s5p-fimc-md",
+diff --git a/drivers/media/platform/samsung/exynos4-is/mipi-csis.c b/drivers/media/platform/samsung/exynos4-is/mipi-csis.c
+index 686ca8753ba2..6a0d35f33e8c 100644
+--- a/drivers/media/platform/samsung/exynos4-is/mipi-csis.c
++++ b/drivers/media/platform/samsung/exynos4-is/mipi-csis.c
+@@ -975,7 +975,7 @@ static int s5pcsis_runtime_resume(struct device *dev)
+ }
+ #endif
+ 
+-static void s5pcsis_remove(struct platform_device *pdev)
++static int s5pcsis_remove(struct platform_device *pdev)
+ {
+ 	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
+ 	struct csis_state *state = sd_to_csis_state(sd);
+@@ -987,6 +987,8 @@ static void s5pcsis_remove(struct platform_device *pdev)
+ 	s5pcsis_clk_put(state);
+ 
+ 	media_entity_cleanup(&state->sd.entity);
++
++	return 0;
+ }
+ 
+ static const struct dev_pm_ops s5pcsis_pm_ops = {
+@@ -1020,7 +1022,7 @@ MODULE_DEVICE_TABLE(of, s5pcsis_of_match);
+ 
+ static struct platform_driver s5pcsis_driver = {
+ 	.probe		= s5pcsis_probe,
+-	.remove_new	= s5pcsis_remove,
++	.remove		= s5pcsis_remove,
+ 	.driver		= {
+ 		.of_match_table = s5pcsis_of_match,
+ 		.name		= CSIS_DRIVER_NAME,
+diff --git a/drivers/media/platform/samsung/s3c-camif/camif-core.c b/drivers/media/platform/samsung/s3c-camif/camif-core.c
+index afe1fcc37354..9827510b7b50 100644
+--- a/drivers/media/platform/samsung/s3c-camif/camif-core.c
++++ b/drivers/media/platform/samsung/s3c-camif/camif-core.c
+@@ -508,7 +508,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void s3c_camif_remove(struct platform_device *pdev)
++static int s3c_camif_remove(struct platform_device *pdev)
+ {
+ 	struct camif_dev *camif = platform_get_drvdata(pdev);
+ 	struct s3c_camif_plat_data *pdata = &camif->pdata;
+@@ -522,6 +522,8 @@ static void s3c_camif_remove(struct platform_device *pdev)
+ 	camif_clk_put(camif);
+ 	s3c_camif_unregister_subdev(camif);
+ 	pdata->gpio_put();
++
++	return 0;
+ }
+ 
+ static int s3c_camif_runtime_resume(struct device *dev)
+@@ -622,7 +624,7 @@ static const struct dev_pm_ops s3c_camif_pm_ops = {
+ 
+ static struct platform_driver s3c_camif_driver = {
+ 	.probe		= s3c_camif_probe,
+-	.remove_new	= s3c_camif_remove,
++	.remove		= s3c_camif_remove,
+ 	.id_table	= s3c_camif_driver_ids,
+ 	.driver = {
+ 		.name	= S3C_CAMIF_DRIVER_NAME,
+diff --git a/drivers/media/platform/samsung/s5p-g2d/g2d.c b/drivers/media/platform/samsung/s5p-g2d/g2d.c
+index 89aeba47ed07..6b43efe57c07 100644
+--- a/drivers/media/platform/samsung/s5p-g2d/g2d.c
++++ b/drivers/media/platform/samsung/s5p-g2d/g2d.c
+@@ -740,7 +740,7 @@ static int g2d_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void g2d_remove(struct platform_device *pdev)
++static int g2d_remove(struct platform_device *pdev)
+ {
+ 	struct g2d_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -753,6 +753,8 @@ static void g2d_remove(struct platform_device *pdev)
+ 	clk_put(dev->gate);
+ 	clk_unprepare(dev->clk);
+ 	clk_put(dev->clk);
++
++	return 0;
+ }
+ 
+ static struct g2d_variant g2d_drvdata_v3x = {
+@@ -777,7 +779,7 @@ MODULE_DEVICE_TABLE(of, exynos_g2d_match);
+ 
+ static struct platform_driver g2d_pdrv = {
+ 	.probe		= g2d_probe,
+-	.remove_new	= g2d_remove,
++	.remove		= g2d_remove,
+ 	.driver		= {
+ 		.name = G2D_NAME,
+ 		.of_match_table = exynos_g2d_match,
+diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+index c3c7e48f1b6e..55814041b8d8 100644
+--- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+@@ -2991,7 +2991,7 @@ static int s5p_jpeg_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void s5p_jpeg_remove(struct platform_device *pdev)
++static int s5p_jpeg_remove(struct platform_device *pdev)
+ {
+ 	struct s5p_jpeg *jpeg = platform_get_drvdata(pdev);
+ 	int i;
+@@ -3008,6 +3008,8 @@ static void s5p_jpeg_remove(struct platform_device *pdev)
+ 		for (i = jpeg->variant->num_clocks - 1; i >= 0; i--)
+ 			clk_disable_unprepare(jpeg->clocks[i]);
+ 	}
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -3162,7 +3164,7 @@ static void *jpeg_get_drv_data(struct device *dev)
+ 
+ static struct platform_driver s5p_jpeg_driver = {
+ 	.probe = s5p_jpeg_probe,
+-	.remove_new = s5p_jpeg_remove,
++	.remove = s5p_jpeg_remove,
+ 	.driver = {
+ 		.of_match_table	= of_match_ptr(samsung_jpeg_match),
+ 		.name		= S5P_JPEG_M2M_NAME,
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+index e30e54935d79..4f0834da9750 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+@@ -1431,7 +1431,7 @@ static int s5p_mfc_probe(struct platform_device *pdev)
+ }
+ 
+ /* Remove the driver */
+-static void s5p_mfc_remove(struct platform_device *pdev)
++static int s5p_mfc_remove(struct platform_device *pdev)
+ {
+ 	struct s5p_mfc_dev *dev = platform_get_drvdata(pdev);
+ 	struct s5p_mfc_ctx *ctx;
+@@ -1463,6 +1463,8 @@ static void s5p_mfc_remove(struct platform_device *pdev)
+ 	s5p_mfc_unconfigure_dma_memory(dev);
+ 
+ 	s5p_mfc_final_pm(dev);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -1689,7 +1691,7 @@ MODULE_DEVICE_TABLE(of, exynos_mfc_match);
+ 
+ static struct platform_driver s5p_mfc_driver = {
+ 	.probe		= s5p_mfc_probe,
+-	.remove_new	= s5p_mfc_remove,
++	.remove		= s5p_mfc_remove,
+ 	.driver	= {
+ 		.name	= S5P_MFC_NAME,
+ 		.pm	= &s5p_mfc_pm_ops,
+diff --git a/drivers/media/platform/st/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/st/sti/bdisp/bdisp-v4l2.c
+index 1328b4eb6b9f..080da254b910 100644
+--- a/drivers/media/platform/st/sti/bdisp/bdisp-v4l2.c
++++ b/drivers/media/platform/st/sti/bdisp/bdisp-v4l2.c
+@@ -1257,7 +1257,7 @@ static const struct dev_pm_ops bdisp_pm_ops = {
+ 	.runtime_resume         = bdisp_runtime_resume,
+ };
+ 
+-static void bdisp_remove(struct platform_device *pdev)
++static int bdisp_remove(struct platform_device *pdev)
+ {
+ 	struct bdisp_dev *bdisp = platform_get_drvdata(pdev);
+ 
+@@ -1277,6 +1277,8 @@ static void bdisp_remove(struct platform_device *pdev)
+ 	destroy_workqueue(bdisp->work_queue);
+ 
+ 	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
++
++	return 0;
+ }
+ 
+ static int bdisp_probe(struct platform_device *pdev)
+@@ -1411,7 +1413,7 @@ MODULE_DEVICE_TABLE(of, bdisp_match_types);
+ 
+ static struct platform_driver bdisp_driver = {
+ 	.probe          = bdisp_probe,
+-	.remove_new     = bdisp_remove,
++	.remove         = bdisp_remove,
+ 	.driver         = {
+ 		.name           = BDISP_NAME,
+ 		.of_match_table = bdisp_match_types,
+diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+index 5dc1f908b49b..28f503e402d1 100644
+--- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
++++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+@@ -873,7 +873,7 @@ static int c8sectpfe_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void c8sectpfe_remove(struct platform_device *pdev)
++static int c8sectpfe_remove(struct platform_device *pdev)
+ {
+ 	struct c8sectpfei *fei = platform_get_drvdata(pdev);
+ 	struct channel_info *channel;
+@@ -905,6 +905,8 @@ static void c8sectpfe_remove(struct platform_device *pdev)
+ 		writel(0, fei->io + SYS_OTHER_CLKEN);
+ 
+ 	clk_disable_unprepare(fei->c8sectpfeclk);
++
++	return 0;
+ }
+ 
+ 
+@@ -1171,7 +1173,7 @@ static struct platform_driver c8sectpfe_driver = {
+ 		.of_match_table = c8sectpfe_match,
+ 	},
+ 	.probe	= c8sectpfe_probe,
+-	.remove_new = c8sectpfe_remove,
++	.remove	= c8sectpfe_remove,
+ };
+ 
+ module_platform_driver(c8sectpfe_driver);
+diff --git a/drivers/media/platform/st/sti/delta/delta-v4l2.c b/drivers/media/platform/st/sti/delta/delta-v4l2.c
+index da402d1e9171..03eaee6d15da 100644
+--- a/drivers/media/platform/st/sti/delta/delta-v4l2.c
++++ b/drivers/media/platform/st/sti/delta/delta-v4l2.c
+@@ -1900,7 +1900,7 @@ static int delta_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void delta_remove(struct platform_device *pdev)
++static int delta_remove(struct platform_device *pdev)
+ {
+ 	struct delta_dev *delta = platform_get_drvdata(pdev);
+ 
+@@ -1914,6 +1914,8 @@ static void delta_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(delta->dev);
+ 
+ 	v4l2_device_unregister(&delta->v4l2_dev);
++
++	return 0;
+ }
+ 
+ static int delta_runtime_suspend(struct device *dev)
+@@ -1954,7 +1956,7 @@ MODULE_DEVICE_TABLE(of, delta_match_types);
+ 
+ static struct platform_driver delta_driver = {
+ 	.probe = delta_probe,
+-	.remove_new = delta_remove,
++	.remove = delta_remove,
+ 	.driver = {
+ 		   .name = DELTA_NAME,
+ 		   .of_match_table = delta_match_types,
+diff --git a/drivers/media/platform/st/sti/hva/hva-v4l2.c b/drivers/media/platform/st/sti/hva/hva-v4l2.c
+index 3a848ca32a0e..bb34d6997d99 100644
+--- a/drivers/media/platform/st/sti/hva/hva-v4l2.c
++++ b/drivers/media/platform/st/sti/hva/hva-v4l2.c
+@@ -1422,7 +1422,7 @@ static int hva_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void hva_remove(struct platform_device *pdev)
++static int hva_remove(struct platform_device *pdev)
+ {
+ 	struct hva_dev *hva = platform_get_drvdata(pdev);
+ 	struct device *dev = hva_to_dev(hva);
+@@ -1440,6 +1440,8 @@ static void hva_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&hva->v4l2_dev);
+ 
+ 	dev_info(dev, "%s %s removed\n", HVA_PREFIX, pdev->name);
++
++	return 0;
+ }
+ 
+ /* PM ops */
+@@ -1459,7 +1461,7 @@ MODULE_DEVICE_TABLE(of, hva_match_types);
+ 
+ static struct platform_driver hva_driver = {
+ 	.probe  = hva_probe,
+-	.remove_new = hva_remove,
++	.remove = hva_remove,
+ 	.driver = {
+ 		.name		= HVA_NAME,
+ 		.of_match_table	= hva_match_types,
+diff --git a/drivers/media/platform/st/stm32/dma2d/dma2d.c b/drivers/media/platform/st/stm32/dma2d/dma2d.c
+index 92f1edee58f8..8e92efb842bf 100644
+--- a/drivers/media/platform/st/stm32/dma2d/dma2d.c
++++ b/drivers/media/platform/st/stm32/dma2d/dma2d.c
+@@ -693,7 +693,7 @@ static int dma2d_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void dma2d_remove(struct platform_device *pdev)
++static int dma2d_remove(struct platform_device *pdev)
+ {
+ 	struct dma2d_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -704,6 +704,8 @@ static void dma2d_remove(struct platform_device *pdev)
+ 	vb2_dma_contig_clear_max_seg_size(&pdev->dev);
+ 	clk_unprepare(dev->gate);
+ 	clk_put(dev->gate);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id stm32_dma2d_match[] = {
+@@ -717,7 +719,7 @@ MODULE_DEVICE_TABLE(of, stm32_dma2d_match);
+ 
+ static struct platform_driver dma2d_pdrv = {
+ 	.probe		= dma2d_probe,
+-	.remove_new	= dma2d_remove,
++	.remove		= dma2d_remove,
+ 	.driver		= {
+ 		.name = DMA2D_NAME,
+ 		.of_match_table = stm32_dma2d_match,
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index dad6e22e4ce4..2ac508da5ba3 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -2135,7 +2135,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void dcmi_remove(struct platform_device *pdev)
++static int dcmi_remove(struct platform_device *pdev)
+ {
+ 	struct stm32_dcmi *dcmi = platform_get_drvdata(pdev);
+ 
+@@ -2148,6 +2148,8 @@ static void dcmi_remove(struct platform_device *pdev)
+ 	media_device_cleanup(&dcmi->mdev);
+ 
+ 	dma_release_channel(dcmi->dma_chan);
++
++	return 0;
+ }
+ 
+ static __maybe_unused int dcmi_runtime_suspend(struct device *dev)
+@@ -2201,7 +2203,7 @@ static const struct dev_pm_ops dcmi_pm_ops = {
+ 
+ static struct platform_driver stm32_dcmi_driver = {
+ 	.probe		= dcmi_probe,
+-	.remove_new	= dcmi_remove,
++	.remove		= dcmi_remove,
+ 	.driver		= {
+ 		.name = DRV_NAME,
+ 		.of_match_table = of_match_ptr(stm32_dcmi_of_match),
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
+index d6e7d1b36083..86c5235a0c7a 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
+@@ -260,7 +260,7 @@ static int sun4i_csi_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void sun4i_csi_remove(struct platform_device *pdev)
++static int sun4i_csi_remove(struct platform_device *pdev)
+ {
+ 	struct sun4i_csi *csi = platform_get_drvdata(pdev);
+ 
+@@ -271,6 +271,8 @@ static void sun4i_csi_remove(struct platform_device *pdev)
+ 	media_device_unregister(&csi->mdev);
+ 	sun4i_csi_dma_unregister(csi);
+ 	media_device_cleanup(&csi->mdev);
++
++	return 0;
+ }
+ 
+ static const struct sun4i_csi_traits sun4i_a10_csi1_traits = {
+@@ -328,7 +330,7 @@ static const struct dev_pm_ops sun4i_csi_pm_ops = {
+ 
+ static struct platform_driver sun4i_csi_driver = {
+ 	.probe	= sun4i_csi_probe,
+-	.remove_new = sun4i_csi_remove,
++	.remove	= sun4i_csi_remove,
+ 	.driver	= {
+ 		.name		= "sun4i-csi",
+ 		.of_match_table	= sun4i_csi_of_match,
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index e2723cfa4515..e3e6650181c8 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -375,7 +375,7 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
+ 	return ret;
+ }
+ 
+-static void sun6i_csi_remove(struct platform_device *pdev)
++static int sun6i_csi_remove(struct platform_device *pdev)
+ {
+ 	struct sun6i_csi_device *csi_dev = platform_get_drvdata(pdev);
+ 
+@@ -386,6 +386,8 @@ static void sun6i_csi_remove(struct platform_device *pdev)
+ 		sun6i_csi_v4l2_cleanup(csi_dev);
+ 
+ 	sun6i_csi_resources_cleanup(csi_dev);
++
++	return 0;
+ }
+ 
+ static const struct sun6i_csi_variant sun6i_a31_csi_variant = {
+@@ -424,7 +426,7 @@ MODULE_DEVICE_TABLE(of, sun6i_csi_of_match);
+ 
+ static struct platform_driver sun6i_csi_platform_driver = {
+ 	.probe	= sun6i_csi_probe,
+-	.remove_new = sun6i_csi_remove,
++	.remove	= sun6i_csi_remove,
+ 	.driver	= {
+ 		.name		= SUN6I_CSI_NAME,
+ 		.of_match_table	= of_match_ptr(sun6i_csi_of_match),
+diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
+index dce130b4c9f6..a220ce849b41 100644
+--- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
++++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
+@@ -737,13 +737,15 @@ static int sun6i_mipi_csi2_probe(struct platform_device *platform_dev)
+ 	return ret;
+ }
+ 
+-static void sun6i_mipi_csi2_remove(struct platform_device *platform_dev)
++static int sun6i_mipi_csi2_remove(struct platform_device *platform_dev)
+ {
+ 	struct sun6i_mipi_csi2_device *csi2_dev =
+ 		platform_get_drvdata(platform_dev);
+ 
+ 	sun6i_mipi_csi2_bridge_cleanup(csi2_dev);
+ 	sun6i_mipi_csi2_resources_cleanup(csi2_dev);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id sun6i_mipi_csi2_of_match[] = {
+@@ -754,7 +756,7 @@ MODULE_DEVICE_TABLE(of, sun6i_mipi_csi2_of_match);
+ 
+ static struct platform_driver sun6i_mipi_csi2_platform_driver = {
+ 	.probe	= sun6i_mipi_csi2_probe,
+-	.remove_new = sun6i_mipi_csi2_remove,
++	.remove	= sun6i_mipi_csi2_remove,
+ 	.driver	= {
+ 		.name		= SUN6I_MIPI_CSI2_NAME,
+ 		.of_match_table	= of_match_ptr(sun6i_mipi_csi2_of_match),
+diff --git a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
+index 23d32e198aaa..cd2e92ae2293 100644
+--- a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
++++ b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
+@@ -804,13 +804,15 @@ static int sun8i_a83t_mipi_csi2_probe(struct platform_device *platform_dev)
+ 	return ret;
+ }
+ 
+-static void sun8i_a83t_mipi_csi2_remove(struct platform_device *platform_dev)
++static int sun8i_a83t_mipi_csi2_remove(struct platform_device *platform_dev)
+ {
+ 	struct sun8i_a83t_mipi_csi2_device *csi2_dev =
+ 		platform_get_drvdata(platform_dev);
+ 
+ 	sun8i_a83t_mipi_csi2_bridge_cleanup(csi2_dev);
+ 	sun8i_a83t_mipi_csi2_resources_cleanup(csi2_dev);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id sun8i_a83t_mipi_csi2_of_match[] = {
+@@ -821,7 +823,7 @@ MODULE_DEVICE_TABLE(of, sun8i_a83t_mipi_csi2_of_match);
+ 
+ static struct platform_driver sun8i_a83t_mipi_csi2_platform_driver = {
+ 	.probe	= sun8i_a83t_mipi_csi2_probe,
+-	.remove_new = sun8i_a83t_mipi_csi2_remove,
++	.remove	= sun8i_a83t_mipi_csi2_remove,
+ 	.driver	= {
+ 		.name		= SUN8I_A83T_MIPI_CSI2_NAME,
+ 		.of_match_table	= of_match_ptr(sun8i_a83t_mipi_csi2_of_match),
+diff --git a/drivers/media/platform/sunxi/sun8i-di/sun8i-di.c b/drivers/media/platform/sunxi/sun8i-di/sun8i-di.c
+index e4b0fd793f55..aa65d70b6270 100644
+--- a/drivers/media/platform/sunxi/sun8i-di/sun8i-di.c
++++ b/drivers/media/platform/sunxi/sun8i-di/sun8i-di.c
+@@ -906,7 +906,7 @@ static int deinterlace_probe(struct platform_device *pdev)
  	return ret;
  }
  
 -static void deinterlace_remove(struct platform_device *pdev)
 +static int deinterlace_remove(struct platform_device *pdev)
  {
- 	struct deinterlace_dev *pcdev = platform_get_drvdata(pdev);
+ 	struct deinterlace_dev *dev = platform_get_drvdata(pdev);
  
-@@ -993,11 +993,12 @@ static void deinterlace_remove(struct platform_device *pdev)
- 	video_unregister_device(&pcdev->vfd);
- 	v4l2_device_unregister(&pcdev->v4l2_dev);
- 	dma_release_channel(pcdev->dma_chan);
+@@ -915,6 +915,8 @@ static void deinterlace_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 
+ 	pm_runtime_force_suspend(&pdev->dev);
++
 +	return 0;
  }
  
- static struct platform_driver deinterlace_pdrv = {
+ static int deinterlace_runtime_resume(struct device *device)
+@@ -1000,7 +1002,7 @@ static const struct dev_pm_ops deinterlace_pm_ops = {
+ 
+ static struct platform_driver deinterlace_driver = {
  	.probe		= deinterlace_probe,
 -	.remove_new	= deinterlace_remove,
-+	.remove	= deinterlace_remove,
++	.remove		= deinterlace_remove,
  	.driver		= {
- 		.name	= MEM2MEM_NAME,
+ 		.name		= DEINTERLACE_NAME,
+ 		.of_match_table	= deinterlace_dt_match,
+diff --git a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+index bd0c4257bbff..fbcca59a0517 100644
+--- a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
++++ b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+@@ -833,7 +833,7 @@ static int rotate_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void rotate_remove(struct platform_device *pdev)
++static int rotate_remove(struct platform_device *pdev)
+ {
+ 	struct rotate_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -842,6 +842,8 @@ static void rotate_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 
+ 	pm_runtime_force_suspend(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static int rotate_runtime_resume(struct device *device)
+@@ -905,7 +907,7 @@ static const struct dev_pm_ops rotate_pm_ops = {
+ 
+ static struct platform_driver rotate_driver = {
+ 	.probe		= rotate_probe,
+-	.remove_new	= rotate_remove,
++	.remove		= rotate_remove,
+ 	.driver		= {
+ 		.name		= ROTATE_NAME,
+ 		.of_match_table	= rotate_dt_match,
+diff --git a/drivers/media/platform/ti/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
+index ffe1887cc429..9fcbf2a2b7c3 100644
+--- a/drivers/media/platform/ti/am437x/am437x-vpfe.c
++++ b/drivers/media/platform/ti/am437x/am437x-vpfe.c
+@@ -2486,7 +2486,7 @@ static int vpfe_probe(struct platform_device *pdev)
+ /*
+  * vpfe_remove : It un-register device from V4L2 driver
+  */
+-static void vpfe_remove(struct platform_device *pdev)
++static int vpfe_remove(struct platform_device *pdev)
+ {
+ 	struct vpfe_device *vpfe = platform_get_drvdata(pdev);
+ 
+@@ -2496,6 +2496,8 @@ static void vpfe_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_cleanup(&vpfe->notifier);
+ 	v4l2_device_unregister(&vpfe->v4l2_dev);
+ 	video_unregister_device(&vpfe->video_dev);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -2626,7 +2628,7 @@ MODULE_DEVICE_TABLE(of, vpfe_of_match);
+ 
+ static struct platform_driver vpfe_driver = {
+ 	.probe		= vpfe_probe,
+-	.remove_new	= vpfe_remove,
++	.remove		= vpfe_remove,
+ 	.driver = {
+ 		.name	= VPFE_MODULE_NAME,
+ 		.pm	= &vpfe_pm_ops,
+diff --git a/drivers/media/platform/ti/cal/cal.c b/drivers/media/platform/ti/cal/cal.c
+index 9c5105223d6b..1236215ec70e 100644
+--- a/drivers/media/platform/ti/cal/cal.c
++++ b/drivers/media/platform/ti/cal/cal.c
+@@ -1293,7 +1293,7 @@ static int cal_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void cal_remove(struct platform_device *pdev)
++static int cal_remove(struct platform_device *pdev)
+ {
+ 	struct cal_dev *cal = platform_get_drvdata(pdev);
+ 	unsigned int i;
+@@ -1319,6 +1319,8 @@ static void cal_remove(struct platform_device *pdev)
+ 	if (ret >= 0)
+ 		pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static int cal_runtime_resume(struct device *dev)
+@@ -1362,7 +1364,7 @@ static const struct dev_pm_ops cal_pm_ops = {
+ 
+ static struct platform_driver cal_pdrv = {
+ 	.probe		= cal_probe,
+-	.remove_new	= cal_remove,
++	.remove		= cal_remove,
+ 	.driver		= {
+ 		.name	= CAL_MODULE_NAME,
+ 		.pm	= &cal_pm_ops,
+diff --git a/drivers/media/platform/ti/davinci/vpif.c b/drivers/media/platform/ti/davinci/vpif.c
+index 63cdfed37bc9..832489822706 100644
+--- a/drivers/media/platform/ti/davinci/vpif.c
++++ b/drivers/media/platform/ti/davinci/vpif.c
+@@ -538,7 +538,7 @@ static int vpif_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void vpif_remove(struct platform_device *pdev)
++static int vpif_remove(struct platform_device *pdev)
+ {
+ 	struct vpif_data *data = platform_get_drvdata(pdev);
+ 
+@@ -551,6 +551,8 @@ static void vpif_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 
+ 	kfree(data);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -590,7 +592,7 @@ static struct platform_driver vpif_driver = {
+ 		.name	= VPIF_DRIVER_NAME,
+ 		.pm	= vpif_pm_ops,
  	},
+-	.remove_new = vpif_remove,
++	.remove = vpif_remove,
+ 	.probe = vpif_probe,
+ };
+ 
+diff --git a/drivers/media/platform/ti/davinci/vpif_capture.c b/drivers/media/platform/ti/davinci/vpif_capture.c
+index 44d269d6038c..baf0624637da 100644
+--- a/drivers/media/platform/ti/davinci/vpif_capture.c
++++ b/drivers/media/platform/ti/davinci/vpif_capture.c
+@@ -1714,7 +1714,7 @@ static __init int vpif_probe(struct platform_device *pdev)
+  *
+  * The vidoe device is unregistered
+  */
+-static void vpif_remove(struct platform_device *device)
++static int vpif_remove(struct platform_device *device)
+ {
+ 	struct channel_obj *ch;
+ 	int i;
+@@ -1732,6 +1732,8 @@ static void vpif_remove(struct platform_device *device)
+ 		video_unregister_device(&ch->video_dev);
+ 		kfree(vpif_obj.dev[i]);
+ 	}
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -1814,7 +1816,7 @@ static __refdata struct platform_driver vpif_driver = {
+ 		.pm	= &vpif_pm_ops,
+ 	},
+ 	.probe = vpif_probe,
+-	.remove_new = vpif_remove,
++	.remove = vpif_remove,
+ };
+ 
+ module_platform_driver(vpif_driver);
+diff --git a/drivers/media/platform/ti/davinci/vpif_display.c b/drivers/media/platform/ti/davinci/vpif_display.c
+index f8ec2991c667..b2df81603f62 100644
+--- a/drivers/media/platform/ti/davinci/vpif_display.c
++++ b/drivers/media/platform/ti/davinci/vpif_display.c
+@@ -1305,7 +1305,7 @@ static __init int vpif_probe(struct platform_device *pdev)
+ /*
+  * vpif_remove: It un-register channels from V4L2 driver
+  */
+-static void vpif_remove(struct platform_device *device)
++static int vpif_remove(struct platform_device *device)
+ {
+ 	struct channel_obj *ch;
+ 	int i;
+@@ -1321,6 +1321,8 @@ static void vpif_remove(struct platform_device *device)
+ 		video_unregister_device(&ch->video_dev);
+ 	}
+ 	free_vpif_objs();
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -1397,7 +1399,7 @@ static __refdata struct platform_driver vpif_driver = {
+ 			.pm	= &vpif_pm_ops,
+ 	},
+ 	.probe	= vpif_probe,
+-	.remove_new = vpif_remove,
++	.remove	= vpif_remove,
+ };
+ 
+ module_platform_driver(vpif_driver);
+diff --git a/drivers/media/platform/ti/omap/omap_vout.c b/drivers/media/platform/ti/omap/omap_vout.c
+index 4143274089c3..29e6219ee8da 100644
+--- a/drivers/media/platform/ti/omap/omap_vout.c
++++ b/drivers/media/platform/ti/omap/omap_vout.c
+@@ -1569,7 +1569,7 @@ static void omap_vout_cleanup_device(struct omap_vout_device *vout)
+ 	kfree(vout);
+ }
+ 
+-static void omap_vout_remove(struct platform_device *pdev)
++static int omap_vout_remove(struct platform_device *pdev)
+ {
+ 	int k;
+ 	struct v4l2_device *v4l2_dev = platform_get_drvdata(pdev);
+@@ -1587,6 +1587,8 @@ static void omap_vout_remove(struct platform_device *pdev)
+ 		omap_dss_put_device(vid_dev->displays[k]);
+ 	}
+ 	kfree(vid_dev);
++
++	return 0;
+ }
+ 
+ static int __init omap_vout_probe(struct platform_device *pdev)
+@@ -1720,7 +1722,7 @@ static struct platform_driver omap_vout_driver = {
+ 	.driver = {
+ 		.name = VOUT_NAME,
+ 	},
+-	.remove_new = omap_vout_remove,
++	.remove = omap_vout_remove,
+ };
+ 
+ static int __init omap_vout_init(void)
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index f3aaa9e76492..e7327e38482d 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -1997,7 +1997,7 @@ static int isp_attach_iommu(struct isp_device *isp)
+  *
+  * Always returns 0.
+  */
+-static void isp_remove(struct platform_device *pdev)
++static int isp_remove(struct platform_device *pdev)
+ {
+ 	struct isp_device *isp = platform_get_drvdata(pdev);
+ 
+@@ -2014,6 +2014,8 @@ static void isp_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_cleanup(&isp->notifier);
+ 
+ 	kfree(isp);
++
++	return 0;
+ }
+ 
+ enum isp_of_phy {
+@@ -2474,7 +2476,7 @@ MODULE_DEVICE_TABLE(of, omap3isp_of_table);
+ 
+ static struct platform_driver omap3isp_driver = {
+ 	.probe = isp_probe,
+-	.remove_new = isp_remove,
++	.remove = isp_remove,
+ 	.id_table = omap3isp_id_table,
+ 	.driver = {
+ 		.name = "omap3isp",
+diff --git a/drivers/media/platform/ti/vpe/vpe.c b/drivers/media/platform/ti/vpe/vpe.c
+index 6848cbc82f52..5b1c5d96a407 100644
+--- a/drivers/media/platform/ti/vpe/vpe.c
++++ b/drivers/media/platform/ti/vpe/vpe.c
+@@ -2622,7 +2622,7 @@ static int vpe_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void vpe_remove(struct platform_device *pdev)
++static int vpe_remove(struct platform_device *pdev)
+ {
+ 	struct vpe_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -2635,6 +2635,8 @@ static void vpe_remove(struct platform_device *pdev)
+ 	vpe_set_clock_enable(dev, 0);
+ 	vpe_runtime_put(pdev);
+ 	pm_runtime_disable(&pdev->dev);
++
++	return 0;
+ }
+ 
+ #if defined(CONFIG_OF)
+@@ -2649,7 +2651,7 @@ MODULE_DEVICE_TABLE(of, vpe_of_match);
+ 
+ static struct platform_driver vpe_pdrv = {
+ 	.probe		= vpe_probe,
+-	.remove_new	= vpe_remove,
++	.remove		= vpe_remove,
+ 	.driver		= {
+ 		.name	= VPE_MODULE_NAME,
+ 		.of_match_table = of_match_ptr(vpe_of_match),
+diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+index c0a368bacf88..98a2cf27357c 100644
+--- a/drivers/media/platform/verisilicon/hantro_drv.c
++++ b/drivers/media/platform/verisilicon/hantro_drv.c
+@@ -1184,7 +1184,7 @@ static int hantro_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void hantro_remove(struct platform_device *pdev)
++static int hantro_remove(struct platform_device *pdev)
+ {
+ 	struct hantro_dev *vpu = platform_get_drvdata(pdev);
+ 
+@@ -1200,6 +1200,8 @@ static void hantro_remove(struct platform_device *pdev)
+ 	reset_control_assert(vpu->resets);
+ 	pm_runtime_dont_use_autosuspend(vpu->dev);
+ 	pm_runtime_disable(vpu->dev);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -1222,7 +1224,7 @@ static const struct dev_pm_ops hantro_pm_ops = {
+ 
+ static struct platform_driver hantro_driver = {
+ 	.probe = hantro_probe,
+-	.remove_new = hantro_remove,
++	.remove = hantro_remove,
+ 	.driver = {
+ 		   .name = DRIVER_NAME,
+ 		   .of_match_table = of_match_ptr(of_hantro_match),
 diff --git a/drivers/media/platform/via/via-camera.c b/drivers/media/platform/via/via-camera.c
 index 450254403fa8..06ac4410f4b0 100644
 --- a/drivers/media/platform/via/via-camera.c
