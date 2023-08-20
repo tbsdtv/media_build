@@ -74,19 +74,6 @@ menuconfig	- Generate a ncurses menu. Requires full
 		  kernel source, since it depends on kernel's
 		  mconf and lxconfig stripts;
 
-release		- Allows changing kernel version.
-		  Typical usage is:
-			make release VER=2.6.12-18mdk
-			(to force compiling to 2.6.12-18mdk)
-			(This will work only if
-			 /lib/modules/2.6.12-18mdk/build/
-			 points to that kernel version)
-		  Or
-			make release DIR=~/linux-git
-			(to force using kernel at a specific dir)
-		  To use current kernel version instead:
-			make release
-
 ======================
 Module handling rules:
 (require root access)
@@ -97,22 +84,9 @@ rmmod		- removes all modules from V4L/DVB tree
 
 reload		- removes then reinserts all modules
 
-===================
-Tree merging rules:
-
-ivtv		- enable merged ivtv build, using the latest ivtv sources
-		  from ivtvdriver.org (requires subversion)
-
-cx88-ivtv	- enable cx88-blackbird ivtv API emulation
-
-ivtv-update	- update ivtv sources from ivtvdriver.org
-
 ==========================================
 Patch preparation and tree handling rules:
 (used by developers)
-
-kernel-links	- Generate links to V4L/DVB at kernel tree.
-		  Requires write access to kernel tree.
 
 mismatch	- checks for linker section mismatch. In other words,
 		  check if some driver has functions not properly

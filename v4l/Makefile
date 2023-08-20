@@ -70,8 +70,8 @@ firmware::
 
 # Targets which don't need Makefile.media's rules
 no-makefile-media-targets := %config clean distclean \
-	release %links start insmod load stop rmmod unload reload \
-	help debug cx88-ivtv lxdialog
+	links start insmod load stop rmmod unload reload \
+	help debug lxdialog
 
 # Targets which don't need .myconfig to exist, to keep us from including it
 no-dot-config-targets := $(no-makefile-media-targets) %install remove
@@ -148,7 +148,6 @@ endif
 # Directories to be used
 
 PWD		:= $(shell pwd)
-DEST		:= /lib/modules/$(KERNELRELEASE)/v4l2
 KDIR26		:= /lib/modules/$(KERNELRELEASE)/updates/extra/media
 
 #################################################
@@ -166,17 +165,6 @@ KBUILD_CPPFLAGS := -I$(M)/../linux/include -I$(M)/../linux/include/uapi $(KBUILD
 LINUXINCLUDE    := -I$(M)/../linux/include -I$(M)/../linux/include/uapi $(LINUXINCLUDE) -I$(M)/
 
 MYCFLAGS :=
-
-
-#################################################
-# which files to install?
-
-inst-m		:= $(wildcard *.ko)
-ifeq ($(inst-m),)
-  inst-m	:= $(obj-m)
-endif
-
-v4l_modules := $(shell /sbin/lsmod|cut -d' ' -f1 ) $(patsubst %.ko,%,$(inst-m))
 
 #################################################
 # locales seem to cause trouble sometimes.
@@ -210,13 +198,6 @@ firmware_install::
 
 #################################################
 # Compiling preparation rules
-
-.PHONY: release
-ifneq ($(filter release,$(MAKECMDGOALS)),)
-.PHONY: $(obj)/.version
-endif
-release:
-	@true
 
 $(obj)/.version:
 ifneq ($(DIR),)
@@ -263,9 +244,6 @@ links::
 config-compat.h:: $(obj)/.version .myconfig scripts/make_config_compat.pl
 	[ ! -f "$(obj)/config-mycompat.h" ] && echo "/* empty config-mycompat.h */" > "$(obj)/config-mycompat.h" || true
 	perl scripts/make_config_compat.pl $(SRCDIR) $(obj)/.myconfig $(obj)/config-compat.h
-
-kernel-links makelinks::
-	cd ..;	v4l/scripts/makelinks.sh $(SRCDIR)
 
 
 #################################################
@@ -384,23 +362,6 @@ $(LXDIALOG_LNK):
 $(LXDIALOG):
 	$(MAKE) -C $(SRCDIR) -f $(PWD)/Makefile.kernel $(KMAKEVARS) v4l-$(LXDIALOG)
 endif
-
-cx88-ivtv::
-	@echo creating cx88-ivtv symbolic links...
-	@ln -sf ../v4l_experimental/cx88-ivtv.c .
-
-#################################################
-# Old instalation rule
-
-old-install:: rminstall
-	@echo -e "\nInstalling new V4L modules at $(DEST)..."
-
-	@strip --strip-debug $(inst-m)
-
-	-install -d $(DEST)
-	-install -m 644 -c $(inst-m) $(DEST)
-
-	/sbin/depmod -a ${KERNELRELEASE}
 
 #################################################
 # Help
