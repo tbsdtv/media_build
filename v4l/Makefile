@@ -71,7 +71,7 @@ firmware::
 # Targets which don't need Makefile.media's rules
 no-makefile-media-targets := %config clean distclean snapshot snap \
 	tarball release %links start insmod load stop rmmod unload reload \
-	update push %commit help debug cx88-ivtv lxdialog
+	help debug cx88-ivtv lxdialog
 
 # Targets which don't need .myconfig to exist, to keep us from including it
 no-dot-config-targets := $(no-makefile-media-targets) %install remove
@@ -409,18 +409,6 @@ old-install:: rminstall
 	/sbin/depmod -a ${KERNELRELEASE}
 
 #################################################
-# Tree management rules
-
-update::
-	make -C .. update
-
-commit cvscommit hgcommit::
-	make -C .. commit
-
-push::
-	make -C .. push
-
-#################################################
 # Help
 help::
 	@cat ../INSTALL
@@ -437,12 +425,11 @@ tardest	?= .
 snapdir := $(HOME)/snapshot
 snap	:= $(name)
 
-snapshot snap tarball:: update distclean
+snapshot snap tarball:: distclean
 	echo $(thisdir)
 	echo $(name)
 	echo $(date) > .snapshot
 	(cd ..; tar czf $(snapdir)/$(snap)-$(date).tar.gz .)
-	hg history --style scripts/map-changelog > /$(snapdir)/$(snap)-ChangeLog-$(date)
 	$(MAKE) -C $(snapdir)
 
 dir download apply-patches unapply-patches untar::

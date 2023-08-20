@@ -114,12 +114,6 @@ Patch preparation and tree handling rules:
 kernel-links	- Generate links to V4L/DVB at kernel tree.
 		  Requires write access to kernel tree.
 
-update		- updates the tree from master repository
-
-commit		- commits the change, asking for a commit msg
-
-push		- sends outgoing stuff to master repository
-
 mismatch	- checks for linker section mismatch. In other words,
 		  check if some driver has functions not properly
 		  declared with __init/__exit, and similar tags.
