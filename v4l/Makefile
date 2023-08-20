@@ -52,7 +52,6 @@ default:: prepare firmware
 	$(MAKE) -C ../linux apply_patches
 	$(MAKE) -C $(OUTDIR) M=$(PWD) $(MYCFLAGS) modules
 	./scripts/rmmod.pl check
-#	$(MAKE) checkpatch
 
 mismatch:: prepare firmware
 	@echo Kernel build directory is $(OUTDIR)
@@ -420,17 +419,6 @@ commit cvscommit hgcommit::
 
 push::
 	make -C .. push
-
-#################################################
-# Consistency checks
-checkemacs::
-	scripts/check.pl
-
-checketerse::
-	scripts/check.pl -t
-
-checkpatch::
-	scripts/check.pl -c
 
 #################################################
 # Help

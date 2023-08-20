@@ -120,17 +120,6 @@ commit		- commits the change, asking for a commit msg
 
 push		- sends outgoing stuff to master repository
 
-checkemacs	- checks codingstyle and reports to emacs
-		  using "make checkemacs" at emacs compile menu,
-		  will report the lines with errors inside emacs.
-
-checkpatch	- checks codingstyle and reports using the same
-		  format as c. This way, c error parsers will
-		  handle it.
-
-checkterse	- checks codingstyle and reports using terse
-		  syntax, used on several compilaton tools.
-
 mismatch	- checks for linker section mismatch. In other words,
 		  check if some driver has functions not properly
 		  declared with __init/__exit, and similar tags.
