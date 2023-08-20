@@ -114,8 +114,6 @@ Patch preparation and tree handling rules:
 kernel-links	- Generate links to V4L/DVB at kernel tree.
 		  Requires write access to kernel tree.
 
-cardlist	- Updates Documentation/video4linux/CARDLIST.*
-
 update		- updates the tree from master repository
 
 commit		- commits the change, asking for a commit msg

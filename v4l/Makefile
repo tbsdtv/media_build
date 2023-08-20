@@ -72,7 +72,7 @@ firmware::
 # Targets which don't need Makefile.media's rules
 no-makefile-media-targets := %config clean distclean snapshot snap \
 	tarball release %links start insmod load stop rmmod unload reload \
-	card% update push %commit help debug cx88-ivtv lxdialog
+	update push %commit help debug cx88-ivtv lxdialog
 
 # Targets which don't need .myconfig to exist, to keep us from including it
 no-dot-config-targets := $(no-makefile-media-targets) %install remove
@@ -274,12 +274,6 @@ config-compat.h:: $(obj)/.version .myconfig scripts/make_config_compat.pl
 kernel-links makelinks::
 	cd ..;	v4l/scripts/makelinks.sh $(SRCDIR)
 
-
-#################################################
-# Cardlist updating rule
-
-card cardlist cardlists::
-	scripts/cardlist
 
 #################################################
 # Cleaning rules
