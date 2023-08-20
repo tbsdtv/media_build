@@ -69,8 +69,8 @@ firmware::
 # Object specific rules
 
 # Targets which don't need Makefile.media's rules
-no-makefile-media-targets := %config clean distclean snapshot snap \
-	tarball release %links start insmod load stop rmmod unload reload \
+no-makefile-media-targets := %config clean distclean \
+	release %links start insmod load stop rmmod unload reload \
 	help debug cx88-ivtv lxdialog
 
 # Targets which don't need .myconfig to exist, to keep us from including it
@@ -146,12 +146,6 @@ endif
 
 #################################################
 # Directories to be used
-
-snapshot := $(wildcard $(obj)/.snapshot)
-ifneq ($(snapshot),)
-SNAPSHOT_CFLAGS	:= -DSNAPSHOT='$(shell cat $(snapshot))'
-EXTRA_CFLAGS	+= $(SNAPSHOT_CFLAGS)
-endif
 
 PWD		:= $(shell pwd)
 DEST		:= /lib/modules/$(KERNELRELEASE)/v4l2
@@ -414,23 +408,7 @@ help::
 	@cat ../INSTALL
 
 #################################################
-# build tarballs rules
-
-RPWD	:= $(shell cd .. && pwd)
-thisdir	:= $(notdir $(RPWD))
-name    := v4l-dvb
-date    := $(shell date +%Y%m%d)
-tardest	?= .
-
-snapdir := $(HOME)/snapshot
-snap	:= $(name)
-
-snapshot snap tarball:: distclean
-	echo $(thisdir)
-	echo $(name)
-	echo $(date) > .snapshot
-	(cd ..; tar czf $(snapdir)/$(snap)-$(date).tar.gz .)
-	$(MAKE) -C $(snapdir)
+# main rules
 
 dir download apply-patches unapply-patches untar::
 	make -C ../linux $@
