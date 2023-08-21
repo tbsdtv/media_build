@@ -71,7 +71,7 @@ firmware::
 # Targets which don't need Makefile.media's rules
 no-makefile-media-targets := %config clean distclean \
 	links start insmod load stop rmmod unload reload \
-	help debug lxdialog
+	help debug
 
 # Targets which don't need .myconfig to exist, to keep us from including it
 no-dot-config-targets := $(no-makefile-media-targets) %install remove
@@ -122,10 +122,6 @@ Makefile.media:
 #################################################
 # CFLAGS configuration
 
-ifeq ($(CONFIG_DVB_FIRESAT),m)
-  EXTRA_CFLAGS += -I$(srctree)/drivers/ieee1394/
-endif
-
 EXTRA_CFLAGS += -g
 
 EXTRA_CFLAGS += $(if $(wildcard $(srctree)/.mm), -DMM_KERNEL)
@@ -135,14 +131,6 @@ EXTRA_CFLAGS += -include $(obj)/compat.h
 
 # gives too much warnings (false positives) -> disable it
 EXTRA_CFLAGS += -Wno-format-truncation
-
-#################################################
-# Kernel 2.6/3.x specific rules
-
-ifneq ($(KERNELRELEASE),)
- export-objs	:=
- list-multi	:=
-endif
 
 #################################################
 # Directories to be used
@@ -156,12 +144,6 @@ KDIR26		:= /lib/modules/$(KERNELRELEASE)/updates/extra/media
 HOSTCC:=$(CC)
 CC += -I$(obj)
 
-CPPFLAGS := -I$(M)/../linux/include -I$(M)/../linux/include/uapi $(CPPFLAGS) -I$(M)/
-
-# Needed for kernel 2.6.24 or up
-KBUILD_CPPFLAGS := -I$(M)/../linux/include -I$(M)/../linux/include/uapi $(KBUILD_CPPFLAGS) -I$(M)/
-
-# Needed for kernel 2.6.29 or up
 LINUXINCLUDE    := -I$(M)/../linux/include -I$(M)/../linux/include/uapi $(LINUXINCLUDE) -I$(M)/
 
 MYCFLAGS :=
@@ -262,7 +244,6 @@ distclean:: clean
 		Kconfig Kconfig.kern .config .config.cmd .myconfig \
 		.kconfig.dep config-mycompat.h
 	-rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
-	-rm -f scripts/lxdialog scripts/kconfig
 	@find .. -name '*.orig' -exec rm '{}' \;
 	@find .. -name '*.rej' -exec rm '{}' \;
 	$(MAKE) -C firmware $@
@@ -291,16 +272,6 @@ GCONF := $(OUTDIR)/scripts/kconfig/gconf
 MCONF := $(OUTDIR)/scripts/kconfig/mconf
 CONF := $(OUTDIR)/scripts/kconfig/conf
 
-# lxdialog can be in either scripts/lxdialog or scripts/kconfig/lxdialog
-LXDIALOG_DIR := $(shell if [ -d $(OUTDIR)/scripts/kconfig/lxdialog ]; then echo kconfig/ ; fi)
-# lxdialog might not be a separate program that needs to be built, check
-# for lxdialog/Makefile to find out.
-ifneq ($(wildcard $(SRCDIR)/scripts/$(LXDIALOG_DIR)lxdialog/Makefile),)
-	# lxdialog must be built
-	LXDIALOG_LNK := $(if $(LXDIALOG_DIR),scripts/kconfig,scripts/lxdialog)
-	LXDIALOG := $(OUTDIR)/scripts/$(LXDIALOG_DIR)lxdialog/lxdialog
-endif
-
 # Ideally, some kind of oldconfig process would be used to update .config
 # without destroying the user's configuration.  Lacking that, we will
 # just touch .config if it already exists, and run make_kconfig if it
@@ -322,46 +293,28 @@ $(obj)/Kconfig: $(obj)/.version
 
 xconfig:: $(QCONF) $(obj)/Kconfig
 	$(QCONF) $(obj)/Kconfig
-	./scripts/fix_kconfig.pl
 
 gconfig:: $(GCONF) $(obj)/Kconfig
 	$(GCONF) $(obj)/Kconfig
-	./scripts/fix_kconfig.pl
 
 config:: $(CONF) $(obj)/Kconfig
 	$(CONF) $(obj)/Kconfig
-	./scripts/fix_kconfig.pl
 
-menuconfig:: $(MCONF) lxdialog $(obj)/Kconfig
+menuconfig:: $(MCONF) $(obj)/Kconfig
 	$(MCONF) $(obj)/Kconfig
-	./scripts/fix_kconfig.pl
 
 allyesconfig allmodconfig:: $(obj)/.version
 	@$(MAKE) -C ../linux apply_patches
 	./scripts/make_kconfig.pl $(OUTDIR) $(SRCDIR) 1
-	./scripts/fix_kconfig.pl
 
 stagingconfig:: $(obj)/.version
 	@$(MAKE) -C ../linux apply_patches
 	./scripts/make_kconfig.pl $(OUTDIR) $(SRCDIR) 1 1
-	./scripts/fix_kconfig.pl
 
 # rule to build kernel conf programs
 KMAKEVARS := config-targets=1 mixed-targets=0 dot-config=0 SRCDIR=$(SRCDIR)
 $(QCONF) $(GCONF) $(MCONF) $(CONF):
 	$(MAKE) -C $(OUTDIR) -f $(PWD)/Makefile.kernel $(KMAKEVARS) v4l-$(notdir $@)
-
-# lxdialog has two parts, a symlink and the actual binary
-.PHONY: lxdialog
-lxdialog: $(LXDIALOG) $(LXDIALOG_LNK)
-
-ifdef LXDIALOG
-$(LXDIALOG_LNK):
-	ln -snf $(OUTDIR)/$(LXDIALOG_LNK) $(LXDIALOG_LNK)
-
-$(LXDIALOG):
-	$(MAKE) -C $(SRCDIR) -f $(PWD)/Makefile.kernel $(KMAKEVARS) v4l-$(LXDIALOG)
-endif
 
 #################################################
 # Help

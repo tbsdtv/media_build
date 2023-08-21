@@ -626,9 +626,6 @@ open_kconfig('../linux', './Kconfig.staging');
 close OUT;
 
 # These options should default to off
-disable_config('DVB_AV7110_FIRMWARE');
-disable_config('DVB_CINERGYT2_TUNING');
-disable_config('VIDEO_HELPER_CHIPS_AUTO');
 disable_config('VIDEO_FIXED_MINOR_RANGES');
 disable_config('STAGING') if (!$enable_staging);
 disable_config('STAGING_BROKEN');

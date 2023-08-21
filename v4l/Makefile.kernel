@@ -24,24 +24,16 @@ include $(SRCDIR)/Makefile
 
 # Used by the config target
 v4l-conf: scripts_basic
-	$(MAKE) $(build)=scripts/kconfig scripts/kconfig/conf
+	$(MAKE) $(build)=scripts/kconfig hostprogs-y=conf scripts/kconfig/conf
 
 # Used by the xconfig target
 v4l-qconf: scripts_basic
-	$(MAKE) $(build)=scripts/kconfig qconf-target=1 scripts/kconfig/qconf
+	$(MAKE) $(build)=scripts/kconfig hostprogs-y=qconf scripts/kconfig/qconf
 
 # Used by the qconfig target
 v4l-gconf: scripts_basic
-	$(MAKE) $(build)=scripts/kconfig gconf-target=1 scripts/kconfig/gconf
+	$(MAKE) $(build)=scripts/kconfig hostprogs-y=gconf scripts/kconfig/gconf
 
-# Used by the menuconfig target, also needs lxdialog
+# Used by the menuconfig target
 v4l-mconf: scripts_basic
 	$(MAKE) $(build)=scripts/kconfig hostprogs-y=mconf scripts/kconfig/mconf
-
-# Rule used for kernel where lxdialog is in directory scripts/lxdialog
-v4l-%/scripts/lxdialog/lxdialog: scripts_basic
-	$(MAKE) $(build)=scripts/lxdialog
-
-# Rule used for kernel where lxdialog is in directory scripts/kconfig/lxdialog
-v4l-%/scripts/kconfig/lxdialog/lxdialog: scripts_basic
-	$(MAKE) $(build)=scripts/kconfig/lxdialog
