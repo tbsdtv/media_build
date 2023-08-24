@@ -1,0 +1,13 @@
+diff --git a/drivers/media/dvb-frontends/stid135/globaldefs.h b/drivers/media/dvb-frontends/stid135/globaldefs.h
+index 149248887c75..5664af97acdd 100644
+--- a/drivers/media/dvb-frontends/stid135/globaldefs.h
++++ b/drivers/media/dvb-frontends/stid135/globaldefs.h
+@@ -45,7 +45,7 @@
+ 	#ifdef HOST_PC
+ 		#include <linux/kernel.h>
+ 		#include <linux/delay.h>
+-		#include <linux/slab.h>
++		#include <linux/mm.h>
+ 
+ 		#define WAIT_N_MS(X) msleep(X)
+ 		#define calloc(n,s) kvzalloc(n*s,GFP_KERNEL)
