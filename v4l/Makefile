@@ -301,7 +301,7 @@ stagingconfig:: $(obj)/.version
 	./scripts/make_kconfig.pl $(OUTDIR) $(SRCDIR) 1 1
 
 # rule to build kernel conf programs
-KMAKEVARS := config-targets=1 mixed-targets=0 dot-config=0 SRCDIR=$(SRCDIR)
+KMAKEVARS := config-targets=1 mixed-targets=0 dot-config=0 config-build=1 need-config=0 SRCDIR=$(SRCDIR)
 $(QCONF) $(GCONF) $(MCONF) $(CONF):
 	$(MAKE) -C $(OUTDIR) -f $(PWD)/Makefile.kernel $(KMAKEVARS) v4l-$(notdir $@)
 
