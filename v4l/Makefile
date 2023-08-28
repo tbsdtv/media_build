@@ -11,16 +11,7 @@ obj = .
 endif
 
 #################################################
-# This Makefile is used from two contexts.  It is used directly when one runs
-# 'make' from the v4l-dvb tree.  It used used again when the kernel build
-# process includes this file into the kernel Makefile.
-ifneq ($(TOPDIR),)
-# We are being include from the Kernel
--include $(TOPDIR)/Rules.make
-else
-# We are running directly, not from the Kernel
-
-# take version info from last module build if available
+# Take version info from last module build if available
 # if .version doesn't exist, make will create it for us and restart
 -include $(obj)/.version
 
@@ -41,8 +32,6 @@ override DIR := $(KDIR)
 .PHONY: $(obj)/.version
 endif
 endif
-
-endif	# TOPDIR
 
 #################################################
 # default compilation rule
