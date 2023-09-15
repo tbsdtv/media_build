@@ -8,6 +8,7 @@ VIDEO_OV772X
 VIDEO_OV9650
 VIDEO_TC358746
 VIDEO_XILINX
+VIDEO_HANTRO
 
 # Adding an entry under kernel [major.minor] means that that
 # driver will be enabled from that kernel onwards, and disabled
