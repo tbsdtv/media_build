@@ -29,20 +29,6 @@ my %debug = (	"tuner"			=> "tuner_debug=1",
 		"dvb-usb-dibusb-common"	=> "debug=0x03",
 	    );
 
-sub getobsolete()
-{
-	my @obsolete;
-	open OBSOLETE, '<obsolete.txt' or die "Unable to open obsolete.txt: $!";
-	while (<OBSOLETE>) {
-		next if (/^\s*#/ || /^\s*$/);
-		chomp;
-		m|^.*/([^/]+)$| and push @obsolete, $1;
-	}
-
-	close OBSOLETE;
-	return @obsolete;
-}
-
 sub findprog($)
 {
 	foreach(split(/:/, $ENV{PATH}),qw(/sbin /usr/sbin /usr/local/sbin)) {
@@ -267,7 +253,7 @@ if ($mode eq "load") {
 	if ($mode eq "unload") {
 		prepare_cmd;
 		parse_loaded;
-		my @notunloaded = rmmod(@modlist, getobsolete());
+		my @notunloaded = rmmod(@modlist);
 		@notunloaded = rmmod(@notunloaded) if (@notunloaded);
 		if (@notunloaded) {
 			print "Couldn't unload: ", join(' ', @notunloaded), "\n";

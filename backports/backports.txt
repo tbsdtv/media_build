@@ -69,6 +69,7 @@ add v5.17_overflow.patch
 
 [5.15.1023]
 add v5.15_container_of.patch
+add v5.15_kvzalloc_location.patch
 
 [5.14.1023]
 add v5.14_bus_void_return.patch

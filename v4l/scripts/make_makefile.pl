@@ -143,69 +143,6 @@ sub open_makefile($) {
 	close $in;
 }
 
-my %obsolete;
-sub getobsolete()
-{
-	open OBSOLETE, '<obsolete.txt' or die "Can't open obsolete.txt: $!";
-	while (<OBSOLETE>) {
-		next if (/^\s*#/ || /^\s*$/);
-		chomp;
-		if (m|^(.*)/([^/]*)$|) {
-			$obsolete{$1}{"$2.ko"} = 1;
-		} else {
-			print "Unable to parse obsolete.txt:$.\n$_\n";
-		}
-	}
-
-	close OBSOLETE;
-}
-
-sub removeobsolete()
-{
-	while ( my ($dir, $files) = each(%obsolete) ) {
-		print OUT "\t\@if [ -d \$(DESTDIR)\$(KDIR26)/$dir ]; then echo -e \"\\nRemoving obsolete files from \$(DESTDIR)\$(KDIR26)/$dir:\"; fi\n";
-		print OUT "\t\@files='", join(' ', keys %$files), "'; ";
-
-		print OUT "for i in \$\$files;do if [ -f \"\$(DESTDIR)\$(KDIR26)/$dir/\$\$i\" ]; then ";
-		print OUT "echo -n \"\$\$i \";";
-		print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i; fi; done; ";
-
-		print OUT "for i in \$\$files;do if [ -f \"\$(DESTDIR)\$(KDIR26)/$dir/\$\$i.(gz|bz2|xz)\" ]; then ";
-		print OUT "echo -n \"\$\$i.* \";";
-		print OUT " rm \$(DESTDIR)\$(KDIR26)/$dir/\$\$i.*; fi; done\n\n";
-		print OUT "\t\@if [ -d \$(DESTDIR)\$(KDIR26)/$dir ]; then echo; echo; fi\n";
-	}
-}
-
-#
-# Special hack for Ubuntu with their non-standard dirs
-#
-sub removeubuntu($)
-{
-	my $udir = shift;
-	my $dest = "/lib/modules/\$(KERNELRELEASE)/$udir";
-	my $filelist;
-
-	while ( my ($dir, $files) = each(%srcdir) ) {
-		$filelist .= ' '. join(' ', keys %$files);
-	}
-	while ( my ($dir, $files) = each(%obsolete) ) {
-		$filelist .= ' ' . join(' ', keys %$files);
-	}
-	$filelist =~ s/\s+$//;
-
-	print OUT "\t\@if [ -d $dest ]; then ";
-	print OUT "printf \"\\nHmm... distro kernel with a non-standard place for module backports detected.\\n";
-	print OUT "Please always prefer to use vanilla upstream kernel with V4L/DVB\\n";
-	print OUT "I'll try to remove old/obsolete LUM files from $dest:\\n\"; ";
-	print OUT "files='", $filelist, "'; ";
-
-	print OUT "for i in \$\$files;do find \"$dest\" \-name \"\$\$i\" \-exec echo \'{}\' \';\' ;";
-	print OUT " find \"$dest\" \-name \"\$\$i\" \-exec rm \'{}\' \';\' ;";
-	print OUT " done;";
-	print OUT " fi\n";
-}
-
 sub parse_dir()
 {
 	my $file = $File::Find::name;
@@ -216,8 +153,6 @@ sub parse_dir()
 
 ##############################################################################
 
-getobsolete();
-
 open OUT, '>Makefile.media' or die 'Unable to write Makefile.media';
 open_makefile('../linux/drivers/media/Makefile');
 
@@ -226,11 +161,6 @@ find({wanted => \&parse_dir, no_chdir => 1}, '../linux/drivers/misc');
 
 # Creating Install rule
 print OUT "media-install:: media-rminstall\n";
-
-removeobsolete();
-removeubuntu("kernel/ubuntu/media");
-removeubuntu("kernel/ubuntu/lirc");
-removeubuntu("/updates/dkms");
 
 print OUT "\t\@echo \"Installing kernel modules under \$(DESTDIR)\$(KDIR26)/:\"\n";
 
@@ -263,10 +193,6 @@ print OUT "\t/sbin/depmod -a \$(KERNELRELEASE) \$(if \$(DESTDIR),-b \$(DESTDIR))
 # Creating Remove rule
 print OUT "media-rminstall::\n";
 
-removeobsolete();
-removeubuntu("/ubuntu/media");
-removeubuntu("/updates/dkms");
-
 while ( my ($dir, $files) = each(%instdir) ) {
 	print OUT "\t\@if [ -d \$(DESTDIR)\$(KDIR26)/$dir ]; then echo -e \"\\nRemoving old \$(KDIR26)/$dir files:\"; fi\n";
 	print OUT "\t\@files='", join(' ', keys %$files), "'; ";
@@ -286,7 +212,6 @@ $mediadeps =~ s,\.\./linux/drivers/media/\.\.,..,g;
 
 # Print dependencies of Makefile.media
 print OUT "Makefile.media: ../linux/drivers/media/Makefile \\\n";
-print OUT "\tobsolete.txt \\\n";
 print OUT $mediadeps;
 print OUT "\n";
 close OUT;

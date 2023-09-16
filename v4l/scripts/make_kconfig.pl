@@ -626,9 +626,6 @@ open_kconfig('../linux', './Kconfig.staging');
 close OUT;
 
 # These options should default to off
-disable_config('DVB_AV7110_FIRMWARE');
-disable_config('DVB_CINERGYT2_TUNING');
-disable_config('VIDEO_HELPER_CHIPS_AUTO');
 disable_config('VIDEO_FIXED_MINOR_RANGES');
 disable_config('STAGING') if (!$enable_staging);
 disable_config('STAGING_BROKEN');
@@ -655,7 +652,11 @@ while (my ($key, $deps) = each %depend) {
 	print OUT "# Needed by ", join(', ', keys %$deps), "\n";
 	print OUT "config $key\n\ttristate\n";
 	print OUT "\tdefault ", qw(n m y)[$kernopts{$key}], "\n\n";
-	print OUT "\toption modules\n" if ($key eq "MODULES");
+	if (cmp_ver($kernver, '5.13.0') < 0) {
+		print OUT "\toption modules\n" if ($key eq "MODULES");
+	} else {
+		print OUT "\tmodules\n" if ($key eq "MODULES");
+	}
 }
 close OUT;
 
