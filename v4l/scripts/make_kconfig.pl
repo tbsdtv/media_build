@@ -655,7 +655,7 @@ while (my ($key, $deps) = each %depend) {
 	print OUT "# Needed by ", join(', ', keys %$deps), "\n";
 	print OUT "config $key\n\ttristate\n";
 	print OUT "\tdefault ", qw(n m y)[$kernopts{$key}], "\n\n";
-	print OUT "\toption modules\n" if ($key eq "MODULES");
+#	print OUT "\toption modules\n" if ($key eq "MODULES");
 }
 close OUT;
 
