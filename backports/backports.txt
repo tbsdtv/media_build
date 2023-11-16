@@ -28,6 +28,9 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
+[6.5.1023]
+add v6.5_pcm_copy.patch
+
 [6.4.1023]
 add v6.4_pin_user_pages.patch
 

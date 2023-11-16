@@ -1129,6 +1129,19 @@ index b5948759342e..35663c10fcd9 100644
  	.remove = og01a1b_remove,
  };
  
+diff --git a/drivers/media/i2c/ov01a10.c b/drivers/media/i2c/ov01a10.c
+index bbd5740d2280..06a1022faea7 100644
+--- a/drivers/media/i2c/ov01a10.c
++++ b/drivers/media/i2c/ov01a10.c
+@@ -939,7 +939,7 @@ static struct i2c_driver ov01a10_i2c_driver = {
+ 		.name = "ov01a10",
+ 		.acpi_match_table = ACPI_PTR(ov01a10_acpi_ids),
+ 	},
+-	.probe = ov01a10_probe,
++	.probe_new = ov01a10_probe,
+ 	.remove = ov01a10_remove,
+ };
+ 
 diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
 index 741d977a76f3..9fbef9c5a52f 100644
 --- a/drivers/media/i2c/ov02a10.c
