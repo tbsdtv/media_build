@@ -142,7 +142,7 @@ sub check_other_dependencies()
 	check_files_for_func("sched_set_fifo", "NEED_SCHED_SET_FIFO", "include/linux/sched.h");
 	check_files_for_func("dma_map_sgtable", "NEED_DMA_MAP_SGTABLE", "include/linux/dma-mapping.h");
 	check_files_for_func("in_compat_syscall", "NEED_IN_COMPAT_SYSCALL", "include/linux/compat.h");
-	check_files_for_func("dev_err_probe", "NEED_DEV_ERR_PROBE", "include/linux/device.h");
+	check_files_for_func("dev_err_probe", "NEED_DEV_ERR_PROBE", "include/linux/device.h", "include/linux/dev_printk.h");
 	check_files_for_func("pm_runtime_resume_and_get", "NEED_PM_RUNTIME_RESUME_AND_GET", "include/linux/pm_runtime.h");
 	check_files_for_func("vma_lookup", "NEED_VMA_LOOKUP", "include/linux/mm.h");
 	check_files_for_func("HZ_PER_MHZ", "NEED_HZ_PER_MHZ", "include/linux/units.h");
