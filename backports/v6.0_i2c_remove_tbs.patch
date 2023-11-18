@@ -1,8 +1,8 @@
 diff --git a/drivers/media/dvb-frontends/gx1503.c b/drivers/media/dvb-frontends/gx1503.c
-index 326386f14c31..49ba797092cc 100644
+index 8107d63c2ce8..c01701afab2c 100644
 --- a/drivers/media/dvb-frontends/gx1503.c
 +++ b/drivers/media/dvb-frontends/gx1503.c
-@@ -554,7 +554,7 @@ static int gx1503_probe(struct i2c_client *client,
+@@ -553,7 +553,7 @@ static int gx1503_probe(struct i2c_client *client)
  	return ret;
  }
  
@@ -11,7 +11,7 @@ index 326386f14c31..49ba797092cc 100644
  {
  	struct gx1503_dev*dev = i2c_get_clientdata(client);
  	
-@@ -568,6 +568,7 @@ static void gx1503_remove(struct i2c_client *client)
+@@ -567,6 +567,7 @@ static void gx1503_remove(struct i2c_client *client)
  	dev->fe.ops.release = NULL;
  	dev->fe.demodulator_priv = NULL;
  	kfree(dev);
@@ -20,10 +20,10 @@ index 326386f14c31..49ba797092cc 100644
  
  static const struct i2c_device_id gx1503_id_table[] = {
 diff --git a/drivers/media/dvb-frontends/m88rs6060.c b/drivers/media/dvb-frontends/m88rs6060.c
-index f5a79666643a..b302b3faee77 100644
+index 265632489eef..185bee7eeb29 100644
 --- a/drivers/media/dvb-frontends/m88rs6060.c
 +++ b/drivers/media/dvb-frontends/m88rs6060.c
-@@ -3606,7 +3606,7 @@ static int m88rs6060_probe(struct i2c_client *client,
+@@ -3595,7 +3595,7 @@ static int m88rs6060_probe(struct i2c_client *client)
  	return ret;
  }
  
@@ -32,7 +32,7 @@ index f5a79666643a..b302b3faee77 100644
  {
  	struct m88rs6060_dev *dev = i2c_get_clientdata(client);
  	
-@@ -3630,6 +3630,7 @@ static void m88rs6060_remove(struct i2c_client *client)
+@@ -3619,6 +3619,7 @@ static void m88rs6060_remove(struct i2c_client *client)
  	dev->fe.demodulator_priv = NULL;
  
  	kfree(dev);
@@ -41,15 +41,15 @@ index f5a79666643a..b302b3faee77 100644
  
  static const struct i2c_device_id m88rs6060_id_table[] = {
 diff --git a/drivers/media/dvb-frontends/mtv23x.c b/drivers/media/dvb-frontends/mtv23x.c
-index 3d07154c22dd..ed167760ad33 100644
+index 939b2babd353..d560799bfa51 100644
 --- a/drivers/media/dvb-frontends/mtv23x.c
 +++ b/drivers/media/dvb-frontends/mtv23x.c
-@@ -2471,12 +2471,13 @@ static int mtv23x_probe(struct i2c_client*client,
+@@ -2470,12 +2470,13 @@ static int mtv23x_probe(struct i2c_client *client)
  	return ret;
  }
  
--static void mtv23x_remove(struct i2c_client*client)
-+static int mtv23x_remove(struct i2c_client*client)
+-static void mtv23x_remove(struct i2c_client *client)
++static int mtv23x_remove(struct i2c_client *client)
  {
  	struct mtv23x_dev*dev = i2c_get_clientdata(client);
  
@@ -60,10 +60,10 @@ index 3d07154c22dd..ed167760ad33 100644
  
  static const struct i2c_device_id mtv23x_id_table[] ={
 diff --git a/drivers/media/dvb-frontends/si2183.c b/drivers/media/dvb-frontends/si2183.c
-index b9564d4f4a84..01901088dee8 100644
+index fd1e78d9f0d8..625e6eda6f0f 100644
 --- a/drivers/media/dvb-frontends/si2183.c
 +++ b/drivers/media/dvb-frontends/si2183.c
-@@ -1796,7 +1796,7 @@ static int si2183_probe(struct i2c_client *client,
+@@ -1795,7 +1795,7 @@ static int si2183_probe(struct i2c_client *client)
  	return ret;
  }
  
@@ -72,7 +72,7 @@ index b9564d4f4a84..01901088dee8 100644
  {
  	struct si2183_dev *dev = i2c_get_clientdata(client);
  
-@@ -1819,6 +1819,7 @@ static void si2183_remove(struct i2c_client *client)
+@@ -1818,6 +1818,7 @@ static void si2183_remove(struct i2c_client *client)
  	dev->fe.demodulator_priv = NULL;
  
  	kfree(dev);
@@ -81,10 +81,10 @@ index b9564d4f4a84..01901088dee8 100644
  
  static const struct i2c_device_id si2183_id_table[] = {
 diff --git a/drivers/media/tuners/mxl603.c b/drivers/media/tuners/mxl603.c
-index 992e3426c40d..432435ffd17a 100644
+index ae5a05aa28bc..3b29d3af0f11 100644
 --- a/drivers/media/tuners/mxl603.c
 +++ b/drivers/media/tuners/mxl603.c
-@@ -556,11 +556,12 @@ static int mxl603_probe(struct i2c_client *client,
+@@ -555,11 +555,12 @@ static int mxl603_probe(struct i2c_client *client)
  	return ret;
  }
  
