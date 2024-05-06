@@ -483,6 +483,27 @@ index c28fee7509cd..1eb371b79e36 100644
  }
  
  static const struct i2c_device_id ts2020_id_table[] = {
+diff --git a/drivers/media/i2c/adv748x/adv748x-core.c b/drivers/media/i2c/adv748x/adv748x-core.c
+index 3eb6d5e8f082..301b8d1cf36b 100644
+--- a/drivers/media/i2c/adv748x/adv748x-core.c
++++ b/drivers/media/i2c/adv748x/adv748x-core.c
+@@ -815,7 +815,7 @@ static int adv748x_probe(struct i2c_client *client)
+ 	return ret;
+ }
+ 
+-static void adv748x_remove(struct i2c_client *client)
++static int adv748x_remove(struct i2c_client *client)
+ {
+ 	struct adv748x_state *state = i2c_get_clientdata(client);
+ 
+@@ -828,6 +828,7 @@ static void adv748x_remove(struct i2c_client *client)
+ 	adv748x_unregister_clients(state);
+ 	adv748x_dt_cleanup(state);
+ 	mutex_destroy(&state->mutex);
++	return 0;
+ }
+ 
+ static const struct of_device_id adv748x_of_table[] = {
 diff --git a/drivers/media/i2c/ad5820.c b/drivers/media/i2c/ad5820.c
 index 44c26af49071..16ba18f85d2d 100644
 --- a/drivers/media/i2c/ad5820.c
