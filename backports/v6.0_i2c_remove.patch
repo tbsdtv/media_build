@@ -1320,6 +1320,48 @@ index 25d4dbb6041e..a2b1e5ac3b10 100644
  }
  
  static const struct dev_pm_ops imx355_pm_ops = {
+diff --git a/drivers/media/i2c/imx412.c b/drivers/media/i2c/imx412.c
+index c7e862ae4040..a938435de9bd 100644
+--- a/drivers/media/i2c/imx412.c
++++ b/drivers/media/i2c/imx412.c
+@@ -1263,7 +1263,7 @@ static int imx412_probe(struct i2c_client *client)
+  *
+  * Return: 0 if successful, error code otherwise.
+  */
+-static void imx412_remove(struct i2c_client *client)
++static int imx412_remove(struct i2c_client *client)
+ {
+ 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+ 	struct imx412 *imx412 = to_imx412(sd);
+@@ -1278,6 +1278,7 @@ static void imx412_remove(struct i2c_client *client)
+ 	pm_runtime_set_suspended(&client->dev);
+ 
+ 	mutex_destroy(&imx412->mutex);
++	return 0;
+ }
+ 
+ static const struct dev_pm_ops imx412_pm_ops = {
+diff --git a/drivers/media/i2c/imx415.c b/drivers/media/i2c/imx415.c
+index 4b5d1ee9cc6b..865cd6592a45 100644
+--- a/drivers/media/i2c/imx415.c
++++ b/drivers/media/i2c/imx415.c
+@@ -1233,7 +1233,7 @@ static int imx415_probe(struct i2c_client *client)
+ 	return ret;
+ }
+ 
+-static void imx415_remove(struct i2c_client *client)
++static int imx415_remove(struct i2c_client *client)
+ {
+ 	struct v4l2_subdev *subdev = i2c_get_clientdata(client);
+ 	struct imx415 *sensor = to_imx415(subdev);
+@@ -1250,6 +1250,7 @@ static void imx415_remove(struct i2c_client *client)
+ 	if (!pm_runtime_status_suspended(sensor->dev))
+ 		imx415_power_off(sensor);
+ 	pm_runtime_set_suspended(sensor->dev);
++	return 0;
+ }
+ 
+ static int imx415_runtime_resume(struct device *dev)
 diff --git a/drivers/media/i2c/ir-kbd-i2c.c b/drivers/media/i2c/ir-kbd-i2c.c
 index 51921068931d..580eba23fa97 100644
 --- a/drivers/media/i2c/ir-kbd-i2c.c
