@@ -28,6 +28,13 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
+[6.8.1023]
+add v6.8-ccs.patch
+add v6.8-spi.patch
+
+[6.7.1023]
+add v6.7-cec.patch
+
 [6.5.1023]
 add v6.5_pcm_copy.patch
 add v6.5_dvb_math.patch
