@@ -1,0 +1,12 @@
+diff --git a/drivers/media/cec/core/cec-notifier.c b/drivers/media/cec/core/cec-notifier.c
+index a41f24172b11..389dc664b211 100644
+--- a/drivers/media/cec/core/cec-notifier.c
++++ b/drivers/media/cec/core/cec-notifier.c
+@@ -7,7 +7,6 @@
+  */
+ 
+ #include <linux/export.h>
+-#include <linux/platform_device.h>
+ #include <linux/string.h>
+ #include <linux/slab.h>
+ #include <linux/i2c.h>
