@@ -43,9 +43,6 @@ add v6.7-cec.patch
 add v6.5_pcm_copy.patch
 add v6.5_dvb_math.patch
 
-[6.4.1023]
-add v6.4_pin_user_pages.patch
-
 [6.3.1023]
 add v6.3_class_create.patch
 add v6.3_check_endpoint.patch
