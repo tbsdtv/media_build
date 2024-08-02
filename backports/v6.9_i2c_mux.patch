@@ -1,0 +1,104 @@
+diff --git a/drivers/media/dvb-frontends/af9013.c b/drivers/media/dvb-frontends/af9013.c
+index 5afdbe244596..a829c89792a4 100644
+--- a/drivers/media/dvb-frontends/af9013.c
++++ b/drivers/media/dvb-frontends/af9013.c
+@@ -1480,7 +1480,7 @@ static int af9013_probe(struct i2c_client *client)
+ 		goto err_regmap_exit;
+ 	}
+ 	state->muxc->priv = state;
+-	ret = i2c_mux_add_adapter(state->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(state->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err_regmap_exit;
+ 
+diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
+index a1cb424527cc..2d7750649850 100644
+--- a/drivers/media/dvb-frontends/lgdt3306a.c
++++ b/drivers/media/dvb-frontends/lgdt3306a.c
+@@ -2203,7 +2203,7 @@ static int lgdt3306a_probe(struct i2c_client *client)
+ 		goto err_kfree;
+ 	}
+ 	state->muxc->priv = client;
+-	ret = i2c_mux_add_adapter(state->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(state->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err_kfree;
+ 
+diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-frontends/m88ds3103.c
+index fae55c4563ff..cf037b61b226 100644
+--- a/drivers/media/dvb-frontends/m88ds3103.c
++++ b/drivers/media/dvb-frontends/m88ds3103.c
+@@ -1866,7 +1866,7 @@ static int m88ds3103_probe(struct i2c_client *client)
+ 		goto err_kfree;
+ 	}
+ 	dev->muxc->priv = dev;
+-	ret = i2c_mux_add_adapter(dev->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(dev->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err_kfree;
+ 
+diff --git a/drivers/media/dvb-frontends/rtl2830.c b/drivers/media/dvb-frontends/rtl2830.c
+index 30d10fe4b33e..35c969fd2cb5 100644
+--- a/drivers/media/dvb-frontends/rtl2830.c
++++ b/drivers/media/dvb-frontends/rtl2830.c
+@@ -838,7 +838,7 @@ static int rtl2830_probe(struct i2c_client *client)
+ 		goto err_regmap_exit;
+ 	}
+ 	dev->muxc->priv = client;
+-	ret = i2c_mux_add_adapter(dev->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(dev->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err_regmap_exit;
+ 
+diff --git a/drivers/media/dvb-frontends/rtl2832.c b/drivers/media/dvb-frontends/rtl2832.c
+index 5142820b1b3d..601cf45c3935 100644
+--- a/drivers/media/dvb-frontends/rtl2832.c
++++ b/drivers/media/dvb-frontends/rtl2832.c
+@@ -1082,7 +1082,7 @@ static int rtl2832_probe(struct i2c_client *client)
+ 		goto err_regmap_exit;
+ 	}
+ 	dev->muxc->priv = dev;
+-	ret = i2c_mux_add_adapter(dev->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(dev->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err_regmap_exit;
+ 
+diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
+index 26828fd41e68..dae1f2153e8b 100644
+--- a/drivers/media/dvb-frontends/si2168.c
++++ b/drivers/media/dvb-frontends/si2168.c
+@@ -744,7 +744,7 @@ static int si2168_probe(struct i2c_client *client)
+ 		goto err_kfree;
+ 	}
+ 	dev->muxc->priv = client;
+-	ret = i2c_mux_add_adapter(dev->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(dev->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err_kfree;
+ 
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index bf591bf5da25..88c58e0c49aa 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -382,7 +382,7 @@ static int max9286_i2c_mux_init(struct max9286_priv *priv)
+ 	for_each_source(priv, source) {
+ 		unsigned int index = to_index(priv, source);
+ 
+-		ret = i2c_mux_add_adapter(priv->mux, 0, index);
++		ret = i2c_mux_add_adapter(priv->mux, 0, index, 0);
+ 		if (ret < 0)
+ 			goto error;
+ 	}
+diff --git a/drivers/media/usb/cx231xx/cx231xx-i2c.c b/drivers/media/usb/cx231xx/cx231xx-i2c.c
+index 6da8e7943d94..78a75fbd3a53 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-i2c.c
++++ b/drivers/media/usb/cx231xx/cx231xx-i2c.c
+@@ -567,7 +567,7 @@ int cx231xx_i2c_mux_create(struct cx231xx *dev)
+ 
+ int cx231xx_i2c_mux_register(struct cx231xx *dev, int mux_no)
+ {
+-	return i2c_mux_add_adapter(dev->muxc, 0, mux_no);
++	return i2c_mux_add_adapter(dev->muxc, 0, mux_no, 0);
+ }
+ 
+ void cx231xx_i2c_mux_unregister(struct cx231xx *dev)

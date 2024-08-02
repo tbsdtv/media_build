@@ -134,47 +134,6 @@ index 049c2f2001ea..3d9533c1b202 100644
  	v4l2_async_nf_cleanup(notifier);
  	kfree(notifier);
  
-diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
-index 4c2ec7a0d804..f2c439359557 100644
---- a/drivers/media/v4l2-core/videobuf-dma-contig.c
-+++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
-@@ -314,7 +314,7 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
- 	}
- 
- 	vma->vm_ops = &videobuf_vm_ops;
--	vm_flags_set(vma, VM_DONTEXPAND);
-+	vma->vm_flags |= VM_DONTEXPAND;
- 	vma->vm_private_data = map;
- 
- 	dev_dbg(q->dev, "mmap %p: q=%p %08lx-%08lx (%lx) pgoff %08lx buf %d\n",
-diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index 53001532e8e3..234e9f647c96 100644
---- a/drivers/media/v4l2-core/videobuf-dma-sg.c
-+++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
-@@ -630,8 +630,8 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
- 	map->count    = 1;
- 	map->q        = q;
- 	vma->vm_ops   = &videobuf_vm_ops;
--	/* using shared anonymous pages */
--	vm_flags_mod(vma, VM_DONTEXPAND | VM_DONTDUMP, VM_IO);
-+	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
-+	vma->vm_flags &= ~VM_IO; /* using shared anonymous pages */
- 	vma->vm_private_data = map;
- 	dprintk(1, "mmap %p: q=%p %08lx-%08lx pgoff %08lx bufs %d-%d\n",
- 		map, q, vma->vm_start, vma->vm_end, vma->vm_pgoff, first, last);
-diff --git a/drivers/media/v4l2-core/videobuf-vmalloc.c b/drivers/media/v4l2-core/videobuf-vmalloc.c
-index 85c7090606d6..9b2443720ab0 100644
---- a/drivers/media/v4l2-core/videobuf-vmalloc.c
-+++ b/drivers/media/v4l2-core/videobuf-vmalloc.c
-@@ -247,7 +247,7 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
- 	}
- 
- 	vma->vm_ops          = &videobuf_vm_ops;
--	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
-+	vma->vm_flags       |= VM_DONTEXPAND | VM_DONTDUMP;
- 	vma->vm_private_data = map;
- 
- 	dprintk(1, "mmap %p: q=%p %08lx-%08lx (%lx) pgoff %08lx buf %d\n",
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 index 205d3cac425c..d14e13385385 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
