@@ -1,0 +1,77 @@
+diff --git a/drivers/media/dvb-frontends/gx1133.c b/drivers/media/dvb-frontends/gx1133.c
+index 6d616de86d78..45e8abfa91a2 100644
+--- a/drivers/media/dvb-frontends/gx1133.c
++++ b/drivers/media/dvb-frontends/gx1133.c
+@@ -810,10 +810,10 @@ struct dvb_frontend *gx1133_attach(const struct gx1133_config *cfg,
+ 		goto err1;
+ 	}
+ 	priv->muxc->priv = priv;
+-	ret = i2c_mux_add_adapter(priv->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(priv->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err1;
+-	ret = i2c_mux_add_adapter(priv->muxc, 0, 1);
++	ret = i2c_mux_add_adapter(priv->muxc, 0, 1, 0);
+ 	if (ret)
+ 		goto err1;
+ 	priv->i2c_demod = priv->muxc->adapter[0];
+diff --git a/drivers/media/dvb-frontends/gx1503.c b/drivers/media/dvb-frontends/gx1503.c
+index 18b7b4f9feb4..8107d63c2ce8 100644
+--- a/drivers/media/dvb-frontends/gx1503.c
++++ b/drivers/media/dvb-frontends/gx1503.c
+@@ -516,7 +516,7 @@ static int gx1503_probe(struct i2c_client *client)
+ 		goto err_regmap_exit;
+ 	}
+ 	dev->muxc->priv = client;
+-	ret = i2c_mux_add_adapter(dev->muxc,0,0);
++	ret = i2c_mux_add_adapter(dev->muxc,0,0,0);
+ 	if(ret)
+ 		goto err_regmap_exit;
+ 	
+diff --git a/drivers/media/dvb-frontends/si2183.c b/drivers/media/dvb-frontends/si2183.c
+index 6f07d7a89e2a..fd1e78d9f0d8 100644
+--- a/drivers/media/dvb-frontends/si2183.c
++++ b/drivers/media/dvb-frontends/si2183.c
+@@ -1734,7 +1734,7 @@ static int si2183_probe(struct i2c_client *client)
+ 			goto err_base_kfree;
+ 		}
+ 		base->muxc->priv = client;
+-		ret = i2c_mux_add_adapter(base->muxc, 0, 0);
++		ret = i2c_mux_add_adapter(base->muxc, 0, 0, 0);
+ 		if (ret)
+ 			goto err_base_kfree;
+ 		base->tuner_adapter = base->muxc->adapter[0];
+diff --git a/drivers/media/dvb-frontends/tas2101.c b/drivers/media/dvb-frontends/tas2101.c
+index ef2211d30010..dbbc3a8c65e2 100644
+--- a/drivers/media/dvb-frontends/tas2101.c
++++ b/drivers/media/dvb-frontends/tas2101.c
+@@ -624,10 +624,10 @@ struct dvb_frontend *tas2101_attach(const struct tas2101_config *cfg,
+ 		goto err1;
+ 	}
+ 	priv->muxc->priv = priv;
+-	ret = i2c_mux_add_adapter(priv->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(priv->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err1;
+-	ret = i2c_mux_add_adapter(priv->muxc, 0, 1);
++	ret = i2c_mux_add_adapter(priv->muxc, 0, 1, 0);
+ 	if (ret)
+ 		goto err1;
+ 	priv->i2c_demod = priv->muxc->adapter[0];
+diff --git a/drivers/media/dvb-frontends/tas2971.c b/drivers/media/dvb-frontends/tas2971.c
+index f12c5e3770db..059ef8305ad8 100644
+--- a/drivers/media/dvb-frontends/tas2971.c
++++ b/drivers/media/dvb-frontends/tas2971.c
+@@ -294,10 +294,10 @@ struct dvb_frontend *tas2971_attach(const struct tas2101_config *cfg,
+ 		goto err1;
+ 	}
+ 	base->muxc->priv = priv;
+-	ret = i2c_mux_add_adapter(base->muxc, 0, 0);
++	ret = i2c_mux_add_adapter(base->muxc, 0, 0, 0);
+ 	if (ret)
+ 		goto err1;
+-	ret = i2c_mux_add_adapter(base->muxc, 0, 1);
++	ret = i2c_mux_add_adapter(base->muxc, 0, 1, 0);
+ 	if (ret)
+ 		goto err1;
+ 	base->i2c_demod = base->muxc->adapter[0];

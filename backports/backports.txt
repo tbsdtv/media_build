@@ -30,6 +30,7 @@ add rc-cec.patch
 
 [6.9.1023]
 add v6.9_i2c_mux.patch
+add v6.9_i2c_mux_tbs.patch
 add v6.9_assign_str.patch
 
 [6.8.1023]
