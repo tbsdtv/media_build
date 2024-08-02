@@ -106,7 +106,6 @@ add v5.7_pin_user_pages.patch
 add v5.7_define_seq_attribute.patch
 
 [5.6.1023]
-add v5.6_pin_user_pages.patch
 add v5.6_const_fb_ops.patch
 add v5.6_pm_runtime_get_if_active.patch
 
