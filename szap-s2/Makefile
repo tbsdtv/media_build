@@ -1,4 +1,4 @@
-CC=gcc
+CC ?= gcc
 
 SRC=lnb.c szap-s2.c tzap-t2.c
 HED=lnb.h
