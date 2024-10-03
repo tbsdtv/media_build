@@ -70,7 +70,7 @@ sub check_other_dependencies()
 	check_files_for_func("BUS_CEC", "NEED_BUS_CEC", "include/uapi/linux/input.h");
 	check_files_for_func("kthread_init_worker", "NEED_KTHREAD_INIT_WORKER", "include/linux/kthread.h");
 	check_files_for_func("print_hex_dump_debug", "NEED_PRINT_HEX_DUMP_DEBUG", "include/linux/printk.h");
-	check_files_for_func("min3", "NEED_MIN3", "include/linux/kernel.h");
+	check_files_for_func("min3", "NEED_MIN3", "include/linux/kernel.h", "include/linux/minmax.h");
 	check_files_for_func("rcu_pointer_handoff", "NEED_RCU_POINTER_HANDOFF", "include/linux/rcupdate.h");
 	check_files_for_func("regmap_read_poll_timeout", "NEED_REGMAP_READ_POLL_TIMEOUT", "include/linux/regmap.h");
 	check_files_for_func("dma_coerce_mask_and_coherent", "NEED_DMA_COERCE_MASK", "include/linux/dma-mapping.h");
