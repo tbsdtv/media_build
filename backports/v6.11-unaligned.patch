@@ -596,3 +596,16 @@ index bbe3967c3a4c..587427b73914 100644
  #include <linux/ctype.h>
  #include <linux/string.h>
  #include <linux/firmware.h>
+diff --git a/drivers/media/dvb-frontends/mxl58x.c b/drivers/media/dvb-frontends/mxl58x.c
+index 6b518f9f612e..956867cfc671 100644
+--- a/drivers/media/dvb-frontends/mxl58x.c
++++ b/drivers/media/dvb-frontends/mxl58x.c
+@@ -39,7 +39,7 @@
+ #include <linux/mutex.h>
+ #include <linux/vmalloc.h>
+ #include <asm/div64.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ 
+ #include "mxl58x.h"
