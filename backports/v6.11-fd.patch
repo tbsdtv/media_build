@@ -1,0 +1,88 @@
+diff --git a/drivers/media/mc/mc-request.c b/drivers/media/mc/mc-request.c
+index df39c8c11e9a..addb8f2d8939 100644
+--- a/drivers/media/mc/mc-request.c
++++ b/drivers/media/mc/mc-request.c
+@@ -246,21 +246,22 @@ static const struct file_operations request_fops = {
+ struct media_request *
+ media_request_get_by_fd(struct media_device *mdev, int request_fd)
+ {
++	struct fd f;
+ 	struct media_request *req;
+ 
+ 	if (!mdev || !mdev->ops ||
+ 	    !mdev->ops->req_validate || !mdev->ops->req_queue)
+ 		return ERR_PTR(-EBADR);
+ 
+-	CLASS(fd, f)(request_fd);
+-	if (fd_empty(f))
+-		goto err;
++	f = fdget(request_fd);
++	if (!f.file)
++		goto err_no_req_fd;
+ 
+-	if (fd_file(f)->f_op != &request_fops)
+-		goto err;
+-	req = fd_file(f)->private_data;
++	if (f.file->f_op != &request_fops)
++		goto err_fput;
++	req = f.file->private_data;
+ 	if (req->mdev != mdev)
+-		goto err;
++		goto err_fput;
+ 
+ 	/*
+ 	 * Note: as long as someone has an open filehandle of the request,
+@@ -271,9 +272,14 @@ media_request_get_by_fd(struct media_device *mdev, int request_fd)
+ 	 * before media_request_get() is called.
+ 	 */
+ 	media_request_get(req);
++	fdput(f);
++
+ 	return req;
+ 
+-err:
++err_fput:
++	fdput(f);
++
++err_no_req_fd:
+ 	dev_dbg(mdev->dev, "cannot find request_fd %d\n", request_fd);
+ 	return ERR_PTR(-EINVAL);
+ }
+diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
+index a2257dc2f25d..b1e6ded5d0ab 100644
+--- a/drivers/media/rc/lirc_dev.c
++++ b/drivers/media/rc/lirc_dev.c
+@@ -815,23 +815,28 @@ void __exit lirc_dev_exit(void)
+ 
+ struct rc_dev *rc_dev_get_from_fd(int fd, bool write)
+ {
+-	CLASS(fd, f)(fd);
++	struct fd f = fdget(fd);
+ 	struct lirc_fh *fh;
+ 	struct rc_dev *dev;
+ 
+-	if (fd_empty(f))
++	if (!f.file)
+ 		return ERR_PTR(-EBADF);
+ 
+-	if (fd_file(f)->f_op != &lirc_fops)
++	if (f.file->f_op != &lirc_fops) {
++		fdput(f);
+ 		return ERR_PTR(-EINVAL);
++	}
+ 
+-	if (write && !(fd_file(f)->f_mode & FMODE_WRITE))
++	if (write && !(f.file->f_mode & FMODE_WRITE)) {
++		fdput(f);
+ 		return ERR_PTR(-EPERM);
++	}
+ 
+-	fh = fd_file(f)->private_data;
++	fh = f.file->private_data;
+ 	dev = fh->rc;
+ 
+ 	get_device(&dev->dev);
++	fdput(f);
+ 
+ 	return dev;
+ }

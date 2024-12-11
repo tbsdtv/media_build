@@ -28,6 +28,10 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
+[6.11.1023]
+add v6.11-unaligned.patch
+add v6.11-fd.patch
+
 [6.10.1023]
 add v6.10_bt8xx.patch
 
