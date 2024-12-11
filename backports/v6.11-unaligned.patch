@@ -1,0 +1,598 @@
+diff --git a/drivers/media/dvb-frontends/mxl5xx.c b/drivers/media/dvb-frontends/mxl5xx.c
+index ca1f1d3d6122..4ebbcf05cc09 100644
+--- a/drivers/media/dvb-frontends/mxl5xx.c
++++ b/drivers/media/dvb-frontends/mxl5xx.c
+@@ -21,7 +21,7 @@
+ #include <linux/mutex.h>
+ #include <linux/vmalloc.h>
+ #include <asm/div64.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <media/dvb_frontend.h>
+ #include "mxl5xx.h"
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index 2cd1c9e6d4bf..25993445f4fe 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -9,7 +9,7 @@
+  * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
+index a099c9c51120..50e78f5b058c 100644
+--- a/drivers/media/i2c/hi556.c
++++ b/drivers/media/i2c/hi556.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Intel Corporation.
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
+index 99bdabb77110..fa0038749a3b 100644
+--- a/drivers/media/i2c/hi846.c
++++ b/drivers/media/i2c/hi846.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2021 Purism SPC
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/gpio/consumer.h>
+diff --git a/drivers/media/i2c/hi847.c b/drivers/media/i2c/hi847.c
+index f16c5c5291cf..7cdce392e137 100644
+--- a/drivers/media/i2c/hi847.c
++++ b/drivers/media/i2c/hi847.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2022 Intel Corporation.
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+diff --git a/drivers/media/i2c/imx208.c b/drivers/media/i2c/imx208.c
+index 88debccce0cf..3e870fa9ff79 100644
+--- a/drivers/media/i2c/imx208.c
++++ b/drivers/media/i2c/imx208.c
+@@ -8,7 +8,7 @@
+ #include <linux/pm_runtime.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #define IMX208_REG_MODE_SELECT		0x0100
+ #define IMX208_MODE_STANDBY		0x00
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index ab9f450da98f..d737d5e9a4a6 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -26,7 +26,7 @@
+ #include <media/v4l2-event.h>
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-mediabus.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #define IMX219_REG_VALUE_08BIT		1
+ #define IMX219_REG_VALUE_16BIT		2
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index 085c4bf96b71..e196565e846e 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -10,7 +10,7 @@
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fwnode.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #define IMX258_REG_VALUE_08BIT		1
+ #define IMX258_REG_VALUE_16BIT		2
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index 9a3363e26140..b3f832e9d7e1 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -18,7 +18,7 @@
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <media/media-entity.h>
+ #include <media/v4l2-ctrls.h>
+diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
+index 3a21c22b8e3c..a2140848d0d6 100644
+--- a/drivers/media/i2c/imx319.c
++++ b/drivers/media/i2c/imx319.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (C) 2018 Intel Corporation
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+index c1021102c9bb..d722c9b7cd31 100644
+--- a/drivers/media/i2c/imx334.c
++++ b/drivers/media/i2c/imx334.c
+@@ -4,7 +4,7 @@
+  *
+  * Copyright (C) 2021 Intel Corporation
+  */
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index dbed9c36451c..482a0b7f040a 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -4,7 +4,7 @@
+  *
+  * Copyright (C) 2021 Intel Corporation
+  */
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/imx355.c b/drivers/media/i2c/imx355.c
+index 0fc0005f78a9..6571a98b1e9e 100644
+--- a/drivers/media/i2c/imx355.c
++++ b/drivers/media/i2c/imx355.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (C) 2018 Intel Corporation
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+diff --git a/drivers/media/i2c/imx412.c b/drivers/media/i2c/imx412.c
+index bfd0ca7826d2..c7e862ae4040 100644
+--- a/drivers/media/i2c/imx412.c
++++ b/drivers/media/i2c/imx412.c
+@@ -4,7 +4,7 @@
+  *
+  * Copyright (C) 2021 Intel Corporation
+  */
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/ir-kbd-i2c.c b/drivers/media/i2c/ir-kbd-i2c.c
+index c84e1e0e6109..b37a2aaf8ac0 100644
+--- a/drivers/media/i2c/ir-kbd-i2c.c
++++ b/drivers/media/i2c/ir-kbd-i2c.c
+@@ -35,7 +35,7 @@
+  *	Copyright (C) 2011 Andy Walls <awalls@md.metrocast.net>
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+diff --git a/drivers/media/i2c/og01a1b.c b/drivers/media/i2c/og01a1b.c
+index c1444e455bfe..b5948759342e 100644
+--- a/drivers/media/i2c/og01a1b.c
++++ b/drivers/media/i2c/og01a1b.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2022 Intel Corporation.
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+diff --git a/drivers/media/i2c/ov01a10.c b/drivers/media/i2c/ov01a10.c
+index 923328b38582..bbd5740d2280 100644
+--- a/drivers/media/i2c/ov01a10.c
++++ b/drivers/media/i2c/ov01a10.c
+@@ -3,7 +3,7 @@
+  * Copyright (c) 2023 Intel Corporation.
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <linux/acpi.h>
+ #include <linux/bitfield.h>
+diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+index 65311dda1852..d06e9fc37f77 100644
+--- a/drivers/media/i2c/ov2680.c
++++ b/drivers/media/i2c/ov2680.c
+@@ -10,7 +10,7 @@
+  *
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+index 567a6572632c..158d934733c3 100644
+--- a/drivers/media/i2c/ov2740.c
++++ b/drivers/media/i2c/ov2740.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2020 Intel Corporation.
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
+index dbd6d22d51cb..d722348b938b 100644
+--- a/drivers/media/i2c/ov5670.c
++++ b/drivers/media/i2c/ov5670.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2017 Intel Corporation.
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+index 9cc9188c8ae4..700c4b69846f 100644
+--- a/drivers/media/i2c/ov5675.c
++++ b/drivers/media/i2c/ov5675.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Intel Corporation.
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
+index 2136bef64612..7f9212cce239 100644
+--- a/drivers/media/i2c/ov5693.c
++++ b/drivers/media/i2c/ov5693.c
+@@ -12,7 +12,7 @@
+  * Jake Day
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+index 3e9c5c99872d..f053c3a7676a 100644
+--- a/drivers/media/i2c/ov8856.c
++++ b/drivers/media/i2c/ov8856.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Intel Corporation.
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/ov8858.c b/drivers/media/i2c/ov8858.c
+index e31b786293f3..3af6125a2eee 100644
+--- a/drivers/media/i2c/ov8858.c
++++ b/drivers/media/i2c/ov8858.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2017 Fuzhou Rockchip Electronics Co., Ltd.
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
+index 04546ab21a3b..068c7449f50e 100644
+--- a/drivers/media/i2c/ov9282.c
++++ b/drivers/media/i2c/ov9282.c
+@@ -4,7 +4,7 @@
+  *
+  * Copyright (C) 2021 Intel Corporation
+  */
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/ov9734.c b/drivers/media/i2c/ov9734.c
+index e9a6a3711600..b6244772bc59 100644
+--- a/drivers/media/i2c/ov9734.c
++++ b/drivers/media/i2c/ov9734.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2020 Intel Corporation.
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/acpi.h>
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+diff --git a/drivers/media/i2c/st-vgxy61.c b/drivers/media/i2c/st-vgxy61.c
+index a432850fc1ec..30f82ca344c4 100644
+--- a/drivers/media/i2c/st-vgxy61.c
++++ b/drivers/media/i2c/st-vgxy61.c
+@@ -15,7 +15,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/units.h>
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <media/mipi-csi2.h>
+ #include <media/v4l2-async.h>
+diff --git a/drivers/media/pci/bt8xx/bttv-cards.c b/drivers/media/pci/bt8xx/bttv-cards.c
+index 365b04e5ae4d..867c1308de23 100644
+--- a/drivers/media/pci/bt8xx/bttv-cards.c
++++ b/drivers/media/pci/bt8xx/bttv-cards.c
+@@ -24,7 +24,7 @@
+ #include <linux/firmware.h>
+ #include <net/checksum.h>
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <asm/io.h>
+ 
+ #include "bttvp.h"
+diff --git a/drivers/media/platform/chips-media/coda-jpeg.c b/drivers/media/platform/chips-media/coda-jpeg.c
+index 5746892658b1..ba8f41002917 100644
+--- a/drivers/media/platform/chips-media/coda-jpeg.c
++++ b/drivers/media/platform/chips-media/coda-jpeg.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2014 Philipp Zabel, Pengutronix
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/irqreturn.h>
+ #include <linux/kernel.h>
+ #include <linux/ktime.h>
+diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/platform/renesas/rcar_jpu.c
+index 99b99b1a5629..2b8cb50f54de 100644
+--- a/drivers/media/platform/renesas/rcar_jpu.c
++++ b/drivers/media/platform/renesas/rcar_jpu.c
+@@ -14,7 +14,7 @@
+  *      3) V4L2_CID_JPEG_ACTIVE_MARKER
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/clk.h>
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+diff --git a/drivers/media/platform/verisilicon/hantro_g1_mpeg2_dec.c b/drivers/media/platform/verisilicon/hantro_g1_mpeg2_dec.c
+index e0d6bd0a6e44..9aea331e1a3c 100644
+--- a/drivers/media/platform/verisilicon/hantro_g1_mpeg2_dec.c
++++ b/drivers/media/platform/verisilicon/hantro_g1_mpeg2_dec.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2018 Rockchip Electronics Co., Ltd.
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/bitfield.h>
+ #include <media/v4l2-mem2mem.h>
+ #include "hantro.h"
+diff --git a/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c b/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
+index 86cc1a07026f..12d69503d6ba 100644
+--- a/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
++++ b/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2018 Rockchip Electronics Co., Ltd.
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <media/v4l2-mem2mem.h>
+ #include "hantro_jpeg.h"
+ #include "hantro.h"
+diff --git a/drivers/media/platform/verisilicon/rockchip_vpu2_hw_jpeg_enc.c b/drivers/media/platform/verisilicon/rockchip_vpu2_hw_jpeg_enc.c
+index 61621b1be8a2..8395c4d48dd0 100644
+--- a/drivers/media/platform/verisilicon/rockchip_vpu2_hw_jpeg_enc.c
++++ b/drivers/media/platform/verisilicon/rockchip_vpu2_hw_jpeg_enc.c
+@@ -22,7 +22,7 @@
+  * zigzag, nor linear.
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <media/v4l2-mem2mem.h>
+ #include "hantro_jpeg.h"
+ #include "hantro.h"
+diff --git a/drivers/media/platform/verisilicon/rockchip_vpu2_hw_mpeg2_dec.c b/drivers/media/platform/verisilicon/rockchip_vpu2_hw_mpeg2_dec.c
+index 50a3a3eeaa00..b66737fab46b 100644
+--- a/drivers/media/platform/verisilicon/rockchip_vpu2_hw_mpeg2_dec.c
++++ b/drivers/media/platform/verisilicon/rockchip_vpu2_hw_mpeg2_dec.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2018 Rockchip Electronics Co., Ltd.
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/bitfield.h>
+ #include <media/v4l2-mem2mem.h>
+ #include "hantro.h"
+diff --git a/drivers/media/radio/radio-raremono.c b/drivers/media/radio/radio-raremono.c
+index 64c7452c05b5..c3180d53c282 100644
+--- a/drivers/media/radio/radio-raremono.c
++++ b/drivers/media/radio/radio-raremono.c
+@@ -12,7 +12,7 @@
+ #include <linux/hid.h>
+ #include <linux/mutex.h>
+ #include <linux/videodev2.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-ioctl.h>
+ #include <media/v4l2-ctrls.h>
+diff --git a/drivers/media/radio/si470x/radio-si470x.h b/drivers/media/radio/si470x/radio-si470x.h
+index 2915c0023fcd..e57ab54a27fc 100644
+--- a/drivers/media/radio/si470x/radio-si470x.h
++++ b/drivers/media/radio/si470x/radio-si470x.h
+@@ -26,7 +26,7 @@
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-event.h>
+ #include <media/v4l2-device.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ 
+ 
+diff --git a/drivers/media/rc/ir_toy.c b/drivers/media/rc/ir_toy.c
+index bf97f522bd46..196806709259 100644
+--- a/drivers/media/rc/ir_toy.c
++++ b/drivers/media/rc/ir_toy.c
+@@ -12,7 +12,7 @@
+  * Copyright (C) 2011 Peter Kooiman <pkooiman@gmail.com>
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/completion.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+diff --git a/drivers/media/rc/redrat3.c b/drivers/media/rc/redrat3.c
+index d89a4cfe3c89..9f2947af33aa 100644
+--- a/drivers/media/rc/redrat3.c
++++ b/drivers/media/rc/redrat3.c
+@@ -31,7 +31,7 @@
+  * --
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/device.h>
+ #include <linux/leds.h>
+ #include <linux/module.h>
+diff --git a/drivers/media/tuners/xc2028.c b/drivers/media/tuners/xc2028.c
+index 807585d2dfde..5a967edceca9 100644
+--- a/drivers/media/tuners/xc2028.c
++++ b/drivers/media/tuners/xc2028.c
+@@ -14,7 +14,7 @@
+ #include <media/tuner.h>
+ #include <linux/mutex.h>
+ #include <linux/slab.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include "tuner-i2c.h"
+ #include "xc2028.h"
+ #include "xc2028-types.h"
+diff --git a/drivers/media/tuners/xc4000.c b/drivers/media/tuners/xc4000.c
+index 596bf1d71b7a..57ded9ff3f04 100644
+--- a/drivers/media/tuners/xc4000.c
++++ b/drivers/media/tuners/xc4000.c
+@@ -16,7 +16,7 @@
+ #include <linux/dvb/frontend.h>
+ #include <linux/i2c.h>
+ #include <linux/mutex.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <media/dvb_frontend.h>
+ 
+diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/m920x.c
+index 961537cf7d5b..fea5bcf72a31 100644
+--- a/drivers/media/usb/dvb-usb/m920x.c
++++ b/drivers/media/usb/dvb-usb/m920x.c
+@@ -17,7 +17,7 @@
+ 
+ #include <media/tuner.h>
+ #include "tuner-simple.h"
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ /* debug */
+ static int dvb_usb_m920x_debug;
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index fe57ee21def2..08fcd2ffa727 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -18,7 +18,7 @@
+ #include <linux/videodev2.h>
+ #include <linux/vmalloc.h>
+ #include <linux/wait.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <media/v4l2-common.h>
+ #include <media/v4l2-ioctl.h>
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index 7e7e5a59ec56..28dde08ec6c5 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -18,7 +18,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/wait.h>
+ #include <linux/atomic.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ 
+ #include <media/v4l2-common.h>
+ 
+diff --git a/drivers/media/v4l2-core/v4l2-jpeg.c b/drivers/media/v4l2-core/v4l2-jpeg.c
+index acc49c84bd16..94435a7b6816 100644
+--- a/drivers/media/v4l2-core/v4l2-jpeg.c
++++ b/drivers/media/v4l2-core/v4l2-jpeg.c
+@@ -9,7 +9,7 @@
+  * [1] https://www.w3.org/Graphics/JPEG/itu-t81.pdf
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/errno.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+diff --git a/drivers/staging/media/av7110/av7110.c b/drivers/staging/media/av7110/av7110.c
+index cb6a5b13dcca..a5a431c14ea7 100644
+--- a/drivers/staging/media/av7110/av7110.c
++++ b/drivers/staging/media/av7110/av7110.c
+@@ -33,7 +33,7 @@
+ #include <linux/i2c.h>
+ #include <linux/kthread.h>
+ #include <linux/slab.h>
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <asm/byteorder.h>
+
+
+diff --git a/drivers/misc/altera-stapl/altera.c b/drivers/misc/altera-stapl/altera.c
+index bbe3967c3a4c..587427b73914 100644
+--- a/drivers/misc/altera-stapl/altera.c
++++ b/drivers/misc/altera-stapl/altera.c
+@@ -9,7 +9,7 @@
+  * Copyright (C) 2010,2011 Igor M. Liplianin <liplianin@netup.ru>
+  */
+ 
+-#include <linux/unaligned.h>
++#include <asm/unaligned.h>
+ #include <linux/ctype.h>
+ #include <linux/string.h>
+ #include <linux/firmware.h>
