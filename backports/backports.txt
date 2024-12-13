@@ -61,6 +61,7 @@ add v6.2_remove.patch
 add v6.2_probe.patch
 add v6.2_probe_tbs.patch
 add v6.2_v4l2-core.patch
+add v6.2_vm_flags_set.patch
 
 [6.1.1023]
 add v6.1_class.patch
