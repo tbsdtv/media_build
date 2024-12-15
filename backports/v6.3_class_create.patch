@@ -11,16 +11,3 @@ index fb81fa46d92e..c62f795eb54e 100644
  	if (IS_ERR(dvb_class)) {
  		retval = PTR_ERR(dvb_class);
  		goto error;
-diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index 043d23aaa3cb..25ab61dae126 100644
---- a/drivers/media/rc/lirc_dev.c
-+++ b/drivers/media/rc/lirc_dev.c
-@@ -785,7 +785,7 @@ int __init lirc_dev_init(void)
- {
- 	int retval;
- 
--	lirc_class = class_create("lirc");
-+	lirc_class = class_create(THIS_MODULE, "lirc");
- 	if (IS_ERR(lirc_class)) {
- 		pr_err("class_create failed\n");
- 		return PTR_ERR(lirc_class);
