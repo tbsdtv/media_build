@@ -1,0 +1,40 @@
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index ef1be5de9bb6..cf6727d9c81f 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -3073,4 +3073,4 @@ EXPORT_SYMBOL_GPL(vb2_thread_stop);
+ MODULE_DESCRIPTION("Media buffer core framework");
+ MODULE_AUTHOR("Pawel Osciak <pawel@osciak.com>, Marek Szyprowski");
+ MODULE_LICENSE("GPL");
+-MODULE_IMPORT_NS("DMA_BUF");
++MODULE_IMPORT_NS(DMA_BUF);
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index fe3ca40e6ec7..b3397e35da4f 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -864,4 +864,4 @@ EXPORT_SYMBOL_GPL(vb2_dma_contig_set_max_seg_size);
+ MODULE_DESCRIPTION("DMA-contig memory handling routines for videobuf2");
+ MODULE_AUTHOR("Pawel Osciak <pawel@osciak.com>");
+ MODULE_LICENSE("GPL");
+-MODULE_IMPORT_NS("DMA_BUF");
++MODULE_IMPORT_NS(DMA_BUF);
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+index 2e3e97492d2b..183037fb1273 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+@@ -673,4 +673,4 @@ EXPORT_SYMBOL_GPL(vb2_dma_sg_memops);
+ MODULE_DESCRIPTION("dma scatter/gather memory handling routines for videobuf2");
+ MODULE_AUTHOR("Andrzej Pietrasiewicz");
+ MODULE_LICENSE("GPL");
+-MODULE_IMPORT_NS("DMA_BUF");
++MODULE_IMPORT_NS(DMA_BUF);
+diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+index a59a83e22368..a6c6d2fcaaa4 100644
+--- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
++++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+@@ -443,4 +443,4 @@ EXPORT_SYMBOL_GPL(vb2_vmalloc_memops);
+ MODULE_DESCRIPTION("vmalloc memory handling routines for videobuf2");
+ MODULE_AUTHOR("Pawel Osciak <pawel@osciak.com>");
+ MODULE_LICENSE("GPL");
+-MODULE_IMPORT_NS("DMA_BUF");
++MODULE_IMPORT_NS(DMA_BUF);

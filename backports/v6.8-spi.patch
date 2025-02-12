@@ -1,5 +1,5 @@
 diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
-index e90aa1c1584c..526042d8afae 100644
+index 34d6d52f1e4e..0b1e9f32fd47 100644
 --- a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
 +++ b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
 @@ -35,7 +35,7 @@ struct netup_spi_regs {
@@ -79,14 +79,14 @@ index e90aa1c1584c..526042d8afae 100644
 +	struct spi_master *master;
  	struct netup_spi *nspi;
  
--	ctlr = devm_spi_alloc_master(&ndev->pci_dev->dev,
--					 sizeof(struct netup_spi));
+-	ctlr = devm_spi_alloc_host(&ndev->pci_dev->dev,
+-				   sizeof(struct netup_spi));
 -	if (!ctlr) {
 +	master = devm_spi_alloc_master(&ndev->pci_dev->dev,
 +		sizeof(struct netup_spi));
 +	if (!master) {
  		dev_err(&ndev->pci_dev->dev,
- 			"%s(): unable to alloc SPI master\n", __func__);
+ 			"%s(): unable to alloc SPI host\n", __func__);
  		return -EINVAL;
  	}
 -	nspi = spi_controller_get_devdata(ctlr);
@@ -135,7 +135,7 @@ index e90aa1c1584c..526042d8afae 100644
  	reg = readw(&spi->regs->control_stat);
  	writew(reg | NETUP_SPI_CTRL_IRQ, &spi->regs->control_stat);
 diff --git a/drivers/media/usb/msi2500/msi2500.c b/drivers/media/usb/msi2500/msi2500.c
-index 5138486abfa0..9759996ee6a4 100644
+index 05b0550e840c..9759996ee6a4 100644
 --- a/drivers/media/usb/msi2500/msi2500.c
 +++ b/drivers/media/usb/msi2500/msi2500.c
 @@ -107,7 +107,7 @@ struct msi2500_dev {
@@ -187,12 +187,14 @@ index 5138486abfa0..9759996ee6a4 100644
  	int ret;
  	static struct spi_board_info board_info = {
  		.modalias		= "msi001",
-@@ -1220,30 +1220,30 @@ static int msi2500_probe(struct usb_interface *intf,
+@@ -1219,31 +1219,31 @@ static int msi2500_probe(struct usb_interface *intf,
+ 		goto err_free_mem;
  	}
  
- 	/* SPI master adapter */
--	ctlr = spi_alloc_master(dev->dev, 0);
+-	/* SPI host adapter */
+-	ctlr = spi_alloc_host(dev->dev, 0);
 -	if (ctlr == NULL) {
++	/* SPI master adapter */
 +	master = spi_alloc_master(dev->dev, 0);
 +	if (master == NULL) {
  		ret = -ENOMEM;
