@@ -28,6 +28,9 @@ add drx39xxj.patch
 add ccs.patch
 add rc-cec.patch
 
+[6.12.1023]
+add v6.12_import_ns.patch
+
 [6.11.1023]
 add v6.11-unaligned.patch
 add v6.11-fd.patch
