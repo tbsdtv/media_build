@@ -46,6 +46,7 @@ add v6.9_assign_str.patch
 [6.8.1023]
 add v6.8-ccs.patch
 add v6.8-spi.patch
+add v6.8_remove.patch
 
 [6.7.1023]
 add v6.7-cec.patch
@@ -60,7 +61,6 @@ add v6.3_check_endpoint.patch
 
 [6.2.1023]
 add v6.2_class.patch
-add v6.2_remove.patch
 add v6.2_probe.patch
 add v6.2_probe_tbs.patch
 add v6.2_v4l2-core.patch
