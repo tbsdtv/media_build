@@ -146,30 +146,3 @@ add v5.0_gpio.patch
 
 [4.20.1023]
 add v4.20_access_ok.patch
-
-[4.18.1023]
-add v4.18_fwnode_args_args.patch
-add v4.18_ccs_bitops.patch
-add v4.18_vb2_map_atomic.patch
-add v4.18_ida_simple.patch
-
-[4.17.1023]
-add v4.17_i2c_check_num_msgs.patch
-
-[4.16.1023]
-add v4.16_poll_requested_events.patch
-
-[4.15.1023]
-add v4.15_pmdown_time.patch
-add v4.15_async.patch
-
-[4.14.1023]
-add v4.14_saa7146_timer_cast.patch
-add v4.14_module_param_call.patch
-add v4.14_fwnode_handle_get.patch
-delete v4.13_fwnode_graph_get_port_parent.patch
-
-[4.13.1023]
-add v4.13_remove_nospec_h.patch
-add v4.13_drmP.patch
-add v4.13_fwnode_graph_get_port_parent.patch
