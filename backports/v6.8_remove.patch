@@ -1,3 +1,172 @@
+diff --git a/drivers/media/rc/gpio-ir-recv.c b/drivers/media/rc/gpio-ir-recv.c
+index dbd3e2fff594..41ef8cdba28c 100644
+--- a/drivers/media/rc/gpio-ir-recv.c
++++ b/drivers/media/rc/gpio-ir-recv.c
+@@ -128,7 +128,7 @@ static int gpio_ir_recv_probe(struct platform_device *pdev)
+ 				"gpio-ir-recv-irq", gpio_dev);
+ }
+ 
+-static void gpio_ir_recv_remove(struct platform_device *pdev)
++static int gpio_ir_recv_remove(struct platform_device *pdev)
+ {
+ 	struct gpio_rc_dev *gpio_dev = platform_get_drvdata(pdev);
+ 	struct device *pmdev = gpio_dev->pmdev;
+@@ -141,6 +141,8 @@ static void gpio_ir_recv_remove(struct platform_device *pdev)
+ 		pm_runtime_put_noidle(pmdev);
+ 		pm_runtime_set_suspended(pmdev);
+ 	}
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+diff --git a/drivers/media/rc/img-ir/img-ir-core.c b/drivers/media/rc/img-ir/img-ir-core.c
+index 067f4bc7fcc3..be04d34dc8d2 100644
+--- a/drivers/media/rc/img-ir/img-ir-core.c
++++ b/drivers/media/rc/img-ir/img-ir-core.c
+@@ -152,7 +152,7 @@ static int img_ir_probe(struct platform_device *pdev)
+ 	return error;
+ }
+ 
+-static void img_ir_remove(struct platform_device *pdev)
++static int img_ir_remove(struct platform_device *pdev)
+ {
+ 	struct img_ir_priv *priv = platform_get_drvdata(pdev);
+ 
+@@ -164,6 +164,8 @@ static void img_ir_remove(struct platform_device *pdev)
+ 		clk_disable_unprepare(priv->clk);
+ 	if (!IS_ERR(priv->sys_clk))
+ 		clk_disable_unprepare(priv->sys_clk);
++
++	return 0;
+ }
+ 
+ static SIMPLE_DEV_PM_OPS(img_ir_pmops, img_ir_suspend, img_ir_resume);
+diff --git a/drivers/media/rc/ir-hix5hd2.c b/drivers/media/rc/ir-hix5hd2.c
+index afd80d2350c6..1298e523dba1 100644
+--- a/drivers/media/rc/ir-hix5hd2.c
++++ b/drivers/media/rc/ir-hix5hd2.c
+@@ -340,12 +340,14 @@ static int hix5hd2_ir_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void hix5hd2_ir_remove(struct platform_device *pdev)
++static int hix5hd2_ir_remove(struct platform_device *pdev)
+ {
+ 	struct hix5hd2_ir_priv *priv = platform_get_drvdata(pdev);
+ 
+ 	clk_disable_unprepare(priv->clock);
+ 	rc_unregister_device(priv->rdev);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+diff --git a/drivers/media/rc/meson-ir-tx.c b/drivers/media/rc/meson-ir-tx.c
+index 40e899694f86..abdb62b16e98 100644
+--- a/drivers/media/rc/meson-ir-tx.c
++++ b/drivers/media/rc/meson-ir-tx.c
+@@ -372,11 +372,13 @@ static int __init meson_irtx_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static void meson_irtx_remove(struct platform_device *pdev)
++static int meson_irtx_remove(struct platform_device *pdev)
+ {
+ 	struct rc_dev *rc = platform_get_drvdata(pdev);
+ 
+ 	rc_unregister_device(rc);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id meson_irtx_dt_match[] = {
+diff --git a/drivers/media/rc/meson-ir.c b/drivers/media/rc/meson-ir.c
+index 49aa4392cfe1..42df2d67bb61 100644
+--- a/drivers/media/rc/meson-ir.c
++++ b/drivers/media/rc/meson-ir.c
+@@ -177,7 +177,7 @@ static int meson_ir_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static void meson_ir_remove(struct platform_device *pdev)
++static int meson_ir_remove(struct platform_device *pdev)
+ {
+ 	struct meson_ir *ir = platform_get_drvdata(pdev);
+ 	unsigned long flags;
+@@ -186,6 +186,8 @@ static void meson_ir_remove(struct platform_device *pdev)
+ 	spin_lock_irqsave(&ir->lock, flags);
+ 	meson_ir_set_mask(ir, IR_DEC_REG1, REG1_ENABLE, 0);
+ 	spin_unlock_irqrestore(&ir->lock, flags);
++
++	return 0;
+ }
+ 
+ static void meson_ir_shutdown(struct platform_device *pdev)
+diff --git a/drivers/media/rc/mtk-cir.c b/drivers/media/rc/mtk-cir.c
+index 020b8acff91d..fb4766d4fcbc 100644
+--- a/drivers/media/rc/mtk-cir.c
++++ b/drivers/media/rc/mtk-cir.c
+@@ -421,7 +421,7 @@ static int mtk_ir_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void mtk_ir_remove(struct platform_device *pdev)
++static int mtk_ir_remove(struct platform_device *pdev)
+ {
+ 	struct mtk_ir *ir = platform_get_drvdata(pdev);
+ 
+@@ -435,6 +435,8 @@ static void mtk_ir_remove(struct platform_device *pdev)
+ 
+ 	clk_disable_unprepare(ir->bus);
+ 	clk_disable_unprepare(ir->clk);
++
++	return 0;
+ }
+ 
+ static struct platform_driver mtk_ir_driver = {
+diff --git a/drivers/media/rc/st_rc.c b/drivers/media/rc/st_rc.c
+index 6539fa0a6e79..7fa892d5f352 100644
+--- a/drivers/media/rc/st_rc.c
++++ b/drivers/media/rc/st_rc.c
+@@ -195,7 +195,7 @@ static int st_rc_hardware_init(struct st_rc_device *dev)
+ 	return 0;
+ }
+ 
+-static void st_rc_remove(struct platform_device *pdev)
++static int st_rc_remove(struct platform_device *pdev)
+ {
+ 	struct st_rc_device *rc_dev = platform_get_drvdata(pdev);
+ 
+@@ -203,6 +203,8 @@ static void st_rc_remove(struct platform_device *pdev)
+ 	device_init_wakeup(&pdev->dev, false);
+ 	clk_disable_unprepare(rc_dev->sys_clock);
+ 	rc_unregister_device(rc_dev->rdev);
++
++	return 0;
+ }
+ 
+ static int st_rc_open(struct rc_dev *rdev)
+diff --git a/drivers/media/rc/sunxi-cir.c b/drivers/media/rc/sunxi-cir.c
+index 5be5f943cbc8..85d3b66a342a 100644
+--- a/drivers/media/rc/sunxi-cir.c
++++ b/drivers/media/rc/sunxi-cir.c
+@@ -365,12 +365,14 @@ static int sunxi_ir_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static void sunxi_ir_remove(struct platform_device *pdev)
++static int sunxi_ir_remove(struct platform_device *pdev)
+ {
+ 	struct sunxi_ir *ir = platform_get_drvdata(pdev);
+ 
+ 	rc_unregister_device(ir->rc);
+ 	sunxi_ir_hw_exit(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static void sunxi_ir_shutdown(struct platform_device *pdev)
 diff --git a/drivers/media/cec/platform/cec-gpio/cec-gpio.c b/drivers/media/cec/platform/cec-gpio/cec-gpio.c
 index 8015096be1e3..c8c4efc83f5f 100644
 --- a/drivers/media/cec/platform/cec-gpio/cec-gpio.c
