@@ -23,7 +23,7 @@ my $kernel_version = '';
 
 my $main_git_url = "https://github.com/tbsdtv/linux_media.git";
 my $main_branch = "latest";
-my $firmware_url = "https://github.com/tbsdtv/media_build/releases/download/latest";
+my $firmware_url = "https://github.com/tbsdtv/media_build/releases/download/last";
 my $firmware_tarball = "dvb-firmwares.tar.bz2";
 
 GetOptions('v|verbose' => \$level,
