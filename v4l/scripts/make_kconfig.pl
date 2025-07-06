@@ -640,7 +640,10 @@ disable_config('DVB_SAA716X_FF');
 disable_config('CEC_CORE');
 disable_config('MEDIA_CEC_SUPPORT');
 disable_config('VIDEO_SOLO6X10');
-
+disable_config('VIDEO_MX290');
+disable_config('VIDEO_MX415');
+disable_config('VIDEO_TC358746');
+disable_config('VIDEO_IMX8_ISI');
 # Check dependencies
 my %newconfig = checkdeps();
 
