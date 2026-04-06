@@ -113,9 +113,7 @@ shift
 # kernel's autoinstall can find it before its own build has run.
 dkms_dyn_conf_shared=""
 if [ $# -ge 1 ] ; then
-    if [ "${1}" = "--help" ] ; then
-        arg_check_help "${1}"
-    fi
+    arg_check_help "${1}"
 
     dkms_dyn_conf_shared="${1}"
     shift
@@ -170,10 +168,10 @@ source ${module_copy_script}
 if [ -n "${dkms_dyn_conf_shared}" ] ; then
     dkms_dyn_conf_shared_dir="$(dirname "${dkms_dyn_conf_shared}")"
     if ! mkdir -p "${dkms_dyn_conf_shared_dir}" ; then
-        exit_print "Failed to create shared fallback directory: ${dkms_dyn_conf_shared_dir}" ${err_default}
+        err_exit "Failed to create shared fallback directory: ${dkms_dyn_conf_shared_dir}" ${err_default}
     fi
     if ! cp -f "${dkms_dyn_conf}" "${dkms_dyn_conf_shared}" ; then
-        exit_print "Failed to update shared fallback config: ${dkms_dyn_conf_shared}" ${err_default}
+        err_exit "Failed to update shared fallback config: ${dkms_dyn_conf_shared}" ${err_default}
     fi
 fi
 
