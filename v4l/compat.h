@@ -1310,4 +1310,14 @@ static inline int dma_mmap_noncontiguous(struct device *dev,
 #define dev_is_platform(dev) ((dev)->bus == &platform_bus_type)
 #endif
 
+/* v6.8-ccs.patch uses the 2-param form of pm_runtime_get_if_active(dev, flag).
+ * Some distributions (e.g. Ubuntu 6.8) backport the 1-param form from 6.9+.
+ * Use a variadic macro to drop the second argument when the kernel only
+ * exposes the 1-param API.  The (pm_runtime_get_if_active) notation prevents
+ * recursive macro expansion.
+ */
+#ifdef NEED_PM_RUNTIME_GET_IF_ACTIVE_WRAPPER
+#define pm_runtime_get_if_active(dev, ...) (pm_runtime_get_if_active)(dev)
+#endif
+
 #endif /*  _COMPAT_H */
