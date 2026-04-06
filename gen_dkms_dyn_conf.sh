@@ -112,9 +112,17 @@ shift
 # When provided, the generated conf is also copied there so that the next
 # kernel's autoinstall can find it before its own build has run.
 dkms_dyn_conf_shared=""
-if [ $# -ge 1 ] && [ "${1}" != "--help" ] ; then
+if [ $# -ge 1 ] ; then
+    if [ "${1}" = "--help" ] ; then
+        arg_check_help "${1}"
+    fi
+
     dkms_dyn_conf_shared="${1}"
     shift
+fi
+
+if [ $# -ne 0 ] ; then
+    usage
 fi
 
 # First check, if the target module directory to store also the dynamically
@@ -160,7 +168,13 @@ source ${module_copy_script}
 # Update the shared (kernel-independent) fallback copy so that the next
 # kernel's autoinstall can pre-load the full module list before its build runs.
 if [ -n "${dkms_dyn_conf_shared}" ] ; then
-    cp -f "${dkms_dyn_conf}" "${dkms_dyn_conf_shared}"
+    dkms_dyn_conf_shared_dir="$(dirname "${dkms_dyn_conf_shared}")"
+    if ! mkdir -p "${dkms_dyn_conf_shared_dir}" ; then
+        exit_print "Failed to create shared fallback directory: ${dkms_dyn_conf_shared_dir}" ${err_default}
+    fi
+    if ! cp -f "${dkms_dyn_conf}" "${dkms_dyn_conf_shared}" ; then
+        exit_print "Failed to update shared fallback config: ${dkms_dyn_conf_shared}" ${err_default}
+    fi
 fi
 
 exit_print "Done!" ${err_ok}
